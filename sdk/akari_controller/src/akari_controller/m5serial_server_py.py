@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import enum
 import contextlib
 import time
 from typing import Any, List, Optional, Tuple
@@ -12,14 +13,18 @@ Created on 2020/05/08
 @author: Kazuya Yamamoto
 """
 
-RESETALLOUT = 0
-WRITEPINVAL = 1
-SETDISPLAYCOLOR = 10
-SETDISPLAYTEXT = 11
-SETDISPLAYIMG = 12
-USEJAPANESEFONT = 13
-RESETM5 = 99
-STARTM5 = 98
+
+class CommandId(enum.IntEnum):
+    RESETALLOUT = 0
+    WRITEPINVAL = 1
+    SETDISPLAYCOLOR = 10
+    SETDISPLAYTEXT = 11
+    SETDISPLAYIMG = 12
+    USEJAPANESEFONT = 13
+    STARTM5 = 98
+    RESETM5 = 99
+
+
 color_pair: List[Tuple[str, int]] = [
     ("black", 0x0000),
     ("navy", 0x000F),
@@ -78,7 +83,7 @@ class M5SerialServer:
 
     def __write_pinval_command(self, dout0: int, dout1: int, pwmout0: int) -> bool:
         data = {
-            "com": WRITEPINVAL,
+            "com": CommandId.WRITEPINVAL,
             "pin": {"do0": dout0, "do1": dout1, "po0": pwmout0},
         }
         result = self._communicator.send_data(data)
@@ -88,7 +93,7 @@ class M5SerialServer:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
-        data = {"com": 98}
+        data = {"com": CommandId.STARTM5}
         assert self._communicator.send_data(data)
         time.sleep(0.1)
 
@@ -132,14 +137,14 @@ class M5SerialServer:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
-        data = {"com": RESETALLOUT}
+        data = {"com": CommandId.RESETALLOUT}
         result = self._communicator.send_data(data)
         self._communicator.wait_sync(sync_flg)
         return result
 
     def set_display_color(self, color: str, sync_flg: bool = True) -> bool:
         data = {
-            "com": SETDISPLAYCOLOR,
+            "com": CommandId.SETDISPLAYCOLOR,
             "lcd": {"cl": self.__color_to_m5code(color)},
         }
         result = self._communicator.send_data(data)
@@ -158,7 +163,7 @@ class M5SerialServer:
         sync_flg: bool = True,
     ) -> bool:
         data = {
-            "com": SETDISPLAYTEXT,
+            "com": CommandId.SETDISPLAYTEXT,
             "lcd": {
                 "m": text,
                 "x": pos_x,
@@ -177,7 +182,7 @@ class M5SerialServer:
         self, filepath: str, pos_x: int, pos_y: int, scale: float, sync_flg: bool = True
     ) -> bool:
         data = {
-            "com": SETDISPLAYIMG,
+            "com": CommandId.SETDISPLAYIMG,
             "lcd": {"pth": filepath, "x": pos_x, "y": pos_y, "scl": round(scale, 2)},
         }
         result = self._communicator.send_data(data)
@@ -185,7 +190,7 @@ class M5SerialServer:
         return result
 
     def use_japanese_font(self, enabled: bool, sync_flg: bool = True) -> bool:
-        data = {"com": USEJAPANESEFONT, "lcd": {"jp": enabled}}
+        data = {"com": CommandId.USEJAPANESEFONT, "lcd": {"jp": enabled}}
         result = self._communicator.send_data(data)
         self._communicator.wait_sync(sync_flg)
         return result
@@ -194,7 +199,7 @@ class M5SerialServer:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
-        data = {"com": 99}
+        data = {"com": CommandId.RESETM5}
         result = self._communicator.send_data(data)
         time.sleep(2)
         self.__start_m5()
