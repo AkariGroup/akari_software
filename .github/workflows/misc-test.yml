@@ -15,8 +15,8 @@ jobs:
         lfs: false
     - name: Install apt packages
       run: |
-        apt-get update
-        apt-get install -y --no-install-recommends git git-lfs
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends git git-lfs
       env:
         DEBIAN_FRONTEND: noninteractive
     - name: Run lfs-pointer-check
