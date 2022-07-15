@@ -81,75 +81,64 @@ class M5SerialServer:
                 break
         return color_int
 
-    def __write_pinval_command(self, dout0: int, dout1: int, pwmout0: int) -> bool:
+    def __write_pinval_command(self, dout0: int, dout1: int, pwmout0: int, sync: bool) -> bool:
         data = {
             "com": CommandId.WRITEPINVAL,
             "pin": {"do0": dout0, "do1": dout1, "po0": pwmout0},
         }
-        result = self._communicator.send_data(data)
-        return result
+        return self._communicator.send_data(data, sync=sync)
 
     def __start_m5(self) -> None:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
         data = {"com": CommandId.STARTM5}
-        assert self._communicator.send_data(data)
+        assert self._communicator.send_data(data, sync=False)
         time.sleep(0.1)
 
-    def set_dout(self, pin_id: int, val: bool, sync_flg: bool = True) -> int:
+    def set_dout(self, pin_id: int, val: bool, sync: bool = True) -> int:
         if pin_id == 0:
             self.__dout0_val = int(val)
         elif pin_id == 1:
             self.__dout1_val = int(val)
         else:
             return 0
-        result = self.__write_pinval_command(
-            self.__dout0_val, self.__dout1_val, self.__pwmout0_val
+        return self.__write_pinval_command(
+            self.__dout0_val, self.__dout1_val, self.__pwmout0_val, sync,
         )
-        self._communicator.wait_sync(sync_flg)
-        return result
 
-    def set_pwmout(self, pin_id: int, val: int, sync_flg: bool = True) -> int:
+    def set_pwmout(self, pin_id: int, val: int, sync: bool = True) -> int:
         if pin_id == 0:
             self.__pwmout0_val = int(val)
         else:
             return 0
-        result = self.__write_pinval_command(
-            self.__dout0_val, self.__dout1_val, self.__pwmout0_val
+        return self.__write_pinval_command(
+            self.__dout0_val, self.__dout1_val, self.__pwmout0_val, sync,
         )
-        self._communicator.wait_sync(sync_flg)
-        return result
 
     def set_allout(
-        self, dout0_val: bool, dout1_val: bool, pwmout0_val: int, sync_flg: bool = True
+        self, dout0_val: bool, dout1_val: bool, pwmout0_val: int, sync: bool = True
     ) -> bool:
         self.__dout0_val = int(dout0_val)
         self.__dout1_val = int(dout1_val)
         self.__pwmout0_val = int(pwmout0_val)
-        result = self.__write_pinval_command(
-            self.__dout0_val, self.__dout1_val, self.__pwmout0_val
+        return self.__write_pinval_command(
+            self.__dout0_val, self.__dout1_val, self.__pwmout0_val, sync,
         )
-        self._communicator.wait_sync(sync_flg)
-        return result
 
-    def reset_allout(self, sync_flg: bool = True) -> bool:
+    def reset_allout(self, sync: bool = True) -> bool:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
         data = {"com": CommandId.RESETALLOUT}
-        result = self._communicator.send_data(data)
-        self._communicator.wait_sync(sync_flg)
-        return result
+        return self._communicator.send_data(data, sync)
 
-    def set_display_color(self, color: str, sync_flg: bool = True) -> bool:
+    def set_display_color(self, color: str, sync: bool = True) -> bool:
         data = {
             "com": CommandId.SETDISPLAYCOLOR,
             "lcd": {"cl": self.__color_to_m5code(color)},
         }
-        result = self._communicator.send_data(data)
-        self._communicator.wait_sync(sync_flg)
-        return result
+        return self._communicator.send_data(data, sync)
 
     def set_display_text(
         self,
@@ -160,7 +149,7 @@ class M5SerialServer:
         text_color: str,
         back_color: str,
         refresh: bool,
-        sync_flg: bool = True,
+        sync: bool = True,
     ) -> bool:
         data = {
             "com": CommandId.SETDISPLAYTEXT,
@@ -174,33 +163,27 @@ class M5SerialServer:
                 "rf": int(refresh),
             },
         }
-        result = self._communicator.send_data(data)
-        self._communicator.wait_sync(sync_flg)
-        return result
+        return self._communicator.send_data(data, sync)
 
     def set_display_image(
-        self, filepath: str, pos_x: int, pos_y: int, scale: float, sync_flg: bool = True
+        self, filepath: str, pos_x: int, pos_y: int, scale: float, sync: bool = True
     ) -> bool:
         data = {
             "com": CommandId.SETDISPLAYIMG,
             "lcd": {"pth": filepath, "x": pos_x, "y": pos_y, "scl": round(scale, 2)},
         }
-        result = self._communicator.send_data(data)
-        self._communicator.wait_sync(sync_flg)
-        return result
+        return self._communicator.send_data(data, sync)
 
-    def use_japanese_font(self, enabled: bool, sync_flg: bool = True) -> bool:
+    def use_japanese_font(self, enabled: bool, sync: bool = True) -> bool:
         data = {"com": CommandId.USEJAPANESEFONT, "lcd": {"jp": enabled}}
-        result = self._communicator.send_data(data)
-        self._communicator.wait_sync(sync_flg)
-        return result
+        return self._communicator.send_data(data, sync)
 
     def reset_m5(self) -> bool:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
         data = {"com": CommandId.RESETM5}
-        result = self._communicator.send_data(data)
+        result = self._communicator.send_data(data, sync=False)
         time.sleep(2)
         self.__start_m5()
         return result
