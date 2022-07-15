@@ -1,0 +1,18 @@
+---
+- name: Configure udev for M5Stack Gray
+  lineinfile:
+    path: "/etc/udev/rules.d/99-m5stack.rules"
+    create: true
+    mode: "644"
+    line: 'KERNEL=="ttyUSB*",  ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{product}=="CP2104 USB to UART Bridge Controller" SYMLINK+="ttyUSB_M5Stack"'
+  become: yes
+  notify: Reload udev rules
+
+- name: Configure udev for M5Stack Basic v2.6
+  lineinfile:
+    path: "/etc/udev/rules.d/99-m5stack.rules"
+    create: true
+    mode: "644"
+    line: 'KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", SYMLINK+="ttyUSB_M5Stack"'
+  become: yes
+  notify: Reload udev rules

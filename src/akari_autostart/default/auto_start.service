@@ -1,0 +1,14 @@
+[Unit]
+Description=akari auto start
+After=local-fs.target
+ConditionPathExists=/opt
+
+[Service]
+ExecStart=/opt/auto_start.sh
+Restart=no
+Type=simple
+User=akari
+Group=akari
+
+[Install]
+WantedBy=multi-user.target

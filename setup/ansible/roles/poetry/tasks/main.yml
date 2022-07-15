@@ -1,0 +1,11 @@
+---
+- name: Install poetry
+  shell: |
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+  args:
+    creates: /home/{{ ansible_user }}/.poetry/bin/poetry
+
+- name: Update .profile
+  lineinfile:
+    path: /home/{{ ansible_user }}/.profile
+    line: 'export PATH="$HOME/.poetry/bin:$PATH"'

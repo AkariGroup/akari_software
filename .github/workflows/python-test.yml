@@ -1,0 +1,34 @@
+name: Python Test
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+env:
+  POETRY_HOME: /opt/poetry
+  POETRY_VERSION: 1.1.13
+jobs:
+  python-test:
+    name: Python Test
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: false
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    - name: Install poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$POETRY_HOME/bin" >> $GITHUB_PATH
+    - name: Install Python dependencies
+      run: |
+        poetry install
+    - name: Lint
+      run: |
+        poetry run pysen run lint
+    - name: Run pytest
+      run: |
+        poetry run pytest -v src/akari_controller/tests

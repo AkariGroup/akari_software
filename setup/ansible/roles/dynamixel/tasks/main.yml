@@ -1,0 +1,15 @@
+---
+- name: Configure udev
+  lineinfile:
+    path: "/etc/udev/rules.d/99-dynamixel.rules"
+    create: true
+    mode: "644"
+    line: 'KERNEL=="ttyUSB*", DRIVERS=="ftdi_sio", MODE="0666", ATTR{device/latency_timer}="1", SYMLINK+="ttyUSB_dynamixel"'
+  become: yes
+  notify: Reload udev rules
+
+- name: Add dynamixel authentification rules
+  file:
+    path: /dev/ttyUSB0
+    owner: '{{ ansible_user }}'
+  become: true

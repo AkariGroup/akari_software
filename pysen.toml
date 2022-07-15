@@ -1,0 +1,24 @@
+[tool.pysen]
+version = "0.10"
+
+[tool.pysen.lint]
+enable_black = true
+enable_flake8 = true
+enable_isort = true
+enable_mypy = true
+mypy_preset = "strict"
+line_length = 88
+py_version = "py38"
+[[tool.pysen.lint.mypy_targets]]
+  paths = [
+    "src/akari_controller/sample/",
+    "src/akari_controller/src/akari_controller",
+    "src/akari_sample/script",
+    "src/depthai_sample/face_detection",
+    "src/depthai_sample/object_recognition",
+    "src/depthai_uvc",
+    "tools/python",
+  ]
+[tool.pysen.lint.source]
+  includes = ["src/","tools/"]
+

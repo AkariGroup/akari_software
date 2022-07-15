@@ -1,0 +1,4 @@
+---
+- name: Reload v4l2loopback
+  command: modprobe v4l2loopback
+  become: yes

@@ -1,0 +1,33 @@
+---
+- name: Create akari_main directory
+  file:
+    path: "{{ akari_main_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+
+- name: Copy akari_main directory
+  synchronize:
+    src: "{{ role_path }}/files/reporoot/"
+    dest: "{{ akari_main_dir }}"
+  delegate_to: localhost
+
+# NOTE: Deployed repository should create a venv in-place for easy env management
+- name: Locate poetry.toml
+  copy:
+    dest: "{{ akari_main_dir }}/poetry.toml"
+    mode: "644"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    content: |
+      [virtualenvs]
+      in-project = true
+
+# NOTE: Specify the poetry path explicitly.
+# Otherwise, the env might be a different one than expected.
+- name: Run poetry install
+  command: /home/{{ ansible_user }}/.poetry/bin/poetry install
+  become_user: "{{ ansible_user }}"
+  args:
+    chdir: "{{ akari_main_dir }}"

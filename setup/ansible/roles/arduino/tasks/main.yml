@@ -1,0 +1,21 @@
+---
+- name: Install apt packages
+  apt:
+    pkg:
+      - arduino
+  become: true
+
+- name: Install pip packages
+  pip:
+    name: platformio
+  become: true
+
+- name: Copy platformio workspace
+  synchronize:
+    src: "{{ role_path }}/files/arduino/"
+    dest: /home/{{ ansible_user }}/arduino/
+
+- name: Upload app to M5Stack
+  shell: platformio run --target=upload
+  args:
+    chdir: /home/{{ ansible_user }}/arduino/

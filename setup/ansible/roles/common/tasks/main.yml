@@ -1,0 +1,30 @@
+---
+- name: Upgrade apt packages
+  apt:
+    upgrade: full
+    update_cache: true
+  become: true
+
+- name: Auto-remove apt packages
+  apt:
+    autoremove: true
+  become: true
+
+- name: Install apt packages
+  apt:
+    pkg:
+      - curl
+      - git
+      - libudev-dev
+      - python-is-python3
+      - python3-pip
+      - ssh
+      - v4l2loopback-dkms
+  become: true
+
+- name: Add user to dialout
+  user:
+    name: '{{ ansible_user }}'
+    groups: dialout
+    append: yes
+  become: true

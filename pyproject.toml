@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "akari_main"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.22.3"
+dynamixel-sdk = "^3.7.31"
+depthai = "^2.15.2"
+akari-controller = {path = "src/akari_controller", develop = true}
+pysen = {extras = ["lint"], version = "^0.10.1"}
+opencv-python = "^4.5.5"
+click = "8.0.4"
+pyvirtualcam = "^0.9.1"
+
+[tool.poetry.dev-dependencies]
+pysen = {version = "0.10.1", extras = ["lint"]}
+pytest = "^7.1.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,13 @@
+*.bak
+*.egg-info
+*.old
+*.org
+*.pyc
+*.swp
+.vscode
+/__pycache__/
+/app/
+build/
+.venv
+
+setup/ansible/hosts

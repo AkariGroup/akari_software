@@ -1,0 +1,5 @@
+---
+- name: Configure mainpc
+  hosts: localhost
+  roles:
+    - akari_main

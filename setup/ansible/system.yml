@@ -1,0 +1,18 @@
+---
+- name: Configure all hosts
+  hosts: all
+  roles:
+    - common
+
+- name: Configure mainpc
+  hosts: mainpc
+  roles:
+    - poetry
+    - oak-d
+    - dynamixel
+    - m5stack
+
+- name: Write M5
+  hosts: mainpc
+  roles:
+    - arduino
