@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package akari_proto;
+
+message SetPinOutRequest {
+  map<string, bool> binary_pins = 1;
+  map<string, int32> int_pins = 2;
+  bool sync = 3;
+}
+
+message SetDisplayColorRequest {
+  Color color = 1;
+  bool sync = 2;
+}
+
+message SetDisplayTextRequest {
+  string text = 1;
+  int32 pos_x = 2;
+  int32 pos_y = 3;
+  int32 size = 4;
+  Color text_color = 5;
+  Color bg_color = 6;
+  bool refresh = 7;
+  bool sync = 8;
+}
+
+message SetDisplayImageRequest {
+  string path = 1;
+  int32 pos_x = 2;
+  int32 pos_y = 3;
+  int32 scale = 4;
+  bool sync = 5;
+}
+
+message UseJapaneseFontRequest {
+  bool enabled = 1;
+  bool sync = 2;
+}
+
+message Color {
+    float red = 1;
+    float green = 2;
+    float blue = 3;
+}
+
+message M5Status {
+  string status_json = 1;
+}
+
+service M5ManagerService {
+    rpc SetPinOut(SetPinOutRequest)
+        returns (google.protobuf.Empty);
+    rpc ResetPinOut(google.protobuf.Empty)
+        returns (google.protobuf.Empty);
+    rpc SetDisplayColor(SetDisplayColorRequest)
+        returns (google.protobuf.Empty);
+    rpc SetDisplayText(SetDisplayTextRequest)
+        returns (google.protobuf.Empty);
+    rpc SetDisplayImage(SetDisplayImageRequest)
+        returns (google.protobuf.Empty);
+    rpc UseJapaneseFont(UseJapaneseFontRequest)
+        returns (google.protobuf.Empty);
+    rpc Reset(google.protobuf.Empty)
+        returns (google.protobuf.Empty);
+
+    rpc Get(google.protobuf.Empty)
+        returns (M5Status);
+    rpc GetStream(google.protobuf.Empty)
+        returns (stream M5Status);
+}

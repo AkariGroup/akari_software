@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package akari_proto;
+
+message GetJointNameResponse {
+  string joint_name = 1;
+}
+
+message GetServoEnabledResponse {
+  bool enabled = 1;
+}
+
+message SetServoEnabledRequest {
+  bool enabled = 1;
+}
+
+message SetProfileAccelerationRequest {
+  float rad_per_sec2 = 1;
+}
+
+message SetProfileVelocityRequest {
+  float rad_per_sec = 1;
+}
+
+message SetGoalPositionRequest {
+  float rad = 1;
+}
+
+message GetPresentPositionResponse {
+  float rad = 1;
+}
+
+service JointControllerService {
+    rpc GetJointName(google.protobuf.Empty)
+        returns (GetJointNameResponse);
+    rpc GetServoEnabled(google.protobuf.Empty)
+        returns (GetServoEnabledResponse);
+    rpc SetServoEnabled(SetServoEnabledRequest)
+        returns (google.protobuf.Empty);
+    rpc SetProfileAcceleration(SetProfileAccelerationRequest)
+        returns (google.protobuf.Empty);
+    rpc SetProfileVelocity(SetProfileVelocityRequest)
+        returns (google.protobuf.Empty);
+    rpc SetGoalPosition(SetGoalPositionRequest)
+        returns (google.protobuf.Empty);
+    rpc GetPresentPosition(google.protobuf.Empty)
+        returns (GetPresentPositionResponse);
+}
