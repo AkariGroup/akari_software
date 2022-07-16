@@ -123,11 +123,19 @@ class M5SerialServer:
         pos_x: int,
         pos_y: int,
         size: int,
-        text_color: Color,
-        back_color: Color,
-        refresh: bool,
+        text_color: Optional[Color] = None,
+        back_color: Optional[Color] = None,
+        refresh: bool = False,
         sync: bool = True,
     ) -> None:
+        text_color_value = -1
+        bg_color_value = -1
+
+        if text_color is not None:
+            text_color_value = text_color.as_rgb565()
+        if back_color is not None:
+            bg_color_value = back_color.as_rgb565()
+
         data = {
             "com": CommandId.SETDISPLAYTEXT,
             "lcd": {
@@ -135,8 +143,8 @@ class M5SerialServer:
                 "x": pos_x,
                 "y": pos_y,
                 "sz": size,
-                "cl": text_color.as_rgb565(),
-                "bk": back_color.as_rgb565(),
+                "cl": text_color_value,
+                "bk": bg_color_value,
                 "rf": int(refresh),
             },
         }
