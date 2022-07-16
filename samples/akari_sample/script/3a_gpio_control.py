@@ -33,9 +33,8 @@ def main() -> None:
         # valがFalseならLo,TrueならHi
         val = True
         # set_doutを実行
-        result = m5.set_dout(pin_id, val)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_dout(pin_id, val)
+        print(f"-> Set to {val}")
         # 2秒停止
         time.sleep(2)
         print()
@@ -47,9 +46,8 @@ def main() -> None:
         # valがFalseならLo,TrueならHi
         val = True
         # set_doutを実行
-        result = m5.set_dout(pin_id, val)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_dout(pin_id, val)
+        print(f"-> Set to {val}")
         # 2秒停止
         time.sleep(2)
         print()
@@ -61,9 +59,8 @@ def main() -> None:
         # valがFalseならLo,TrueならHi
         pwmval = 255
         # set_pwmoutを実行
-        result = m5.set_pwmout(pin_id, pwmval)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_pwmout(pin_id, pwmval)
+        print(f"-> Set to {pwmval}")
         # 2秒停止
         time.sleep(2)
         print()
@@ -89,9 +86,8 @@ def main() -> None:
         # STEP5. すべての出力をリセットにする。
         print("STEP5. Reset all output")
         # reset_alloutを実行
-        result = m5.reset_allout()
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.reset_allout()
+        print(f"-> Reset")
         # 2秒停止
         time.sleep(2)
         print()
@@ -123,9 +119,8 @@ def main() -> None:
         # pwmout0_valでpwmout0の出力値を設定
         pwmout0_val = 200
         # set_alloutを実行
-        result = m5.set_allout(dout0_val, dout1_val, pwmout0_val)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_allout(dout0_val, dout1_val, pwmout0_val)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -151,9 +146,8 @@ def main() -> None:
         # STEP9. すべての出力を再度リセットにする。
         print("STEP9. Reset all output")
         # reset_alloutを実行
-        result = m5.reset_allout()
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.reset_allout()
+        print("-> Reset")
         # 2秒停止
         time.sleep(2)
         print()

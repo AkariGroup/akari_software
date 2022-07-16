@@ -31,9 +31,9 @@ def main() -> None:
         # colorで'white'を指定
         color = "white"
         # set_display_colorを実行
-        result = m5.set_display_color(color)
+        m5.set_display_color(color)
         # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -43,9 +43,9 @@ def main() -> None:
         # colorで'red'を指定
         color = "red"
         # set_display_colorを実行
-        result = m5.set_display_color(color)
+        m5.set_display_color(color)
         # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -55,9 +55,9 @@ def main() -> None:
         # colorで'blue'を指定
         color = "blue"
         # set_display_colorを実行
-        result = m5.set_display_color(color)
+        m5.set_display_color(color)
         # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -67,9 +67,9 @@ def main() -> None:
         # colorで'magenta'を指定
         color = "magenta"
         # set_display_colorを実行
-        result = m5.set_display_color(color)
+        m5.set_display_color(color)
         # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -79,9 +79,9 @@ def main() -> None:
         # colorで'black'を指定
         color = "black"
         # set_display_colorを実行
-        result = m5.set_display_color(color)
+        m5.set_display_color(color)
         # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()

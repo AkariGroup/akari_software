@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import enum
 import contextlib
+import enum
 import time
 from typing import Any, List, Optional, Tuple
 
@@ -81,64 +81,78 @@ class M5SerialServer:
                 break
         return color_int
 
-    def __write_pinval_command(self, dout0: int, dout1: int, pwmout0: int, sync: bool) -> bool:
+    def __write_pinval_command(
+        self, dout0: int, dout1: int, pwmout0: int, sync: bool
+    ) -> None:
         data = {
             "com": CommandId.WRITEPINVAL,
             "pin": {"do0": dout0, "do1": dout1, "po0": pwmout0},
         }
-        return self._communicator.send_data(data, sync=sync)
+        self._communicator.send_data(data, sync=sync)
 
     def __start_m5(self) -> None:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
         data = {"com": CommandId.STARTM5}
-        assert self._communicator.send_data(data, sync=False)
+        self._communicator.send_data(data, sync=False)
         time.sleep(0.1)
 
-    def set_dout(self, pin_id: int, val: bool, sync: bool = True) -> int:
+    def set_dout(self, pin_id: int, val: bool, sync: bool = True) -> None:
         if pin_id == 0:
             self.__dout0_val = int(val)
         elif pin_id == 1:
             self.__dout1_val = int(val)
         else:
-            return 0
-        return self.__write_pinval_command(
-            self.__dout0_val, self.__dout1_val, self.__pwmout0_val, sync,
+            raise ValueError(f"Out of range pin_id: {pin_id}")
+
+        self.__write_pinval_command(
+            self.__dout0_val,
+            self.__dout1_val,
+            self.__pwmout0_val,
+            sync,
         )
 
-    def set_pwmout(self, pin_id: int, val: int, sync: bool = True) -> int:
+    def set_pwmout(self, pin_id: int, val: int, sync: bool = True) -> None:
         if pin_id == 0:
             self.__pwmout0_val = int(val)
         else:
-            return 0
-        return self.__write_pinval_command(
-            self.__dout0_val, self.__dout1_val, self.__pwmout0_val, sync,
+            raise ValueError(f"Out of range pin_id: {pin_id}")
+
+        self.__write_pinval_command(
+            self.__dout0_val,
+            self.__dout1_val,
+            self.__pwmout0_val,
+            sync,
         )
 
     def set_allout(
         self, dout0_val: bool, dout1_val: bool, pwmout0_val: int, sync: bool = True
-    ) -> bool:
+    ) -> None:
         self.__dout0_val = int(dout0_val)
         self.__dout1_val = int(dout1_val)
         self.__pwmout0_val = int(pwmout0_val)
-        return self.__write_pinval_command(
-            self.__dout0_val, self.__dout1_val, self.__pwmout0_val, sync,
+
+        self.__write_pinval_command(
+            self.__dout0_val,
+            self.__dout1_val,
+            self.__pwmout0_val,
+            sync,
         )
 
-    def reset_allout(self, sync: bool = True) -> bool:
+    def reset_allout(self, sync: bool = True) -> None:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
         data = {"com": CommandId.RESETALLOUT}
-        return self._communicator.send_data(data, sync)
+        self._communicator.send_data(data, sync)
 
-    def set_display_color(self, color: str, sync: bool = True) -> bool:
+    def set_display_color(self, color: str, sync: bool = True) -> None:
         data = {
             "com": CommandId.SETDISPLAYCOLOR,
             "lcd": {"cl": self.__color_to_m5code(color)},
         }
-        return self._communicator.send_data(data, sync)
+        self._communicator.send_data(data, sync)
 
     def set_display_text(
         self,
@@ -150,7 +164,7 @@ class M5SerialServer:
         back_color: str,
         refresh: bool,
         sync: bool = True,
-    ) -> bool:
+    ) -> None:
         data = {
             "com": CommandId.SETDISPLAYTEXT,
             "lcd": {
@@ -163,30 +177,29 @@ class M5SerialServer:
                 "rf": int(refresh),
             },
         }
-        return self._communicator.send_data(data, sync)
+        self._communicator.send_data(data, sync)
 
     def set_display_image(
         self, filepath: str, pos_x: int, pos_y: int, scale: float, sync: bool = True
-    ) -> bool:
+    ) -> None:
         data = {
             "com": CommandId.SETDISPLAYIMG,
             "lcd": {"pth": filepath, "x": pos_x, "y": pos_y, "scl": round(scale, 2)},
         }
-        return self._communicator.send_data(data, sync)
+        self._communicator.send_data(data, sync)
 
-    def use_japanese_font(self, enabled: bool, sync: bool = True) -> bool:
+    def use_japanese_font(self, enabled: bool, sync: bool = True) -> None:
         data = {"com": CommandId.USEJAPANESEFONT, "lcd": {"jp": enabled}}
-        return self._communicator.send_data(data, sync)
+        self._communicator.send_data(data, sync)
 
-    def reset_m5(self) -> bool:
+    def reset_m5(self) -> None:
         self.__dout0_val = 0
         self.__dout1_val = 0
         self.__pwmout0_val = 0
         data = {"com": CommandId.RESETM5}
-        result = self._communicator.send_data(data, sync=False)
+        self._communicator.send_data(data, sync=False)
         time.sleep(2)
         self.__start_m5()
-        return result
 
     def get(self) -> M5ComDict:
         return self._communicator.get()

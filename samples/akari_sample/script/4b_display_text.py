@@ -42,11 +42,10 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -67,11 +66,10 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -93,11 +91,10 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -119,11 +116,10 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -145,11 +141,10 @@ def main() -> None:
         # refreshをFalseにすることで前の背景表示を消さずに追記できる。
         refresh = False
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -158,9 +153,8 @@ def main() -> None:
         print("STEP6. Change font")
         # dataをFalseにすることで、フォントを内蔵フォントに変更可能
         data = False
-        result = m5.use_japanese_font(data)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.use_japanese_font(data)
+        print("-> Set")
         print()
 
         # STEP7. 変更したフォントで'7.アカリ'を(50,170)にリフレッシュなしで重ねて表示
@@ -180,11 +174,10 @@ def main() -> None:
         # refreshをFalseにすることで前の表示を消さずに追記できる。
         refresh = False
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -193,9 +186,8 @@ def main() -> None:
         print("STEP8. Change font to default")
         # dataをTrueにすることで、フォントをデフォルトフォントに変更可能
         data = True
-        result = m5.use_japanese_font(data)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.use_japanese_font(data)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -217,11 +209,10 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        result = m5.set_display_text(
+        m5.set_display_text(
             text, pos_x, pos_y, size, text_color, back_color, refresh
         )
-        # 結果を出力
-        print("Result: " + str(result))
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
