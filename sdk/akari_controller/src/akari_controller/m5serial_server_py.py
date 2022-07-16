@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import contextlib
+import dataclasses
 import enum
 import time
-from typing import Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .m5serial_communicator import M5ComDict, M5SerialCommunicator
 
@@ -48,6 +49,21 @@ color_pair: List[Tuple[str, int]] = [
 ]
 
 
+@dataclasses.dataclass
+class _PinOut:
+    dout0: bool = False
+    dout1: bool = False
+    pwmout0: int = 0
+
+    def reset(self) -> None:
+        self.dout0 = False
+        self.dout1 = False
+        self.pwmout0 = 0
+
+    def serialize(self) -> Dict[str, Any]:
+        return {"do0": int(self.dout0), "do1": int(self.dout1), "po0": self.pwmout0}
+
+
 class M5SerialServer:
     def __init__(self, communicator: Optional[M5SerialCommunicator] = None) -> None:
         self._stack = contextlib.ExitStack()
@@ -56,10 +72,8 @@ class M5SerialServer:
         else:
             self._communicator = communicator
 
-        self.__dout0_val = 0
-        self.__dout1_val = 0
-        self.__pwmout0_val = 0
-        self.__data_str: str = ""
+        self._pin_out = _PinOut()
+
         self.reset_m5()
         self._communicator.start()
         time.sleep(0.1)
@@ -81,69 +95,48 @@ class M5SerialServer:
                 break
         return color_int
 
-    def __write_pinval_command(
-        self, dout0: int, dout1: int, pwmout0: int, sync: bool
-    ) -> None:
+    def _write_pin_out(self, sync: bool) -> None:
         data = {
             "com": CommandId.WRITEPINVAL,
-            "pin": {"do0": dout0, "do1": dout1, "po0": pwmout0},
+            "pin": self._pin_out.serialize(),
         }
         self._communicator.send_data(data, sync=sync)
 
-    def __start_m5(self) -> None:
-        self.__dout0_val = 0
-        self.__dout1_val = 0
-        self.__pwmout0_val = 0
+    def _start_m5(self) -> None:
         data = {"com": CommandId.STARTM5}
         self._communicator.send_data(data, sync=False)
+        self._pin_out.reset()
         time.sleep(0.1)
 
-    def set_dout(self, pin_id: int, val: bool, sync: bool = True) -> None:
+    def set_dout(self, pin_id: int, value: bool, sync: bool = True) -> None:
         if pin_id == 0:
-            self.__dout0_val = int(val)
+            self._pin_out.dout0 = value
         elif pin_id == 1:
-            self.__dout1_val = int(val)
+            self._pin_out.dout1 = value
         else:
             raise ValueError(f"Out of range pin_id: {pin_id}")
 
-        self.__write_pinval_command(
-            self.__dout0_val,
-            self.__dout1_val,
-            self.__pwmout0_val,
-            sync,
-        )
+        self._write_pin_out(sync=sync)
 
-    def set_pwmout(self, pin_id: int, val: int, sync: bool = True) -> None:
+    def set_pwmout(self, pin_id: int, value: int, sync: bool = True) -> None:
         if pin_id == 0:
-            self.__pwmout0_val = int(val)
+            self._pin_out.pwmout0 = value
         else:
             raise ValueError(f"Out of range pin_id: {pin_id}")
 
-        self.__write_pinval_command(
-            self.__dout0_val,
-            self.__dout1_val,
-            self.__pwmout0_val,
-            sync,
-        )
+        self._write_pin_out(sync=sync)
 
     def set_allout(
         self, dout0_val: bool, dout1_val: bool, pwmout0_val: int, sync: bool = True
     ) -> None:
-        self.__dout0_val = int(dout0_val)
-        self.__dout1_val = int(dout1_val)
-        self.__pwmout0_val = int(pwmout0_val)
+        self._pin_out.dout0 = dout0_val
+        self._pin_out.dout1 = dout1_val
+        self._pin_out.pwmout0 = pwmout0_val
 
-        self.__write_pinval_command(
-            self.__dout0_val,
-            self.__dout1_val,
-            self.__pwmout0_val,
-            sync,
-        )
+        self._write_pin_out(sync=sync)
 
     def reset_allout(self, sync: bool = True) -> None:
-        self.__dout0_val = 0
-        self.__dout1_val = 0
-        self.__pwmout0_val = 0
+        self._pin_out.reset()
         data = {"com": CommandId.RESETALLOUT}
         self._communicator.send_data(data, sync)
 
@@ -193,13 +186,11 @@ class M5SerialServer:
         self._communicator.send_data(data, sync)
 
     def reset_m5(self) -> None:
-        self.__dout0_val = 0
-        self.__dout1_val = 0
-        self.__pwmout0_val = 0
         data = {"com": CommandId.RESETM5}
         self._communicator.send_data(data, sync=False)
+        self._pin_out.reset()
         time.sleep(2)
-        self.__start_m5()
+        self._start_m5()
 
     def get(self) -> M5ComDict:
         return self._communicator.get()

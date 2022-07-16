@@ -2,7 +2,7 @@ from typing import cast
 
 import pytest
 from akari_controller.m5serial_communicator import M5SerialCommunicator
-from akari_controller.m5serial_server_py import M5SerialServer
+from akari_controller.m5serial_server_py import M5SerialServer, _PinOut
 
 from .mocks import MockM5Communicator
 
@@ -10,6 +10,17 @@ from .mocks import MockM5Communicator
 @pytest.fixture
 def mock_communicator() -> M5SerialCommunicator:
     return cast(M5SerialCommunicator, MockM5Communicator())
+
+
+def test__pin_out() -> None:
+    pin_out = _PinOut()
+    assert pin_out.serialize() == {"do0": 0, "do1": 0, "po0": 0}
+    pin_out.dout0 = True
+    pin_out.pwmout0 = 128
+    assert pin_out.serialize() == {"do0": 1, "do1": 0, "po0": 128}
+
+    pin_out.reset()
+    assert pin_out.serialize() == {"do0": 0, "do1": 0, "po0": 0}
 
 
 def test_set_dout(mock_communicator: M5SerialCommunicator) -> None:
