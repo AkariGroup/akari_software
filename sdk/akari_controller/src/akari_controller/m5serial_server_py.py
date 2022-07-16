@@ -4,8 +4,9 @@ import contextlib
 import dataclasses
 import enum
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
 
+from .color import Color
 from .m5serial_communicator import M5ComDict, M5SerialCommunicator
 
 """
@@ -24,29 +25,6 @@ class CommandId(enum.IntEnum):
     USEJAPANESEFONT = 13
     STARTM5 = 98
     RESETM5 = 99
-
-
-color_pair: List[Tuple[str, int]] = [
-    ("black", 0x0000),
-    ("navy", 0x000F),
-    ("darkgreen", 0x03E0),
-    ("darkcyan", 0x03EF),
-    ("maroon", 0x7800),
-    ("purple", 0x780F),
-    ("olive", 0x7BE0),
-    ("lightgrey", 0xC618),
-    ("darkgrey", 0x7BEF),
-    ("blue", 0x001F),
-    ("green", 0x07E0),
-    ("cyan", 0x07E0),
-    ("red", 0xF800),
-    ("magenta", 0xF81F),
-    ("yellow", 0xFFE0),
-    ("white", 0xFFFF),
-    ("orange", 0xFD20),
-    ("greenyellow", 0xAFE5),
-    ("pink", 0xF81F),
-]
 
 
 @dataclasses.dataclass
@@ -86,14 +64,6 @@ class M5SerialServer:
 
     def close(self) -> None:
         self._stack.close()
-
-    def __color_to_m5code(self, color_str: str) -> int:
-        color_int = -1
-        for i in range(0, len(color_pair)):
-            if color_str == color_pair[i][0]:
-                color_int = color_pair[i][1]
-                break
-        return color_int
 
     def _write_pin_out(self, sync: bool) -> None:
         data = {
@@ -140,10 +110,10 @@ class M5SerialServer:
         data = {"com": CommandId.RESETALLOUT}
         self._communicator.send_data(data, sync)
 
-    def set_display_color(self, color: str, sync: bool = True) -> None:
+    def set_display_color(self, color: Color, sync: bool = True) -> None:
         data = {
             "com": CommandId.SETDISPLAYCOLOR,
-            "lcd": {"cl": self.__color_to_m5code(color)},
+            "lcd": {"cl": color.as_rgb565()},
         }
         self._communicator.send_data(data, sync)
 
@@ -153,8 +123,8 @@ class M5SerialServer:
         pos_x: int,
         pos_y: int,
         size: int,
-        text_color: str,
-        back_color: str,
+        text_color: Color,
+        back_color: Color,
         refresh: bool,
         sync: bool = True,
     ) -> None:
@@ -165,8 +135,8 @@ class M5SerialServer:
                 "x": pos_x,
                 "y": pos_y,
                 "sz": size,
-                "cl": self.__color_to_m5code(text_color),
-                "bk": self.__color_to_m5code(back_color),
+                "cl": text_color.as_rgb565(),
+                "bk": back_color.as_rgb565(),
                 "rf": int(refresh),
             },
         }
