@@ -17,6 +17,7 @@ py_version = "py38"
     "samples/m5serial_sample/",
     "sdk/akari_controller/src/akari_controller",
     "sdk/akari_controller/tests/",
+    "sdk/akari_rpc/akari_rpc",
     "sdk/depthai_uvc",
     "tools/python",
   ]
@@ -25,4 +26,6 @@ py_version = "py38"
     "sdk/",
     "tools/",
   ]
-
+  excludes = [
+    "sdk/akari_rpc/akari_rpc/pb2",
+  ]
