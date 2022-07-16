@@ -115,20 +115,14 @@ class M5SerialCommunicator:
     def send(self, data: bytes) -> None:
         self._serial.write(data)
 
-    def send_data(self, data: Dict[str, Any], sync: bool = True) -> bool:
-        # TODO: Use exception
-        try:
-            json_data = json.dumps(data, ensure_ascii=False)
-            self.send(bytes(json_data, "UTF-8"))
+    def send_data(self, data: Dict[str, Any], sync: bool = True) -> None:
+        json_data = json.dumps(data, ensure_ascii=False)
+        self.send(bytes(json_data, "UTF-8"))
 
-            if sync:
-                self.wait_response()
-            return True
-        except Exception as e:
-            print(e)
-            return False
+        if sync:
+            self._wait_response()
 
-    def wait_response(self) -> None:
+    def _wait_response(self) -> None:
         def _predicate() -> bool:
             return self._latest_msg is not None and self._latest_msg["is_response"]
 

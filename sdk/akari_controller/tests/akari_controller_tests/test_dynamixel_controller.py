@@ -1,4 +1,5 @@
 import math
+from typing import cast
 
 import pytest
 from akari_controller.dynamixel_communicator import DynamixelCommunicator
@@ -18,7 +19,9 @@ from .mocks import MockDynamixelCommunicator
 
 @pytest.fixture
 def mock_communicator() -> DynamixelCommunicator:
-    return MockDynamixelCommunicator(n_devices=2, n_address=256)
+    return cast(
+        DynamixelCommunicator, MockDynamixelCommunicator(n_devices=2, n_address=256)
+    )
 
 
 def test_read_write_device(mock_communicator: DynamixelCommunicator) -> None:

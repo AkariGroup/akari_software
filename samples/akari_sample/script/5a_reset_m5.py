@@ -28,9 +28,9 @@ def main() -> None:
     while True:
         print("Reset M5")
         # reset_m5を実行
-        result = m5.reset_m5()
+        m5.reset_m5()
         # 結果を出力
-        print("Result: " + str(result))
+        print("-> Reset")
         # 5秒停止
         time.sleep(5)
 

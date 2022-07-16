@@ -16,9 +16,13 @@ py_version = "py38"
     "samples/depthai_sample/object_recognition",
     "samples/m5serial_sample/",
     "sdk/akari_controller/src/akari_controller",
+    "sdk/akari_controller/tests/",
     "sdk/depthai_uvc",
     "tools/python",
   ]
 [tool.pysen.lint.source]
-  includes = ["src/","tools/"]
+  includes = [
+    "sdk/",
+    "tools/",
+  ]
 

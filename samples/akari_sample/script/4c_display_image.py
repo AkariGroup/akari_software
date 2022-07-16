@@ -36,9 +36,8 @@ def main() -> None:
         # scaleでサイズ指定。マイナス値を入れると画面サイズに合わせて自動調整される。
         scale = -1.0
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -54,9 +53,8 @@ def main() -> None:
         # scaleでサイズ指定。
         scale = 2.0
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -72,9 +70,8 @@ def main() -> None:
         # scaleでサイズ指定。
         scale = 0.3
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -90,9 +87,8 @@ def main() -> None:
         # scaleでサイズ指定。
         scale = 0.7
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -108,9 +104,8 @@ def main() -> None:
         # scaleでサイズ指定。
         scale = 0.4
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -126,9 +121,8 @@ def main() -> None:
         # scaleでサイズ指定。
         scale = 0.2
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -144,9 +138,8 @@ def main() -> None:
         # scaleでサイズ指定。
         scale = 0.3
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()
@@ -162,9 +155,8 @@ def main() -> None:
         # scaleでサイズ指定。マイナス値で画面に合わせて自動調整。
         scale = -1.0
         # set_display_imageを実行
-        result = m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 結果を出力
-        print("Result: " + str(result))
+        m5.set_display_image(filepath, pos_x, pos_y, scale)
+        print("-> Set")
         # 2秒停止
         time.sleep(2)
         print()

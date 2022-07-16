@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List
 
 
 class MockDynamixelCommunicator:
@@ -22,3 +22,20 @@ class MockDynamixelCommunicator:
             raise RuntimeError()
 
         self._memory[device_id][address] = value - (length - 1)
+
+
+class MockM5Communicator:
+    def __init__(self) -> None:
+        pass
+
+    def start(self) -> None:
+        pass
+
+    def stop(self) -> None:
+        pass
+
+    def send_data(self, data: Dict[str, Any], sync: bool = True) -> None:
+        pass
+
+    def get(self) -> Any:
+        raise NotImplementedError()
