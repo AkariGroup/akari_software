@@ -87,7 +87,7 @@ def main() -> None:
         print("STEP5. Reset all output")
         # reset_alloutを実行
         m5.reset_allout()
-        print(f"-> Reset")
+        print("-> Reset")
         # 2秒停止
         time.sleep(2)
         print()
@@ -119,7 +119,7 @@ def main() -> None:
         # pwmout0_valでpwmout0の出力値を設定
         pwmout0_val = 200
         # set_alloutを実行
-        m5.set_allout(dout0_val, dout1_val, pwmout0_val)
+        m5.set_allout(dout0=dout0_val, dout1=dout1_val, pwmout0=pwmout0_val)
         print("-> Set")
         # 2秒停止
         time.sleep(2)

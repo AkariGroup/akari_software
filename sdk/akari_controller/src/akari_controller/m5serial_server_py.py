@@ -97,11 +97,16 @@ class M5SerialServer:
         self._write_pin_out(sync=sync)
 
     def set_allout(
-        self, dout0_val: bool, dout1_val: bool, pwmout0_val: int, sync: bool = True
+        self,
+        *,
+        dout0: bool,
+        dout1: bool,
+        pwmout0: int,
+        sync: bool = True,
     ) -> None:
-        self._pin_out.dout0 = dout0_val
-        self._pin_out.dout1 = dout1_val
-        self._pin_out.pwmout0 = pwmout0_val
+        self._pin_out.dout0 = dout0
+        self._pin_out.dout1 = dout1
+        self._pin_out.pwmout0 = pwmout0
 
         self._write_pin_out(sync=sync)
 
