@@ -88,7 +88,7 @@ def main() -> None:
         # set_display_colorを実行
         m5.set_display_color(color)
         # 結果を出力
-        print("-> Set")
+        print(f"-> Set (Color: {color})")
         # 2秒停止
         time.sleep(2)
         print()
