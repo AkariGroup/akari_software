@@ -11,12 +11,12 @@ line_length = 88
 py_version = "py38"
 [[tool.pysen.lint.mypy_targets]]
   paths = [
-    "src/akari_controller/sample/",
-    "src/akari_controller/src/akari_controller",
-    "src/akari_sample/script",
-    "src/depthai_sample/face_detection",
-    "src/depthai_sample/object_recognition",
-    "src/depthai_uvc",
+    "samples/akari_sample/script",
+    "samples/depthai_sample/face_detection",
+    "samples/depthai_sample/object_recognition",
+    "sdk/akari_controller/sample/",
+    "sdk/akari_controller/src/akari_controller",
+    "sdk/depthai_uvc",
     "tools/python",
   ]
 [tool.pysen.lint.source]

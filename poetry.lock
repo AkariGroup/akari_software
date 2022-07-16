@@ -1,7 +1,7 @@
 [[package]]
-name = "akari-controller"
+name = "akari_controller"
 version = "0.2.2"
-description = "Akari controller by dynamixel_sdk. python package"
+description = ""
 category = "main"
 optional = false
 python-versions = "*"
@@ -12,7 +12,7 @@ dynamixel_sdk = "*"
 
 [package.source]
 type = "directory"
-url = "src/akari_controller"
+url = "sdk/akari_controller"
 
 [[package]]
 name = "appdirs"
@@ -24,7 +24,7 @@ python-versions = "*"
 
 [[package]]
 name = "atomicwrites"
-version = "1.4.0"
+version = "1.4.1"
 description = "Atomic file writes."
 category = "dev"
 optional = false
@@ -109,7 +109,7 @@ dev = ["pytest (>=5)", "pytest-cov", "coveralls", "black", "mypy", "pylint"]
 
 [[package]]
 name = "depthai"
-version = "2.16.0.0"
+version = "2.17.0.0"
 description = "DepthAI Python Library"
 category = "main"
 optional = false
@@ -230,7 +230,7 @@ python-versions = "*"
 
 [[package]]
 name = "numpy"
-version = "1.23.0"
+version = "1.23.1"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
 optional = false
@@ -386,7 +386,7 @@ numpy = "*"
 
 [[package]]
 name = "regex"
-version = "2022.6.2"
+version = "2022.7.9"
 description = "Alternative regular expression module, to replace re."
 category = "main"
 optional = false
@@ -451,15 +451,12 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5fd4f640fe7edbf5c9cc26c3a59a607aeed4f7baea8faa02d228b7d6b5d2ccf0"
+content-hash = "9473fef83e028006aa416a60842d7ed47bcb7508d7757f3c83a1ea21dae52b66"
 
 [metadata.files]
-akari-controller = []
+akari_controller = []
 appdirs = []
-atomicwrites = [
-    {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
-    {file = "atomicwrites-1.4.0.tar.gz", hash = "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"},
-]
+atomicwrites = []
 attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},
     {file = "attrs-21.4.0.tar.gz", hash = "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"},

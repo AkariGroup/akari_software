@@ -31,4 +31,4 @@ jobs:
         poetry run pysen run lint
     - name: Run pytest
       run: |
-        poetry run pytest -v src/akari_controller/tests
+        poetry run pytest -v sdk/akari_controller/tests
