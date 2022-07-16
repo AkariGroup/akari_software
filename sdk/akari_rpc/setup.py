@@ -8,4 +8,8 @@ setup(
     author="akari",
     author_email="akari.tmc@gmail.com",
     package_data={"akari_rpc": ["py.typed"]},
+    install_requires=[
+        "grpcio==1.44.0",
+        "protobuf==3.19.3",
+    ],
 )
