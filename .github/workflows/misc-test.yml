@@ -1,0 +1,27 @@
+name: Misc Test
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  misc-test:
+    name: Misc Test
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: false
+    - name: Install apt packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends git git-lfs
+      env:
+        DEBIAN_FRONTEND: noninteractive
+    - name: Run lfs-pointer-check
+      run: |
+        src_path=$(pwd)
+        cd $(mktemp -d)
+        wget -c https://github.com/bonprosoft/lfs-pointer-check/releases/download/0.0.3/lfs_pointer_check_linux_amd64.tar.gz -O - | tar -xzv
+        ./lfs-pointer-check --size-limit="1MB" $src_path
