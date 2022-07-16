@@ -10,6 +10,7 @@ Created on 2021/06/11
 import time
 
 from akari_controller.m5serial_server_py import M5SerialServer
+from akari_controller.color import Colors
 
 
 def main() -> None:
@@ -36,9 +37,9 @@ def main() -> None:
         # 文字サイズは3
         size = 3
         # 文字色は黒
-        text_color = "black"
+        text_color = Colors.BLACK
         # 背景色は白
-        back_color = "white"
+        back_color = Colors.WHITE
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
@@ -60,9 +61,9 @@ def main() -> None:
         # 文字サイズは3
         size = 3
         # 文字色は赤
-        text_color = "red"
+        text_color = Colors.RED
         # 背景色は白
-        back_color = "white"
+        back_color = Colors.WHITE
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
@@ -85,9 +86,9 @@ def main() -> None:
         # 文字サイズは4
         size = 4
         # 文字色は白
-        text_color = "white"
+        text_color = Colors.WHITE
         # 背景色は緑
-        back_color = "green"
+        back_color = Colors.GREEN
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
@@ -110,9 +111,9 @@ def main() -> None:
         # 文字サイズは2
         size = 2
         # 文字色は青
-        text_color = "blue"
+        text_color = Colors.BLUE
         # 背景色は黄
-        back_color = "yellow"
+        back_color = Colors.YELLOW
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
@@ -135,9 +136,9 @@ def main() -> None:
         # 文字サイズは3
         size = 3
         # 文字色は黒
-        text_color = "black"
+        text_color = Colors.BLACK
         # 背景色は紫
-        back_color = "magenta"
+        back_color = Colors.MAGENTA
         # refreshをFalseにすることで前の背景表示を消さずに追記できる。
         refresh = False
         # set_display_textを実行
@@ -168,9 +169,9 @@ def main() -> None:
         # 文字サイズは4
         size = 4
         # 文字色はピンク
-        text_color = "pink"
+        text_color = Colors.PINK
         # 背景色は灰
-        back_color = "darkgrey"
+        back_color = Colors.DARKGREY
         # refreshをFalseにすることで前の表示を消さずに追記できる。
         refresh = False
         # set_display_textを実行
@@ -203,9 +204,9 @@ def main() -> None:
         # 文字サイズは6
         size = 6
         # 文字色は白
-        text_color = "white"
+        text_color = Colors.WHITE
         # 背景色は黒
-        back_color = "black"
+        back_color = Colors.BLACK
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行

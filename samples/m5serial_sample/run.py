@@ -12,6 +12,7 @@ import locale
 import time
 
 from akari_controller.m5serial_server_py import M5SerialServer
+from akari_controller.color import Colors
 
 CLOCK_MODE = 1
 SENSOR_MODE = 2
@@ -35,7 +36,7 @@ class M5serialSample(object):
     def init_clock_disp(self) -> None:
         global duration
         duration = 0.5
-        m5.set_display_color("black")
+        m5.set_display_color(Colors.BLACK)
         locale.setlocale(locale.LC_TIME, "ja_JP.UTF-8")
         dt_now = datetime.datetime.now()
         m5.set_display_text(
@@ -43,9 +44,9 @@ class M5serialSample(object):
             -999,
             0,
             2,
-            "white",
-            "black",
-            True,
+            text_color=Colors.WHITE,
+            back_color=Colors.BLACK,
+            refresh=True,
         )
         self.is_initializing = False
 
@@ -57,13 +58,12 @@ class M5serialSample(object):
                 -999,
                 -999,
                 4,
-                "white",
-                "black",
-                False,
+                text_color=Colors.WHITE,
+                back_color=Colors.BLACK,
             )
 
     def init_sensor_disp(self) -> None:
-        m5.set_display_color("lightgrey")
+        m5.set_display_color(Colors.LIGHTGREY)
         self.is_initializing = False
 
     def update_sensor_disp(self) -> None:
@@ -73,9 +73,7 @@ class M5serialSample(object):
                 0,
                 20,
                 2,
-                "orange",
-                "",
-                False,
+                text_color=Colors.ORANGE,
             )
         if self.disp_mode == SENSOR_MODE:
             m5.set_display_text(
@@ -83,9 +81,7 @@ class M5serialSample(object):
                 0,
                 100,
                 2,
-                "pink",
-                "",
-                False,
+                text_color=Colors.PINK,
             )
         if self.disp_mode == SENSOR_MODE:
             m5.set_display_text(
@@ -93,13 +89,11 @@ class M5serialSample(object):
                 0,
                 180,
                 2,
-                "purple",
-                "",
-                False,
+                text_color=Colors.PURPLE,
             )
 
     def init_io_disp(self) -> None:
-        m5.set_display_color("white")
+        m5.set_display_color(Colors.WHITE)
         self.is_initializing = False
 
     def update_io_disp(self) -> None:
@@ -110,9 +104,8 @@ class M5serialSample(object):
                     0,
                     0,
                     2,
-                    "white",
-                    "red",
-                    False,
+                    text_color=Colors.WHITE,
+                    back_color=Colors.RED,
                 )
             else:
                 m5.set_display_text(
@@ -120,9 +113,7 @@ class M5serialSample(object):
                     0,
                     0,
                     2,
-                    "black",
-                    "",
-                    False,
+                    text_color=Colors.BLACK,
                 )
         if self.disp_mode == IO_MODE:
             if self.din1:
@@ -131,9 +122,8 @@ class M5serialSample(object):
                     0,
                     40,
                     2,
-                    "white",
-                    "red",
-                    False,
+                    text_color=Colors.WHITE,
+                    back_color=Colors.RED,
                 )
             else:
                 m5.set_display_text(
@@ -141,9 +131,7 @@ class M5serialSample(object):
                     0,
                     40,
                     2,
-                    "black",
-                    "",
-                    False,
+                    text_color=Colors.BLACK,
                 )
         if self.disp_mode == IO_MODE:
             if self.ain0 > 0:
@@ -152,9 +140,8 @@ class M5serialSample(object):
                     0,
                     80,
                     2,
-                    "white",
-                    "green",
-                    False,
+                    text_color=Colors.WHITE,
+                    back_color=Colors.GREEN,
                 )
             else:
                 m5.set_display_text(
@@ -162,9 +149,7 @@ class M5serialSample(object):
                     0,
                     80,
                     2,
-                    "green",
-                    "",
-                    False,
+                    text_color=Colors.GREEN,
                 )
         if self.disp_mode == IO_MODE:
             if self.dout0:
@@ -173,9 +158,8 @@ class M5serialSample(object):
                     0,
                     120,
                     2,
-                    "white",
-                    "red",
-                    False,
+                    text_color=Colors.WHITE,
+                    back_color=Colors.RED,
                 )
             else:
                 m5.set_display_text(
@@ -183,9 +167,7 @@ class M5serialSample(object):
                     0,
                     120,
                     2,
-                    "black",
-                    "",
-                    False,
+                    text_color=Colors.BLACK,
                 )
         if self.disp_mode == IO_MODE:
             if self.dout1:
@@ -194,9 +176,8 @@ class M5serialSample(object):
                     0,
                     160,
                     2,
-                    "white",
-                    "red",
-                    False,
+                    text_color=Colors.WHITE,
+                    back_color=Colors.RED,
                 )
             else:
                 m5.set_display_text(
@@ -204,9 +185,7 @@ class M5serialSample(object):
                     0,
                     160,
                     2,
-                    "black",
-                    "",
-                    False,
+                    text_color=Colors.BLACK,
                 )
         if self.disp_mode == IO_MODE:
             if self.pwmout0 > 0:
@@ -215,9 +194,8 @@ class M5serialSample(object):
                     0,
                     200,
                     2,
-                    "white",
-                    "blue",
-                    False,
+                    text_color=Colors.WHITE,
+                    back_color=Colors.BLUE,
                 )
             else:
                 m5.set_display_text(
@@ -225,9 +203,7 @@ class M5serialSample(object):
                     0,
                     200,
                     2,
-                    "blue",
-                    "",
-                    False,
+                    text_color=Colors.BLUE,
                 )
 
     def display_update(self) -> None:
