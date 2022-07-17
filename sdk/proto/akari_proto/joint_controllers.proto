@@ -4,38 +4,48 @@ import "google/protobuf/empty.proto";
 
 package akari_proto;
 
-message GetJointNameResponse {
+message JointSpecifier {
+  string joint_name = 1;
+}
+
+message GetJointNamesResponse {
   string joint_name = 1;
 }
 
 message GetServoEnabledResponse {
-  bool enabled = 1;
+  JointSpecifier target_joint = 1;
+  bool enabled = 2;
 }
 
 message SetServoEnabledRequest {
-  bool enabled = 1;
+  JointSpecifier target_joint = 1;
+  bool enabled = 2;
 }
 
 message SetProfileAccelerationRequest {
-  float rad_per_sec2 = 1;
+  JointSpecifier target_joint = 1;
+  float rad_per_sec2 = 2;
 }
 
 message SetProfileVelocityRequest {
-  float rad_per_sec = 1;
+  JointSpecifier target_joint = 1;
+  float rad_per_sec = 2;
 }
 
 message SetGoalPositionRequest {
-  float rad = 1;
+  JointSpecifier target_joint = 1;
+  float rad = 2;
 }
 
 message GetPresentPositionResponse {
-  float rad = 1;
+  JointSpecifier target_joint = 1;
+  float rad = 2;
 }
 
 service JointControllerService {
-    rpc GetJointName(google.protobuf.Empty)
-        returns (GetJointNameResponse);
-    rpc GetServoEnabled(google.protobuf.Empty)
+    rpc GetJointNames(JointSpecifier)
+        returns (GetJointNamesResponse);
+    rpc GetServoEnabled(JointSpecifier)
         returns (GetServoEnabledResponse);
     rpc SetServoEnabled(SetServoEnabledRequest)
         returns (google.protobuf.Empty);
@@ -45,6 +55,6 @@ service JointControllerService {
         returns (google.protobuf.Empty);
     rpc SetGoalPosition(SetGoalPositionRequest)
         returns (google.protobuf.Empty);
-    rpc GetPresentPosition(google.protobuf.Empty)
+    rpc GetPresentPosition(JointSpecifier)
         returns (GetPresentPositionResponse);
 }
