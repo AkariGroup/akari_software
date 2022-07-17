@@ -149,14 +149,14 @@ class Color(google.protobuf.message.Message):
     RED_FIELD_NUMBER: builtins.int
     GREEN_FIELD_NUMBER: builtins.int
     BLUE_FIELD_NUMBER: builtins.int
-    red: builtins.float
-    green: builtins.float
-    blue: builtins.float
+    red: builtins.int
+    green: builtins.int
+    blue: builtins.int
     def __init__(self,
         *,
-        red: builtins.float = ...,
-        green: builtins.float = ...,
-        blue: builtins.float = ...,
+        red: builtins.int = ...,
+        green: builtins.int = ...,
+        blue: builtins.int = ...,
         ) -> None: ...
     def ClearField(self, field_name: typing_extensions.Literal["blue",b"blue","green",b"green","red",b"red"]) -> None: ...
 global___Color = Color
