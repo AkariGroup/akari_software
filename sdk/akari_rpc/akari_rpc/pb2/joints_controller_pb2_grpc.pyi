@@ -10,7 +10,7 @@ import grpc
 class JointsControllerServiceStub:
     def __init__(self, channel: grpc.Channel) -> None: ...
     GetJointNames: grpc.UnaryUnaryMultiCallable[
-        akari_proto.joints_controller_pb2.JointSpecifier,
+        google.protobuf.empty_pb2.Empty,
         akari_proto.joints_controller_pb2.GetJointNamesResponse]
 
     GetServoEnabled: grpc.UnaryUnaryMultiCallable[
@@ -41,7 +41,7 @@ class JointsControllerServiceStub:
 class JointsControllerServiceServicer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def GetJointNames(self,
-        request: akari_proto.joints_controller_pb2.JointSpecifier,
+        request: google.protobuf.empty_pb2.Empty,
         context: grpc.ServicerContext,
     ) -> akari_proto.joints_controller_pb2.GetJointNamesResponse: ...
 

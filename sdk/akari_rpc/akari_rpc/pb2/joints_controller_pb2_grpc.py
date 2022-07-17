@@ -17,7 +17,7 @@ class JointsControllerServiceStub(object):
         """
         self.GetJointNames = channel.unary_unary(
                 '/akari_proto.JointsControllerService/GetJointNames',
-                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=akari__proto_dot_joints__controller__pb2.GetJointNamesResponse.FromString,
                 )
         self.GetServoEnabled = channel.unary_unary(
@@ -102,7 +102,7 @@ def add_JointsControllerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetJointNames': grpc.unary_unary_rpc_method_handler(
                     servicer.GetJointNames,
-                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=akari__proto_dot_joints__controller__pb2.GetJointNamesResponse.SerializeToString,
             ),
             'GetServoEnabled': grpc.unary_unary_rpc_method_handler(
@@ -157,7 +157,7 @@ class JointsControllerService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetJointNames',
-            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             akari__proto_dot_joints__controller__pb2.GetJointNamesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

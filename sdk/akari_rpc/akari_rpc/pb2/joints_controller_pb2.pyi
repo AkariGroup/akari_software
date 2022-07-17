@@ -4,6 +4,7 @@ isort:skip_file
 """
 import builtins
 import google.protobuf.descriptor
+import google.protobuf.internal.containers
 import google.protobuf.message
 import typing
 import typing_extensions
@@ -23,13 +24,14 @@ global___JointSpecifier = JointSpecifier
 
 class GetJointNamesResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    JOINT_NAME_FIELD_NUMBER: builtins.int
-    joint_name: typing.Text
+    JOINT_NAMES_FIELD_NUMBER: builtins.int
+    @property
+    def joint_names(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[typing.Text]: ...
     def __init__(self,
         *,
-        joint_name: typing.Text = ...,
+        joint_names: typing.Optional[typing.Iterable[typing.Text]] = ...,
         ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["joint_name",b"joint_name"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["joint_names",b"joint_names"]) -> None: ...
 global___GetJointNamesResponse = GetJointNamesResponse
 
 class GetServoEnabledResponse(google.protobuf.message.Message):

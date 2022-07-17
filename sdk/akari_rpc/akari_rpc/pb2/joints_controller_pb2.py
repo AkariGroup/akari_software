@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n#akari_proto/joints_controller.proto\x12\x0b\x61kari_proto\x1a\x1bgoogle/protobuf/empty.proto\"/\n\x0eJointSpecifier\x12\x1d\n\njoint_name\x18\x01 \x01(\tR\tjointName\"6\n\x15GetJointNamesResponse\x12\x1d\n\njoint_name\x18\x01 \x01(\tR\tjointName\"s\n\x17GetServoEnabledResponse\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x18\n\x07\x65nabled\x18\x02 \x01(\x08R\x07\x65nabled\"r\n\x16SetServoEnabledRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x18\n\x07\x65nabled\x18\x02 \x01(\x08R\x07\x65nabled\"\x81\x01\n\x1dSetProfileAccelerationRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12 \n\x0crad_per_sec2\x18\x02 \x01(\x02R\nradPerSec2\"{\n\x19SetProfileVelocityRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x1e\n\x0brad_per_sec\x18\x02 \x01(\x02R\tradPerSec\"j\n\x16SetGoalPositionRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x10\n\x03rad\x18\x02 \x01(\x02R\x03rad\"n\n\x1aGetPresentPositionResponse\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x10\n\x03rad\x18\x02 \x01(\x02R\x03rad2\xf1\x04\n\x17JointsControllerService\x12P\n\rGetJointNames\x12\x1b.akari_proto.JointSpecifier\x1a\".akari_proto.GetJointNamesResponse\x12T\n\x0fGetServoEnabled\x12\x1b.akari_proto.JointSpecifier\x1a$.akari_proto.GetServoEnabledResponse\x12N\n\x0fSetServoEnabled\x12#.akari_proto.SetServoEnabledRequest\x1a\x16.google.protobuf.Empty\x12\\\n\x16SetProfileAcceleration\x12*.akari_proto.SetProfileAccelerationRequest\x1a\x16.google.protobuf.Empty\x12T\n\x12SetProfileVelocity\x12&.akari_proto.SetProfileVelocityRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetGoalPosition\x12#.akari_proto.SetGoalPositionRequest\x1a\x16.google.protobuf.Empty\x12Z\n\x12GetPresentPosition\x12\x1b.akari_proto.JointSpecifier\x1a\'.akari_proto.GetPresentPositionResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n#akari_proto/joints_controller.proto\x12\x0b\x61kari_proto\x1a\x1bgoogle/protobuf/empty.proto\"/\n\x0eJointSpecifier\x12\x1d\n\njoint_name\x18\x01 \x01(\tR\tjointName\"8\n\x15GetJointNamesResponse\x12\x1f\n\x0bjoint_names\x18\x01 \x03(\tR\njointNames\"s\n\x17GetServoEnabledResponse\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x18\n\x07\x65nabled\x18\x02 \x01(\x08R\x07\x65nabled\"r\n\x16SetServoEnabledRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x18\n\x07\x65nabled\x18\x02 \x01(\x08R\x07\x65nabled\"\x81\x01\n\x1dSetProfileAccelerationRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12 \n\x0crad_per_sec2\x18\x02 \x01(\x02R\nradPerSec2\"{\n\x19SetProfileVelocityRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x1e\n\x0brad_per_sec\x18\x02 \x01(\x02R\tradPerSec\"j\n\x16SetGoalPositionRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x10\n\x03rad\x18\x02 \x01(\x02R\x03rad\"n\n\x1aGetPresentPositionResponse\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x10\n\x03rad\x18\x02 \x01(\x02R\x03rad2\xec\x04\n\x17JointsControllerService\x12K\n\rGetJointNames\x12\x16.google.protobuf.Empty\x1a\".akari_proto.GetJointNamesResponse\x12T\n\x0fGetServoEnabled\x12\x1b.akari_proto.JointSpecifier\x1a$.akari_proto.GetServoEnabledResponse\x12N\n\x0fSetServoEnabled\x12#.akari_proto.SetServoEnabledRequest\x1a\x16.google.protobuf.Empty\x12\\\n\x16SetProfileAcceleration\x12*.akari_proto.SetProfileAccelerationRequest\x1a\x16.google.protobuf.Empty\x12T\n\x12SetProfileVelocity\x12&.akari_proto.SetProfileVelocityRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetGoalPosition\x12#.akari_proto.SetGoalPositionRequest\x1a\x16.google.protobuf.Empty\x12Z\n\x12GetPresentPosition\x12\x1b.akari_proto.JointSpecifier\x1a\'.akari_proto.GetPresentPositionResponseb\x06proto3')
 
 
 
@@ -90,19 +90,19 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _JOINTSPECIFIER._serialized_start=81
   _JOINTSPECIFIER._serialized_end=128
   _GETJOINTNAMESRESPONSE._serialized_start=130
-  _GETJOINTNAMESRESPONSE._serialized_end=184
-  _GETSERVOENABLEDRESPONSE._serialized_start=186
-  _GETSERVOENABLEDRESPONSE._serialized_end=301
-  _SETSERVOENABLEDREQUEST._serialized_start=303
-  _SETSERVOENABLEDREQUEST._serialized_end=417
-  _SETPROFILEACCELERATIONREQUEST._serialized_start=420
-  _SETPROFILEACCELERATIONREQUEST._serialized_end=549
-  _SETPROFILEVELOCITYREQUEST._serialized_start=551
-  _SETPROFILEVELOCITYREQUEST._serialized_end=674
-  _SETGOALPOSITIONREQUEST._serialized_start=676
-  _SETGOALPOSITIONREQUEST._serialized_end=782
-  _GETPRESENTPOSITIONRESPONSE._serialized_start=784
-  _GETPRESENTPOSITIONRESPONSE._serialized_end=894
-  _JOINTSCONTROLLERSERVICE._serialized_start=897
-  _JOINTSCONTROLLERSERVICE._serialized_end=1522
+  _GETJOINTNAMESRESPONSE._serialized_end=186
+  _GETSERVOENABLEDRESPONSE._serialized_start=188
+  _GETSERVOENABLEDRESPONSE._serialized_end=303
+  _SETSERVOENABLEDREQUEST._serialized_start=305
+  _SETSERVOENABLEDREQUEST._serialized_end=419
+  _SETPROFILEACCELERATIONREQUEST._serialized_start=422
+  _SETPROFILEACCELERATIONREQUEST._serialized_end=551
+  _SETPROFILEVELOCITYREQUEST._serialized_start=553
+  _SETPROFILEVELOCITYREQUEST._serialized_end=676
+  _SETGOALPOSITIONREQUEST._serialized_start=678
+  _SETGOALPOSITIONREQUEST._serialized_end=784
+  _GETPRESENTPOSITIONRESPONSE._serialized_start=786
+  _GETPRESENTPOSITIONRESPONSE._serialized_end=896
+  _JOINTSCONTROLLERSERVICE._serialized_start=899
+  _JOINTSCONTROLLERSERVICE._serialized_end=1519
 # @@protoc_insertion_point(module_scope)
