@@ -4,7 +4,6 @@ setup(
     name="akari_controller",
     version="0.2.2",
     packages=find_packages(exclude=["tests"]),
-    package_dir={"": "src"},
     description="Akari controller by dynamixel_sdk. python package",
     long_description=open("README.md").read(),
     author="akari",
