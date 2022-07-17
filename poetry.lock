@@ -1,7 +1,7 @@
 [[package]]
-name = "akari_controller"
+name = "akari-controller"
 version = "0.2.2"
-description = ""
+description = "Akari controller by dynamixel_sdk. python package"
 category = "main"
 optional = false
 python-versions = "*"
@@ -13,6 +13,23 @@ dynamixel_sdk = "*"
 [package.source]
 type = "directory"
 url = "sdk/akari_controller"
+
+[[package]]
+name = "akari-proto"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "*"
+develop = true
+
+[package.dependencies]
+grpcio = "1.44.0"
+protobuf = "3.19.3"
+
+[package.source]
+type = "directory"
+url = "sdk/akari_proto"
 
 [[package]]
 name = "appdirs"
@@ -177,6 +194,20 @@ python-versions = ">=3.7"
 gitdb = ">=4.0.1,<5"
 
 [[package]]
+name = "grpcio"
+version = "1.44.0"
+description = "HTTP/2-based RPC framework"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+six = ">=1.5.2"
+
+[package.extras]
+protobuf = ["grpcio-tools (>=1.44.0)"]
+
+[[package]]
 name = "iniconfig"
 version = "1.1.1"
 description = "iniconfig: brain-dead simple config-ini parsing"
@@ -282,6 +313,14 @@ python-versions = ">=3.6"
 [package.extras]
 dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
+
+[[package]]
+name = "protobuf"
+version = "3.19.3"
+description = "Protocol Buffers"
+category = "main"
+optional = false
+python-versions = ">=3.5"
 
 [[package]]
 name = "py"
@@ -393,6 +432,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+
+[[package]]
 name = "smmap"
 version = "5.0.0"
 description = "A pure Python implementation of a sliding window memory map manager"
@@ -451,10 +498,11 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9473fef83e028006aa416a60842d7ed47bcb7508d7757f3c83a1ea21dae52b66"
+content-hash = "aafe778fc4e588f13f373a35b4b44ae27be2522e2ba775b7beebfc2e5a537529"
 
 [metadata.files]
-akari_controller = []
+akari-controller = []
+akari-proto = []
 appdirs = []
 atomicwrites = []
 attrs = [
@@ -477,6 +525,7 @@ gitpython = [
     {file = "GitPython-3.1.27-py3-none-any.whl", hash = "sha256:5b68b000463593e05ff2b261acff0ff0972df8ab1b70d3cdbd41b546c8b8fc3d"},
     {file = "GitPython-3.1.27.tar.gz", hash = "sha256:1c885ce809e8ba2d88a29befeb385fcea06338d3640712b59ca623c220bb5704"},
 ]
+grpcio = []
 iniconfig = []
 isort = [
     {file = "isort-5.1.4-py3-none-any.whl", hash = "sha256:ae3007f72a2e9da36febd3454d8be4b175d6ca17eb765841d5fe3d038aede79d"},
@@ -501,6 +550,7 @@ opencv-python = [
 packaging = []
 pathspec = []
 pluggy = []
+protobuf = []
 py = []
 pycodestyle = []
 pyflakes = []
@@ -516,6 +566,7 @@ pytest = [
 ]
 pyvirtualcam = []
 regex = []
+six = []
 smmap = [
     {file = "smmap-5.0.0-py3-none-any.whl", hash = "sha256:2aba19d6a040e78d8b09de5c57e96207b09ed71d8e55ce0959eeee6c8e190d94"},
     {file = "smmap-5.0.0.tar.gz", hash = "sha256:c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936"},

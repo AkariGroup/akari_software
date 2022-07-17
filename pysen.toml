@@ -25,4 +25,6 @@ py_version = "py38"
     "sdk/",
     "tools/",
   ]
-
+  exclude_globs = [
+    "sdk/akari_proto/akari_proto/*pb2*",
+  ]
