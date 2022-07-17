@@ -1,7 +1,7 @@
 [[package]]
-name = "akari_controller"
+name = "akari-controller"
 version = "0.2.2"
-description = ""
+description = "Akari controller by dynamixel_sdk. python package"
 category = "main"
 optional = false
 python-versions = "*"
@@ -15,7 +15,7 @@ type = "directory"
 url = "sdk/akari_controller"
 
 [[package]]
-name = "akari-rpc"
+name = "akari-proto"
 version = "0.1.0"
 description = ""
 category = "main"
@@ -29,7 +29,7 @@ protobuf = "3.19.3"
 
 [package.source]
 type = "directory"
-url = "sdk/akari_rpc"
+url = "sdk/akari_proto"
 
 [[package]]
 name = "appdirs"
@@ -498,11 +498,11 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "cdebd6fde2cbbfd04b926c7a575ecf13ea4af88bcb7c98ed1d08fbcef39a4e63"
+content-hash = "aafe778fc4e588f13f373a35b4b44ae27be2522e2ba775b7beebfc2e5a537529"
 
 [metadata.files]
-akari_controller = []
-akari-rpc = []
+akari-controller = []
+akari-proto = []
 appdirs = []
 atomicwrites = []
 attrs = [

@@ -13,8 +13,7 @@ message GetJointNamesResponse {
 }
 
 message GetServoEnabledResponse {
-  JointSpecifier target_joint = 1;
-  bool enabled = 2;
+  bool enabled = 1;
 }
 
 message SetServoEnabledRequest {
@@ -38,8 +37,7 @@ message SetGoalPositionRequest {
 }
 
 message GetPresentPositionResponse {
-  JointSpecifier target_joint = 1;
-  float rad = 2;
+  float rad = 1;
 }
 
 service JointsControllerService {

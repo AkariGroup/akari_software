@@ -36,18 +36,13 @@ global___GetJointNamesResponse = GetJointNamesResponse
 
 class GetServoEnabledResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TARGET_JOINT_FIELD_NUMBER: builtins.int
     ENABLED_FIELD_NUMBER: builtins.int
-    @property
-    def target_joint(self) -> global___JointSpecifier: ...
     enabled: builtins.bool
     def __init__(self,
         *,
-        target_joint: typing.Optional[global___JointSpecifier] = ...,
         enabled: builtins.bool = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["target_joint",b"target_joint"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["enabled",b"enabled","target_joint",b"target_joint"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["enabled",b"enabled"]) -> None: ...
 global___GetServoEnabledResponse = GetServoEnabledResponse
 
 class SetServoEnabledRequest(google.protobuf.message.Message):
@@ -116,16 +111,11 @@ global___SetGoalPositionRequest = SetGoalPositionRequest
 
 class GetPresentPositionResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    TARGET_JOINT_FIELD_NUMBER: builtins.int
     RAD_FIELD_NUMBER: builtins.int
-    @property
-    def target_joint(self) -> global___JointSpecifier: ...
     rad: builtins.float
     def __init__(self,
         *,
-        target_joint: typing.Optional[global___JointSpecifier] = ...,
         rad: builtins.float = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["target_joint",b"target_joint"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["rad",b"rad","target_joint",b"target_joint"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["rad",b"rad"]) -> None: ...
 global___GetPresentPositionResponse = GetPresentPositionResponse
