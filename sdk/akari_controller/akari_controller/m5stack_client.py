@@ -9,12 +9,6 @@ from typing import Any, Dict, Optional
 from .color import Color
 from .m5serial_communicator import M5ComDict, M5SerialCommunicator
 
-"""
-m5serial_server_py
-Created on 2020/05/08
-@author: Kazuya Yamamoto
-"""
-
 
 class CommandId(enum.IntEnum):
     RESETALLOUT = 0
@@ -42,7 +36,7 @@ class _PinOut:
         return {"do0": int(self.dout0), "do1": int(self.dout1), "po0": self.pwmout0}
 
 
-class M5SerialServer:
+class M5StackSerialClient:
     def __init__(self, communicator: Optional[M5SerialCommunicator] = None) -> None:
         self._stack = contextlib.ExitStack()
         if communicator is None:
@@ -56,7 +50,7 @@ class M5SerialServer:
         self._communicator.start()
         time.sleep(0.1)
 
-    def __enter__(self) -> M5SerialServer:
+    def __enter__(self) -> M5StackSerialClient:
         return self
 
     def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:

@@ -32,7 +32,7 @@ DEFAULT_JOINT_CONFIGS: List[DynamixelControllerConfig] = [
 ]
 
 
-class AkariController:
+class JointManager:
     def __init__(self, communicator: Optional[DynamixelCommunicator] = None) -> None:
         """Akariの関節制御コントローラ"""
 
@@ -51,7 +51,7 @@ class AkariController:
                 self._communicator,
             )
 
-    def __enter__(self) -> AkariController:
+    def __enter__(self) -> JointManager:
         return self
 
     def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:

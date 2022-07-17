@@ -11,7 +11,8 @@ import datetime
 import locale
 import time
 
-from akari_controller.m5serial_server_py import M5SerialServer
+from akari_controller import AkariClient
+from akari_controller.m5stack_client import M5StackSerialClient
 from akari_controller.color import Colors
 
 CLOCK_MODE = 1
@@ -19,13 +20,12 @@ SENSOR_MODE = 2
 IO_MODE = 3
 duration = 0.01
 INPUT_INTERVAL = 1  # ボタン再入力受付時間[s]
-m5 = M5SerialServer()
 
 
 class M5serialSample(object):
-    def __init__(self) -> None:
-        # global m5
-        # m5 = M5SerialServer()
+    def __init__(self, m5: M5StackSerialClient) -> None:
+        self.m5 = m5
+
         self.is_initializing = False
         self.button_a_input_time = datetime.datetime.now()
         self.button_b_input_time = datetime.datetime.now()
@@ -36,10 +36,10 @@ class M5serialSample(object):
     def init_clock_disp(self) -> None:
         global duration
         duration = 0.5
-        m5.set_display_color(Colors.BLACK)
+        self.m5.set_display_color(Colors.BLACK)
         locale.setlocale(locale.LC_TIME, "ja_JP.UTF-8")
         dt_now = datetime.datetime.now()
-        m5.set_display_text(
+        self.m5.set_display_text(
             dt_now.strftime("%Y/%m/%d %a"),
             -999,
             0,
@@ -53,7 +53,7 @@ class M5serialSample(object):
     def update_clock_disp(self) -> None:
         if self.disp_mode == CLOCK_MODE:
             dt_now = datetime.datetime.now()
-            m5.set_display_text(
+            self.m5.set_display_text(
                 dt_now.strftime("%H:%M:%S "),
                 -999,
                 -999,
@@ -63,12 +63,12 @@ class M5serialSample(object):
             )
 
     def init_sensor_disp(self) -> None:
-        m5.set_display_color(Colors.LIGHTGREY)
+        self.m5.set_display_color(Colors.LIGHTGREY)
         self.is_initializing = False
 
     def update_sensor_disp(self) -> None:
         if self.disp_mode == SENSOR_MODE:
-            m5.set_display_text(
+            self.m5.set_display_text(
                 "明るさ: " + str(self.brightness).rjust(4, " ") + " \n",
                 0,
                 20,
@@ -76,7 +76,7 @@ class M5serialSample(object):
                 text_color=Colors.ORANGE,
             )
         if self.disp_mode == SENSOR_MODE:
-            m5.set_display_text(
+            self.m5.set_display_text(
                 "気圧: " + str(round(self.pressure / 100, 2)).rjust(7, " ") + " hPa  \n",
                 0,
                 100,
@@ -84,7 +84,7 @@ class M5serialSample(object):
                 text_color=Colors.PINK,
             )
         if self.disp_mode == SENSOR_MODE:
-            m5.set_display_text(
+            self.m5.set_display_text(
                 "気温: " + str(round(self.temperature, 2)).rjust(7, " ") + " C \n",
                 0,
                 180,
@@ -93,13 +93,13 @@ class M5serialSample(object):
             )
 
     def init_io_disp(self) -> None:
-        m5.set_display_color(Colors.WHITE)
+        self.m5.set_display_color(Colors.WHITE)
         self.is_initializing = False
 
     def update_io_disp(self) -> None:
         if self.disp_mode == IO_MODE:
             if self.din0:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "din0: " + str(int(self.din0)) + " \n",
                     0,
                     0,
@@ -108,7 +108,7 @@ class M5serialSample(object):
                     back_color=Colors.RED,
                 )
             else:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "din0: " + str(int(self.din0)) + "    \n",
                     0,
                     0,
@@ -117,7 +117,7 @@ class M5serialSample(object):
                 )
         if self.disp_mode == IO_MODE:
             if self.din1:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "din1: " + str(int(self.din1)) + " \n",
                     0,
                     40,
@@ -126,7 +126,7 @@ class M5serialSample(object):
                     back_color=Colors.RED,
                 )
             else:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "din1: " + str(int(self.din1)) + "    \n",
                     0,
                     40,
@@ -135,7 +135,7 @@ class M5serialSample(object):
                 )
         if self.disp_mode == IO_MODE:
             if self.ain0 > 0:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "ain0: " + str(int(self.ain0)).rjust(3, " ") + " \n",
                     0,
                     80,
@@ -144,7 +144,7 @@ class M5serialSample(object):
                     back_color=Colors.GREEN,
                 )
             else:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "ain0: " + str(int(self.ain0)).rjust(3, " ") + "    \n",
                     0,
                     80,
@@ -153,7 +153,7 @@ class M5serialSample(object):
                 )
         if self.disp_mode == IO_MODE:
             if self.dout0:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "dout0: " + str(int(self.dout0)) + " \n",
                     0,
                     120,
@@ -162,7 +162,7 @@ class M5serialSample(object):
                     back_color=Colors.RED,
                 )
             else:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "dout0: " + str(int(self.dout0)) + "    \n",
                     0,
                     120,
@@ -171,7 +171,7 @@ class M5serialSample(object):
                 )
         if self.disp_mode == IO_MODE:
             if self.dout1:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "dout1: " + str(int(self.dout1)) + " \n",
                     0,
                     160,
@@ -180,7 +180,7 @@ class M5serialSample(object):
                     back_color=Colors.RED,
                 )
             else:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "dout1: " + str(int(self.dout1)) + "    \n",
                     0,
                     160,
@@ -189,7 +189,7 @@ class M5serialSample(object):
                 )
         if self.disp_mode == IO_MODE:
             if self.pwmout0 > 0:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "pwmout0: " + str(int(self.pwmout0)).rjust(3, " ") + " \n",
                     0,
                     200,
@@ -198,7 +198,7 @@ class M5serialSample(object):
                     back_color=Colors.BLUE,
                 )
             else:
-                m5.set_display_text(
+                self.m5.set_display_text(
                     "pwmout0: " + str(int(self.pwmout0)).rjust(3, " ") + "    \n",
                     0,
                     200,
@@ -207,7 +207,7 @@ class M5serialSample(object):
                 )
 
     def display_update(self) -> None:
-        data = m5.get()
+        data = self.m5.get()
         self.din0 = data["din0"]
         self.din1 = data["din1"]
         self.ain0 = data["ain0"]
@@ -261,10 +261,11 @@ class M5serialSample(object):
 
 
 def main() -> None:
-    m5_serial_sample = M5serialSample()
-    while True:
-        m5_serial_sample.display_update()
-        time.sleep(0.01)
+    with AkariClient() as akari:
+        m5_serial_sample = M5serialSample(akari.m5stack)
+        while True:
+            m5_serial_sample.display_update()
+            time.sleep(0.01)
 
 
 if __name__ == "__main__":
