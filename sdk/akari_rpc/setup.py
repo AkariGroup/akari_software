@@ -1,9 +1,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="akari_rpc",
+    name="akari-rpc",
     version="0.1.0",
-    description="gRPC client of Akari gRPC service",
+    description="protobuf definitions and utility functions of Akari gRPC service",
     packages=find_packages(exclude=["tests"]),
     author="akari",
     author_email="akari.tmc@gmail.com",
