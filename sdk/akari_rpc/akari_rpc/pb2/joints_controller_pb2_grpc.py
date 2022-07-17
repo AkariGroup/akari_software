@@ -2,11 +2,11 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from akari_proto import joint_controllers_pb2 as akari__proto_dot_joint__controllers__pb2
+from akari_proto import joints_controller_pb2 as akari__proto_dot_joints__controller__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-class JointControllerServiceStub(object):
+class JointsControllerServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -16,43 +16,43 @@ class JointControllerServiceStub(object):
             channel: A grpc.Channel.
         """
         self.GetJointNames = channel.unary_unary(
-                '/akari_proto.JointControllerService/GetJointNames',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.JointSpecifier.SerializeToString,
-                response_deserializer=akari__proto_dot_joint__controllers__pb2.GetJointNamesResponse.FromString,
+                '/akari_proto.JointsControllerService/GetJointNames',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetJointNamesResponse.FromString,
                 )
         self.GetServoEnabled = channel.unary_unary(
-                '/akari_proto.JointControllerService/GetServoEnabled',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.JointSpecifier.SerializeToString,
-                response_deserializer=akari__proto_dot_joint__controllers__pb2.GetServoEnabledResponse.FromString,
+                '/akari_proto.JointsControllerService/GetServoEnabled',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetServoEnabledResponse.FromString,
                 )
         self.SetServoEnabled = channel.unary_unary(
-                '/akari_proto.JointControllerService/SetServoEnabled',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.SetServoEnabledRequest.SerializeToString,
+                '/akari_proto.JointsControllerService/SetServoEnabled',
+                request_serializer=akari__proto_dot_joints__controller__pb2.SetServoEnabledRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetProfileAcceleration = channel.unary_unary(
-                '/akari_proto.JointControllerService/SetProfileAcceleration',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.SetProfileAccelerationRequest.SerializeToString,
+                '/akari_proto.JointsControllerService/SetProfileAcceleration',
+                request_serializer=akari__proto_dot_joints__controller__pb2.SetProfileAccelerationRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetProfileVelocity = channel.unary_unary(
-                '/akari_proto.JointControllerService/SetProfileVelocity',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.SetProfileVelocityRequest.SerializeToString,
+                '/akari_proto.JointsControllerService/SetProfileVelocity',
+                request_serializer=akari__proto_dot_joints__controller__pb2.SetProfileVelocityRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetGoalPosition = channel.unary_unary(
-                '/akari_proto.JointControllerService/SetGoalPosition',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.SetGoalPositionRequest.SerializeToString,
+                '/akari_proto.JointsControllerService/SetGoalPosition',
+                request_serializer=akari__proto_dot_joints__controller__pb2.SetGoalPositionRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.GetPresentPosition = channel.unary_unary(
-                '/akari_proto.JointControllerService/GetPresentPosition',
-                request_serializer=akari__proto_dot_joint__controllers__pb2.JointSpecifier.SerializeToString,
-                response_deserializer=akari__proto_dot_joint__controllers__pb2.GetPresentPositionResponse.FromString,
+                '/akari_proto.JointsControllerService/GetPresentPosition',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetPresentPositionResponse.FromString,
                 )
 
 
-class JointControllerServiceServicer(object):
+class JointsControllerServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetJointNames(self, request, context):
@@ -98,51 +98,51 @@ class JointControllerServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_JointControllerServiceServicer_to_server(servicer, server):
+def add_JointsControllerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetJointNames': grpc.unary_unary_rpc_method_handler(
                     servicer.GetJointNames,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.JointSpecifier.FromString,
-                    response_serializer=akari__proto_dot_joint__controllers__pb2.GetJointNamesResponse.SerializeToString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetJointNamesResponse.SerializeToString,
             ),
             'GetServoEnabled': grpc.unary_unary_rpc_method_handler(
                     servicer.GetServoEnabled,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.JointSpecifier.FromString,
-                    response_serializer=akari__proto_dot_joint__controllers__pb2.GetServoEnabledResponse.SerializeToString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetServoEnabledResponse.SerializeToString,
             ),
             'SetServoEnabled': grpc.unary_unary_rpc_method_handler(
                     servicer.SetServoEnabled,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.SetServoEnabledRequest.FromString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.SetServoEnabledRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SetProfileAcceleration': grpc.unary_unary_rpc_method_handler(
                     servicer.SetProfileAcceleration,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.SetProfileAccelerationRequest.FromString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.SetProfileAccelerationRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SetProfileVelocity': grpc.unary_unary_rpc_method_handler(
                     servicer.SetProfileVelocity,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.SetProfileVelocityRequest.FromString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.SetProfileVelocityRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SetGoalPosition': grpc.unary_unary_rpc_method_handler(
                     servicer.SetGoalPosition,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.SetGoalPositionRequest.FromString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.SetGoalPositionRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'GetPresentPosition': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPresentPosition,
-                    request_deserializer=akari__proto_dot_joint__controllers__pb2.JointSpecifier.FromString,
-                    response_serializer=akari__proto_dot_joint__controllers__pb2.GetPresentPositionResponse.SerializeToString,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetPresentPositionResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'akari_proto.JointControllerService', rpc_method_handlers)
+            'akari_proto.JointsControllerService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class JointControllerService(object):
+class JointsControllerService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -156,9 +156,9 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/GetJointNames',
-            akari__proto_dot_joint__controllers__pb2.JointSpecifier.SerializeToString,
-            akari__proto_dot_joint__controllers__pb2.GetJointNamesResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetJointNames',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetJointNamesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -173,9 +173,9 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/GetServoEnabled',
-            akari__proto_dot_joint__controllers__pb2.JointSpecifier.SerializeToString,
-            akari__proto_dot_joint__controllers__pb2.GetServoEnabledResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetServoEnabled',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetServoEnabledResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -190,8 +190,8 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/SetServoEnabled',
-            akari__proto_dot_joint__controllers__pb2.SetServoEnabledRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/SetServoEnabled',
+            akari__proto_dot_joints__controller__pb2.SetServoEnabledRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -207,8 +207,8 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/SetProfileAcceleration',
-            akari__proto_dot_joint__controllers__pb2.SetProfileAccelerationRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/SetProfileAcceleration',
+            akari__proto_dot_joints__controller__pb2.SetProfileAccelerationRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -224,8 +224,8 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/SetProfileVelocity',
-            akari__proto_dot_joint__controllers__pb2.SetProfileVelocityRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/SetProfileVelocity',
+            akari__proto_dot_joints__controller__pb2.SetProfileVelocityRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -241,8 +241,8 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/SetGoalPosition',
-            akari__proto_dot_joint__controllers__pb2.SetGoalPositionRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/SetGoalPosition',
+            akari__proto_dot_joints__controller__pb2.SetGoalPositionRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -258,8 +258,8 @@ class JointControllerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointControllerService/GetPresentPosition',
-            akari__proto_dot_joint__controllers__pb2.JointSpecifier.SerializeToString,
-            akari__proto_dot_joint__controllers__pb2.GetPresentPositionResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetPresentPosition',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetPresentPositionResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

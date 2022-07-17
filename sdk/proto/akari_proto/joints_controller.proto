@@ -42,7 +42,7 @@ message GetPresentPositionResponse {
   float rad = 2;
 }
 
-service JointControllerService {
+service JointsControllerService {
     rpc GetJointNames(JointSpecifier)
         returns (GetJointNamesResponse);
     rpc GetServoEnabled(JointSpecifier)
