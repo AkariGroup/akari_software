@@ -2,8 +2,8 @@ import math
 from typing import cast
 
 import pytest
-from akari_controller.dynamixel_communicator import DynamixelCommunicator
-from akari_controller.dynamixel_controller import (
+from akari_client.dynamixel_communicator import DynamixelCommunicator
+from akari_client.dynamixel_controller import (
     DynamixelControlItem,
     DynamixelController,
     DynamixelControllerConfig,

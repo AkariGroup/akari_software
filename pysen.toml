@@ -15,8 +15,8 @@ py_version = "py38"
     "samples/depthai_sample/face_detection",
     "samples/depthai_sample/object_recognition",
     "samples/m5serial_sample/",
-    "sdk/akari_controller/akari_controller",
-    "sdk/akari_controller/tests/",
+    "sdk/akari_client/akari_client",
+    "sdk/akari_client/tests/",
     "sdk/depthai_uvc",
     "tools/python",
   ]

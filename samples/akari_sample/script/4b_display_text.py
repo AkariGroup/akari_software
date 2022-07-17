@@ -9,8 +9,8 @@ Created on 2021/06/11
 
 import time
 
-from akari_controller import AkariClient
-from akari_controller.color import Colors
+from akari_client import AkariClient
+from akari_client.color import Colors
 
 
 def main() -> None:

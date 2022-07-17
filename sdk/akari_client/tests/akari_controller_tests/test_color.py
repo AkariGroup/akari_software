@@ -1,4 +1,4 @@
-from akari_controller.color import Color, Colors
+from akari_client.color import Color, Colors
 
 
 def test_color() -> None:

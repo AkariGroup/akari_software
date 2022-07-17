@@ -10,7 +10,7 @@ Created on 2021/06/11
 
 import time
 
-from akari_controller import AkariClient
+from akari_client import AkariClient
 
 
 def main() -> None:

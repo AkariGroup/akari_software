@@ -11,9 +11,9 @@ import datetime
 import locale
 import time
 
-from akari_controller import AkariClient
-from akari_controller.m5stack_client import M5StackSerialClient
-from akari_controller.color import Colors
+from akari_client import AkariClient
+from akari_client.m5stack_client import M5StackSerialClient
+from akari_client.color import Colors
 
 CLOCK_MODE = 1
 SENSOR_MODE = 2

@@ -9,7 +9,7 @@ python = "^3.8"
 numpy = "^1.22.3"
 dynamixel-sdk = "^3.7.31"
 depthai = "^2.15.2"
-akari-controller = {path = "sdk/akari_controller", develop = true}
+akari-client = {path = "sdk/akari_client", develop = true}
 akari-proto = {path = "sdk/akari_proto", develop = true}
 pysen = {extras = ["lint"], version = "^0.10.1"}
 opencv-python = "^4.5.5"

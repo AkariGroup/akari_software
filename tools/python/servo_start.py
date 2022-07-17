@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from akari_controller import AkariClient
+from akari_client import AkariClient
 
 with AkariClient() as akari:
     akari.joints.enable_all_servo()

@@ -10,7 +10,7 @@ Created on 2021/02/14
 import time
 
 # モータ制御の際はakari_clientのライブラリをインポートする
-from akari_controller import AkariClient
+from akari_client import AkariClient
 
 # AkariClientのインスタンスを作成する。
 akari = AkariClient()

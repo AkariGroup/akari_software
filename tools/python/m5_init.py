@@ -7,7 +7,7 @@ Created on 2020/06/04
 @author: Kazuya Yamamoto
 """
 
-from akari_controller import AkariClient
+from akari_client import AkariClient
 
 
 def main() -> None:
