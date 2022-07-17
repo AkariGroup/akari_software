@@ -13,6 +13,7 @@ mypy_ignore_packages = ["akari_proto.*"]
 
 [[tool.pysen.lint.mypy_targets]]
   paths = [
+    "internal/akari_rpc_server/akari_rpc_server/",
     "samples/akari_sample/script",
     "samples/depthai_sample/face_detection",
     "samples/depthai_sample/object_recognition",
@@ -20,6 +21,7 @@ mypy_ignore_packages = ["akari_proto.*"]
     "sdk/akari_client/akari_client",
     "sdk/akari_client/tests/",
     "sdk/akari_proto/akari_proto/",
+    "sdk/akari_proto/tests/",
     "sdk/depthai_uvc",
     "tools/python",
   ]
