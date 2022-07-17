@@ -45,11 +45,11 @@ message Color {
     float blue = 3;
 }
 
-message M5Status {
+message M5StackStatus {
   string status_json = 1;
 }
 
-service M5ManagerService {
+service M5StackService {
     rpc SetPinOut(SetPinOutRequest)
         returns (google.protobuf.Empty);
     rpc ResetPinOut(google.protobuf.Empty)
@@ -66,7 +66,7 @@ service M5ManagerService {
         returns (google.protobuf.Empty);
 
     rpc Get(google.protobuf.Empty)
-        returns (M5Status);
+        returns (M5StackStatus);
     rpc GetStream(google.protobuf.Empty)
-        returns (stream M5Status);
+        returns (stream M5StackStatus);
 }

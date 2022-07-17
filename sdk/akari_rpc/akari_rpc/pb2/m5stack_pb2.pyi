@@ -161,7 +161,7 @@ class Color(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["blue",b"blue","green",b"green","red",b"red"]) -> None: ...
 global___Color = Color
 
-class M5Status(google.protobuf.message.Message):
+class M5StackStatus(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     STATUS_JSON_FIELD_NUMBER: builtins.int
     status_json: typing.Text
@@ -170,4 +170,4 @@ class M5Status(google.protobuf.message.Message):
         status_json: typing.Text = ...,
         ) -> None: ...
     def ClearField(self, field_name: typing_extensions.Literal["status_json",b"status_json"]) -> None: ...
-global___M5Status = M5Status
+global___M5StackStatus = M5StackStatus

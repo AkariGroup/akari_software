@@ -2,11 +2,11 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from akari_proto import m5_manager_pb2 as akari__proto_dot_m5__manager__pb2
+from akari_proto import m5stack_pb2 as akari__proto_dot_m5stack__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-class M5ManagerServiceStub(object):
+class M5StackServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -16,53 +16,53 @@ class M5ManagerServiceStub(object):
             channel: A grpc.Channel.
         """
         self.SetPinOut = channel.unary_unary(
-                '/akari_proto.M5ManagerService/SetPinOut',
-                request_serializer=akari__proto_dot_m5__manager__pb2.SetPinOutRequest.SerializeToString,
+                '/akari_proto.M5StackService/SetPinOut',
+                request_serializer=akari__proto_dot_m5stack__pb2.SetPinOutRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.ResetPinOut = channel.unary_unary(
-                '/akari_proto.M5ManagerService/ResetPinOut',
+                '/akari_proto.M5StackService/ResetPinOut',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetDisplayColor = channel.unary_unary(
-                '/akari_proto.M5ManagerService/SetDisplayColor',
-                request_serializer=akari__proto_dot_m5__manager__pb2.SetDisplayColorRequest.SerializeToString,
+                '/akari_proto.M5StackService/SetDisplayColor',
+                request_serializer=akari__proto_dot_m5stack__pb2.SetDisplayColorRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetDisplayText = channel.unary_unary(
-                '/akari_proto.M5ManagerService/SetDisplayText',
-                request_serializer=akari__proto_dot_m5__manager__pb2.SetDisplayTextRequest.SerializeToString,
+                '/akari_proto.M5StackService/SetDisplayText',
+                request_serializer=akari__proto_dot_m5stack__pb2.SetDisplayTextRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetDisplayImage = channel.unary_unary(
-                '/akari_proto.M5ManagerService/SetDisplayImage',
-                request_serializer=akari__proto_dot_m5__manager__pb2.SetDisplayImageRequest.SerializeToString,
+                '/akari_proto.M5StackService/SetDisplayImage',
+                request_serializer=akari__proto_dot_m5stack__pb2.SetDisplayImageRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.UseJapaneseFont = channel.unary_unary(
-                '/akari_proto.M5ManagerService/UseJapaneseFont',
-                request_serializer=akari__proto_dot_m5__manager__pb2.UseJapaneseFontRequest.SerializeToString,
+                '/akari_proto.M5StackService/UseJapaneseFont',
+                request_serializer=akari__proto_dot_m5stack__pb2.UseJapaneseFontRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.Reset = channel.unary_unary(
-                '/akari_proto.M5ManagerService/Reset',
+                '/akari_proto.M5StackService/Reset',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.Get = channel.unary_unary(
-                '/akari_proto.M5ManagerService/Get',
+                '/akari_proto.M5StackService/Get',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=akari__proto_dot_m5__manager__pb2.M5Status.FromString,
+                response_deserializer=akari__proto_dot_m5stack__pb2.M5StackStatus.FromString,
                 )
         self.GetStream = channel.unary_stream(
-                '/akari_proto.M5ManagerService/GetStream',
+                '/akari_proto.M5StackService/GetStream',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=akari__proto_dot_m5__manager__pb2.M5Status.FromString,
+                response_deserializer=akari__proto_dot_m5stack__pb2.M5StackStatus.FromString,
                 )
 
 
-class M5ManagerServiceServicer(object):
+class M5StackServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def SetPinOut(self, request, context):
@@ -120,11 +120,11 @@ class M5ManagerServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_M5ManagerServiceServicer_to_server(servicer, server):
+def add_M5StackServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SetPinOut': grpc.unary_unary_rpc_method_handler(
                     servicer.SetPinOut,
-                    request_deserializer=akari__proto_dot_m5__manager__pb2.SetPinOutRequest.FromString,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.SetPinOutRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'ResetPinOut': grpc.unary_unary_rpc_method_handler(
@@ -134,22 +134,22 @@ def add_M5ManagerServiceServicer_to_server(servicer, server):
             ),
             'SetDisplayColor': grpc.unary_unary_rpc_method_handler(
                     servicer.SetDisplayColor,
-                    request_deserializer=akari__proto_dot_m5__manager__pb2.SetDisplayColorRequest.FromString,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.SetDisplayColorRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SetDisplayText': grpc.unary_unary_rpc_method_handler(
                     servicer.SetDisplayText,
-                    request_deserializer=akari__proto_dot_m5__manager__pb2.SetDisplayTextRequest.FromString,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.SetDisplayTextRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SetDisplayImage': grpc.unary_unary_rpc_method_handler(
                     servicer.SetDisplayImage,
-                    request_deserializer=akari__proto_dot_m5__manager__pb2.SetDisplayImageRequest.FromString,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.SetDisplayImageRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'UseJapaneseFont': grpc.unary_unary_rpc_method_handler(
                     servicer.UseJapaneseFont,
-                    request_deserializer=akari__proto_dot_m5__manager__pb2.UseJapaneseFontRequest.FromString,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.UseJapaneseFontRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'Reset': grpc.unary_unary_rpc_method_handler(
@@ -160,21 +160,21 @@ def add_M5ManagerServiceServicer_to_server(servicer, server):
             'Get': grpc.unary_unary_rpc_method_handler(
                     servicer.Get,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=akari__proto_dot_m5__manager__pb2.M5Status.SerializeToString,
+                    response_serializer=akari__proto_dot_m5stack__pb2.M5StackStatus.SerializeToString,
             ),
             'GetStream': grpc.unary_stream_rpc_method_handler(
                     servicer.GetStream,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=akari__proto_dot_m5__manager__pb2.M5Status.SerializeToString,
+                    response_serializer=akari__proto_dot_m5stack__pb2.M5StackStatus.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'akari_proto.M5ManagerService', rpc_method_handlers)
+            'akari_proto.M5StackService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class M5ManagerService(object):
+class M5StackService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -188,8 +188,8 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/SetPinOut',
-            akari__proto_dot_m5__manager__pb2.SetPinOutRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/SetPinOut',
+            akari__proto_dot_m5stack__pb2.SetPinOutRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -205,7 +205,7 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/ResetPinOut',
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/ResetPinOut',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
@@ -222,8 +222,8 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/SetDisplayColor',
-            akari__proto_dot_m5__manager__pb2.SetDisplayColorRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/SetDisplayColor',
+            akari__proto_dot_m5stack__pb2.SetDisplayColorRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -239,8 +239,8 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/SetDisplayText',
-            akari__proto_dot_m5__manager__pb2.SetDisplayTextRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/SetDisplayText',
+            akari__proto_dot_m5stack__pb2.SetDisplayTextRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -256,8 +256,8 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/SetDisplayImage',
-            akari__proto_dot_m5__manager__pb2.SetDisplayImageRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/SetDisplayImage',
+            akari__proto_dot_m5stack__pb2.SetDisplayImageRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -273,8 +273,8 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/UseJapaneseFont',
-            akari__proto_dot_m5__manager__pb2.UseJapaneseFontRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/UseJapaneseFont',
+            akari__proto_dot_m5stack__pb2.UseJapaneseFontRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -290,7 +290,7 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/Reset',
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/Reset',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
@@ -307,9 +307,9 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5ManagerService/Get',
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/Get',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            akari__proto_dot_m5__manager__pb2.M5Status.FromString,
+            akari__proto_dot_m5stack__pb2.M5StackStatus.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -324,8 +324,8 @@ class M5ManagerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/akari_proto.M5ManagerService/GetStream',
+        return grpc.experimental.unary_stream(request, target, '/akari_proto.M5StackService/GetStream',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            akari__proto_dot_m5__manager__pb2.M5Status.FromString,
+            akari__proto_dot_m5stack__pb2.M5StackStatus.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

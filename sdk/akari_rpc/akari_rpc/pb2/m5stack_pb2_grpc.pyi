@@ -3,15 +3,15 @@
 isort:skip_file
 """
 import abc
-import akari_proto.m5_manager_pb2
+import akari_proto.m5stack_pb2
 import google.protobuf.empty_pb2
 import grpc
 import typing
 
-class M5ManagerServiceStub:
+class M5StackServiceStub:
     def __init__(self, channel: grpc.Channel) -> None: ...
     SetPinOut: grpc.UnaryUnaryMultiCallable[
-        akari_proto.m5_manager_pb2.SetPinOutRequest,
+        akari_proto.m5stack_pb2.SetPinOutRequest,
         google.protobuf.empty_pb2.Empty]
 
     ResetPinOut: grpc.UnaryUnaryMultiCallable[
@@ -19,19 +19,19 @@ class M5ManagerServiceStub:
         google.protobuf.empty_pb2.Empty]
 
     SetDisplayColor: grpc.UnaryUnaryMultiCallable[
-        akari_proto.m5_manager_pb2.SetDisplayColorRequest,
+        akari_proto.m5stack_pb2.SetDisplayColorRequest,
         google.protobuf.empty_pb2.Empty]
 
     SetDisplayText: grpc.UnaryUnaryMultiCallable[
-        akari_proto.m5_manager_pb2.SetDisplayTextRequest,
+        akari_proto.m5stack_pb2.SetDisplayTextRequest,
         google.protobuf.empty_pb2.Empty]
 
     SetDisplayImage: grpc.UnaryUnaryMultiCallable[
-        akari_proto.m5_manager_pb2.SetDisplayImageRequest,
+        akari_proto.m5stack_pb2.SetDisplayImageRequest,
         google.protobuf.empty_pb2.Empty]
 
     UseJapaneseFont: grpc.UnaryUnaryMultiCallable[
-        akari_proto.m5_manager_pb2.UseJapaneseFontRequest,
+        akari_proto.m5stack_pb2.UseJapaneseFontRequest,
         google.protobuf.empty_pb2.Empty]
 
     Reset: grpc.UnaryUnaryMultiCallable[
@@ -40,17 +40,17 @@ class M5ManagerServiceStub:
 
     Get: grpc.UnaryUnaryMultiCallable[
         google.protobuf.empty_pb2.Empty,
-        akari_proto.m5_manager_pb2.M5Status]
+        akari_proto.m5stack_pb2.M5StackStatus]
 
     GetStream: grpc.UnaryStreamMultiCallable[
         google.protobuf.empty_pb2.Empty,
-        akari_proto.m5_manager_pb2.M5Status]
+        akari_proto.m5stack_pb2.M5StackStatus]
 
 
-class M5ManagerServiceServicer(metaclass=abc.ABCMeta):
+class M5StackServiceServicer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def SetPinOut(self,
-        request: akari_proto.m5_manager_pb2.SetPinOutRequest,
+        request: akari_proto.m5stack_pb2.SetPinOutRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 
@@ -62,25 +62,25 @@ class M5ManagerServiceServicer(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def SetDisplayColor(self,
-        request: akari_proto.m5_manager_pb2.SetDisplayColorRequest,
+        request: akari_proto.m5stack_pb2.SetDisplayColorRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 
     @abc.abstractmethod
     def SetDisplayText(self,
-        request: akari_proto.m5_manager_pb2.SetDisplayTextRequest,
+        request: akari_proto.m5stack_pb2.SetDisplayTextRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 
     @abc.abstractmethod
     def SetDisplayImage(self,
-        request: akari_proto.m5_manager_pb2.SetDisplayImageRequest,
+        request: akari_proto.m5stack_pb2.SetDisplayImageRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 
     @abc.abstractmethod
     def UseJapaneseFont(self,
-        request: akari_proto.m5_manager_pb2.UseJapaneseFontRequest,
+        request: akari_proto.m5stack_pb2.UseJapaneseFontRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 
@@ -94,13 +94,13 @@ class M5ManagerServiceServicer(metaclass=abc.ABCMeta):
     def Get(self,
         request: google.protobuf.empty_pb2.Empty,
         context: grpc.ServicerContext,
-    ) -> akari_proto.m5_manager_pb2.M5Status: ...
+    ) -> akari_proto.m5stack_pb2.M5StackStatus: ...
 
     @abc.abstractmethod
     def GetStream(self,
         request: google.protobuf.empty_pb2.Empty,
         context: grpc.ServicerContext,
-    ) -> typing.Iterator[akari_proto.m5_manager_pb2.M5Status]: ...
+    ) -> typing.Iterator[akari_proto.m5stack_pb2.M5StackStatus]: ...
 
 
-def add_M5ManagerServiceServicer_to_server(servicer: M5ManagerServiceServicer, server: grpc.Server) -> None: ...
+def add_M5StackServiceServicer_to_server(servicer: M5StackServiceServicer, server: grpc.Server) -> None: ...
