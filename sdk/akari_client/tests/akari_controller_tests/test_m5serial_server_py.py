@@ -1,8 +1,8 @@
 from typing import cast
 
 import pytest
-from akari_controller.m5serial_communicator import M5SerialCommunicator
-from akari_controller.m5serial_server_py import M5SerialServer, _PinOut
+from akari_client.m5serial_communicator import M5SerialCommunicator
+from akari_client.m5stack_client import M5StackSerialClient, _PinOut
 
 from .mocks import MockM5Communicator
 
@@ -24,7 +24,7 @@ def test__pin_out() -> None:
 
 
 def test_set_dout(mock_communicator: M5SerialCommunicator) -> None:
-    client = M5SerialServer(mock_communicator)
+    client = M5StackSerialClient(mock_communicator)
 
     client.set_dout(0, True)
     client.set_dout(1, True)
@@ -34,7 +34,7 @@ def test_set_dout(mock_communicator: M5SerialCommunicator) -> None:
 
 
 def test_set_pwmout(mock_communicator: M5SerialCommunicator) -> None:
-    client = M5SerialServer(mock_communicator)
+    client = M5StackSerialClient(mock_communicator)
 
     client.set_pwmout(0, 255)
 

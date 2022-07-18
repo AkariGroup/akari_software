@@ -10,29 +10,30 @@ Created on 2021/06/11
 
 import time
 
-from akari_controller.m5serial_server_py import M5SerialServer
+from akari_client import AkariClient
 
 
 def main() -> None:
     """
     メイン関数
     """
-    # m5と通信するクラスを呼び出す
-    m5 = M5SerialServer()
+    with AkariClient() as akari:
+        # m5と通信するクラスを呼び出す
+        m5 = akari.m5stack
 
-    print("Start!")
-    # 2秒停止
-    time.sleep(2)
+        print("Start!")
+        # 2秒停止
+        time.sleep(2)
 
-    # アプリが終了されるまでループする。
-    while True:
-        print("Reset M5")
-        # reset_m5を実行
-        m5.reset_m5()
-        # 結果を出力
-        print("-> Reset")
-        # 5秒停止
-        time.sleep(5)
+        # アプリが終了されるまでループする。
+        while True:
+            print("Reset M5")
+            # reset_m5を実行
+            m5.reset_m5()
+            # 結果を出力
+            print("-> Reset")
+            # 5秒停止
+            time.sleep(5)
 
 
 if __name__ == "__main__":

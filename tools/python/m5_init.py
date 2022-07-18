@@ -7,11 +7,12 @@ Created on 2020/06/04
 @author: Kazuya Yamamoto
 """
 
-from akari_controller.m5serial_server_py import M5SerialServer
+from akari_client import AkariClient
 
 
 def main() -> None:
-    M5SerialServer()
+    with AkariClient() as akari:
+        akari.m5stack.get()
 
 
 if __name__ == "__main__":
