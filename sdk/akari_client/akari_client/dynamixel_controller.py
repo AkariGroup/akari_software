@@ -70,8 +70,6 @@ class DynamixelController(RevoluteJointController):
         self._config = config
         self._communicator = communicator
 
-        self.set_position_limit(config.min_position_limit, config.max_position_limit)
-
     def __str__(self) -> str:
         return self._config.joint_name
 
