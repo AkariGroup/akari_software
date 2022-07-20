@@ -14,7 +14,7 @@ const (
 
 func main() {
 	srv := grpc.NewServer()
-	d, err := daemon.NewDaemon()
+	d, err := daemon.NewDaemon(daemon.NewDaemonConfig{})
 	if err != nil {
 		panic(err)
 	}
