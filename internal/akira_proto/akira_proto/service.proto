@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package akira_proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/AkariGroup/akari_software/internal/akira/proto";
+
+
+enum ServiceStatus {
+    CREATED = 0;
+    STARTING = 1;
+    RUNNING = 2;
+    STOPPING = 3;
+    ERROR = 4;
+    COMPLETED = 5;
+}
+
+message ServiceInstance {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string service_address = 4;
+  ServiceStatus status = 5;
+}
+
+message ListServiceInstancesResponse {
+  repeated ServiceInstance instances = 1;
+}
+
+message GetServiceInstanceRequest {
+  string id = 1;
+}
+
+message LaunchJupyterServiceRequest {
+  string project_id = 1;
+}
+
+service AkariServiceService {
+  rpc ListServiceInstances(google.protobuf.Empty) returns (ListServiceInstancesResponse) {
+    option (google.api.http) = {
+      get: "/services/instances"
+    };
+  }
+
+  rpc GetServiceInstance(GetServiceInstanceRequest) returns (ServiceInstance) {
+    option (google.api.http) = {
+      get: "/services/instances/{id}"
+    };
+  }
+
+  rpc LaunchJupyterService(LaunchJupyterServiceRequest) returns (ServiceInstance) {
+    option (google.api.http) = {
+      post: "/service/launch/jupyter"
+      body: "*"
+    };
+  }
+}

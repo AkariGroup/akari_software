@@ -1,0 +1,184 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "akira_proto/service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "AkariServiceService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/service/launch/jupyter": {
+      "post": {
+        "operationId": "AkariServiceService_LaunchJupyterService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/akira_protoServiceInstance"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/akira_protoLaunchJupyterServiceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AkariServiceService"
+        ]
+      }
+    },
+    "/services/instances": {
+      "get": {
+        "operationId": "AkariServiceService_ListServiceInstances",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/akira_protoListServiceInstancesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "AkariServiceService"
+        ]
+      }
+    },
+    "/services/instances/{id}": {
+      "get": {
+        "operationId": "AkariServiceService_GetServiceInstance",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/akira_protoServiceInstance"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AkariServiceService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "akira_protoLaunchJupyterServiceRequest": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string"
+        }
+      }
+    },
+    "akira_protoListServiceInstancesResponse": {
+      "type": "object",
+      "properties": {
+        "instances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/akira_protoServiceInstance"
+          }
+        }
+      }
+    },
+    "akira_protoServiceInstance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "serviceAddress": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/akira_protoServiceStatus"
+        }
+      }
+    },
+    "akira_protoServiceStatus": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "STARTING",
+        "RUNNING",
+        "STOPPING",
+        "ERROR",
+        "COMPLETED"
+      ],
+      "default": "CREATED"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
