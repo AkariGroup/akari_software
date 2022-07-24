@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package akira_proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/AkariGroup/akari_software/internal/akira/proto";
+
+service SystemService {
+  rpc GetSystemTime(google.protobuf.Empty) returns (google.protobuf.Timestamp) {
+    option (google.api.http) = {
+      get: "/system/current_time"
+    };
+  }
+}
