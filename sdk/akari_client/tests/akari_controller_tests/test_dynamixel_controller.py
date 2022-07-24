@@ -49,19 +49,11 @@ def test_read_write_device(mock_communicator: DynamixelCommunicator) -> None:
     assert controller2._read(control) == 42
 
 
-def test_init(mock_communicator: DynamixelCommunicator) -> None:
+def test_set_position_limit(mock_communicator: DynamixelCommunicator) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 12, 34), mock_communicator
+        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
     )
-
     assert controller.joint_name == "tilt"
-    assert controller._read(
-        DynamixelControlTable.MIN_POSITION_LIMIT
-    ) == rad_to_dynamixel_pulse(12)
-    assert controller._read(
-        DynamixelControlTable.MAX_POSITION_LIMIT
-    ) == rad_to_dynamixel_pulse(34)
-
     controller.set_position_limit(56, 78)
     assert controller._read(
         DynamixelControlTable.MIN_POSITION_LIMIT
