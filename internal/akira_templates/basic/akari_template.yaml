@@ -1,0 +1,10 @@
+---
+name: "Basic"
+version: "0.0.1"
+description: "Basic template with a single ipynb file"
+author: "Akari"
+url: "https://github.com/AkariGroup/"
+tags:
+  - Official
+  - Basic
+  - Jupyter

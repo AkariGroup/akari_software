@@ -11,3 +11,6 @@ build/
 .venv
 
 setup/ansible/hosts
+
+internal/docker/.projects/*
+!internal/docker/.projects/.gitkeep
