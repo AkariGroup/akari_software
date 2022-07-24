@@ -68,7 +68,7 @@
         ]
       }
     },
-    "/projects/{id}": {
+    "/projects/detail": {
       "get": {
         "operationId": "ProjectService_GetProject",
         "responses": {
@@ -88,8 +88,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],

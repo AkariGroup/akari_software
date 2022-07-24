@@ -58,7 +58,7 @@ service ProjectService {
 
   rpc GetProject(GetProjectRequest) returns (Project) {
     option (google.api.http) = {
-      get: "/projects/{id}"
+      get: "/projects/detail"
     };
   }
 

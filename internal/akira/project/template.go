@@ -49,7 +49,13 @@ func (t *localTemplate) Metadata() TemplateMetadata {
 }
 
 func (t *localTemplate) Setup(d string) error {
-	return cp.Copy(t.dir, d)
+	metaPath := filepath.Join(t.dir, METADATA_FILENAME)
+	opts := cp.Options{
+		Skip: func(src string) (bool, error) {
+			return src == metaPath, nil
+		},
+	}
+	return cp.Copy(t.dir, d, opts)
 }
 
 type TemplateManager struct {

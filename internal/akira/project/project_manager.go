@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"sync"
 
 	"github.com/AkariGroup/akari_software/internal/akira/internal/util"
@@ -71,8 +72,14 @@ func (m *ProjectManager) UpdateProjects() {
 	}
 }
 
-func (m *ProjectManager) CreateProject(name string, manifest ProjectManifest, template Template) (Project, error) {
-	dir := filepath.Join(m.baseDir, name)
+var isSafeDirName = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
+
+func (m *ProjectManager) CreateProject(dirname string, manifest ProjectManifest, template Template) (Project, error) {
+	if !isSafeDirName.MatchString(dirname) {
+		return nil, fmt.Errorf("invalid path: %#v", dirname)
+	}
+
+	dir := filepath.Join(m.baseDir, dirname)
 
 	proj, err := func() (Project, error) {
 		m.mu.Lock()
