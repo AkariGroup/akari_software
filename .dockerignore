@@ -1,0 +1,7 @@
+*.egg-info
+*.pyc
+*.swp
+.git
+.vscode
+__pycache__
+setup
