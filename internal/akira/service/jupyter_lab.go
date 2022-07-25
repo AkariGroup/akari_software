@@ -19,7 +19,7 @@ const (
 	JupyterTokenLength            = 20
 	JupyterContainerListeningPort = 8080
 	JupyterContainerWorkdir       = "/app"
-	JupyterImageName              = "akari_jupyter"
+	JupyterImageName              = "docker.vbcpp.net/akira_services/jupyter_lab"
 )
 
 type JupyterLab struct {

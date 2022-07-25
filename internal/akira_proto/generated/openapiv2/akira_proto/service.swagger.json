@@ -50,12 +50,12 @@
     },
     "/services/instances": {
       "get": {
-        "operationId": "AkariServiceService_ListServiceInstances",
+        "operationId": "AkariServiceService_ListInstances",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/akira_protoListServiceInstancesResponse"
+              "$ref": "#/definitions/akira_protoListInstancesResponse"
             }
           },
           "default": {
@@ -72,12 +72,43 @@
     },
     "/services/instances/{id}": {
       "get": {
-        "operationId": "AkariServiceService_GetServiceInstance",
+        "operationId": "AkariServiceService_GetInstance",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/akira_protoServiceInstance"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AkariServiceService"
+        ]
+      }
+    },
+    "/services/instances/{id}/terminate": {
+      "get": {
+        "operationId": "AkariServiceService_TerminateInstance",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           },
           "default": {
@@ -110,7 +141,7 @@
         }
       }
     },
-    "akira_protoListServiceInstancesResponse": {
+    "akira_protoListInstancesResponse": {
       "type": "object",
       "properties": {
         "instances": {

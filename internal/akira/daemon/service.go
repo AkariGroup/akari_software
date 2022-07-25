@@ -38,25 +38,37 @@ func instanceToPb(s service.Instance) *proto.ServiceInstance {
 	}
 }
 
-func (m *AkariServiceServicer) ListServiceInstances(ctx context.Context, r *emptypb.Empty) (*proto.ListServiceInstancesResponse, error) {
+func (m *AkariServiceServicer) ListInstances(ctx context.Context, r *emptypb.Empty) (*proto.ListInstancesResponse, error) {
 	services := m.da.service.Instances()
 	var ret []*proto.ServiceInstance
 	for _, s := range services {
 		ret = append(ret, instanceToPb(s))
 	}
 
-	return &proto.ListServiceInstancesResponse{
+	return &proto.ListInstancesResponse{
 		Instances: ret,
 	}, nil
 }
 
-func (m *AkariServiceServicer) GetServiceInstance(ctx context.Context, r *proto.GetServiceInstanceRequest) (*proto.ServiceInstance, error) {
+func (m *AkariServiceServicer) GetInstance(ctx context.Context, r *proto.GetInstanceRequest) (*proto.ServiceInstance, error) {
 	p, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
 	}
 
 	return instanceToPb(p), nil
+}
+
+func (m *AkariServiceServicer) TerminateInstance(ctx context.Context, r *proto.TerminateInstanceRequest) (*emptypb.Empty, error) {
+	p, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
+	}
+
+	if err := p.Stop(); err != nil {
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("failed to stop service: %#v", err))
+	}
+	return &emptypb.Empty{}, nil
 }
 
 func (m *AkariServiceServicer) LaunchJupyterService(ctx context.Context, r *proto.LaunchJupyterServiceRequest) (*proto.ServiceInstance, error) {

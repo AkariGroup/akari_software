@@ -23,8 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AkariServiceServiceClient interface {
-	ListServiceInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServiceInstancesResponse, error)
-	GetServiceInstance(ctx context.Context, in *GetServiceInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
+	ListInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListInstancesResponse, error)
+	GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
+	TerminateInstance(ctx context.Context, in *TerminateInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	LaunchJupyterService(ctx context.Context, in *LaunchJupyterServiceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
 }
 
@@ -36,18 +37,27 @@ func NewAkariServiceServiceClient(cc grpc.ClientConnInterface) AkariServiceServi
 	return &akariServiceServiceClient{cc}
 }
 
-func (c *akariServiceServiceClient) ListServiceInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServiceInstancesResponse, error) {
-	out := new(ListServiceInstancesResponse)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/ListServiceInstances", in, out, opts...)
+func (c *akariServiceServiceClient) ListInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
+	out := new(ListInstancesResponse)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/ListInstances", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) GetServiceInstance(ctx context.Context, in *GetServiceInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error) {
+func (c *akariServiceServiceClient) GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error) {
 	out := new(ServiceInstance)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetServiceInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetInstance", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *akariServiceServiceClient) TerminateInstance(ctx context.Context, in *TerminateInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/TerminateInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +77,9 @@ func (c *akariServiceServiceClient) LaunchJupyterService(ctx context.Context, in
 // All implementations must embed UnimplementedAkariServiceServiceServer
 // for forward compatibility
 type AkariServiceServiceServer interface {
-	ListServiceInstances(context.Context, *emptypb.Empty) (*ListServiceInstancesResponse, error)
-	GetServiceInstance(context.Context, *GetServiceInstanceRequest) (*ServiceInstance, error)
+	ListInstances(context.Context, *emptypb.Empty) (*ListInstancesResponse, error)
+	GetInstance(context.Context, *GetInstanceRequest) (*ServiceInstance, error)
+	TerminateInstance(context.Context, *TerminateInstanceRequest) (*emptypb.Empty, error)
 	LaunchJupyterService(context.Context, *LaunchJupyterServiceRequest) (*ServiceInstance, error)
 	mustEmbedUnimplementedAkariServiceServiceServer()
 }
@@ -77,11 +88,14 @@ type AkariServiceServiceServer interface {
 type UnimplementedAkariServiceServiceServer struct {
 }
 
-func (UnimplementedAkariServiceServiceServer) ListServiceInstances(context.Context, *emptypb.Empty) (*ListServiceInstancesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListServiceInstances not implemented")
+func (UnimplementedAkariServiceServiceServer) ListInstances(context.Context, *emptypb.Empty) (*ListInstancesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInstances not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) GetServiceInstance(context.Context, *GetServiceInstanceRequest) (*ServiceInstance, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetServiceInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) GetInstance(context.Context, *GetInstanceRequest) (*ServiceInstance, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInstance not implemented")
+}
+func (UnimplementedAkariServiceServiceServer) TerminateInstance(context.Context, *TerminateInstanceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TerminateInstance not implemented")
 }
 func (UnimplementedAkariServiceServiceServer) LaunchJupyterService(context.Context, *LaunchJupyterServiceRequest) (*ServiceInstance, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LaunchJupyterService not implemented")
@@ -99,38 +113,56 @@ func RegisterAkariServiceServiceServer(s grpc.ServiceRegistrar, srv AkariService
 	s.RegisterService(&AkariServiceService_ServiceDesc, srv)
 }
 
-func _AkariServiceService_ListServiceInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AkariServiceService_ListInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).ListServiceInstances(ctx, in)
+		return srv.(AkariServiceServiceServer).ListInstances(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/ListServiceInstances",
+		FullMethod: "/akira_proto.AkariServiceService/ListInstances",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).ListServiceInstances(ctx, req.(*emptypb.Empty))
+		return srv.(AkariServiceServiceServer).ListInstances(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_GetServiceInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetServiceInstanceRequest)
+func _AkariServiceService_GetInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInstanceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).GetServiceInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).GetInstance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/GetServiceInstance",
+		FullMethod: "/akira_proto.AkariServiceService/GetInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).GetServiceInstance(ctx, req.(*GetServiceInstanceRequest))
+		return srv.(AkariServiceServiceServer).GetInstance(ctx, req.(*GetInstanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AkariServiceService_TerminateInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminateInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AkariServiceServiceServer).TerminateInstance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.AkariServiceService/TerminateInstance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AkariServiceServiceServer).TerminateInstance(ctx, req.(*TerminateInstanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -161,12 +193,16 @@ var AkariServiceService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AkariServiceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListServiceInstances",
-			Handler:    _AkariServiceService_ListServiceInstances_Handler,
+			MethodName: "ListInstances",
+			Handler:    _AkariServiceService_ListInstances_Handler,
 		},
 		{
-			MethodName: "GetServiceInstance",
-			Handler:    _AkariServiceService_GetServiceInstance_Handler,
+			MethodName: "GetInstance",
+			Handler:    _AkariServiceService_GetInstance_Handler,
+		},
+		{
+			MethodName: "TerminateInstance",
+			Handler:    _AkariServiceService_TerminateInstance_Handler,
 		},
 		{
 			MethodName: "LaunchJupyterService",

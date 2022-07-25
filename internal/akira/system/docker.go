@@ -2,6 +2,8 @@ package system
 
 import (
 	"context"
+	"fmt"
+	"os/user"
 	"strconv"
 	"time"
 
@@ -50,6 +52,7 @@ type CreateContainerOption struct {
 	Env    []string
 	Ports  map[string]int
 	Mounts []mount.Mount
+	RequireRoot bool
 }
 
 func (d *DockerSystem) CreateContainer(config CreateContainerOption) (ContainerId, error) {
@@ -64,6 +67,15 @@ func (d *DockerSystem) CreateContainer(config CreateContainerOption) (ContainerI
 		portBindings[nat.Port(c)] = []nat.PortBinding{{HostPort: strconv.Itoa(h)}}
 	}
 
+	var containerUser string
+	if !config.RequireRoot {
+		if u, err := user.Current(); err != nil {
+			return "", fmt.Errorf("failed to get current user: %w", err)
+		} else {
+			containerUser = fmt.Sprintf("%s:%s", u.Uid, u.Gid)
+		}
+	}
+
 	containerConfig := container.Config{
 		Image:        config.Image,
 		Env:          config.Env,
@@ -71,6 +83,7 @@ func (d *DockerSystem) CreateContainer(config CreateContainerOption) (ContainerI
 		Labels: map[string]string{
 			AKARI_CONTAINER_TYPE_MARKER: string(ContainerTypeService),
 		},
+		User: containerUser,
 	}
 	hostConfig := container.HostConfig{
 		PortBindings: portBindings,

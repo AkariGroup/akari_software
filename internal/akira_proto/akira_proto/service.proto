@@ -25,11 +25,15 @@ message ServiceInstance {
   ServiceStatus status = 5;
 }
 
-message ListServiceInstancesResponse {
+message ListInstancesResponse {
   repeated ServiceInstance instances = 1;
 }
 
-message GetServiceInstanceRequest {
+message GetInstanceRequest {
+  string id = 1;
+}
+
+message TerminateInstanceRequest {
   string id = 1;
 }
 
@@ -38,15 +42,21 @@ message LaunchJupyterServiceRequest {
 }
 
 service AkariServiceService {
-  rpc ListServiceInstances(google.protobuf.Empty) returns (ListServiceInstancesResponse) {
+  rpc ListInstances(google.protobuf.Empty) returns (ListInstancesResponse) {
     option (google.api.http) = {
       get: "/services/instances"
     };
   }
 
-  rpc GetServiceInstance(GetServiceInstanceRequest) returns (ServiceInstance) {
+  rpc GetInstance(GetInstanceRequest) returns (ServiceInstance) {
     option (google.api.http) = {
       get: "/services/instances/{id}"
+    };
+  }
+
+  rpc TerminateInstance(TerminateInstanceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/services/instances/{id}/terminate"
     };
   }
 
