@@ -48,10 +48,10 @@ func NewDockerSystem() (*DockerSystem, error) {
 }
 
 type CreateContainerOption struct {
-	Image  string
-	Env    []string
-	Ports  map[string]int
-	Mounts []mount.Mount
+	Image       string
+	Env         []string
+	Ports       map[string]int
+	Mounts      []mount.Mount
 	RequireRoot bool
 }
 
