@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  daemon:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: daemon
+    volumes:
+      - ../akira_templates:/templates:ro
+      - ./.projects:/projects
+    environment:
+      HOST_UID: ${HOST_UID:?You need to run `source env.sh`}
+      HOST_GID: ${HOST_GID:?You need to run `source env.sh`}
+    network_mode: host
+  gateway:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: gateway
+    network_mode: host

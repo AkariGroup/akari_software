@@ -12,5 +12,11 @@ func RegisterServicers(s *grpc.Server, d *Daemon) error {
 		proto.RegisterSystemServiceServer(s, system)
 	}
 
+	if project, err := NewProjectServicer(d); err != nil {
+		return err
+	} else {
+		proto.RegisterProjectServiceServer(s, project)
+	}
+
 	return nil
 }

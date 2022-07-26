@@ -24,6 +24,10 @@ func main() {
 		panic(err)
 	}
 
+	if err := proto.RegisterProjectServiceHandlerFromEndpoint(context.Background(), mux, DAEMON_GRPC_ENDPOINT, opts); err != nil {
+		panic(err)
+	}
+
 	fmt.Printf("Gateway Started at %s\n", GATEWAY_PORT)
 	if err := http.ListenAndServe(GATEWAY_PORT, mux); err != nil {
 		panic(err)

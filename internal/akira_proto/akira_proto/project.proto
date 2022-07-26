@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package akira_proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/AkariGroup/akari_software/internal/akira/proto";
+
+message ProjectManifest {
+  string name = 1;
+  string description = 2;
+  string author = 3;
+  string url = 4;
+}
+
+message CreateProjectRequest {
+  string name = 1;
+  ProjectManifest manifest = 2;
+  string template_id = 3;
+}
+
+message Project {
+  string id = 1;
+  ProjectManifest manifest = 2;
+  string path = 3;
+}
+
+message GetProjectRequest {
+  string id = 1;
+}
+
+message ListProjectsResponse {
+  repeated Project projects = 1;
+}
+
+message Template {
+  string id = 1;
+  string name = 2;
+  string version = 3;
+  string description = 4;
+  string author = 5;
+  string url = 6;
+  repeated string tags = 7;
+}
+
+message ListTemplatesResponse {
+  repeated Template templates = 1;
+}
+
+service ProjectService {
+  rpc CreateProject(CreateProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      post: "/projects"
+      body: "*"
+    };
+  }
+
+  rpc GetProject(GetProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      get: "/projects/detail"
+    };
+  }
+
+  rpc ListProjects(google.protobuf.Empty) returns (ListProjectsResponse) {
+    option (google.api.http) = {
+      get: "/projects"
+    };
+  }
+
+  rpc ListTemplates(google.protobuf.Empty) returns (ListTemplatesResponse) {
+    option (google.api.http) = {
+      get: "/templates"
+    };
+  }
+}
