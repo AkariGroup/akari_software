@@ -24,4 +24,4 @@ jobs:
         src_path=$(pwd)
         cd $(mktemp -d)
         wget -c https://github.com/bonprosoft/lfs-pointer-check/releases/download/0.0.3/lfs_pointer_check_linux_amd64.tar.gz -O - | tar -xzv
-        ./lfs-pointer-check --size-limit="1MB" $src_path
+        ./lfs-pointer-check --size-limit="10MB" $src_path
