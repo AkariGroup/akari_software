@@ -18,5 +18,8 @@ func RegisterServicers(s *grpc.Server, d *Daemon) error {
 		proto.RegisterProjectServiceServer(s, project)
 	}
 
+	service := NewAkariServiceServicer(d)
+	proto.RegisterAkariServiceServiceServer(s, service)
+
 	return nil
 }

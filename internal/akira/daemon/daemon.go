@@ -5,11 +5,15 @@ import (
 	"os"
 
 	"github.com/AkariGroup/akari_software/internal/akira/project"
+	"github.com/AkariGroup/akari_software/internal/akira/service"
+	"github.com/AkariGroup/akari_software/internal/akira/system"
 )
 
 type Daemon struct {
 	projects  *project.ProjectManager
 	templates *project.TemplateManager
+	service   service.ServiceManager
+	docker    *system.DockerSystem
 }
 
 const (
@@ -42,14 +46,21 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	if err != nil {
 		return nil, err
 	}
+	docker, err := system.NewDockerSystem()
+	if err != nil {
+		return nil, err
+	}
 
 	pm := project.NewProjectManager(projectDir)
 	pm.UpdateProjects()
 	tm := project.NewTemplateManager(templateDir)
 	tm.UpdateTemplates()
+	svr := service.NewServiceManager()
 
 	return &Daemon{
 		projects:  pm,
 		templates: tm,
+		service:   svr,
+		docker:    docker,
 	}, nil
 }

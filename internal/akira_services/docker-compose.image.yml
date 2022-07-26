@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  jupyter_lab:
+    build:
+      context: ../../
+      dockerfile: internal/akira_services/jupyter_lab/Dockerfile
+    image: docker.vbcpp.net/akira_services/jupyter_lab
+    command: exit 1

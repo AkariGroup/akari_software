@@ -6,11 +6,21 @@ services:
       dockerfile: docker/Dockerfile
       target: daemon
     volumes:
-      - ../akira_templates:/templates:ro
-      - ./.projects:/projects
+      - type: bind
+        source: ${AKARI_REPOSITORY_DIR:?You need to run `source env.sh`}/internal/akira_templates
+        target: /templates
+        read_only: true
+      - type: bind
+        source: ${AKIRA_DEV_PROJECT_DIR:?You need to run `source env.sh`}
+        target: ${AKIRA_DEV_PROJECT_DIR:?You need to run `source env.sh`}
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
     environment:
       HOST_UID: ${HOST_UID:?You need to run `source env.sh`}
       HOST_GID: ${HOST_GID:?You need to run `source env.sh`}
+      DOCKER_GID: ${DOCKER_GID:?You need to run `source env.sh`}
+      AKIRA_PROJECT_DIR: ${AKIRA_DEV_PROJECT_DIR}
     network_mode: host
   gateway:
     build:
