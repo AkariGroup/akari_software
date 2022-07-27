@@ -9,7 +9,6 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useCallback, useState } from "react";
@@ -30,7 +29,6 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 export function Header() {
   const setSidebar = useSidebarSetValue();
-  const theme = useTheme();
   const [anchorElAvatar, setAnchorElAvatar] = useState<HTMLElement | null>(
     null
   );
