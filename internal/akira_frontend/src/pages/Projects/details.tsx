@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
@@ -40,8 +41,14 @@ export function ProjectsDetails() {
             <CardContent>
               <Box mb={1}>
                 <Typography variant="h4">{project.manifest?.name}</Typography>
-                <Typography mt={1} variant="body2">
-                  {project.manifest?.author}
+                <Typography
+                  mt={1}
+                  variant="body2"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <PersonIcon />
+                  &nbsp;{project.manifest?.author}
                 </Typography>
               </Box>
               <Divider />
@@ -55,14 +62,14 @@ export function ProjectsDetails() {
               <OpenProjectWithServiceButton />
             </Box>
             <Box>
-              <Typography variant="subtitle2">Project info</Typography>
+              <Typography variant="subtitle2">プロジェクト情報</Typography>
               <Divider />
               <Typography mt={1} variant="body2" color="textSecondary">
                 URL: {project.manifest?.url}
               </Typography>
             </Box>
             <Box>
-              <Typography variant="subtitle2">Metadata</Typography>
+              <Typography variant="subtitle2">メタデータ</Typography>
               <Divider />
               <Typography mt={1} variant="body2" color="textSecondary">
                 ID: {project.id}
