@@ -137,7 +137,7 @@ export function Sidebar(props: Props) {
         sx={{
           display: {
             xs: "none",
-            lg: "inline-block",
+            lg: "block",
           },
         }}
       >
