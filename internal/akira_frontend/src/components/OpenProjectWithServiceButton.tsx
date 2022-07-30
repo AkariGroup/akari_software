@@ -5,7 +5,7 @@ import { useApiClient } from "../hooks/api";
 
 export function OpenProjectWithServiceButton() {
   const client = useApiClient();
-  const { data } = useAspidaSWR(client.services.instances, {
+  const { data } = useAspidaSWR(client.instances, {
     enabled: !!client,
   });
 
@@ -35,7 +35,7 @@ export function OpenProjectWithServiceButton() {
           if (s.status !== "RUNNING") {
             return null;
           }
-          return <MenuItem onClick={handleClose}>{s.name}</MenuItem>;
+          return <MenuItem onClick={handleClose}>{s.displayName}</MenuItem>;
         })}
       </Menu>
     </>

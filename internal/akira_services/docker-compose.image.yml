@@ -4,5 +4,5 @@ services:
     build:
       context: ../../
       dockerfile: internal/akira_services/jupyter_lab/Dockerfile
-    image: docker.vbcpp.net/akira_services/jupyter_lab
+    image: akarirobot/akira-jupyter-service:v1
     command: exit 1

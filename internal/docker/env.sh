@@ -8,4 +8,11 @@ export HOST_UID=$(id -u)
 export DOCKER_GID=$(getent group docker | cut -d: -f3)
 
 export AKARI_REPOSITORY_DIR=${REPOSITORY_ROOT}
-export AKIRA_DEV_PROJECT_DIR=${SCRIPT_DIR}/.projects
+export AKIRA_DEV_LOCAL_DIR=${SCRIPT_DIR}/.local
+export AKIRA_DOCKER_CREDENTIAL=$(cat .docker_credential)
+
+# for local development
+export AKIRA_TEMPLATE_DIR=${AKARI_REPOSITORY_DIR}/internal/akira_templates
+export AKIRA_PROJECT_DIR=${AKIRA_DEV_LOCAL_DIR}/projects
+export AKIRA_CONFIG_DIR=${AKIRA_DEV_LOCAL_DIR}/etc/akira
+export AKIRA_VAR_DIR=${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
