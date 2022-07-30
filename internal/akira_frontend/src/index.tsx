@@ -13,7 +13,7 @@ root.render(
   <React.StrictMode>
     <DarkModeProvider>
       <SidebarOpenedProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/ui">
           <App />
         </BrowserRouter>
       </SidebarOpenedProvider>

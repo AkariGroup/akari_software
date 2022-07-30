@@ -1,4 +1,4 @@
-import { createTheme, CssBaseline, useTheme } from "@mui/material";
+import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
 import { useRoutes } from "react-router-dom";
 import { useDarkmodeValue } from "./contexts/DarkmodeContext";
