@@ -16,3 +16,14 @@
   hosts: mainpc
   roles:
     - arduino
+
+- name: Setup docker
+  hosts: mainpc
+  tags:
+    - docker
+  vars_prompt:
+    - name: akira_docker_credential
+      prompt: Enter the Docker API token
+  roles:
+    - docker
+    - docker_credential

@@ -1,0 +1,10 @@
+---
+- name: Create /root/.akira_docker_credential
+  copy:
+    dest: "/root/.akira_docker_credential"
+    owner: root
+    group: root
+    mode: "0600"
+    content: |
+      {{ akira_docker_credential }}
+  become: true
