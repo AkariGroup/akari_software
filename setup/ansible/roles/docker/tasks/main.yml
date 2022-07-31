@@ -36,8 +36,8 @@
   apt:
     update_cache: true
     pkg:
-      - docker-ce
-      - docker-ce-cli
+      - docker-ce={{ docker_version }}
+      - docker-ce-cli={{ docker_version }}
       - containerd.io
       - docker-compose-plugin
   become: true
