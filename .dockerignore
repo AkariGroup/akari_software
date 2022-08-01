@@ -3,5 +3,6 @@
 *.swp
 .git
 .vscode
+/setup
 __pycache__
-setup
+node_modules

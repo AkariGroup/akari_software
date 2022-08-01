@@ -24,10 +24,13 @@ WORKDIR /app
 COPY docker/daemon-entrypoint.sh /entrypoint.sh
 COPY --from=build /build/daemon .
 COPY akira_templates /templates
-RUN mkdir -p /projects
+
+RUN mkdir -p /projects /etc/akira /var/lib/akira
 
 ENV AKIRA_PROJECT_DIR=/projects
 ENV AKIRA_TEMPLATE_DIR=/templates
+ENV AKIRA_CONFIG_DIR=/etc/akira
+ENV AKIRA_VAR_DIR=/var/lib/akira
 
 EXPOSE 30001
 ENTRYPOINT ["/entrypoint.sh"]

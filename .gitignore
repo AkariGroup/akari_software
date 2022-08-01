@@ -12,5 +12,6 @@ build/
 
 setup/ansible/hosts
 
-internal/docker/.projects/*
-!internal/docker/.projects/.gitkeep
+internal/docker/.docker_credential
+internal/docker/.local/*
+!internal/docker/.local/.gitkeep

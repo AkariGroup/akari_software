@@ -8,62 +8,161 @@ import "google/protobuf/empty.proto";
 option go_package = "github.com/AkariGroup/akari_software/internal/akira/proto";
 
 
-enum ServiceStatus {
-    CREATED = 0;
+enum InstanceStatus {
+    TERMINATED = 0;
     STARTING = 1;
     RUNNING = 2;
     STOPPING = 3;
     ERROR = 4;
-    COMPLETED = 5;
+    STOPPED = 5;
+}
+
+message Service {
+  string id = 1;
+  string name = 2;
+  string version = 3;
+  string display_name = 4;
+  string description = 5;
+  repeated string capabilities = 6;
 }
 
 message ServiceInstance {
   string id = 1;
-  string name = 2;
-  string description = 3;
-  string service_address = 4;
-  ServiceStatus status = 5;
+  Service service = 2;
+  string display_name = 3;
+  string description = 4;
+  InstanceStatus status = 5;
+}
+
+message ListServicesResponse {
+  repeated Service services = 1;
 }
 
 message ListInstancesResponse {
   repeated ServiceInstance instances = 1;
 }
 
+message GetServiceRequest {
+  string id = 1;
+}
+
+message CreateInstanceRequest {
+  string service_id = 1;
+  string display_name = 2;
+  string description = 3;
+}
+
 message GetInstanceRequest {
   string id = 1;
+}
+
+message RemoveInstanceRequest {
+  string id = 1;
+}
+
+message StartInstanceRequest {
+  string id = 1;
+}
+
+message StopInstanceRequest {
+  string id = 1;
+  bool terminate = 2;
 }
 
 message TerminateInstanceRequest {
   string id = 1;
 }
 
-message LaunchJupyterServiceRequest {
-  string project_id = 1;
+message CleanInstanceRequest {
+  string id = 1;
+}
+
+message OpenRequest {
+  string id = 1;
+}
+
+message OpenResponse {
+  string url = 1;
+}
+
+message OpenProjectRequest {
+  string service_id = 1;
+  string project_id = 2;
+}
+
+message OpenProjectResponse {
+  string url = 1;
 }
 
 service AkariServiceService {
+  rpc ListServices(google.protobuf.Empty) returns (ListServicesResponse) {
+    option (google.api.http) = {
+      get: "/services"
+    };
+  }
+
+  rpc GetService(GetServiceRequest) returns (Service) {
+    option (google.api.http) = {
+      get: "/services/{id}"
+    };
+  }
+
   rpc ListInstances(google.protobuf.Empty) returns (ListInstancesResponse) {
     option (google.api.http) = {
-      get: "/services/instances"
+      get: "/instances"
+    };
+  }
+
+  rpc CreateInstance(CreateInstanceRequest) returns (ServiceInstance) {
+    option (google.api.http) = {
+      post: "/instances"
+      body: "*"
     };
   }
 
   rpc GetInstance(GetInstanceRequest) returns (ServiceInstance) {
     option (google.api.http) = {
-      get: "/services/instances/{id}"
+      get: "/instances/{id}"
+    };
+  }
+
+  rpc RemoveInstance(RemoveInstanceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/instances/{id}/remove"
+      body: "*"
+    };
+  }
+
+  rpc StartInstance(StartInstanceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/instances/{id}/start"
+      body: "*"
+    };
+  }
+
+  rpc StopInstance(StopInstanceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/instances/{id}/stop"
+      body: "*"
     };
   }
 
   rpc TerminateInstance(TerminateInstanceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      get: "/services/instances/{id}/terminate"
+      post: "/instances/{id}/terminate"
+      body: "*"
     };
   }
 
-  rpc LaunchJupyterService(LaunchJupyterServiceRequest) returns (ServiceInstance) {
+  rpc Open(OpenRequest) returns (OpenResponse) {
     option (google.api.http) = {
-      post: "/service/launch/jupyter"
-      body: "*"
+      get: "/instances/{id}/open"
+    };
+  }
+
+  rpc OpenProject(OpenProjectRequest) returns (OpenProjectResponse) {
+    option (google.api.http) = {
+      get: "/instances/{service_id}/open_project"
     };
   }
 }

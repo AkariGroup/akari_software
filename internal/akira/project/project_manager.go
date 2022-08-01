@@ -18,11 +18,20 @@ type ProjectManager struct {
 	mu sync.RWMutex
 }
 
-func NewProjectManager(baseDir string) *ProjectManager {
+func NewProjectManager(baseDir string) (*ProjectManager, error) {
+	baseDir, err := filepath.Abs(baseDir)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
+		return nil, err
+	}
+
 	return &ProjectManager{
 		baseDir:  baseDir,
 		projects: make(map[ProjectId]Project),
-	}
+	}, nil
 }
 
 func (m *ProjectManager) registerProject(p Project) error {
