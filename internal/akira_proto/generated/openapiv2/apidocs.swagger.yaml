@@ -100,11 +100,6 @@ paths:
           in: path
           required: true
           type: string
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
       tags:
         - AkariServiceService
   /instances/{id}/start:
@@ -125,11 +120,6 @@ paths:
           in: path
           required: true
           type: string
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
       tags:
         - AkariServiceService
   /instances/{id}/stop:
@@ -178,11 +168,6 @@ paths:
           in: path
           required: true
           type: string
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
       tags:
         - AkariServiceService
   /instances/{serviceId}/open_project:
