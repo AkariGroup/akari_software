@@ -5,35 +5,38 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export enum DialogResult {
+export enum PowerDialogResult {
   CANCEL = 0,
   SHUTDOWN = 1,
   TERMINATE = 2,
 }
 
 type Props = {
-  onResponse: (d: DialogResult) => void;
+  serviceName: string;
+  onResponse: (d: PowerDialogResult) => void;
 };
 
 export function PowerDialog(props: Props) {
   return (
-    <Dialog open={true} onClose={() => props.onResponse(DialogResult.CANCEL)}>
-      <DialogTitle>シャットダウンしますか</DialogTitle>
+    <Dialog open={true} onClose={() => props.onResponse(PowerDialogResult.CANCEL)}>
+      <DialogTitle>確認</DialogTitle>
       <DialogContent>
-        <DialogContentText>Terminate option</DialogContentText>
+        <DialogContentText>
+          '{props.serviceName}' をシャットダウンしますか？
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => props.onResponse(DialogResult.CANCEL)}>
+        <Button onClick={() => props.onResponse(PowerDialogResult.CANCEL)}>
           キャンセル
         </Button>
         <Button
-          onClick={() => props.onResponse(DialogResult.SHUTDOWN)}
+          onClick={() => props.onResponse(PowerDialogResult.SHUTDOWN)}
           color="error"
         >
           停止
         </Button>
         <Button
-          onClick={() => props.onResponse(DialogResult.TERMINATE)}
+          onClick={() => props.onResponse(PowerDialogResult.TERMINATE)}
           color="error"
         >
           完全停止

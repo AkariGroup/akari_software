@@ -2,7 +2,6 @@ import {
   IconButton,
   Link,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -19,7 +18,9 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCallback, useState } from "react";
-import { PowerDialog, DialogResult } from "./powerDialog";
+import { PowerDialog, PowerDialogResult } from "./powerDialog";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
 
 type Props = {
   instances: Akira_protoServiceInstance[];
@@ -77,15 +78,13 @@ function Status({ status }: { status?: Akira_protoInstanceStatus }) {
   );
 }
 
-type InstanceProp = {
+type PowerButtonProps = {
   instance: Akira_protoServiceInstance;
   onStart: (target: Akira_protoServiceInstance) => void;
   onStop: (target: Akira_protoServiceInstance, terminate: boolean) => void;
-  onLaunch: (target: Akira_protoServiceInstance) => void;
-  onRemove: (target: Akira_protoServiceInstance) => void;
 };
 
-function PowerButton(props: InstanceProp) {
+function PowerButton(props: PowerButtonProps) {
   const [powerDialogOpened, setPowerDialogOpened] = useState(false);
   const onPowerIconClicked = useCallback(() => {
     if (props.instance.status === "RUNNING") {
@@ -95,12 +94,12 @@ function PowerButton(props: InstanceProp) {
     }
   }, [props, setPowerDialogOpened]);
   const onPowerConfirmation = useCallback(
-    (d: DialogResult) => {
+    (d: PowerDialogResult) => {
       setPowerDialogOpened(false);
-      if (d === DialogResult.CANCEL) {
+      if (d === PowerDialogResult.CANCEL) {
         return;
       } else {
-        props.onStop(props.instance, d === DialogResult.TERMINATE);
+        props.onStop(props.instance, d === PowerDialogResult.TERMINATE);
       }
     },
     [props, setPowerDialogOpened]
@@ -108,19 +107,68 @@ function PowerButton(props: InstanceProp) {
   const powerButtonDisabled =
     props.instance.status === "STARTING" ||
     props.instance.status === "STOPPING";
-  const powerButtonOff = props.instance.status === "RUNNING";
+  const powerIcon =
+    props.instance.status === "RUNNING" ? (
+      <PowerSettingsNewIcon color="error" />
+    ) : (
+      <PlayArrowIcon color="success" />
+    );
 
   return (
     <>
       {powerDialogOpened ? (
-        <PowerDialog onResponse={onPowerConfirmation} />
+        <PowerDialog
+          serviceName={props.instance.displayName ?? ""}
+          onResponse={onPowerConfirmation}
+        />
       ) : null}
       <IconButton onClick={onPowerIconClicked} disabled={powerButtonDisabled}>
-        <PowerSettingsNewIcon color={powerButtonOff ? "error" : "success"} />
+        {powerIcon}
       </IconButton>
     </>
   );
 }
+
+type RemoveButtonProps = {
+  instance: Akira_protoServiceInstance;
+  onRemove: (target: Akira_protoServiceInstance) => void;
+};
+
+function RemoveButton(props: RemoveButtonProps) {
+  const [opened, setOpened] = useState(false);
+  const onConfirm = useCallback(
+    (d: RemoveDialogResult) => {
+      setOpened(false);
+      if (d === RemoveDialogResult.CANCEL) {
+        return;
+      } else {
+        props.onRemove(props.instance);
+      }
+    },
+    [props, setOpened]
+  );
+  return (
+    <>
+      {opened ? (
+        <RemoveDialog
+          serviceName={props.instance.displayName ?? ""}
+          onResponse={onConfirm}
+        />
+      ) : null}
+      <IconButton onClick={() => setOpened(true)}>
+        <DeleteIcon />
+      </IconButton>
+    </>
+  );
+}
+
+type InstanceProp = {
+  instance: Akira_protoServiceInstance;
+  onStart: (target: Akira_protoServiceInstance) => void;
+  onStop: (target: Akira_protoServiceInstance, terminate: boolean) => void;
+  onLaunch: (target: Akira_protoServiceInstance) => void;
+  onRemove: (target: Akira_protoServiceInstance) => void;
+};
 
 function InstanceRow({
   instance,
@@ -148,19 +196,14 @@ function InstanceRow({
           <Status status={instance.status} />
         </TableCell>
         <TableCell align="right">
-          <IconButton onClick={() => onLaunch(instance)}>
+          <IconButton
+            onClick={() => onLaunch(instance)}
+            disabled={instance.status !== "RUNNING"}
+          >
             <LaunchIcon />
           </IconButton>
-          <PowerButton
-            instance={instance}
-            onStart={onStart}
-            onStop={onStop}
-            onLaunch={onLaunch}
-            onRemove={onRemove}
-          />
-          <IconButton onClick={() => onRemove(instance)}>
-            <DeleteIcon />
-          </IconButton>
+          <PowerButton instance={instance} onStart={onStart} onStop={onStop} />
+          <RemoveButton instance={instance} onRemove={onRemove} />
         </TableCell>
       </TableRow>
     </>

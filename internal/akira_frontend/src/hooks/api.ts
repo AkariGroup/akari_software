@@ -8,7 +8,9 @@ export function getAspidaClient(): AspidaClient<AxiosRequestConfig> {
   return aspida(axios, { baseURL: "/" });
 }
 
-export function useApiClient() {
+export type ApiClient = ReturnType<typeof api<AspidaClient<AxiosRequestConfig<any>>>>;
+
+export function useApiClient(): ApiClient {
   const client = useMemo(() => {
     return api(getAspidaClient());
   }, []);
