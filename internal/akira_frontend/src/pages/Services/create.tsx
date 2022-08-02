@@ -6,6 +6,7 @@ import {
   Drawer,
   FormControl,
   FormHelperText,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -13,6 +14,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Controller,
   ControllerRenderProps,
@@ -103,12 +105,24 @@ export function InstanceCreateDrawer(props: Props) {
   } = useForm<Akira_protoCreateInstanceRequest>();
 
   return (
-    <Drawer anchor="right" open={true} onClose={props.onClose}>
-      <Stack margin={2} spacing={2} minWidth="40vw">
-        <Typography variant="h5">
-          インスタンスの作成
+    <Drawer
+      anchor="right"
+      open={true}
+      onClose={props.onClose}
+      PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
+    >
+      <Stack margin={2} spacing={2}>
+        <Box>
+          <Stack direction="row" alignItems="center">
+            <IconButton onClick={props.onClose}>
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h5" ml={1}>
+              インスタンスの作成
+            </Typography>
+          </Stack>
           <Divider sx={{ mt: 1 }} />
-        </Typography>
+        </Box>
         <Controller
           name="displayName"
           control={control}
