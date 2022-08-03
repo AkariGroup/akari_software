@@ -14,7 +14,7 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
 import { useCallback } from "react";
-import { Akira_protoServiceInstance } from "../../api/@types";
+import { Akira_protoService } from "../../api/@types";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
 export function ProjectsDetails() {
@@ -27,18 +27,18 @@ export function ProjectsDetails() {
     },
     enabled: !!projectId && !!client,
   });
-  const { data: instances } = useAspidaSWR(client?.instances, {
+  const { data: services } = useAspidaSWR(client?.services, {
     enabled: !!client,
   });
   const setBusy = useSetBackdropValue();
 
   const onOpenProject = useCallback(
-    async (s: Akira_protoServiceInstance) => {
+    async (s: Akira_protoService) => {
       if (!client || !s.id || !project?.id) return;
 
       setBusy(true);
       try {
-        const res = await client.instances._serviceId(s.id).open_project.get({
+        const res = await client.services._id(s.id).open_project.get({
           query: { projectId: project.id },
         });
         const url = res.body.url;
@@ -85,7 +85,7 @@ export function ProjectsDetails() {
           <Stack spacing={3}>
             <Box>
               <OpenProjectWithServiceButton
-                instances={instances?.instances}
+                services={services?.services}
                 onSelected={onOpenProject}
               />
             </Box>

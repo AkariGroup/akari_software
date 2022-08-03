@@ -8,7 +8,7 @@ import "google/protobuf/empty.proto";
 option go_package = "github.com/AkariGroup/akari_software/internal/akira/proto";
 
 
-enum InstanceStatus {
+enum ServiceStatus {
     TERMINATED = 0;
     STARTING = 1;
     RUNNING = 2;
@@ -26,54 +26,54 @@ message ServiceImage {
   repeated string capabilities = 6;
 }
 
-message ServiceInstance {
+message Service {
   string id = 1;
   ServiceImage image = 2;
   string display_name = 3;
   string description = 4;
-  InstanceStatus status = 5;
+  ServiceStatus status = 5;
 }
 
 message ListImagesResponse {
   repeated ServiceImage images = 1;
 }
 
-message ListInstancesResponse {
-  repeated ServiceInstance instances = 1;
+message ListServicesResponse {
+  repeated Service services = 1;
 }
 
 message GetImageRequest {
   string id = 1;
 }
 
-message CreateInstanceRequest {
+message CreateServiceRequest {
   string image_id = 1;
   string display_name = 2;
   string description = 3;
 }
 
-message GetInstanceRequest {
+message GetServiceRequest {
   string id = 1;
 }
 
-message RemoveInstanceRequest {
+message RemoveServiceRequest {
   string id = 1;
 }
 
-message StartInstanceRequest {
+message StartServiceRequest {
   string id = 1;
 }
 
-message StopInstanceRequest {
+message StopServiceRequest {
   string id = 1;
   bool terminate = 2;
 }
 
-message TerminateInstanceRequest {
+message TerminateServiceRequest {
   string id = 1;
 }
 
-message CleanInstanceRequest {
+message CleanServiceRequest {
   string id = 1;
 }
 
@@ -86,7 +86,7 @@ message OpenResponse {
 }
 
 message OpenProjectRequest {
-  string service_id = 1;
+  string id = 1;
   string project_id = 2;
 }
 
@@ -97,69 +97,69 @@ message OpenProjectResponse {
 service AkariServiceService {
   rpc ListImages(google.protobuf.Empty) returns (ListImagesResponse) {
     option (google.api.http) = {
-      get: "/images"
+      get: "/service-images"
     };
   }
 
   rpc GetImage(GetImageRequest) returns (ServiceImage) {
     option (google.api.http) = {
-      get: "/images/{id}"
+      get: "/service-images/{id}"
     };
   }
 
-  rpc ListInstances(google.protobuf.Empty) returns (ListInstancesResponse) {
+  rpc ListServices(google.protobuf.Empty) returns (ListServicesResponse) {
     option (google.api.http) = {
-      get: "/instances"
+      get: "/services"
     };
   }
 
-  rpc CreateInstance(CreateInstanceRequest) returns (ServiceInstance) {
+  rpc CreateService(CreateServiceRequest) returns (Service) {
     option (google.api.http) = {
-      post: "/instances"
+      post: "/services"
       body: "*"
     };
   }
 
-  rpc GetInstance(GetInstanceRequest) returns (ServiceInstance) {
+  rpc GetService(GetServiceRequest) returns (Service) {
     option (google.api.http) = {
-      get: "/instances/{id}"
+      get: "/services/{id}"
     };
   }
 
-  rpc RemoveInstance(RemoveInstanceRequest) returns (google.protobuf.Empty) {
+  rpc RemoveService(RemoveServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/instances/{id}/remove"
+      post: "/services/{id}/remove"
     };
   }
 
-  rpc StartInstance(StartInstanceRequest) returns (google.protobuf.Empty) {
+  rpc StartService(StartServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/instances/{id}/start"
+      post: "/services/{id}/start"
     };
   }
 
-  rpc StopInstance(StopInstanceRequest) returns (google.protobuf.Empty) {
+  rpc StopService(StopServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/instances/{id}/stop"
+      post: "/services/{id}/stop"
       body: "*"
     };
   }
 
-  rpc TerminateInstance(TerminateInstanceRequest) returns (google.protobuf.Empty) {
+  rpc TerminateService(TerminateServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/instances/{id}/terminate"
+      post: "/services/{id}/terminate"
     };
   }
 
   rpc Open(OpenRequest) returns (OpenResponse) {
     option (google.api.http) = {
-      get: "/instances/{id}/open"
+      get: "/services/{id}/open"
     };
   }
 
   rpc OpenProject(OpenProjectRequest) returns (OpenProjectResponse) {
     option (google.api.http) = {
-      get: "/instances/{service_id}/open_project"
+      get: "/services/{id}/open_project"
     };
   }
 }

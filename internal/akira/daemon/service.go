@@ -25,8 +25,8 @@ func NewAkariServiceServicer(d *Daemon) *AkariServiceServicer {
 	}
 }
 
-func instanceStatusToPb(s service.InstanceStatus) proto.InstanceStatus {
-	return proto.InstanceStatus(s)
+func serviceStatusToPb(s service.ServiceStatus) proto.ServiceStatus {
+	return proto.ServiceStatus(s)
 }
 
 func imageToPb(c service.ImageConfig) *proto.ServiceImage {
@@ -45,13 +45,13 @@ func imageToPb(c service.ImageConfig) *proto.ServiceImage {
 	}
 }
 
-func instanceToPb(s service.Instance, c service.ImageConfig) *proto.ServiceInstance {
-	return &proto.ServiceInstance{
+func serviceToPb(s service.Service, c service.ImageConfig) *proto.Service {
+	return &proto.Service{
 		Id:          string(s.Id()),
 		Image:       imageToPb(c),
 		DisplayName: s.Config().DisplayName,
 		Description: s.Config().Description,
-		Status:      instanceStatusToPb(s.Status()),
+		Status:      serviceStatusToPb(s.Status()),
 	}
 }
 
@@ -75,23 +75,23 @@ func (m *AkariServiceServicer) GetImage(ctx context.Context, r *proto.GetImageRe
 	}
 }
 
-func (m *AkariServiceServicer) ListInstances(ctx context.Context, r *emptypb.Empty) (*proto.ListInstancesResponse, error) {
-	services := m.da.service.Instances()
-	var ret []*proto.ServiceInstance
+func (m *AkariServiceServicer) ListServices(ctx context.Context, r *emptypb.Empty) (*proto.ListServicesResponse, error) {
+	services := m.da.service.Services()
+	var ret []*proto.Service
 	for _, s := range services {
 		if c, ok := m.da.service.GetImage(s.Config().ImageId); ok {
-			ret = append(ret, instanceToPb(s, c))
+			ret = append(ret, serviceToPb(s, c))
 		} else {
 			log.Printf("failed to find service of id: $#v -> skipped\n", s.Config().ImageId)
 		}
 	}
 
-	return &proto.ListInstancesResponse{
-		Instances: ret,
+	return &proto.ListServicesResponse{
+		Services: ret,
 	}, nil
 }
 
-func (m *AkariServiceServicer) CreateInstance(ctx context.Context, r *proto.CreateInstanceRequest) (*proto.ServiceInstance, error) {
+func (m *AkariServiceServicer) CreateService(ctx context.Context, r *proto.CreateServiceRequest) (*proto.Service, error) {
 	s, ok := m.da.service.GetImage(service.ImageId(r.ImageId))
 	// NOTE: In order to
 	if !ok {
@@ -100,37 +100,37 @@ func (m *AkariServiceServicer) CreateInstance(ctx context.Context, r *proto.Crea
 
 	// TODO: Use a custom error to change the response type
 	// (e.g. Use NotFound eror when the requested service doesn't exist)
-	if p, err := m.da.service.CreateInstance(s.Id, r.DisplayName, r.Description); err != nil {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("failed to create instance: %#v", err))
+	if p, err := m.da.service.CreateService(s.Id, r.DisplayName, r.Description); err != nil {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("failed to create service: %#v", err))
 	} else {
-		return instanceToPb(p, s), nil
+		return serviceToPb(p, s), nil
 	}
 }
 
-func (m *AkariServiceServicer) GetInstance(ctx context.Context, r *proto.GetInstanceRequest) (*proto.ServiceInstance, error) {
-	p, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
+func (m *AkariServiceServicer) GetService(ctx context.Context, r *proto.GetServiceRequest) (*proto.Service, error) {
+	p, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 	s, ok := m.da.service.GetImage(p.Config().ImageId)
 	if !ok {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("image removed: %#v", p.Config().ImageId))
 	}
-	return instanceToPb(p, s), nil
+	return serviceToPb(p, s), nil
 }
 
-func (m *AkariServiceServicer) RemoveInstance(ctx context.Context, r *proto.RemoveInstanceRequest) (*emptypb.Empty, error) {
-	if err := m.da.service.RemoveInstance(service.InstanceId(r.Id)); err != nil {
+func (m *AkariServiceServicer) RemoveService(ctx context.Context, r *proto.RemoveServiceRequest) (*emptypb.Empty, error) {
+	if err := m.da.service.RemoveService(service.ServiceId(r.Id)); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
 	} else {
 		return &emptypb.Empty{}, nil
 	}
 }
 
-func (m *AkariServiceServicer) StartInstance(ctx context.Context, r *proto.StartInstanceRequest) (*emptypb.Empty, error) {
-	s, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
+func (m *AkariServiceServicer) StartService(ctx context.Context, r *proto.StartServiceRequest) (*emptypb.Empty, error) {
+	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 
 	if err := s.Start(); err != nil {
@@ -140,10 +140,10 @@ func (m *AkariServiceServicer) StartInstance(ctx context.Context, r *proto.Start
 	}
 }
 
-func (m *AkariServiceServicer) StopInstance(ctx context.Context, r *proto.StopInstanceRequest) (*emptypb.Empty, error) {
-	s, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
+func (m *AkariServiceServicer) StopService(ctx context.Context, r *proto.StopServiceRequest) (*emptypb.Empty, error) {
+	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 
 	if err := s.Stop(); err != nil {
@@ -158,10 +158,10 @@ func (m *AkariServiceServicer) StopInstance(ctx context.Context, r *proto.StopIn
 	return &emptypb.Empty{}, nil
 }
 
-func (m *AkariServiceServicer) TerminateInstance(ctx context.Context, r *proto.TerminateInstanceRequest) (*emptypb.Empty, error) {
-	s, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
+func (m *AkariServiceServicer) TerminateService(ctx context.Context, r *proto.TerminateServiceRequest) (*emptypb.Empty, error) {
+	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 
 	if err := s.Terminate(); err != nil {
@@ -172,9 +172,9 @@ func (m *AkariServiceServicer) TerminateInstance(ctx context.Context, r *proto.T
 }
 
 func (m *AkariServiceServicer) Open(ctx context.Context, r *proto.OpenRequest) (*proto.OpenResponse, error) {
-	s, ok := m.da.service.GetInstance(service.InstanceId(r.Id))
+	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 
 	if addr, err := s.GetOpenAddress(); err != nil {
@@ -187,9 +187,9 @@ func (m *AkariServiceServicer) Open(ctx context.Context, r *proto.OpenRequest) (
 }
 
 func (m *AkariServiceServicer) OpenProject(ctx context.Context, r *proto.OpenProjectRequest) (*proto.OpenProjectResponse, error) {
-	s, ok := m.da.service.GetInstance(service.InstanceId(r.ServiceId))
+	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.ServiceId))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 
 	p, ok := m.da.projects.GetProject(r.ProjectId)

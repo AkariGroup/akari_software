@@ -25,13 +25,13 @@ const _ = grpc.SupportPackageIsVersion7
 type AkariServiceServiceClient interface {
 	ListImages(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListImagesResponse, error)
 	GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*ServiceImage, error)
-	ListInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListInstancesResponse, error)
-	CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
-	GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
-	RemoveInstance(ctx context.Context, in *RemoveInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	StopInstance(ctx context.Context, in *StopInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	TerminateInstance(ctx context.Context, in *TerminateInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListServices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServicesResponse, error)
+	CreateService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*Service, error)
+	GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*Service, error)
+	RemoveService(ctx context.Context, in *RemoveServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	StartService(ctx context.Context, in *StartServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	StopService(ctx context.Context, in *StopServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	TerminateService(ctx context.Context, in *TerminateServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*OpenResponse, error)
 	OpenProject(ctx context.Context, in *OpenProjectRequest, opts ...grpc.CallOption) (*OpenProjectResponse, error)
 }
@@ -62,63 +62,63 @@ func (c *akariServiceServiceClient) GetImage(ctx context.Context, in *GetImageRe
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) ListInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
-	out := new(ListInstancesResponse)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/ListInstances", in, out, opts...)
+func (c *akariServiceServiceClient) ListServices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServicesResponse, error) {
+	out := new(ListServicesResponse)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/ListServices", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error) {
-	out := new(ServiceInstance)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/CreateInstance", in, out, opts...)
+func (c *akariServiceServiceClient) CreateService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*Service, error) {
+	out := new(Service)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/CreateService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error) {
-	out := new(ServiceInstance)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetInstance", in, out, opts...)
+func (c *akariServiceServiceClient) GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*Service, error) {
+	out := new(Service)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) RemoveInstance(ctx context.Context, in *RemoveInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *akariServiceServiceClient) RemoveService(ctx context.Context, in *RemoveServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/RemoveInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/RemoveService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) StartInstance(ctx context.Context, in *StartInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *akariServiceServiceClient) StartService(ctx context.Context, in *StartServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/StartInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/StartService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) StopInstance(ctx context.Context, in *StopInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *akariServiceServiceClient) StopService(ctx context.Context, in *StopServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/StopInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/StopService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) TerminateInstance(ctx context.Context, in *TerminateInstanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *akariServiceServiceClient) TerminateService(ctx context.Context, in *TerminateServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/TerminateInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/TerminateService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -149,13 +149,13 @@ func (c *akariServiceServiceClient) OpenProject(ctx context.Context, in *OpenPro
 type AkariServiceServiceServer interface {
 	ListImages(context.Context, *emptypb.Empty) (*ListImagesResponse, error)
 	GetImage(context.Context, *GetImageRequest) (*ServiceImage, error)
-	ListInstances(context.Context, *emptypb.Empty) (*ListInstancesResponse, error)
-	CreateInstance(context.Context, *CreateInstanceRequest) (*ServiceInstance, error)
-	GetInstance(context.Context, *GetInstanceRequest) (*ServiceInstance, error)
-	RemoveInstance(context.Context, *RemoveInstanceRequest) (*emptypb.Empty, error)
-	StartInstance(context.Context, *StartInstanceRequest) (*emptypb.Empty, error)
-	StopInstance(context.Context, *StopInstanceRequest) (*emptypb.Empty, error)
-	TerminateInstance(context.Context, *TerminateInstanceRequest) (*emptypb.Empty, error)
+	ListServices(context.Context, *emptypb.Empty) (*ListServicesResponse, error)
+	CreateService(context.Context, *CreateServiceRequest) (*Service, error)
+	GetService(context.Context, *GetServiceRequest) (*Service, error)
+	RemoveService(context.Context, *RemoveServiceRequest) (*emptypb.Empty, error)
+	StartService(context.Context, *StartServiceRequest) (*emptypb.Empty, error)
+	StopService(context.Context, *StopServiceRequest) (*emptypb.Empty, error)
+	TerminateService(context.Context, *TerminateServiceRequest) (*emptypb.Empty, error)
 	Open(context.Context, *OpenRequest) (*OpenResponse, error)
 	OpenProject(context.Context, *OpenProjectRequest) (*OpenProjectResponse, error)
 	mustEmbedUnimplementedAkariServiceServiceServer()
@@ -171,26 +171,26 @@ func (UnimplementedAkariServiceServiceServer) ListImages(context.Context, *empty
 func (UnimplementedAkariServiceServiceServer) GetImage(context.Context, *GetImageRequest) (*ServiceImage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetImage not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) ListInstances(context.Context, *emptypb.Empty) (*ListInstancesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListInstances not implemented")
+func (UnimplementedAkariServiceServiceServer) ListServices(context.Context, *emptypb.Empty) (*ListServicesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListServices not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) CreateInstance(context.Context, *CreateInstanceRequest) (*ServiceInstance, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) CreateService(context.Context, *CreateServiceRequest) (*Service, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateService not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) GetInstance(context.Context, *GetInstanceRequest) (*ServiceInstance, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) GetService(context.Context, *GetServiceRequest) (*Service, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetService not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) RemoveInstance(context.Context, *RemoveInstanceRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) RemoveService(context.Context, *RemoveServiceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveService not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) StartInstance(context.Context, *StartInstanceRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StartInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) StartService(context.Context, *StartServiceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StartService not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) StopInstance(context.Context, *StopInstanceRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StopInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) StopService(context.Context, *StopServiceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StopService not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) TerminateInstance(context.Context, *TerminateInstanceRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TerminateInstance not implemented")
+func (UnimplementedAkariServiceServiceServer) TerminateService(context.Context, *TerminateServiceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TerminateService not implemented")
 }
 func (UnimplementedAkariServiceServiceServer) Open(context.Context, *OpenRequest) (*OpenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Open not implemented")
@@ -247,128 +247,128 @@ func _AkariServiceService_GetImage_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_ListInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AkariServiceService_ListServices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).ListInstances(ctx, in)
+		return srv.(AkariServiceServiceServer).ListServices(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/ListInstances",
+		FullMethod: "/akira_proto.AkariServiceService/ListServices",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).ListInstances(ctx, req.(*emptypb.Empty))
+		return srv.(AkariServiceServiceServer).ListServices(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_CreateInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateInstanceRequest)
+func _AkariServiceService_CreateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).CreateInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).CreateService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/CreateInstance",
+		FullMethod: "/akira_proto.AkariServiceService/CreateService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).CreateInstance(ctx, req.(*CreateInstanceRequest))
+		return srv.(AkariServiceServiceServer).CreateService(ctx, req.(*CreateServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_GetInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetInstanceRequest)
+func _AkariServiceService_GetService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).GetInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).GetService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/GetInstance",
+		FullMethod: "/akira_proto.AkariServiceService/GetService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).GetInstance(ctx, req.(*GetInstanceRequest))
+		return srv.(AkariServiceServiceServer).GetService(ctx, req.(*GetServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_RemoveInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RemoveInstanceRequest)
+func _AkariServiceService_RemoveService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).RemoveInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).RemoveService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/RemoveInstance",
+		FullMethod: "/akira_proto.AkariServiceService/RemoveService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).RemoveInstance(ctx, req.(*RemoveInstanceRequest))
+		return srv.(AkariServiceServiceServer).RemoveService(ctx, req.(*RemoveServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_StartInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StartInstanceRequest)
+func _AkariServiceService_StartService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).StartInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).StartService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/StartInstance",
+		FullMethod: "/akira_proto.AkariServiceService/StartService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).StartInstance(ctx, req.(*StartInstanceRequest))
+		return srv.(AkariServiceServiceServer).StartService(ctx, req.(*StartServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_StopInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StopInstanceRequest)
+func _AkariServiceService_StopService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StopServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).StopInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).StopService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/StopInstance",
+		FullMethod: "/akira_proto.AkariServiceService/StopService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).StopInstance(ctx, req.(*StopInstanceRequest))
+		return srv.(AkariServiceServiceServer).StopService(ctx, req.(*StopServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_TerminateInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TerminateInstanceRequest)
+func _AkariServiceService_TerminateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminateServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).TerminateInstance(ctx, in)
+		return srv.(AkariServiceServiceServer).TerminateService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/TerminateInstance",
+		FullMethod: "/akira_proto.AkariServiceService/TerminateService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).TerminateInstance(ctx, req.(*TerminateInstanceRequest))
+		return srv.(AkariServiceServiceServer).TerminateService(ctx, req.(*TerminateServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -425,32 +425,32 @@ var AkariServiceService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AkariServiceService_GetImage_Handler,
 		},
 		{
-			MethodName: "ListInstances",
-			Handler:    _AkariServiceService_ListInstances_Handler,
+			MethodName: "ListServices",
+			Handler:    _AkariServiceService_ListServices_Handler,
 		},
 		{
-			MethodName: "CreateInstance",
-			Handler:    _AkariServiceService_CreateInstance_Handler,
+			MethodName: "CreateService",
+			Handler:    _AkariServiceService_CreateService_Handler,
 		},
 		{
-			MethodName: "GetInstance",
-			Handler:    _AkariServiceService_GetInstance_Handler,
+			MethodName: "GetService",
+			Handler:    _AkariServiceService_GetService_Handler,
 		},
 		{
-			MethodName: "RemoveInstance",
-			Handler:    _AkariServiceService_RemoveInstance_Handler,
+			MethodName: "RemoveService",
+			Handler:    _AkariServiceService_RemoveService_Handler,
 		},
 		{
-			MethodName: "StartInstance",
-			Handler:    _AkariServiceService_StartInstance_Handler,
+			MethodName: "StartService",
+			Handler:    _AkariServiceService_StartService_Handler,
 		},
 		{
-			MethodName: "StopInstance",
-			Handler:    _AkariServiceService_StopInstance_Handler,
+			MethodName: "StopService",
+			Handler:    _AkariServiceService_StopService_Handler,
 		},
 		{
-			MethodName: "TerminateInstance",
-			Handler:    _AkariServiceService_TerminateInstance_Handler,
+			MethodName: "TerminateService",
+			Handler:    _AkariServiceService_TerminateService_Handler,
 		},
 		{
 			MethodName: "Open",

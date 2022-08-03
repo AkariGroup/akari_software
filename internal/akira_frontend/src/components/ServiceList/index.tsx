@@ -10,10 +10,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import {
-  Akira_protoInstanceStatus,
-  Akira_protoServiceInstance,
-} from "../../api/@types";
+import { Akira_protoServiceStatus, Akira_protoService } from "../../api/@types";
 import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,11 +20,11 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
 
 type Props = {
-  instances: Akira_protoServiceInstance[];
-  onStart: (target: Akira_protoServiceInstance) => void;
-  onStop: (target: Akira_protoServiceInstance, terminate: boolean) => void;
-  onLaunch: (target: Akira_protoServiceInstance) => void;
-  onRemove: (target: Akira_protoServiceInstance) => void;
+  services: Akira_protoService[];
+  onStart: (target: Akira_protoService) => void;
+  onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onLaunch: (target: Akira_protoService) => void;
+  onRemove: (target: Akira_protoService) => void;
 };
 
 function Header() {
@@ -43,7 +40,7 @@ function Header() {
   );
 }
 
-function Status({ status }: { status?: Akira_protoInstanceStatus }) {
+function Status({ status }: { status?: Akira_protoServiceStatus }) {
   let color = "primary";
   let bold = false;
   switch (status) {
@@ -79,18 +76,18 @@ function Status({ status }: { status?: Akira_protoInstanceStatus }) {
 }
 
 type PowerButtonProps = {
-  instance: Akira_protoServiceInstance;
-  onStart: (target: Akira_protoServiceInstance) => void;
-  onStop: (target: Akira_protoServiceInstance, terminate: boolean) => void;
+  service: Akira_protoService;
+  onStart: (target: Akira_protoService) => void;
+  onStop: (target: Akira_protoService, terminate: boolean) => void;
 };
 
 function PowerButton(props: PowerButtonProps) {
   const [powerDialogOpened, setPowerDialogOpened] = useState(false);
   const onPowerIconClicked = useCallback(() => {
-    if (props.instance.status === "RUNNING") {
+    if (props.service.status === "RUNNING") {
       setPowerDialogOpened(true);
     } else {
-      props.onStart(props.instance);
+      props.onStart(props.service);
     }
   }, [props, setPowerDialogOpened]);
   const onPowerConfirmation = useCallback(
@@ -99,16 +96,15 @@ function PowerButton(props: PowerButtonProps) {
       if (d === PowerDialogResult.CANCEL) {
         return;
       } else {
-        props.onStop(props.instance, d === PowerDialogResult.TERMINATE);
+        props.onStop(props.service, d === PowerDialogResult.TERMINATE);
       }
     },
     [props, setPowerDialogOpened]
   );
   const powerButtonDisabled =
-    props.instance.status === "STARTING" ||
-    props.instance.status === "STOPPING";
+    props.service.status === "STARTING" || props.service.status === "STOPPING";
   const powerIcon =
-    props.instance.status === "RUNNING" ? (
+    props.service.status === "RUNNING" ? (
       <PowerSettingsNewIcon color="error" />
     ) : (
       <PlayArrowIcon color="success" />
@@ -118,7 +114,7 @@ function PowerButton(props: PowerButtonProps) {
     <>
       {powerDialogOpened ? (
         <PowerDialog
-          serviceName={props.instance.displayName ?? ""}
+          serviceName={props.service.displayName ?? ""}
           onResponse={onPowerConfirmation}
         />
       ) : null}
@@ -130,8 +126,8 @@ function PowerButton(props: PowerButtonProps) {
 }
 
 type RemoveButtonProps = {
-  instance: Akira_protoServiceInstance;
-  onRemove: (target: Akira_protoServiceInstance) => void;
+  service: Akira_protoService;
+  onRemove: (target: Akira_protoService) => void;
 };
 
 function RemoveButton(props: RemoveButtonProps) {
@@ -142,7 +138,7 @@ function RemoveButton(props: RemoveButtonProps) {
       if (d === RemoveDialogResult.CANCEL) {
         return;
       } else {
-        props.onRemove(props.instance);
+        props.onRemove(props.service);
       }
     },
     [props, setOpened]
@@ -151,7 +147,7 @@ function RemoveButton(props: RemoveButtonProps) {
     <>
       {opened ? (
         <RemoveDialog
-          serviceName={props.instance.displayName ?? ""}
+          serviceName={props.service.displayName ?? ""}
           onResponse={onConfirm}
         />
       ) : null}
@@ -162,25 +158,25 @@ function RemoveButton(props: RemoveButtonProps) {
   );
 }
 
-type InstanceProp = {
-  instance: Akira_protoServiceInstance;
-  onStart: (target: Akira_protoServiceInstance) => void;
-  onStop: (target: Akira_protoServiceInstance, terminate: boolean) => void;
-  onLaunch: (target: Akira_protoServiceInstance) => void;
-  onRemove: (target: Akira_protoServiceInstance) => void;
+type ServiceRowProps = {
+  service: Akira_protoService;
+  onStart: (target: Akira_protoService) => void;
+  onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onLaunch: (target: Akira_protoService) => void;
+  onRemove: (target: Akira_protoService) => void;
 };
 
-function InstanceRow({
-  instance,
+function ServiceRow({
+  service,
   onStart,
   onStop,
   onLaunch,
   onRemove,
-}: InstanceProp) {
+}: ServiceRowProps) {
   return (
     <>
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-        <TableCell component="th">{instance.displayName}</TableCell>
+        <TableCell component="th">{service.displayName}</TableCell>
         <TableCell>
           <Link
             color="textSecondary"
@@ -189,37 +185,37 @@ function InstanceRow({
               cursor: "pointer",
             }}
           >
-            {instance.image?.name}@{instance.image?.version}
+            {service.image?.name}@{service.image?.version}
           </Link>
         </TableCell>
         <TableCell>
-          <Status status={instance.status} />
+          <Status status={service.status} />
         </TableCell>
         <TableCell align="right">
           <IconButton
-            onClick={() => onLaunch(instance)}
-            disabled={instance.status !== "RUNNING"}
+            onClick={() => onLaunch(service)}
+            disabled={service.status !== "RUNNING"}
           >
             <LaunchIcon />
           </IconButton>
-          <PowerButton instance={instance} onStart={onStart} onStop={onStop} />
-          <RemoveButton instance={instance} onRemove={onRemove} />
+          <PowerButton service={service} onStart={onStart} onStop={onStop} />
+          <RemoveButton service={service} onRemove={onRemove} />
         </TableCell>
       </TableRow>
     </>
   );
 }
 
-export function InstanceList(props: Props) {
+export function ServiceList(props: Props) {
   return (
     <TableContainer component={Paper}>
       <Table>
         <Header />
         <TableBody>
-          {props.instances?.map((x) => (
-            <InstanceRow
+          {props.services?.map((x) => (
+            <ServiceRow
               key={x.id}
-              instance={x}
+              service={x}
               onStart={props.onStart}
               onStop={props.onStop}
               onLaunch={props.onLaunch}

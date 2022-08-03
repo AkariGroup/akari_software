@@ -23,14 +23,14 @@ import {
   useForm,
 } from "react-hook-form";
 import {
-  Akira_protoCreateInstanceRequest,
+  Akira_protoCreateServiceRequest,
   Akira_protoServiceImage,
 } from "../../api/@types";
 import { ApiClient } from "../../hooks/api";
 import { ValidationMessages } from "../../libs/messages";
 
 type ServiceImageSelectorProps = {
-  fields: ControllerRenderProps<Akira_protoCreateInstanceRequest, "imageId">;
+  fields: ControllerRenderProps<Akira_protoCreateServiceRequest, "imageId">;
   images?: Akira_protoServiceImage[];
   error?: FieldError;
 };
@@ -91,18 +91,18 @@ function ServiceImageSelector(props: ServiceImageSelectorProps) {
 type Props = {
   client: ApiClient;
   onClose: () => void;
-  onSubmit: SubmitHandler<Akira_protoCreateInstanceRequest>;
+  onSubmit: SubmitHandler<Akira_protoCreateServiceRequest>;
 };
 
-export function InstanceCreateDrawer(props: Props) {
-  const { data: images } = useAspidaSWR(props.client?.images, {
+export function ServiceCreateDrawer(props: Props) {
+  const { data: images } = useAspidaSWR(props.client?.service_images, {
     enabled: !!props.client,
   });
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Akira_protoCreateInstanceRequest>();
+  } = useForm<Akira_protoCreateServiceRequest>();
 
   return (
     <Drawer

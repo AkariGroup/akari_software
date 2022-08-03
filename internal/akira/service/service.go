@@ -10,11 +10,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type InstanceId string
-type InstanceStatus int8
+type ServiceId string
+type ServiceStatus int8
 
 const (
-	Terminated InstanceStatus = iota
+	Terminated ServiceStatus = iota
 	Starting
 	Running
 	Stopping
@@ -22,40 +22,40 @@ const (
 	Stopped
 )
 
-func NewInstanceId() InstanceId {
-	return InstanceId(uuid.New().String())
+func NewServiceId() ServiceId {
+	return ServiceId(uuid.New().String())
 }
 
-type InstanceConfig struct {
-	Id      InstanceId `json:"id" validate:"required"`
-	ImageId ImageId    `json:"image_id" validate:"required"`
+type ServiceConfig struct {
+	Id      ServiceId `json:"id" validate:"required"`
+	ImageId ImageId   `json:"image_id" validate:"required"`
 
 	DisplayName string `json:"display_name" validate:"required"`
 	Description string `json:"description"`
 }
 
-type Instance interface {
-	Id() InstanceId
-	Config() InstanceConfig
+type Service interface {
+	Id() ServiceId
+	Config() ServiceConfig
 
 	Start() error
 	Stop() error
 	Terminate() error
 	Clean() error
-	Status() InstanceStatus
+	Status() ServiceStatus
 
 	GetOpenAddress() (string, error)
 	GetOpenProjectAddress(projectDir string) (string, error)
 }
 
-func loadInstanceConfig(p string) (InstanceConfig, error) {
+func loadServiceConfig(p string) (ServiceConfig, error) {
 	content, err := ioutil.ReadFile(p)
 	if err != nil {
-		return InstanceConfig{}, err
+		return ServiceConfig{}, err
 	}
 
 	v := validator.New()
-	var config InstanceConfig
+	var config ServiceConfig
 	err = yaml.UnmarshalWithOptions(
 		content,
 		&config,
@@ -65,7 +65,7 @@ func loadInstanceConfig(p string) (InstanceConfig, error) {
 	return config, err
 }
 
-func saveInstanceConfig(c InstanceConfig, p string) error {
+func saveServiceConfig(c ServiceConfig, p string) error {
 	content, err := yaml.Marshal(c)
 	if err != nil {
 		return err

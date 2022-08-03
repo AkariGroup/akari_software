@@ -1,10 +1,10 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import { MouseEventHandler, useCallback, useState } from "react";
-import { Akira_protoServiceInstance } from "../api/@types";
+import { Akira_protoService } from "../api/@types";
 
 type Props = {
-  instances?: Akira_protoServiceInstance[];
-  onSelected: (s: Akira_protoServiceInstance) => void;
+  services?: Akira_protoService[];
+  onSelected: (s: Akira_protoService) => void;
 };
 
 export function OpenProjectWithServiceButton(props: Props) {
@@ -19,27 +19,26 @@ export function OpenProjectWithServiceButton(props: Props) {
     setAnchorEl(null);
   }, [setAnchorEl]);
   const onItemClick = useCallback(
-    async (s: Akira_protoServiceInstance) => {
+    async (s: Akira_protoService) => {
       handleClose();
       props.onSelected(s);
     },
     [props, handleClose]
   );
 
-  const runningInstances = props.instances?.filter(
+  const runningServices = props.services?.filter(
     (s) =>
-      s.status === "RUNNING" &&
-      s.image?.capabilities?.includes("open_project")
+      s.status === "RUNNING" && s.image?.capabilities?.includes("open_project")
   );
-  const hasActiveInstances = (runningInstances?.length ?? 0) > 0;
+  const hasActiveServices = (runningServices?.length ?? 0) > 0;
 
   return (
     <>
-      <Button onClick={handleClick} disabled={!hasActiveInstances}>
+      <Button onClick={handleClick} disabled={!hasActiveServices}>
         Open With Service
       </Button>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        {runningInstances?.map((s) => (
+        {runningServices?.map((s) => (
           <MenuItem key={s.id} onClick={() => onItemClick(s)}>
             {s.displayName}
           </MenuItem>

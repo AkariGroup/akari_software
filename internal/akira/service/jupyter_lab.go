@@ -23,10 +23,10 @@ const (
 )
 
 type JupyterLab struct {
-	config InstanceConfig
+	config ServiceConfig
 	image  ImageConfig
 	opts   ServiceManagerOptions
-	status InstanceStatus
+	status ServiceStatus
 	token  string
 
 	servicePort int
@@ -35,7 +35,7 @@ type JupyterLab struct {
 	mu sync.Mutex
 }
 
-func NewJupyterLab(image ImageConfig, config InstanceConfig, opts ServiceManagerOptions) *JupyterLab {
+func NewJupyterLab(image ImageConfig, config ServiceConfig, opts ServiceManagerOptions) *JupyterLab {
 	return &JupyterLab{
 		config: config,
 		image:  image,
@@ -45,15 +45,15 @@ func NewJupyterLab(image ImageConfig, config InstanceConfig, opts ServiceManager
 	}
 }
 
-func (p *JupyterLab) Id() InstanceId {
+func (p *JupyterLab) Id() ServiceId {
 	return p.config.Id
 }
 
-func (p *JupyterLab) Config() InstanceConfig {
+func (p *JupyterLab) Config() ServiceConfig {
 	return p.config
 }
 
-func (p *JupyterLab) changeStatus(s InstanceStatus) {
+func (p *JupyterLab) changeStatus(s ServiceStatus) {
 	p.mu.Lock()
 	p.status = s
 	p.mu.Unlock()
@@ -224,7 +224,7 @@ func (p *JupyterLab) Clean() error {
 	return os.RemoveAll(p.varDir())
 }
 
-func (p *JupyterLab) Status() InstanceStatus {
+func (p *JupyterLab) Status() ServiceStatus {
 	return p.status
 }
 
