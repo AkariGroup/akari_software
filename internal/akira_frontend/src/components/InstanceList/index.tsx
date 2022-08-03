@@ -189,7 +189,7 @@ function InstanceRow({
               cursor: "pointer",
             }}
           >
-            {instance.service?.name}@{instance.service?.version}
+            {instance.image?.name}@{instance.image?.version}
           </Link>
         </TableCell>
         <TableCell>

@@ -29,13 +29,13 @@ func instanceStatusToPb(s service.InstanceStatus) proto.InstanceStatus {
 	return proto.InstanceStatus(s)
 }
 
-func serviceToPb(c service.ServiceConfig) *proto.Service {
+func imageToPb(c service.ImageConfig) *proto.ServiceImage {
 	var ca []string
 	for _, v := range c.Capabilities {
 		ca = append(ca, string(v))
 	}
 
-	return &proto.Service{
+	return &proto.ServiceImage{
 		Id:           string(c.Id),
 		Name:         c.Name,
 		Version:      string(c.Version),
@@ -45,33 +45,33 @@ func serviceToPb(c service.ServiceConfig) *proto.Service {
 	}
 }
 
-func instanceToPb(s service.Instance, c service.ServiceConfig) *proto.ServiceInstance {
+func instanceToPb(s service.Instance, c service.ImageConfig) *proto.ServiceInstance {
 	return &proto.ServiceInstance{
 		Id:          string(s.Id()),
-		Service:     serviceToPb(c),
+		Image:       imageToPb(c),
 		DisplayName: s.Config().DisplayName,
 		Description: s.Config().Description,
 		Status:      instanceStatusToPb(s.Status()),
 	}
 }
 
-func (m *AkariServiceServicer) ListServices(ctx context.Context, r *emptypb.Empty) (*proto.ListServicesResponse, error) {
-	services := m.da.service.Services()
-	var ret []*proto.Service
+func (m *AkariServiceServicer) ListImages(ctx context.Context, r *emptypb.Empty) (*proto.ListImagesResponse, error) {
+	services := m.da.service.Images()
+	var ret []*proto.ServiceImage
 	for _, s := range services {
-		ret = append(ret, serviceToPb(s))
+		ret = append(ret, imageToPb(s))
 	}
 
-	return &proto.ListServicesResponse{
-		Services: ret,
+	return &proto.ListImagesResponse{
+		Images: ret,
 	}, nil
 }
 
-func (m *AkariServiceServicer) GetService(ctx context.Context, r *proto.GetServiceRequest) (*proto.Service, error) {
-	if s, ok := m.da.service.GetService(service.ServiceId(r.Id)); !ok {
+func (m *AkariServiceServicer) GetImage(ctx context.Context, r *proto.GetImageRequest) (*proto.ServiceImage, error) {
+	if s, ok := m.da.service.GetImage(service.ImageId(r.Id)); !ok {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	} else {
-		return serviceToPb(s), nil
+		return imageToPb(s), nil
 	}
 }
 
@@ -79,10 +79,10 @@ func (m *AkariServiceServicer) ListInstances(ctx context.Context, r *emptypb.Emp
 	services := m.da.service.Instances()
 	var ret []*proto.ServiceInstance
 	for _, s := range services {
-		if c, ok := m.da.service.GetService(s.Config().ServiceId); ok {
+		if c, ok := m.da.service.GetImage(s.Config().ImageId); ok {
 			ret = append(ret, instanceToPb(s, c))
 		} else {
-			log.Printf("failed to find service of id: $#v -> skipped\n", s.Config().ServiceId)
+			log.Printf("failed to find service of id: $#v -> skipped\n", s.Config().ImageId)
 		}
 	}
 
@@ -92,16 +92,16 @@ func (m *AkariServiceServicer) ListInstances(ctx context.Context, r *emptypb.Emp
 }
 
 func (m *AkariServiceServicer) CreateInstance(ctx context.Context, r *proto.CreateInstanceRequest) (*proto.ServiceInstance, error) {
-	s, ok := m.da.service.GetService(service.ServiceId(r.ServiceId))
+	s, ok := m.da.service.GetImage(service.ImageId(r.ImageId))
 	// NOTE: In order to
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.ServiceId))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.ImageId))
 	}
 
 	// TODO: Use a custom error to change the response type
 	// (e.g. Use NotFound eror when the requested service doesn't exist)
 	if p, err := m.da.service.CreateInstance(s.Id, r.DisplayName, r.Description); err != nil {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.ServiceId))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("failed to create instance: %#v", err))
 	} else {
 		return instanceToPb(p, s), nil
 	}
@@ -112,9 +112,9 @@ func (m *AkariServiceServicer) GetInstance(ctx context.Context, r *proto.GetInst
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("instance doesn't exist: %#v", r.Id))
 	}
-	s, ok := m.da.service.GetService(p.Config().ServiceId)
+	s, ok := m.da.service.GetImage(p.Config().ImageId)
 	if !ok {
-		return nil, status.Errorf(codes.Internal, fmt.Sprintf("service removed: %#v", p.Config().ServiceId))
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("image removed: %#v", p.Config().ImageId))
 	}
 	return instanceToPb(p, s), nil
 }

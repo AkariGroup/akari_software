@@ -17,7 +17,7 @@ enum InstanceStatus {
     STOPPED = 5;
 }
 
-message Service {
+message ServiceImage {
   string id = 1;
   string name = 2;
   string version = 3;
@@ -28,26 +28,26 @@ message Service {
 
 message ServiceInstance {
   string id = 1;
-  Service service = 2;
+  ServiceImage image = 2;
   string display_name = 3;
   string description = 4;
   InstanceStatus status = 5;
 }
 
-message ListServicesResponse {
-  repeated Service services = 1;
+message ListImagesResponse {
+  repeated ServiceImage images = 1;
 }
 
 message ListInstancesResponse {
   repeated ServiceInstance instances = 1;
 }
 
-message GetServiceRequest {
+message GetImageRequest {
   string id = 1;
 }
 
 message CreateInstanceRequest {
-  string service_id = 1;
+  string image_id = 1;
   string display_name = 2;
   string description = 3;
 }
@@ -95,15 +95,15 @@ message OpenProjectResponse {
 }
 
 service AkariServiceService {
-  rpc ListServices(google.protobuf.Empty) returns (ListServicesResponse) {
+  rpc ListImages(google.protobuf.Empty) returns (ListImagesResponse) {
     option (google.api.http) = {
-      get: "/services"
+      get: "/images"
     };
   }
 
-  rpc GetService(GetServiceRequest) returns (Service) {
+  rpc GetImage(GetImageRequest) returns (ServiceImage) {
     option (google.api.http) = {
-      get: "/services/{id}"
+      get: "/images/{id}"
     };
   }
 

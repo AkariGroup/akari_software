@@ -27,8 +27,8 @@ func NewInstanceId() InstanceId {
 }
 
 type InstanceConfig struct {
-	Id        InstanceId `json:"id" validate:"required"`
-	ServiceId ServiceId  `json:"service_id" validate:"required"`
+	Id      InstanceId `json:"id" validate:"required"`
+	ImageId ImageId    `json:"image_id" validate:"required"`
 
 	DisplayName string `json:"display_name" validate:"required"`
 	Description string `json:"description"`

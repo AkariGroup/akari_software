@@ -23,8 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AkariServiceServiceClient interface {
-	ListServices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServicesResponse, error)
-	GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*Service, error)
+	ListImages(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListImagesResponse, error)
+	GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*ServiceImage, error)
 	ListInstances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListInstancesResponse, error)
 	CreateInstance(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
 	GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*ServiceInstance, error)
@@ -44,18 +44,18 @@ func NewAkariServiceServiceClient(cc grpc.ClientConnInterface) AkariServiceServi
 	return &akariServiceServiceClient{cc}
 }
 
-func (c *akariServiceServiceClient) ListServices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServicesResponse, error) {
-	out := new(ListServicesResponse)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/ListServices", in, out, opts...)
+func (c *akariServiceServiceClient) ListImages(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListImagesResponse, error) {
+	out := new(ListImagesResponse)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/ListImages", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *akariServiceServiceClient) GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*Service, error) {
-	out := new(Service)
-	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetService", in, out, opts...)
+func (c *akariServiceServiceClient) GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*ServiceImage, error) {
+	out := new(ServiceImage)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetImage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,8 +147,8 @@ func (c *akariServiceServiceClient) OpenProject(ctx context.Context, in *OpenPro
 // All implementations must embed UnimplementedAkariServiceServiceServer
 // for forward compatibility
 type AkariServiceServiceServer interface {
-	ListServices(context.Context, *emptypb.Empty) (*ListServicesResponse, error)
-	GetService(context.Context, *GetServiceRequest) (*Service, error)
+	ListImages(context.Context, *emptypb.Empty) (*ListImagesResponse, error)
+	GetImage(context.Context, *GetImageRequest) (*ServiceImage, error)
 	ListInstances(context.Context, *emptypb.Empty) (*ListInstancesResponse, error)
 	CreateInstance(context.Context, *CreateInstanceRequest) (*ServiceInstance, error)
 	GetInstance(context.Context, *GetInstanceRequest) (*ServiceInstance, error)
@@ -165,11 +165,11 @@ type AkariServiceServiceServer interface {
 type UnimplementedAkariServiceServiceServer struct {
 }
 
-func (UnimplementedAkariServiceServiceServer) ListServices(context.Context, *emptypb.Empty) (*ListServicesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListServices not implemented")
+func (UnimplementedAkariServiceServiceServer) ListImages(context.Context, *emptypb.Empty) (*ListImagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListImages not implemented")
 }
-func (UnimplementedAkariServiceServiceServer) GetService(context.Context, *GetServiceRequest) (*Service, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetService not implemented")
+func (UnimplementedAkariServiceServiceServer) GetImage(context.Context, *GetImageRequest) (*ServiceImage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetImage not implemented")
 }
 func (UnimplementedAkariServiceServiceServer) ListInstances(context.Context, *emptypb.Empty) (*ListInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListInstances not implemented")
@@ -211,38 +211,38 @@ func RegisterAkariServiceServiceServer(s grpc.ServiceRegistrar, srv AkariService
 	s.RegisterService(&AkariServiceService_ServiceDesc, srv)
 }
 
-func _AkariServiceService_ListServices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AkariServiceService_ListImages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).ListServices(ctx, in)
+		return srv.(AkariServiceServiceServer).ListImages(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/ListServices",
+		FullMethod: "/akira_proto.AkariServiceService/ListImages",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).ListServices(ctx, req.(*emptypb.Empty))
+		return srv.(AkariServiceServiceServer).ListImages(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AkariServiceService_GetService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetServiceRequest)
+func _AkariServiceService_GetImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetImageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AkariServiceServiceServer).GetService(ctx, in)
+		return srv.(AkariServiceServiceServer).GetImage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.AkariServiceService/GetService",
+		FullMethod: "/akira_proto.AkariServiceService/GetImage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AkariServiceServiceServer).GetService(ctx, req.(*GetServiceRequest))
+		return srv.(AkariServiceServiceServer).GetImage(ctx, req.(*GetImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -417,12 +417,12 @@ var AkariServiceService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AkariServiceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListServices",
-			Handler:    _AkariServiceService_ListServices_Handler,
+			MethodName: "ListImages",
+			Handler:    _AkariServiceService_ListImages_Handler,
 		},
 		{
-			MethodName: "GetService",
-			Handler:    _AkariServiceService_GetService_Handler,
+			MethodName: "GetImage",
+			Handler:    _AkariServiceService_GetImage_Handler,
 		},
 		{
 			MethodName: "ListInstances",

@@ -24,27 +24,27 @@ import {
 } from "react-hook-form";
 import {
   Akira_protoCreateInstanceRequest,
-  Akira_protoService,
+  Akira_protoServiceImage,
 } from "../../api/@types";
 import { ApiClient } from "../../hooks/api";
 import { ValidationMessages } from "../../libs/messages";
 
-type ServiceSelectorProps = {
-  fields: ControllerRenderProps<Akira_protoCreateInstanceRequest, "serviceId">;
-  services?: Akira_protoService[];
+type ServiceImageSelectorProps = {
+  fields: ControllerRenderProps<Akira_protoCreateInstanceRequest, "imageId">;
+  images?: Akira_protoServiceImage[];
   error?: FieldError;
 };
 
-function ServiceItem({ service }: { service: Akira_protoService }) {
+function ServiceImageItem({ image }: { image: Akira_protoServiceImage }) {
   return (
     <Stack>
       <Typography whiteSpace="nowrap">
         <Box component="span" fontWeight="bold">
-          {service.displayName}
+          {image.displayName}
         </Box>
-        &nbsp; - Version: {service.version}, Name: {service.name}&nbsp;
+        &nbsp; - Version: {image.version}, Name: {image.name}&nbsp;
         <Box component="span" color="text.secondary">
-          (ID: {service.id})
+          (ID: {image.id})
         </Box>
       </Typography>
       <Typography
@@ -54,32 +54,32 @@ function ServiceItem({ service }: { service: Akira_protoService }) {
         textOverflow="ellipsis"
         color="text.secondary"
       >
-        {service.description}
+        {image.description}
       </Typography>
     </Stack>
   );
 }
 
-function ServiceSelector(props: ServiceSelectorProps) {
+function ServiceImageSelector(props: ServiceImageSelectorProps) {
   const error = !!props.error;
   return (
     <FormControl fullWidth variant="filled" error={error}>
-      <InputLabel id="image-selector-label">サービス</InputLabel>
+      <InputLabel id="image-selector-label">サービスイメージ</InputLabel>
       <Select
         {...props.fields}
         labelId="image-selector-label"
-        label="サービス"
+        label="サービスイメージ"
         defaultValue=""
         renderValue={(e) => {
-          const item = props.services?.find((s) => s.id === e);
+          const item = props.images?.find((s) => s.id === e);
           return `${item?.displayName} @ ${item?.version}`;
         }}
         error={error}
         onChange={(val) => props.fields.onChange(val)}
       >
-        {props.services?.map((t) => (
+        {props.images?.map((t) => (
           <MenuItem key={t.id} value={t.id}>
-            <ServiceItem service={t} />
+            <ServiceImageItem image={t} />
           </MenuItem>
         ))}
       </Select>
@@ -95,7 +95,7 @@ type Props = {
 };
 
 export function InstanceCreateDrawer(props: Props) {
-  const { data: services } = useAspidaSWR(props.client?.services, {
+  const { data: images } = useAspidaSWR(props.client?.images, {
     enabled: !!props.client,
   });
   const {
@@ -160,17 +160,17 @@ export function InstanceCreateDrawer(props: Props) {
         />
 
         <Controller
-          name="serviceId"
+          name="imageId"
           control={control}
           defaultValue=""
           rules={{
             required: ValidationMessages.Required,
           }}
           render={({ field }) => (
-            <ServiceSelector
+            <ServiceImageSelector
               fields={field}
-              services={services?.services}
-              error={errors.serviceId}
+              images={images?.images}
+              error={errors.imageId}
             />
           )}
         />

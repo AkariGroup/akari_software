@@ -32,26 +32,26 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_AkariServiceService_ListServices_0(ctx context.Context, marshaler runtime.Marshaler, client AkariServiceServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AkariServiceService_ListImages_0(ctx context.Context, marshaler runtime.Marshaler, client AkariServiceServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
-	msg, err := client.ListServices(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.ListImages(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_AkariServiceService_ListServices_0(ctx context.Context, marshaler runtime.Marshaler, server AkariServiceServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AkariServiceService_ListImages_0(ctx context.Context, marshaler runtime.Marshaler, server AkariServiceServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
-	msg, err := server.ListServices(ctx, &protoReq)
+	msg, err := server.ListImages(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_AkariServiceService_GetService_0(ctx context.Context, marshaler runtime.Marshaler, client AkariServiceServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetServiceRequest
+func request_AkariServiceService_GetImage_0(ctx context.Context, marshaler runtime.Marshaler, client AkariServiceServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetImageRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -71,13 +71,13 @@ func request_AkariServiceService_GetService_0(ctx context.Context, marshaler run
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
-	msg, err := client.GetService(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetImage(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_AkariServiceService_GetService_0(ctx context.Context, marshaler runtime.Marshaler, server AkariServiceServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetServiceRequest
+func local_request_AkariServiceService_GetImage_0(ctx context.Context, marshaler runtime.Marshaler, server AkariServiceServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetImageRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -97,7 +97,7 @@ func local_request_AkariServiceService_GetService_0(ctx context.Context, marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
-	msg, err := server.GetService(ctx, &protoReq)
+	msg, err := server.GetImage(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -558,19 +558,19 @@ func local_request_AkariServiceService_OpenProject_0(ctx context.Context, marsha
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAkariServiceServiceHandlerFromEndpoint instead.
 func RegisterAkariServiceServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AkariServiceServiceServer) error {
 
-	mux.Handle("GET", pattern_AkariServiceService_ListServices_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AkariServiceService_ListImages_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/akira_proto.AkariServiceService/ListServices", runtime.WithHTTPPathPattern("/services"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/akira_proto.AkariServiceService/ListImages", runtime.WithHTTPPathPattern("/images"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AkariServiceService_ListServices_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AkariServiceService_ListImages_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -578,23 +578,23 @@ func RegisterAkariServiceServiceHandlerServer(ctx context.Context, mux *runtime.
 			return
 		}
 
-		forward_AkariServiceService_ListServices_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AkariServiceService_ListImages_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AkariServiceService_GetService_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AkariServiceService_GetImage_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/akira_proto.AkariServiceService/GetService", runtime.WithHTTPPathPattern("/services/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/akira_proto.AkariServiceService/GetImage", runtime.WithHTTPPathPattern("/images/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AkariServiceService_GetService_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AkariServiceService_GetImage_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -602,7 +602,7 @@ func RegisterAkariServiceServiceHandlerServer(ctx context.Context, mux *runtime.
 			return
 		}
 
-		forward_AkariServiceService_GetService_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AkariServiceService_GetImage_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -863,45 +863,45 @@ func RegisterAkariServiceServiceHandler(ctx context.Context, mux *runtime.ServeM
 // "AkariServiceServiceClient" to call the correct interceptors.
 func RegisterAkariServiceServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AkariServiceServiceClient) error {
 
-	mux.Handle("GET", pattern_AkariServiceService_ListServices_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AkariServiceService_ListImages_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/akira_proto.AkariServiceService/ListServices", runtime.WithHTTPPathPattern("/services"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/akira_proto.AkariServiceService/ListImages", runtime.WithHTTPPathPattern("/images"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AkariServiceService_ListServices_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AkariServiceService_ListImages_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AkariServiceService_ListServices_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AkariServiceService_ListImages_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AkariServiceService_GetService_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AkariServiceService_GetImage_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/akira_proto.AkariServiceService/GetService", runtime.WithHTTPPathPattern("/services/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/akira_proto.AkariServiceService/GetImage", runtime.WithHTTPPathPattern("/images/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AkariServiceService_GetService_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AkariServiceService_GetImage_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AkariServiceService_GetService_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AkariServiceService_GetImage_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -1098,9 +1098,9 @@ func RegisterAkariServiceServiceHandlerClient(ctx context.Context, mux *runtime.
 }
 
 var (
-	pattern_AkariServiceService_ListServices_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"services"}, ""))
+	pattern_AkariServiceService_ListImages_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"images"}, ""))
 
-	pattern_AkariServiceService_GetService_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"services", "id"}, ""))
+	pattern_AkariServiceService_GetImage_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"images", "id"}, ""))
 
 	pattern_AkariServiceService_ListInstances_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"instances"}, ""))
 
@@ -1122,9 +1122,9 @@ var (
 )
 
 var (
-	forward_AkariServiceService_ListServices_0 = runtime.ForwardResponseMessage
+	forward_AkariServiceService_ListImages_0 = runtime.ForwardResponseMessage
 
-	forward_AkariServiceService_GetService_0 = runtime.ForwardResponseMessage
+	forward_AkariServiceService_GetImage_0 = runtime.ForwardResponseMessage
 
 	forward_AkariServiceService_ListInstances_0 = runtime.ForwardResponseMessage
 

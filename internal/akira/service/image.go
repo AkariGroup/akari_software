@@ -1,7 +1,7 @@
 package service
 
-type ServiceId string
-type ServiceVersion string
+type ImageId string
+type ImageVersion string
 type ServiceCapability string
 
 const (
@@ -13,12 +13,12 @@ type ServiceContainerOption struct {
 	Image string `json:"image" validate:"required"`
 }
 
-type ServiceConfig struct {
+type ImageConfig struct {
 	// Id is unique to name/version pairs
-	Id ServiceId `json:"id" validate:"required"`
+	Id ImageId `json:"id" validate:"required"`
 	// Name is unique through different versions
-	Name    string         `json:"name" validate:"required"`
-	Version ServiceVersion `json:"version" validate:"required"`
+	Name    string       `json:"name" validate:"required"`
+	Version ImageVersion `json:"version" validate:"required"`
 
 	DisplayName     string                 `json:"name" validate:"required"`
 	Description     string                 `json:"description"`

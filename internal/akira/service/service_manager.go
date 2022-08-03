@@ -13,12 +13,12 @@ import (
 )
 
 type ServiceManager interface {
-	Services() []ServiceConfig
+	Images() []ImageConfig
 	Instances() []Instance
 
-	GetService(s ServiceId) (ServiceConfig, bool)
+	GetImage(s ImageId) (ImageConfig, bool)
 
-	CreateInstance(s ServiceId, displayName string, description string) (Instance, error)
+	CreateInstance(s ImageId, displayName string, description string) (Instance, error)
 	GetInstance(s InstanceId) (Instance, bool)
 	RemoveInstance(s InstanceId) error
 }
@@ -32,7 +32,7 @@ type ServiceManagerOptions struct {
 }
 
 type serviceManager struct {
-	services  map[ServiceId]ServiceConfig
+	images    map[ImageId]ImageConfig
 	instances map[InstanceId]Instance
 	opts      ServiceManagerOptions
 
@@ -52,11 +52,11 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	}
 
 	m := &serviceManager{
-		services:  make(map[ServiceId]ServiceConfig),
+		images:    make(map[ImageId]ImageConfig),
 		instances: make(map[InstanceId]Instance),
 		opts:      opts,
 	}
-	if err := m.scanServices(); err != nil {
+	if err := m.scanImages(); err != nil {
 		return nil, err
 	}
 	if err := m.scanInstances(); err != nil {
@@ -65,10 +65,10 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	return m, nil
 }
 
-func (m *serviceManager) scanServices() error {
-	// TODO: Load Service from directory
-	jupyterId := ServiceId("bca6daa4-b41f-4729-bac3-34f161f9ad91")
-	m.services[jupyterId] = ServiceConfig{
+func (m *serviceManager) scanImages() error {
+	// TODO: Load Image from directory
+	jupyterId := ImageId("bca6daa4-b41f-4729-bac3-34f161f9ad91")
+	m.images[jupyterId] = ImageConfig{
 		Id:          jupyterId,
 		Name:        JupyterLabServiceName,
 		Version:     "v1",
@@ -86,9 +86,9 @@ func (m *serviceManager) scanServices() error {
 }
 
 func (m *serviceManager) loadInstance(c InstanceConfig) (Instance, error) {
-	s, ok := m.services[c.ServiceId]
+	s, ok := m.images[c.ImageId]
 	if !ok {
-		return nil, fmt.Errorf("service id: %#v not found", c.ServiceId)
+		return nil, fmt.Errorf("service id: %#v not found", c.ImageId)
 	}
 
 	switch s.Name {
@@ -133,12 +133,12 @@ func (m *serviceManager) scanInstances() error {
 	return nil
 }
 
-func (m *serviceManager) Services() []ServiceConfig {
+func (m *serviceManager) Images() []ImageConfig {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	var ret []ServiceConfig
-	for _, v := range m.services {
+	var ret []ImageConfig
+	for _, v := range m.images {
 		ret = append(ret, v)
 	}
 	return ret
@@ -155,26 +155,26 @@ func (m *serviceManager) Instances() []Instance {
 	return ret
 }
 
-func (m *serviceManager) GetService(s ServiceId) (ServiceConfig, bool) {
+func (m *serviceManager) GetImage(s ImageId) (ImageConfig, bool) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	sv, ok := m.services[s]
+	sv, ok := m.images[s]
 	return sv, ok
 }
 
-func (m *serviceManager) CreateInstance(s ServiceId, displayName string, description string) (Instance, error) {
+func (m *serviceManager) CreateInstance(s ImageId, displayName string, description string) (Instance, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	_, ok := m.services[s]
+	_, ok := m.images[s]
 	if !ok {
 		return nil, fmt.Errorf("service: %s doesn't exist", s)
 	}
 
 	config := InstanceConfig{
 		Id:          NewInstanceId(),
-		ServiceId:   s,
+		ImageId:     s,
 		DisplayName: displayName,
 		Description: description,
 	}

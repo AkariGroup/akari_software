@@ -23,11 +23,11 @@ const (
 )
 
 type JupyterLab struct {
-	config  InstanceConfig
-	service ServiceConfig
-	opts    ServiceManagerOptions
-	status  InstanceStatus
-	token   string
+	config InstanceConfig
+	image  ImageConfig
+	opts   ServiceManagerOptions
+	status InstanceStatus
+	token  string
 
 	servicePort int
 	containerId *system.ContainerId
@@ -35,13 +35,13 @@ type JupyterLab struct {
 	mu sync.Mutex
 }
 
-func NewJupyterLab(service ServiceConfig, config InstanceConfig, opts ServiceManagerOptions) *JupyterLab {
+func NewJupyterLab(image ImageConfig, config InstanceConfig, opts ServiceManagerOptions) *JupyterLab {
 	return &JupyterLab{
-		config:  config,
-		service: service,
-		opts:    opts,
-		status:  Terminated,
-		token:   util.GetRandomByteString(JupyterTokenLength),
+		config: config,
+		image:  image,
+		opts:   opts,
+		status: Terminated,
+		token:  util.GetRandomByteString(JupyterTokenLength),
 	}
 }
 
@@ -70,7 +70,7 @@ func (p *JupyterLab) createContainer() (system.ContainerId, error) {
 
 	var err error
 
-	imageRef := fmt.Sprintf("%s:%s", p.service.ContainerOption.Image, p.service.Version)
+	imageRef := fmt.Sprintf("%s:%s", p.image.ContainerOption.Image, p.image.Version)
 	err = p.opts.Docker.PullImage(imageRef)
 	if err != nil {
 		return "", fmt.Errorf("error while pulling image (ref: %#v): %#v)", imageRef, err)
