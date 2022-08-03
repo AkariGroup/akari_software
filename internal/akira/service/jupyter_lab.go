@@ -60,7 +60,7 @@ func (p *JupyterLab) changeStatus(s ServiceStatus) {
 }
 
 func (p *JupyterLab) varDir() string {
-	return filepath.Join(p.opts.InstanceVarDir, string(p.config.Id))
+	return filepath.Join(p.opts.ServiceVarDir, string(p.config.Id))
 }
 
 func (p *JupyterLab) createContainer() (system.ContainerId, error) {

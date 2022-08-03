@@ -24,11 +24,11 @@ type ServiceManager interface {
 }
 
 type ServiceManagerOptions struct {
-	ServiceDir        string
-	InstanceConfigDir string
-	InstanceVarDir    string
-	ProjectRootDir    string
-	Docker            *system.DockerSystem
+	ImageConfigDir   string
+	ServiceConfigDir string
+	ServiceVarDir    string
+	ProjectRootDir   string
+	Docker           *system.DockerSystem
 }
 
 type serviceManager struct {
@@ -44,10 +44,10 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	if opts.ProjectRootDir, err = filepath.Abs(opts.ProjectRootDir); err != nil {
 		return nil, err
 	}
-	if opts.InstanceConfigDir, err = filepath.Abs(opts.InstanceConfigDir); err != nil {
+	if opts.ServiceConfigDir, err = filepath.Abs(opts.ServiceConfigDir); err != nil {
 		return nil, err
 	}
-	if opts.InstanceVarDir, err = filepath.Abs(opts.InstanceVarDir); err != nil {
+	if opts.ServiceVarDir, err = filepath.Abs(opts.ServiceVarDir); err != nil {
 		return nil, err
 	}
 
@@ -101,7 +101,7 @@ func (m *serviceManager) loadService(c ServiceConfig) (Service, error) {
 }
 
 func (m *serviceManager) scanServices() error {
-	files, err := ioutil.ReadDir(m.opts.InstanceConfigDir)
+	files, err := ioutil.ReadDir(m.opts.ServiceConfigDir)
 	if err != nil {
 		return fmt.Errorf("error while scanning services: %#v\n", err)
 	}
@@ -110,7 +110,7 @@ func (m *serviceManager) scanServices() error {
 		if f.IsDir() {
 			continue
 		}
-		p := filepath.Join(m.opts.InstanceConfigDir, f.Name())
+		p := filepath.Join(m.opts.ServiceConfigDir, f.Name())
 		base := filepath.Base(p)
 		if strings.HasPrefix(base, ".") || !strings.HasSuffix(p, ".yaml") {
 			continue
@@ -180,7 +180,7 @@ func (m *serviceManager) CreateService(s ImageId, displayName string, descriptio
 	}
 	if err := saveServiceConfig(
 		config,
-		filepath.Join(m.opts.InstanceConfigDir, fmt.Sprintf("%s.yaml", string(config.Id))),
+		filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(config.Id))),
 	); err != nil {
 		return nil, fmt.Errorf("failed to save service config: %#v", err)
 	}
@@ -214,7 +214,7 @@ func (m *serviceManager) RemoveService(id ServiceId) error {
 	delete(m.services, id)
 	m.mu.Unlock()
 
-	p := filepath.Join(m.opts.InstanceConfigDir, fmt.Sprintf("%s.yaml", string(s.Id())))
+	p := filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(s.Id())))
 	os.Remove(p)
 	return nil
 }
