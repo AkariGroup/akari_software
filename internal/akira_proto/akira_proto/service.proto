@@ -129,14 +129,12 @@ service AkariServiceService {
   rpc RemoveInstance(RemoveInstanceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/instances/{id}/remove"
-      body: "*"
     };
   }
 
   rpc StartInstance(StartInstanceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/instances/{id}/start"
-      body: "*"
     };
   }
 
@@ -150,7 +148,6 @@ service AkariServiceService {
   rpc TerminateInstance(TerminateInstanceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/instances/{id}/terminate"
-      body: "*"
     };
   }
 

@@ -30,13 +30,9 @@ import {
 } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
+import { ValidationMessages } from "../../../libs/messages";
 
 const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
-
-enum ValidationMessages {
-  Required = "必須項目です",
-  InvalidCharacter = "無効な文字が含まれています",
-}
 
 type TemplateSelectorProps = {
   fields: ControllerRenderProps<CreateProjectFromTemplateInputs, "templateId">;

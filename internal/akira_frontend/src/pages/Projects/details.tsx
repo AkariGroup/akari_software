@@ -13,6 +13,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
+import { useCallback } from "react";
+import { Akira_protoServiceInstance } from "../../api/@types";
+import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
 export function ProjectsDetails() {
   const [searchParams] = useSearchParams();
@@ -24,6 +27,28 @@ export function ProjectsDetails() {
     },
     enabled: !!projectId && !!client,
   });
+  const { data: instances } = useAspidaSWR(client?.instances, {
+    enabled: !!client,
+  });
+  const setBusy = useSetBackdropValue();
+
+  const onOpenProject = useCallback(
+    async (s: Akira_protoServiceInstance) => {
+      if (!client || !s.id || !project?.id) return;
+
+      setBusy(true);
+      try {
+        const res = await client.instances._serviceId(s.id).open_project.get({
+          query: { projectId: project.id },
+        });
+        const url = res.body.url;
+        window.open(url, "_blank", "noopener,noreferrer");
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, project, setBusy]
+  );
 
   if (!projectId) {
     return <Navigate to="/projects" />;
@@ -59,7 +84,10 @@ export function ProjectsDetails() {
         <Grid item sm={12} md={3} sx={{ overflowWrap: "anywhere" }}>
           <Stack spacing={3}>
             <Box>
-              <OpenProjectWithServiceButton />
+              <OpenProjectWithServiceButton
+                instances={instances?.instances}
+                onSelected={onOpenProject}
+              />
             </Box>
             <Box>
               <Typography variant="subtitle2">プロジェクト情報</Typography>

@@ -4,6 +4,7 @@ import { HomeDashboard } from "../pages/HomeDashboard";
 import { Projects } from "../pages/Projects";
 import { ProjectsCreate } from "../pages/Projects/Create";
 import { ProjectsDetails } from "../pages/Projects/details";
+import { Services } from "../pages/Services";
 
 export const AppRoute: RouteObject = {
   path: "",
@@ -27,6 +28,15 @@ export const AppRoute: RouteObject = {
         {
           path: "details",
           element: <ProjectsDetails />,
+        },
+      ],
+    },
+    {
+      path: "/services",
+      children: [
+        {
+          path: "",
+          element: <Services />,
         },
       ],
     },
