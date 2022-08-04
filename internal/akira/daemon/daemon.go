@@ -70,15 +70,18 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 		return nil, err
 	}
 
+	imageConfigDir, err := setupDir(configDir, "service_images")
+	if err != nil {
+		return nil, err
+	}
 	serviceConfigDir, err := setupDir(configDir, "services")
 	if err != nil {
 		return nil, err
 	}
-	instanceConfigDir, err := setupDir(configDir, "instances")
+	serviceVarDir, err := setupDir(varDir, "services")
 	if err != nil {
 		return nil, err
 	}
-	instanceVarDir, err := setupDir(varDir, "instances")
 
 	var dockerAuth *string
 	if e, ok := os.LookupEnv(DOCKER_REGISTRY_AUTH); ok {
@@ -104,11 +107,11 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	tm := project.NewTemplateManager(templateDir)
 	tm.UpdateTemplates()
 	opts := service.ServiceManagerOptions{
-		ServiceDir:        serviceConfigDir,
-		InstanceConfigDir: instanceConfigDir,
-		InstanceVarDir:    instanceVarDir,
-		ProjectRootDir:    projectDir,
-		Docker:            docker,
+		ImageConfigDir:   imageConfigDir,
+		ServiceConfigDir: serviceConfigDir,
+		ServiceVarDir:    serviceVarDir,
+		ProjectRootDir:   projectDir,
+		Docker:           docker,
 	}
 	svr, err := service.NewServiceManager(opts)
 	if err != nil {

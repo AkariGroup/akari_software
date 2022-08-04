@@ -23,11 +23,11 @@ const (
 )
 
 type JupyterLab struct {
-	config  InstanceConfig
-	service ServiceConfig
-	opts    ServiceManagerOptions
-	status  InstanceStatus
-	token   string
+	config ServiceConfig
+	image  ImageConfig
+	opts   ServiceManagerOptions
+	status ServiceStatus
+	token  string
 
 	servicePort int
 	containerId *system.ContainerId
@@ -35,32 +35,32 @@ type JupyterLab struct {
 	mu sync.Mutex
 }
 
-func NewJupyterLab(service ServiceConfig, config InstanceConfig, opts ServiceManagerOptions) *JupyterLab {
+func NewJupyterLab(image ImageConfig, config ServiceConfig, opts ServiceManagerOptions) *JupyterLab {
 	return &JupyterLab{
-		config:  config,
-		service: service,
-		opts:    opts,
-		status:  Terminated,
-		token:   util.GetRandomByteString(JupyterTokenLength),
+		config: config,
+		image:  image,
+		opts:   opts,
+		status: Terminated,
+		token:  util.GetRandomByteString(JupyterTokenLength),
 	}
 }
 
-func (p *JupyterLab) Id() InstanceId {
+func (p *JupyterLab) Id() ServiceId {
 	return p.config.Id
 }
 
-func (p *JupyterLab) Config() InstanceConfig {
+func (p *JupyterLab) Config() ServiceConfig {
 	return p.config
 }
 
-func (p *JupyterLab) changeStatus(s InstanceStatus) {
+func (p *JupyterLab) changeStatus(s ServiceStatus) {
 	p.mu.Lock()
 	p.status = s
 	p.mu.Unlock()
 }
 
 func (p *JupyterLab) varDir() string {
-	return filepath.Join(p.opts.InstanceVarDir, string(p.config.Id))
+	return filepath.Join(p.opts.ServiceVarDir, string(p.config.Id))
 }
 
 func (p *JupyterLab) createContainer() (system.ContainerId, error) {
@@ -70,7 +70,7 @@ func (p *JupyterLab) createContainer() (system.ContainerId, error) {
 
 	var err error
 
-	imageRef := fmt.Sprintf("%s:%s", p.service.ContainerOption.Image, p.service.Version)
+	imageRef := fmt.Sprintf("%s:%s", p.image.ContainerOption.Image, p.image.Version)
 	err = p.opts.Docker.PullImage(imageRef)
 	if err != nil {
 		return "", fmt.Errorf("error while pulling image (ref: %#v): %#v)", imageRef, err)
@@ -224,7 +224,7 @@ func (p *JupyterLab) Clean() error {
 	return os.RemoveAll(p.varDir())
 }
 
-func (p *JupyterLab) Status() InstanceStatus {
+func (p *JupyterLab) Status() ServiceStatus {
 	return p.status
 }
 

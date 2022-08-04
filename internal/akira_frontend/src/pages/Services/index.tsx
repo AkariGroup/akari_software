@@ -2,26 +2,26 @@ import useAspidaSWR from "@aspida/swr";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import {
-  Akira_protoCreateInstanceRequest,
-  Akira_protoServiceInstance,
+  Akira_protoCreateServiceRequest,
+  Akira_protoService,
 } from "../../api/@types";
-import { InstanceList } from "../../components/InstanceList";
+import { ServiceList } from "../../components/ServiceList";
 import { useApiClient } from "../../hooks/api";
-import { InstanceCreateDrawer } from "./create";
+import { ServiceCreateDrawer } from "./create";
 import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
 export function Services() {
   const client = useApiClient();
-  const { data, error, mutate } = useAspidaSWR(client?.instances, {
+  const { data, error, mutate } = useAspidaSWR(client?.services, {
     enabled: !!client,
     refreshInterval: 5 * 1000, // in ms
   });
   const [createDrawerOpened, setCreateDrawerOpened] = useState(false);
   const setBusy = useSetBackdropValue();
 
-  const onInstanceCreate: SubmitHandler<Akira_protoCreateInstanceRequest> =
+  const onServiceCreate: SubmitHandler<Akira_protoCreateServiceRequest> =
     useCallback(
       async (data) => {
         if (!client) return;
@@ -29,7 +29,7 @@ export function Services() {
         // TODO: Handle error (e.g. Directory name conflicts)
         setBusy(true);
         try {
-          await client.instances.post({
+          await client.services.post({
             body: data,
           });
           setCreateDrawerOpened(false);
@@ -42,12 +42,12 @@ export function Services() {
     );
 
   const onStartService = useCallback(
-    async (target: Akira_protoServiceInstance) => {
+    async (target: Akira_protoService) => {
       if (!client || !target.id) return;
 
       setBusy(true);
       try {
-        await client.instances._id(target.id).start.post();
+        await client.services._id(target.id).start.post();
         mutate?.();
       } finally {
         setBusy(false);
@@ -57,12 +57,12 @@ export function Services() {
   );
 
   const onStopService = useCallback(
-    async (target: Akira_protoServiceInstance, terminate: boolean) => {
+    async (target: Akira_protoService, terminate: boolean) => {
       if (!client || !target.id) return;
 
       setBusy(true);
       try {
-        await client.instances._id(target.id).stop.post({
+        await client.services._id(target.id).stop.post({
           body: { terminate: terminate },
         });
         mutate?.();
@@ -74,12 +74,12 @@ export function Services() {
   );
 
   const onLaunchService = useCallback(
-    async (target: Akira_protoServiceInstance) => {
+    async (target: Akira_protoService) => {
       if (!client || !target.id) return;
 
       setBusy(true);
       try {
-        const res = await client.instances._id(target.id).open.get();
+        const res = await client.services._id(target.id).open.get();
         const url = res.body.url;
         window.open(url, "_blank", "noopener,noreferrer");
       } finally {
@@ -90,12 +90,12 @@ export function Services() {
   );
 
   const onRemoveService = useCallback(
-    async (target: Akira_protoServiceInstance) => {
+    async (target: Akira_protoService) => {
       if (!client || !target.id) return;
 
       setBusy(true);
       try {
-        await client.instances._id(target.id).remove.post();
+        await client.services._id(target.id).remove.post();
         mutate?.();
       } finally {
         setBusy(false);
@@ -104,7 +104,7 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
-  if (!data?.instances || error) {
+  if (!data?.services || error) {
     return <></>;
   }
 
@@ -112,12 +112,12 @@ export function Services() {
     <Container maxWidth="xl">
       <Stack margin={1} spacing={1}>
         {createDrawerOpened ? (
-          <InstanceCreateDrawer
+          <ServiceCreateDrawer
             client={client}
             onClose={() => {
               setCreateDrawerOpened(false);
             }}
-            onSubmit={onInstanceCreate}
+            onSubmit={onServiceCreate}
           />
         ) : (
           <></>
@@ -136,8 +136,8 @@ export function Services() {
             新規作成
           </Button>
         </Box>
-        <InstanceList
-          instances={data.instances}
+        <ServiceList
+          services={data.services}
           onStart={onStartService}
           onStop={onStopService}
           onLaunch={onLaunchService}

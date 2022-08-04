@@ -1,31 +1,87 @@
 package service
 
-type ServiceId string
-type ServiceVersion string
-type ServiceCapability string
+import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
 
-const (
-	CapabilityOpen        ServiceCapability = "open"
-	CapabilityOpenProject                   = "open_project"
+	"github.com/go-playground/validator/v10"
+	yaml "github.com/goccy/go-yaml"
+	"github.com/google/uuid"
 )
 
-type ServiceContainerOption struct {
-	Image string `json:"image" validate:"required"`
+type ServiceId string
+type ServiceStatus int8
+
+const (
+	Terminated ServiceStatus = iota
+	Starting
+	Running
+	Stopping
+	Error
+	Stopped
+)
+
+func NewServiceId() ServiceId {
+	return ServiceId(uuid.New().String())
 }
 
 type ServiceConfig struct {
-	// Id is unique to name/version pairs
-	Id ServiceId `json:"id" validate:"required"`
-	// Name is unique through different versions
-	Name    string         `json:"name" validate:"required"`
-	Version ServiceVersion `json:"version" validate:"required"`
+	Id      ServiceId `json:"id" validate:"required"`
+	ImageId ImageId   `json:"image_id" validate:"required"`
 
-	DisplayName     string                 `json:"name" validate:"required"`
-	Description     string                 `json:"description"`
-	Capabilities    []ServiceCapability    `json:"capabilities"`
-	ContainerOption ServiceContainerOption `json:"container_option" validate:"required"`
+	DisplayName string `json:"display_name" validate:"required"`
+	Description string `json:"description"`
 }
 
-const (
-	JupyterLabServiceName = "akari-srv.vbcpp.net/jupyer-lab"
-)
+type Service interface {
+	Id() ServiceId
+	Config() ServiceConfig
+
+	Start() error
+	Stop() error
+	Terminate() error
+	Clean() error
+	Status() ServiceStatus
+
+	GetOpenAddress() (string, error)
+	GetOpenProjectAddress(projectDir string) (string, error)
+}
+
+func loadServiceConfig(p string) (ServiceConfig, error) {
+	content, err := ioutil.ReadFile(p)
+	if err != nil {
+		return ServiceConfig{}, err
+	}
+
+	v := validator.New()
+	var config ServiceConfig
+	err = yaml.UnmarshalWithOptions(
+		content,
+		&config,
+		yaml.Strict(),
+		yaml.Validator(v),
+	)
+	return config, err
+}
+
+func saveServiceConfig(c ServiceConfig, p string) error {
+	content, err := yaml.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	dir := filepath.Dir(p)
+	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+		return err
+	}
+
+	fs, err := os.Create(p)
+	if err != nil {
+		return err
+	}
+
+	fs.Write(content)
+	fs.Close()
+	return nil
+}
