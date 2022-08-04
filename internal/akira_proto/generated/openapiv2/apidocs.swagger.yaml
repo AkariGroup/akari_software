@@ -387,6 +387,10 @@ definitions:
   akira_protoService:
     type: object
     properties:
+      capabilities:
+        type: array
+        items:
+          type: string
       description:
         type: string
       displayName:
@@ -397,6 +401,8 @@ definitions:
         $ref: '#/definitions/akira_protoServiceImage'
       status:
         $ref: '#/definitions/akira_protoServiceStatus'
+      type:
+        $ref: '#/definitions/akira_protoServiceType'
   akira_protoServiceImage:
     type: object
     properties:
@@ -424,6 +430,12 @@ definitions:
       - ERROR
       - STOPPED
     default: TERMINATED
+  akira_protoServiceType:
+    type: string
+    enum:
+      - USER
+      - SYSTEM
+    default: USER
   akira_protoTemplate:
     type: object
     properties:

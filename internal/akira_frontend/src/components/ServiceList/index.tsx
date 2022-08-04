@@ -10,7 +10,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Akira_protoServiceStatus, Akira_protoService } from "../../api/@types";
+import {
+  Akira_protoServiceStatus,
+  Akira_protoService,
+  Akira_protoServiceImage,
+} from "../../api/@types";
 import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,8 +27,8 @@ type Props = {
   services: Akira_protoService[];
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
-  onLaunch: (target: Akira_protoService) => void;
-  onRemove: (target: Akira_protoService) => void;
+  onLaunch?: (target: Akira_protoService) => void;
+  onRemove?: (target: Akira_protoService) => void;
 };
 
 function Header() {
@@ -162,9 +166,27 @@ type ServiceRowProps = {
   service: Akira_protoService;
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
-  onLaunch: (target: Akira_protoService) => void;
-  onRemove: (target: Akira_protoService) => void;
+  onLaunch?: (target: Akira_protoService) => void;
+  onRemove?: (target: Akira_protoService) => void;
 };
+
+function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
+  if (!image) {
+    return <Typography color="textSecondary">-</Typography>;
+  }
+
+  return (
+    <Link
+      color="textSecondary"
+      underline="none"
+      sx={{
+        cursor: "pointer",
+      }}
+    >
+      {image.name}@{image.version}
+    </Link>
+  );
+}
 
 function ServiceRow({
   service,
@@ -178,28 +200,24 @@ function ServiceRow({
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell component="th">{service.displayName}</TableCell>
         <TableCell>
-          <Link
-            color="textSecondary"
-            underline="none"
-            sx={{
-              cursor: "pointer",
-            }}
-          >
-            {service.image?.name}@{service.image?.version}
-          </Link>
+          <ServiceImageLink image={service.image} />
         </TableCell>
         <TableCell>
           <Status status={service.status} />
         </TableCell>
         <TableCell align="right">
-          <IconButton
-            onClick={() => onLaunch(service)}
-            disabled={service.status !== "RUNNING"}
-          >
-            <LaunchIcon />
-          </IconButton>
+          {!!onLaunch && service.capabilities?.includes("open") ? (
+            <IconButton
+              onClick={() => onLaunch(service)}
+              disabled={service.status !== "RUNNING"}
+            >
+              <LaunchIcon />
+            </IconButton>
+          ) : null}
           <PowerButton service={service} onStart={onStart} onStop={onStop} />
-          <RemoveButton service={service} onRemove={onRemove} />
+          {!!onRemove ? (
+            <RemoveButton service={service} onRemove={onRemove} />
+          ) : null}
         </TableCell>
       </TableRow>
     </>
@@ -207,12 +225,32 @@ function ServiceRow({
 }
 
 export function ServiceList(props: Props) {
+  const sortKey = useCallback(
+    (lhs: Akira_protoService, rhs: Akira_protoService) => {
+      const lhsStatus = lhs.status?.toString() ?? "";
+      const rhsStatus = rhs.status?.toString() ?? "";
+      if (lhsStatus == rhsStatus) {
+        const lhsDisplayName = lhs.displayName ?? "";
+        const rhsDisplayName = rhs.displayName ?? "";
+        if (lhsDisplayName === rhsDisplayName) {
+          return 0;
+        } else if (lhsDisplayName > rhsDisplayName) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+
+      return lhsStatus > rhsStatus ? 1 : -1;
+    },
+    []
+  );
   return (
     <TableContainer component={Paper}>
       <Table>
         <Header />
         <TableBody>
-          {props.services?.map((x) => (
+          {props.services?.sort(sortKey).map((x) => (
             <ServiceRow
               key={x.id}
               service={x}

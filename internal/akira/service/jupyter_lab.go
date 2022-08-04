@@ -49,8 +49,24 @@ func (p *JupyterLab) Id() ServiceId {
 	return p.config.Id
 }
 
-func (p *JupyterLab) Config() ServiceConfig {
-	return p.config
+func (p *JupyterLab) DisplayName() string {
+	return p.config.DisplayName
+}
+
+func (p *JupyterLab) Description() string {
+	return p.config.Description
+}
+
+func (p *JupyterLab) ImageId() ImageId {
+	return p.config.ImageId
+}
+
+func (p *JupyterLab) Type() ServiceType {
+	return ServiceTypeUser
+}
+
+func (p *JupyterLab) Capabilities() []ServiceCapability {
+	return p.image.Capabilities
 }
 
 func (p *JupyterLab) changeStatus(s ServiceStatus) {

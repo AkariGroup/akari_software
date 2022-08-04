@@ -2,11 +2,9 @@ package service
 
 type ImageId string
 type ImageVersion string
-type ServiceCapability string
 
 const (
-	CapabilityOpen        ServiceCapability = "open"
-	CapabilityOpenProject                   = "open_project"
+	NullImageId ImageId = ""
 )
 
 type ServiceContainerOption struct {

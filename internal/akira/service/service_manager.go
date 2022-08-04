@@ -18,9 +18,9 @@ type ServiceManager interface {
 
 	GetImage(s ImageId) (ImageConfig, bool)
 
-	CreateService(s ImageId, displayName string, description string) (Service, error)
+	CreateUserService(s ImageId, displayName string, description string) (Service, error)
 	GetService(s ServiceId) (Service, bool)
-	RemoveService(s ServiceId) error
+	RemoveUserService(s ServiceId) error
 }
 
 type ServiceManagerOptions struct {
@@ -163,7 +163,7 @@ func (m *serviceManager) GetImage(s ImageId) (ImageConfig, bool) {
 	return sv, ok
 }
 
-func (m *serviceManager) CreateService(s ImageId, displayName string, description string) (Service, error) {
+func (m *serviceManager) CreateUserService(s ImageId, displayName string, description string) (Service, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -184,6 +184,7 @@ func (m *serviceManager) CreateService(s ImageId, displayName string, descriptio
 	); err != nil {
 		return nil, fmt.Errorf("failed to save service config: %#v", err)
 	}
+	// We suppose that loadService only returns a UserService
 	service, err := m.loadService(config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load service: %#v", err)
@@ -200,10 +201,13 @@ func (m *serviceManager) GetService(id ServiceId) (Service, bool) {
 	return s, ok
 }
 
-func (m *serviceManager) RemoveService(id ServiceId) error {
+func (m *serviceManager) RemoveUserService(id ServiceId) error {
 	s, ok := m.GetService(id)
 	if !ok {
 		return fmt.Errorf("service doesn't exist: %#v", id)
+	}
+	if s.Type() != ServiceTypeUser {
+		return fmt.Errorf("cannot remove non-user service: %#v", id)
 	}
 
 	s.Stop()

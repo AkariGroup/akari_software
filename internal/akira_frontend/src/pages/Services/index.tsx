@@ -124,25 +124,40 @@ export function Services() {
         )}
 
         <Typography variant="h4" mb={1}>
-          インスタンス一覧
+          サービス
         </Typography>
-        <Box>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            color="success"
-            onClick={() => setCreateDrawerOpened(true)}
-          >
-            新規作成
-          </Button>
+        <Box pb={2}>
+          <Typography variant="h5" mb={1}>
+            ユーザーサービス一覧
+          </Typography>
+          <Box>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              color="success"
+              onClick={() => setCreateDrawerOpened(true)}
+            >
+              新規作成
+            </Button>
+          </Box>
+          <ServiceList
+            services={data.services.filter((x) => x.type === "USER")}
+            onStart={onStartService}
+            onStop={onStopService}
+            onLaunch={onLaunchService}
+            onRemove={onRemoveService}
+          />
         </Box>
-        <ServiceList
-          services={data.services}
-          onStart={onStartService}
-          onStop={onStopService}
-          onLaunch={onLaunchService}
-          onRemove={onRemoveService}
-        />
+        <Box>
+          <Typography variant="h5" mb={1}>
+            システムサービス一覧
+          </Typography>
+          <ServiceList
+            services={data.services.filter((x) => x.type === "SYSTEM")}
+            onStart={onStartService}
+            onStop={onStopService}
+          />
+        </Box>
       </Stack>
     </Container>
   );
