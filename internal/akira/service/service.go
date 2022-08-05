@@ -12,6 +12,13 @@ import (
 
 type ServiceId string
 type ServiceStatus int8
+type ServiceType int8
+type ServiceCapability string
+
+const (
+	CapabilityOpen        ServiceCapability = "open"
+	CapabilityOpenProject                   = "open_project"
+)
 
 const (
 	Terminated ServiceStatus = iota
@@ -20,6 +27,11 @@ const (
 	Stopping
 	Error
 	Stopped
+)
+
+const (
+	ServiceTypeUser ServiceType = iota
+	ServiceTypeSystem
 )
 
 func NewServiceId() ServiceId {
@@ -36,7 +48,11 @@ type ServiceConfig struct {
 
 type Service interface {
 	Id() ServiceId
-	Config() ServiceConfig
+	DisplayName() string
+	Description() string
+	ImageId() ImageId
+	Type() ServiceType
+	Capabilities() []ServiceCapability
 
 	Start() error
 	Stop() error

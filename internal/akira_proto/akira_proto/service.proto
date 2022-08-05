@@ -17,6 +17,11 @@ enum ServiceStatus {
     STOPPED = 5;
 }
 
+enum ServiceType {
+    USER = 0;
+    SYSTEM = 1;
+}
+
 message ServiceImage {
   string id = 1;
   string name = 2;
@@ -28,10 +33,12 @@ message ServiceImage {
 
 message Service {
   string id = 1;
-  ServiceImage image = 2;
+  optional ServiceImage image = 2;
   string display_name = 3;
   string description = 4;
   ServiceStatus status = 5;
+  ServiceType type = 6;
+  repeated string capabilities = 7;
 }
 
 message ListImagesResponse {
