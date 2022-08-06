@@ -10,6 +10,10 @@ message SetPinOutRequest {
   bool sync = 3;
 }
 
+message ResetPinOutRequest {
+  bool sync = 1;
+}
+
 message SetDisplayColorRequest {
   Color color = 1;
   bool sync = 2;
@@ -30,7 +34,7 @@ message SetDisplayImageRequest {
   string path = 1;
   int32 pos_x = 2;
   int32 pos_y = 3;
-  int32 scale = 4;
+  float scale = 4;
   bool sync = 5;
 }
 
@@ -52,7 +56,7 @@ message M5StackStatus {
 service M5StackService {
     rpc SetPinOut(SetPinOutRequest)
         returns (google.protobuf.Empty);
-    rpc ResetPinOut(google.protobuf.Empty)
+    rpc ResetPinOut(ResetPinOutRequest)
         returns (google.protobuf.Empty);
     rpc SetDisplayColor(SetDisplayColorRequest)
         returns (google.protobuf.Empty);

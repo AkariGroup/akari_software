@@ -22,7 +22,7 @@ class M5StackServiceStub(object):
                 )
         self.ResetPinOut = channel.unary_unary(
                 '/akari_proto.M5StackService/ResetPinOut',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                request_serializer=akari__proto_dot_m5stack__pb2.ResetPinOutRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SetDisplayColor = channel.unary_unary(
@@ -129,7 +129,7 @@ def add_M5StackServiceServicer_to_server(servicer, server):
             ),
             'ResetPinOut': grpc.unary_unary_rpc_method_handler(
                     servicer.ResetPinOut,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.ResetPinOutRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SetDisplayColor': grpc.unary_unary_rpc_method_handler(
@@ -206,7 +206,7 @@ class M5StackService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/ResetPinOut',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            akari__proto_dot_m5stack__pb2.ResetPinOutRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -1,5 +1,5 @@
 import json
-from typing import Iterator
+from typing import Iterator, Optional
 
 import grpc
 from akari_controller.color import Color
@@ -11,7 +11,10 @@ from google.protobuf.empty_pb2 import Empty
 from ._error import serializer
 
 
-def _as_akari_color(color: m5stack_pb2.Color) -> Color:
+def _as_akari_color(color: m5stack_pb2.Color) -> Optional[Color]:
+    if color.red == -1 and color.green == -1 and color.blue == -1:
+        return None
+
     return Color(
         color.red,
         color.green,
@@ -29,11 +32,14 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         request: m5stack_pb2.SetPinOutRequest,
         context: grpc.ServicerContext,
     ) -> Empty:
+        # TODO: Implement
         pass
 
     @serialize_error(serializer)
-    def ResetPinOut(self, request: Empty, context: grpc.ServicerContext) -> Empty:
-        self._m5stack.reset_allout(sync=True)
+    def ResetPinOut(
+        self, request: m5stack_pb2.ResetPinOutRequest, context: grpc.ServicerContext
+    ) -> Empty:
+        self._m5stack.reset_allout(sync=request.sync)
         return Empty()
 
     @serialize_error(serializer)
@@ -50,7 +56,6 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
     def SetDisplayText(
         self, request: m5stack_pb2.SetDisplayTextRequest, context: grpc.ServicerContext
     ) -> Empty:
-        # TODO: Support Optional colors
         self._m5stack.set_display_text(
             text=request.text,
             pos_x=request.pos_x,

@@ -15,7 +15,7 @@ class M5StackServiceStub:
         google.protobuf.empty_pb2.Empty]
 
     ResetPinOut: grpc.UnaryUnaryMultiCallable[
-        google.protobuf.empty_pb2.Empty,
+        akari_proto.m5stack_pb2.ResetPinOutRequest,
         google.protobuf.empty_pb2.Empty]
 
     SetDisplayColor: grpc.UnaryUnaryMultiCallable[
@@ -56,7 +56,7 @@ class M5StackServiceServicer(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def ResetPinOut(self,
-        request: google.protobuf.empty_pb2.Empty,
+        request: akari_proto.m5stack_pb2.ResetPinOutRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 
