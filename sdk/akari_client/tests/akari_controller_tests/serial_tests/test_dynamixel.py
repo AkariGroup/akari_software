@@ -2,8 +2,7 @@ import math
 from typing import cast
 
 import pytest
-from akari_client.dynamixel_communicator import DynamixelCommunicator
-from akari_client.dynamixel_controller import (
+from akari_client.serial.dynamixel import (
     DynamixelControlItem,
     DynamixelController,
     DynamixelControllerConfig,
@@ -13,8 +12,9 @@ from akari_client.dynamixel_controller import (
     rad_per_sec_to_rev_per_min,
     rad_to_dynamixel_pulse,
 )
+from akari_client.serial.dynamixel_communicator import DynamixelCommunicator
 
-from .mocks import MockDynamixelCommunicator
+from ..mocks import MockDynamixelCommunicator
 
 
 @pytest.fixture
