@@ -4,7 +4,7 @@ import contextlib
 from typing import Any
 
 from .joint_manager import JointManager
-from .m5stack_client import M5StackSerialClient
+from .m5stack_client import M5StackClient, M5StackSerialClient
 
 
 class AkariClient:
@@ -28,5 +28,5 @@ class AkariClient:
         return self._joints
 
     @property
-    def m5stack(self) -> M5StackSerialClient:
+    def m5stack(self) -> M5StackClient:
         return self._m5stack
