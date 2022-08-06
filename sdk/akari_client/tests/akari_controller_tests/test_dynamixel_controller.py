@@ -26,10 +26,10 @@ def mock_communicator() -> DynamixelCommunicator:
 
 def test_read_write_device(mock_communicator: DynamixelCommunicator) -> None:
     controller1 = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
     controller2 = DynamixelController(
-        DynamixelControllerConfig("pan", 1, 0, 0), mock_communicator
+        DynamixelControllerConfig("pan", 1), mock_communicator
     )
 
     control = DynamixelControlItem("foo", 100, 10)
@@ -51,7 +51,7 @@ def test_read_write_device(mock_communicator: DynamixelCommunicator) -> None:
 
 def test_set_position_limit(mock_communicator: DynamixelCommunicator) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
     assert controller.joint_name == "tilt"
     controller.set_position_limit(56, 78)
@@ -67,7 +67,7 @@ def test_get_set_servo_enabled(
     mock_communicator: DynamixelCommunicator,
 ) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
 
     controller.set_servo_enabled(False)
@@ -81,7 +81,7 @@ def test_set_profile_acceleration(
     mock_communicator: DynamixelCommunicator,
 ) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
 
     controller.set_profile_acceleration(123.4)
@@ -94,7 +94,7 @@ def test_set_profile_velocity(
     mock_communicator: DynamixelCommunicator,
 ) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
 
     controller.set_profile_velocity(123.4)
@@ -107,7 +107,7 @@ def test_set_goal_position(
     mock_communicator: DynamixelCommunicator,
 ) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
 
     controller.set_goal_position(123.4)
@@ -120,7 +120,7 @@ def test_get_present_position(
     mock_communicator: DynamixelCommunicator,
 ) -> None:
     controller = DynamixelController(
-        DynamixelControllerConfig("tilt", 0, 0, 0), mock_communicator
+        DynamixelControllerConfig("tilt", 0), mock_communicator
     )
 
     controller._write(
