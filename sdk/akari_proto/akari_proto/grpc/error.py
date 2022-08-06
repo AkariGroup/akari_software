@@ -23,7 +23,7 @@ TRequest = TypeVar("TRequest")
 TException = TypeVar("TException", bound=BaseException, covariant=True)
 
 TServicerCallable = TypeVar(
-    "TServicerCallable", bound=Callable[[Any, grpc.ServicerContext], Any]
+    "TServicerCallable", bound=Callable[[Any, Any, grpc.ServicerContext], Any]
 )
 TCallable = TypeVar("TCallable", bound=Callable[..., Any])
 
@@ -124,7 +124,7 @@ def serialize_error(
 ) -> Callable[[TServicerCallable], TServicerCallable]:
     def deco(f: TServicerCallable) -> TServicerCallable:
         @functools.wraps(f)
-        def impl(request: TRequest, context: grpc.ServicerContext) -> Any:
+        def impl(self: Any, request: TRequest, context: grpc.ServicerContext) -> Any:
             with _serialize_error(serializer, context):
                 return f(request, context)
 

@@ -5,7 +5,10 @@ import grpc
 from akari_controller.color import Color
 from akari_controller.m5serial_server_py import M5SerialServer
 from akari_proto import m5stack_pb2, m5stack_pb2_grpc
+from akari_proto.grpc.error import serialize_error
 from google.protobuf.empty_pb2 import Empty
+
+from ._error import serializer
 
 
 def _as_akari_color(color: m5stack_pb2.Color) -> Color:
@@ -20,6 +23,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
     def __init__(self, m5stack: M5SerialServer) -> None:
         self._m5stack = m5stack
 
+    @serialize_error(serializer)
     def SetPinOut(
         self,
         request: m5stack_pb2.SetPinOutRequest,
@@ -27,10 +31,12 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
     ) -> Empty:
         pass
 
+    @serialize_error(serializer)
     def ResetPinOut(self, request: Empty, context: grpc.ServicerContext) -> Empty:
         self._m5stack.reset_allout(sync=True)
         return Empty()
 
+    @serialize_error(serializer)
     def SetDisplayColor(
         self, request: m5stack_pb2.SetDisplayColorRequest, context: grpc.ServicerContext
     ) -> Empty:
@@ -40,6 +46,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         )
         return Empty()
 
+    @serialize_error(serializer)
     def SetDisplayText(
         self, request: m5stack_pb2.SetDisplayTextRequest, context: grpc.ServicerContext
     ) -> Empty:
@@ -56,6 +63,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         )
         return Empty()
 
+    @serialize_error(serializer)
     def SetDisplayImage(
         self,
         request: m5stack_pb2.SetDisplayImageRequest,
@@ -70,6 +78,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         )
         return Empty()
 
+    @serialize_error(serializer)
     def UseJapaneseFont(
         self,
         request: m5stack_pb2.UseJapaneseFontRequest,
@@ -81,6 +90,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         )
         return Empty()
 
+    @serialize_error(serializer)
     def Reset(
         self,
         request: Empty,
@@ -89,6 +99,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         self._m5stack.reset_m5()
         return Empty()
 
+    @serialize_error(serializer)
     def Get(
         self,
         request: Empty,
@@ -99,6 +110,7 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
             status_json=json.dumps(data),
         )
 
+    @serialize_error(serializer)
     def GetStream(
         self,
         request: Empty,

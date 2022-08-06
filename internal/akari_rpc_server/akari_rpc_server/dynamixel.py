@@ -3,7 +3,10 @@ from typing import Dict
 import grpc
 from akari_controller.dynamixel_controller import DynamixelController
 from akari_proto import joints_controller_pb2, joints_controller_pb2_grpc
+from akari_proto.grpc.error import serialize_error
 from google.protobuf.empty_pb2 import Empty
+
+from ._error import serializer
 
 
 class DynamixelControllerServiceServicer(
@@ -21,6 +24,7 @@ class DynamixelControllerServiceServicer(
 
         return joint
 
+    @serialize_error(serializer)
     def GetJointNames(
         self,
         request: Empty,
@@ -30,6 +34,7 @@ class DynamixelControllerServiceServicer(
             joint_names=list(self._joints.keys()),
         )
 
+    @serialize_error(serializer)
     def GetServoEnabled(
         self,
         request: joints_controller_pb2.JointSpecifier,
@@ -40,6 +45,7 @@ class DynamixelControllerServiceServicer(
             enabled=joint.get_servo_enabled(),
         )
 
+    @serialize_error(serializer)
     def SetServoEnabled(
         self,
         request: joints_controller_pb2.SetServoEnabledRequest,
@@ -49,6 +55,7 @@ class DynamixelControllerServiceServicer(
         joint.set_servo_enabled(request.enabled)
         return Empty()
 
+    @serialize_error(serializer)
     def SetProfileAcceleration(
         self,
         request: joints_controller_pb2.SetProfileAccelerationRequest,
@@ -58,6 +65,7 @@ class DynamixelControllerServiceServicer(
         joint.set_profile_acceleration(request.rad_per_sec2)
         return Empty()
 
+    @serialize_error(serializer)
     def SetProfileVelocity(
         self,
         request: joints_controller_pb2.SetProfileVelocityRequest,
@@ -67,6 +75,7 @@ class DynamixelControllerServiceServicer(
         joint.set_profile_velocity(request.rad_per_sec)
         return Empty()
 
+    @serialize_error(serializer)
     def SetGoalPosition(
         self,
         request: joints_controller_pb2.SetGoalPositionRequest,
@@ -76,6 +85,7 @@ class DynamixelControllerServiceServicer(
         joint.set_goal_position(request.rad)
         return Empty()
 
+    @serialize_error(serializer)
     def GetPresentPosition(
         self,
         request: joints_controller_pb2.JointSpecifier,
