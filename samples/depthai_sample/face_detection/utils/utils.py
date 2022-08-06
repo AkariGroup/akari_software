@@ -31,7 +31,7 @@ def draw(
         color = (0, 255, 0)
         thickness = 2
         for idx in range(bboxes.shape[0]):
-            bbox = bboxes[idx].astype(np.int)
+            bbox = bboxes[idx].astype(np.int32)
             cv2.rectangle(
                 img,
                 (bbox[0], bbox[1]),
@@ -60,7 +60,7 @@ def draw(
             (0, 255, 255),  # mouth left
         ]
         for idx in range(landmarks.shape[0]):
-            face_landmarks = landmarks[idx].astype(np.int)
+            face_landmarks = landmarks[idx].astype(np.int32)
             for idx, landmark in enumerate(face_landmarks):
                 cv2.circle(
                     img,
