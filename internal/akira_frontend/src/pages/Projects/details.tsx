@@ -8,6 +8,7 @@ import {
   Grid,
   Stack,
   Typography,
+  IconButton,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { Navigate, useSearchParams } from "react-router-dom";
@@ -16,6 +17,8 @@ import { useApiClient } from "../../hooks/api";
 import { useCallback } from "react";
 import { Akira_protoService } from "../../api/@types";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 
 export function ProjectsDetails() {
   const [searchParams] = useSearchParams();
@@ -65,7 +68,16 @@ export function ProjectsDetails() {
           <Card>
             <CardContent>
               <Box mb={1}>
-                <Typography variant="h4">{project.manifest?.name}</Typography>
+                <Grid container>
+                  <Grid item sm={11} >
+                    <Typography variant="h4">{project.manifest?.name}</Typography>
+                  </Grid>
+                  <Grid item sm={1} >
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                    </Grid>
+                </Grid>
                 <Typography
                   mt={1}
                   variant="body2"
