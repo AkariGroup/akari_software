@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-import contextlib
 import enum
-from typing import Any, Dict, Iterator, List, Optional, Tuple, TypeVar
+from typing import Dict, Iterator, List, Optional, Sequence, Tuple, TypeVar
 
 from .joint_controller import RevoluteJointController
-from .serial.dynamixel import DynamixelController, DynamixelControllerConfig
-from .serial.dynamixel_communicator import DynamixelCommunicator
 
 TValue = TypeVar("TValue")
 
@@ -16,45 +13,13 @@ class AkariJoint(str, enum.Enum):
     TILT = "tilt"
 
 
-DEFAULT_JOINT_CONFIGS: List[DynamixelControllerConfig] = [
-    DynamixelControllerConfig(
-        joint_name=AkariJoint.PAN,
-        dynamixel_id=1,
-    ),
-    DynamixelControllerConfig(
-        joint_name=AkariJoint.TILT,
-        dynamixel_id=2,
-    ),
-]
-
-
 class JointManager:
-    def __init__(self, communicator: Optional[DynamixelCommunicator] = None) -> None:
+    def __init__(self, joint_controllers: Sequence[RevoluteJointController]) -> None:
         """Akariの関節制御コントローラ"""
 
-        self._stack = contextlib.ExitStack()
-        if communicator is None:
-            self._communicator = self._stack.enter_context(DynamixelCommunicator.open())
-        else:
-            self._communicator = communicator
-
         self._joints: Dict[str, RevoluteJointController] = {}
-        for config in DEFAULT_JOINT_CONFIGS:
-            # TODO: Dispatch ControllerInitialization by a config class
-            assert isinstance(config, DynamixelControllerConfig)
-            self._joints[config.joint_name] = DynamixelController(
-                config,
-                self._communicator,
-            )
-
-    def __enter__(self) -> JointManager:
-        return self
-
-    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
-        self.close()
-
-    def close(self) -> None:
-        self._stack.close()
+        for j in joint_controllers:
+            self._joints[j.joint_name] = j
 
     def get_joint_names(self) -> List[str]:
         """関節名を取得する。"""

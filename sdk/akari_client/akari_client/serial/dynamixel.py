@@ -1,7 +1,9 @@
 import dataclasses
 import math
+from typing import List
 
 from ..joint_controller import JointControllerConfig, RevoluteJointController
+from ..joint_manager import AkariJoint
 from .dynamixel_communicator import DynamixelCommunicator
 
 PULSE_OFFSET = 2047
@@ -152,3 +154,32 @@ class DynamixelController(RevoluteJointController):
         return dynamixel_pulse_to_rad(
             self._read(DynamixelControlTable.PRESENT_POSITION)
         )
+
+
+_DEFAULT_JOINT_CONFIGS: List[DynamixelControllerConfig] = [
+    DynamixelControllerConfig(
+        joint_name=AkariJoint.PAN,
+        dynamixel_id=1,
+    ),
+    DynamixelControllerConfig(
+        joint_name=AkariJoint.TILT,
+        dynamixel_id=2,
+    ),
+]
+
+
+def create_controllers(
+    communicator: DynamixelCommunicator,
+) -> List[DynamixelController]:
+    joints: List[DynamixelController] = []
+    for config in _DEFAULT_JOINT_CONFIGS:
+        # TODO: Dispatch ControllerInitialization by a config class
+        assert isinstance(config, DynamixelControllerConfig)
+        joints.append(
+            DynamixelController(
+                config,
+                communicator,
+            )
+        )
+
+    return joints
