@@ -1,7 +1,7 @@
 from typing import Dict
 
 import grpc
-from akari_controller.dynamixel_controller import DynamixelController
+from akari_client.serial.dynamixel import DynamixelController
 from akari_proto import joints_controller_pb2, joints_controller_pb2_grpc
 from akari_proto.grpc.error import serialize_error
 from google.protobuf.empty_pb2 import Empty

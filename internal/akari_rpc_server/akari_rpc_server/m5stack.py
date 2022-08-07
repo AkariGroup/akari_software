@@ -3,7 +3,7 @@ from typing import Any, Dict, Iterator, Optional
 
 import grpc
 from akari_client.color import Color
-from akari_client.m5stack_client import M5StackClient
+from akari_client.serial.m5stack import M5StackSerialClient
 from akari_proto import m5stack_pb2, m5stack_pb2_grpc
 from akari_proto.grpc.error import serialize_error
 from google.protobuf.empty_pb2 import Empty
@@ -36,7 +36,7 @@ def _validate_pinout_request(request: m5stack_pb2.SetPinOutRequest) -> None:
 
 
 class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
-    def __init__(self, m5stack: M5StackClient) -> None:
+    def __init__(self, m5stack: M5StackSerialClient) -> None:
         self._m5stack = m5stack
 
     @serialize_error(serializer)
