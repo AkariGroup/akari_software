@@ -12,7 +12,7 @@ import locale
 import time
 
 from akari_client import AkariClient
-from akari_client.m5stack_client import M5StackSerialClient
+from akari_client.m5stack_client import M5StackClient
 from akari_client.color import Colors
 
 CLOCK_MODE = 1
@@ -23,7 +23,7 @@ INPUT_INTERVAL = 1  # ボタン再入力受付時間[s]
 
 
 class M5serialSample(object):
-    def __init__(self, m5: M5StackSerialClient) -> None:
+    def __init__(self, m5: M5StackClient) -> None:
         self.m5 = m5
 
         self.is_initializing = False

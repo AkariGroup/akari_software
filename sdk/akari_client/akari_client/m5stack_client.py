@@ -4,10 +4,85 @@ import contextlib
 import dataclasses
 import enum
 import time
+from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
 from .color import Color
 from .m5serial_communicator import M5ComDict, M5SerialCommunicator
+
+
+class M5StackClient(ABC):
+    @abstractmethod
+    def set_dout(self, pin_id: int, value: bool, sync: bool = True) -> None:
+        ...
+
+    @abstractmethod
+    def set_pwmout(self, pin_id: int, value: int, sync: bool = True) -> None:
+        ...
+
+    @abstractmethod
+    def set_allout(
+        self,
+        *,
+        dout0: bool,
+        dout1: bool,
+        pwmout0: int,
+        sync: bool = True,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def reset_allout(self, sync: bool = True) -> None:
+        ...
+
+    @abstractmethod
+    def set_display_color(
+        self,
+        color: Color,
+        sync: bool = True,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def set_display_text(
+        self,
+        text: str,
+        pos_x: int,
+        pos_y: int,
+        size: int,
+        text_color: Optional[Color] = None,
+        back_color: Optional[Color] = None,
+        refresh: bool = False,
+        sync: bool = True,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def set_display_image(
+        self,
+        filepath: str,
+        pos_x: int,
+        pos_y: int,
+        scale: float,
+        sync: bool = True,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def use_japanese_font(
+        self,
+        enabled: bool,
+        sync: bool = True,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def reset_m5(self) -> None:
+        ...
+
+    @abstractmethod
+    def get(self) -> M5ComDict:
+        ...
 
 
 class CommandId(enum.IntEnum):
@@ -36,7 +111,7 @@ class _PinOut:
         return {"do0": int(self.dout0), "do1": int(self.dout1), "po0": self.pwmout0}
 
 
-class M5StackSerialClient:
+class M5StackSerialClient(M5StackClient):
     def __init__(self, communicator: Optional[M5SerialCommunicator] = None) -> None:
         self._stack = contextlib.ExitStack()
         if communicator is None:
