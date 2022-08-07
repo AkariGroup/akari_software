@@ -56,6 +56,17 @@ class SetPinOutRequest(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["binary_pins",b"binary_pins","int_pins",b"int_pins","sync",b"sync"]) -> None: ...
 global___SetPinOutRequest = SetPinOutRequest
 
+class ResetPinOutRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    SYNC_FIELD_NUMBER: builtins.int
+    sync: builtins.bool
+    def __init__(self,
+        *,
+        sync: builtins.bool = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["sync",b"sync"]) -> None: ...
+global___ResetPinOutRequest = ResetPinOutRequest
+
 class SetDisplayColorRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     COLOR_FIELD_NUMBER: builtins.int
@@ -117,14 +128,14 @@ class SetDisplayImageRequest(google.protobuf.message.Message):
     path: typing.Text
     pos_x: builtins.int
     pos_y: builtins.int
-    scale: builtins.int
+    scale: builtins.float
     sync: builtins.bool
     def __init__(self,
         *,
         path: typing.Text = ...,
         pos_x: builtins.int = ...,
         pos_y: builtins.int = ...,
-        scale: builtins.int = ...,
+        scale: builtins.float = ...,
         sync: builtins.bool = ...,
         ) -> None: ...
     def ClearField(self, field_name: typing_extensions.Literal["path",b"path","pos_x",b"pos_x","pos_y",b"pos_y","scale",b"scale","sync",b"sync"]) -> None: ...
