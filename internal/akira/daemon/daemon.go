@@ -61,8 +61,7 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	if err != nil {
 		return nil, err
 	}
-	// TODO: Use etcDir
-	_, err = configOrEnv(config.etcDir, ETC_DIR_ENV)
+	etcDir, err := configOrEnv(config.etcDir, ETC_DIR_ENV)
 	if err != nil {
 		return nil, err
 	}
@@ -111,6 +110,7 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 		ImageConfigDir:   imageConfigDir,
 		ServiceConfigDir: serviceConfigDir,
 		ServiceVarDir:    serviceVarDir,
+		EtcDir:           etcDir,
 		ProjectRootDir:   projectDir,
 		Docker:           docker,
 	}

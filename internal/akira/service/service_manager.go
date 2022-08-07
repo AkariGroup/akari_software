@@ -27,6 +27,7 @@ type ServiceManagerOptions struct {
 	ImageConfigDir   string
 	ServiceConfigDir string
 	ServiceVarDir    string
+	EtcDir           string
 	ProjectRootDir   string
 	Docker           *system.DockerSystem
 }
@@ -67,21 +68,8 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 
 func (m *serviceManager) scanImages() error {
 	// TODO: Load Image from directory
-	jupyterId := ImageId("bca6daa4-b41f-4729-bac3-34f161f9ad91")
-	m.images[jupyterId] = ImageConfig{
-		Id:          jupyterId,
-		Name:        JupyterLabServiceName,
-		Version:     "v1",
-		DisplayName: "JupyterLab",
-		Description: "Launch a jupyter lab",
-		Capabilities: []ServiceCapability{
-			CapabilityOpen,
-			CapabilityOpenProject,
-		},
-		ContainerOption: ServiceContainerOption{
-			Image: "docker.io/akarirobot/akira-jupyter-service",
-		},
-	}
+	img := jupyterLabImageConfig()
+	m.images[img.Id] = img
 	return nil
 }
 
@@ -101,9 +89,22 @@ func (m *serviceManager) loadService(c ServiceConfig) (Service, error) {
 }
 
 func (m *serviceManager) scanServices() error {
+	registerService := func(s Service) {
+		m.services[s.Id()] = s
+	}
+
 	files, err := ioutil.ReadDir(m.opts.ServiceConfigDir)
 	if err != nil {
 		return fmt.Errorf("error while scanning services: %#v\n", err)
+	}
+
+	// TODO: scan system services
+	if rpcServerConfig, err := akariRpcServerSystemServiceConfig(m.opts.EtcDir); err != nil {
+		log.Printf("error while initializing rpc server: %#v\n", err)
+	} else {
+		registerService(
+			NewSystemService(rpcServerConfig, m.opts),
+		)
 	}
 
 	for _, f := range files {
@@ -126,7 +127,7 @@ func (m *serviceManager) scanServices() error {
 			log.Printf("failed to load service: %#v\n", err)
 			continue
 		} else {
-			m.services[config.Id] = service
+			registerService(service)
 		}
 	}
 
