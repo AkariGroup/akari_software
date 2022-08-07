@@ -1,9 +1,9 @@
 import json
-from typing import Iterator, Optional
+from typing import Any, Dict, Iterator, Optional
 
 import grpc
-from akari_controller.color import Color
-from akari_controller.m5serial_server_py import M5SerialServer
+from akari_client.color import Color
+from akari_client.m5stack_client import M5StackClient
 from akari_proto import m5stack_pb2, m5stack_pb2_grpc
 from akari_proto.grpc.error import serialize_error
 from google.protobuf.empty_pb2 import Empty
@@ -22,8 +22,21 @@ def _as_akari_color(color: m5stack_pb2.Color) -> Optional[Color]:
     )
 
 
+def _validate_pinout_request(request: m5stack_pb2.SetPinOutRequest) -> None:
+    supported_bools = ["dout0", "dout1"]
+    supported_ints = ["pwmout0"]
+
+    for k in request.binary_pins.keys():
+        if k not in supported_bools:
+            raise KeyError(f"Unsupported binary pin: {k}")
+
+    for k in request.int_pins.keys():
+        if k not in supported_ints:
+            raise KeyError(f"Unsupported int pin: {k}")
+
+
 class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
-    def __init__(self, m5stack: M5SerialServer) -> None:
+    def __init__(self, m5stack: M5StackClient) -> None:
         self._m5stack = m5stack
 
     @serialize_error(serializer)
@@ -32,8 +45,16 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         request: m5stack_pb2.SetPinOutRequest,
         context: grpc.ServicerContext,
     ) -> Empty:
-        # TODO: Implement
-        pass
+        _validate_pinout_request(request)
+        args: Dict[str, Any] = {}
+        args.update(request.binary_pins.items())
+        args.update(request.int_pins.items())
+
+        self._m5stack.set_allout(
+            sync=request.sync,
+            **args,
+        )
+        return Empty()
 
     @serialize_error(serializer)
     def ResetPinOut(
@@ -46,10 +67,12 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
     def SetDisplayColor(
         self, request: m5stack_pb2.SetDisplayColorRequest, context: grpc.ServicerContext
     ) -> Empty:
-        self._m5stack.set_display_color(
-            _as_akari_color(request.color),
-            sync=request.sync,
-        )
+        color = _as_akari_color(request.color)
+        if color is not None:
+            self._m5stack.set_display_color(
+                color=color,
+                sync=request.sync,
+            )
         return Empty()
 
     @serialize_error(serializer)
