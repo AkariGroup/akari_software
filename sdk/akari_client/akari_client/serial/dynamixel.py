@@ -1,8 +1,8 @@
 import dataclasses
 import math
 
+from ..joint_controller import JointControllerConfig, RevoluteJointController
 from .dynamixel_communicator import DynamixelCommunicator
-from .joint_controller import JointControllerConfig, RevoluteJointController
 
 PULSE_OFFSET = 2047
 

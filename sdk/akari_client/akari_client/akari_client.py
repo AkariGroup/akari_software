@@ -4,7 +4,8 @@ import contextlib
 from typing import Any
 
 from .joint_manager import JointManager
-from .m5stack_client import M5StackClient, M5StackSerialClient
+from .m5stack_client import M5StackClient
+from .serial.m5stack import M5StackSerialClient
 
 
 class AkariClient:

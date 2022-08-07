@@ -4,9 +4,9 @@ import contextlib
 import enum
 from typing import Any, Dict, Iterator, List, Optional, Tuple, TypeVar
 
-from .dynamixel_communicator import DynamixelCommunicator
-from .dynamixel_controller import DynamixelController, DynamixelControllerConfig
 from .joint_controller import RevoluteJointController
+from .serial.dynamixel import DynamixelController, DynamixelControllerConfig
+from .serial.dynamixel_communicator import DynamixelCommunicator
 
 TValue = TypeVar("TValue")
 

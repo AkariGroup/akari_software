@@ -3,32 +3,15 @@ from __future__ import annotations
 import json
 import threading
 import time
-from typing import Any, Dict, Optional, TypedDict, cast
+from typing import Any, Dict, Optional, cast
 
 import serial
+
+from ..m5stack_client import M5ComDict
 
 BAUDRATE = 500000
 DEVICE_NAME = "/dev/ttyUSB_M5Stack"
 TIMEOUT = 0.2
-
-
-class M5ComDict(TypedDict):
-    din0: bool
-    din1: bool
-    ain0: int
-    dout0: bool
-    dout1: bool
-    pwmout0: int
-    general0: float
-    general1: float
-    button_a: bool
-    button_b: bool
-    button_c: bool
-    temperature: float
-    pressure: float
-    brightness: int
-    time: float
-    is_response: bool
 
 
 class M5SerialCommunicator:

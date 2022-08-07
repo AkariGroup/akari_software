@@ -1,10 +1,10 @@
 from typing import cast
 
 import pytest
-from akari_client.m5serial_communicator import M5SerialCommunicator
-from akari_client.m5stack_client import M5StackSerialClient, _PinOut
+from akari_client.serial.m5stack import M5StackSerialClient, _PinOut
+from akari_client.serial.m5stack_communicator import M5SerialCommunicator
 
-from .mocks import MockM5Communicator
+from ..mocks import MockM5Communicator
 
 
 @pytest.fixture
