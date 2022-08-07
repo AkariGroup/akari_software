@@ -51,7 +51,7 @@ func pbToProjectManifest(pb *proto.ProjectManifest) project.ProjectManifest {
 	}
 }
 
-func (s *ProjectServicer) CreateProject(ctx context.Context, r *proto.CreateProjectRequest) (*proto.Project, error) {
+func (s *ProjectServicer) CreateLocalProject(ctx context.Context, r *proto.CreateLocalProjectRequest) (*proto.Project, error) {
 	m := pbToProjectManifest(r.Manifest)
 	v := validator.New()
 	if err := v.Struct(m); err != nil {
@@ -63,7 +63,7 @@ func (s *ProjectServicer) CreateProject(ctx context.Context, r *proto.CreateProj
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("template doesn't exist: %#v", r.TemplateId))
 	}
 
-	if p, err := s.da.projects.CreateProject(r.Name, m, t); err != nil {
+	if p, err := s.da.projects.CreateProject(r.Dirname, m, t); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error while creating a project: %#v", err))
 	} else {
 		return projectToPb(p), nil

@@ -25,8 +25,9 @@ paths:
             $ref: '#/definitions/rpcStatus'
       tags:
         - ProjectService
+  /projects/create/git:
     post:
-      operationId: ProjectService_CreateProject
+      operationId: ProjectService_CreateProjectFromGit
       responses:
         "200":
           description: A successful response.
@@ -41,7 +42,27 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/akira_protoCreateProjectRequest'
+            $ref: '#/definitions/akira_protoCreateProjectFromGitRequest'
+      tags:
+        - ProjectService
+  /projects/create/local:
+    post:
+      operationId: ProjectService_CreateLocalProject
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/akira_protoProject'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/akira_protoCreateLocalProjectRequest'
       tags:
         - ProjectService
   /projects/detail:
@@ -308,14 +329,23 @@ paths:
       tags:
         - ProjectService
 definitions:
-  akira_protoCreateProjectRequest:
+  akira_protoCreateLocalProjectRequest:
     type: object
     properties:
+      dirname:
+        type: string
       manifest:
         $ref: '#/definitions/akira_protoProjectManifest'
-      name:
-        type: string
       templateId:
+        type: string
+  akira_protoCreateProjectFromGitRequest:
+    type: object
+    properties:
+      branch:
+        type: string
+      dirname:
+        type: string
+      gitUrl:
         type: string
   akira_protoCreateServiceRequest:
     type: object

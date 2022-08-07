@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import { useApiClient } from "../../../hooks/api";
 import {
-  Akira_protoCreateProjectRequest,
+  Akira_protoCreateLocalProjectRequest,
   Akira_protoProjectManifest,
   Akira_protoTemplate,
 } from "../../../api/@types";
@@ -118,13 +118,13 @@ export function CreateProjectFromTemplate() {
     async (data) => {
       if (!client) return;
 
-      const request: Akira_protoCreateProjectRequest = {
-        name: customPath ? data.path : data.manifest.name,
+      const request: Akira_protoCreateLocalProjectRequest = {
+        dirname: customPath ? data.path : data.manifest.name,
         manifest: data.manifest,
         templateId: data.templateId,
       };
       // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.post({
+      const res = await client.projects.create.local.post({
         body: request,
       });
       const projectId = res.body.id;
