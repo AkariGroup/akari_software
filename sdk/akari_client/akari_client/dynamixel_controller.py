@@ -50,8 +50,6 @@ class DynamixelControlTable:
 @dataclasses.dataclass(frozen=True)
 class DynamixelControllerConfig(JointControllerConfig):
     dynamixel_id: int
-    min_position_limit: float
-    max_position_limit: float
 
 
 class DynamixelController(RevoluteJointController):

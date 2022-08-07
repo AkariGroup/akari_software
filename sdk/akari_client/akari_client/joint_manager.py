@@ -20,14 +20,10 @@ DEFAULT_JOINT_CONFIGS: List[DynamixelControllerConfig] = [
     DynamixelControllerConfig(
         joint_name=AkariJoint.PAN,
         dynamixel_id=1,
-        min_position_limit=-2.355,
-        max_position_limit=2.355,
     ),
     DynamixelControllerConfig(
         joint_name=AkariJoint.TILT,
         dynamixel_id=2,
-        min_position_limit=-0.91,
-        max_position_limit=0.91,
     ),
 ]
 
