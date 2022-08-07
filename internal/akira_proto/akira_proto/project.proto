@@ -14,10 +14,16 @@ message ProjectManifest {
   string url = 4;
 }
 
-message CreateProjectRequest {
-  string name = 1;
+message CreateLocalProjectRequest {
+  string dirname = 1;
   ProjectManifest manifest = 2;
   string template_id = 3;
+}
+
+message CreateProjectFromGitRequest {
+  string dirname = 1;
+  string git_url = 2;
+  optional string branch = 3;
 }
 
 message Project {
@@ -49,9 +55,16 @@ message ListTemplatesResponse {
 }
 
 service ProjectService {
-  rpc CreateProject(CreateProjectRequest) returns (Project) {
+  rpc CreateLocalProject(CreateLocalProjectRequest) returns (Project) {
     option (google.api.http) = {
-      post: "/projects"
+      post: "/projects/create/local"
+      body: "*"
+    };
+  }
+
+  rpc CreateProjectFromGit(CreateProjectFromGitRequest) returns (Project) {
+    option (google.api.http) = {
+      post: "/projects/create/git"
       body: "*"
     };
   }

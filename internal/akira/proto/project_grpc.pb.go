@@ -23,7 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProjectServiceClient interface {
-	CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	CreateLocalProject(ctx context.Context, in *CreateLocalProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	CreateProjectFromGit(ctx context.Context, in *CreateProjectFromGitRequest, opts ...grpc.CallOption) (*Project, error)
 	GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	ListProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListProjectsResponse, error)
 	ListTemplates(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListTemplatesResponse, error)
@@ -37,9 +38,18 @@ func NewProjectServiceClient(cc grpc.ClientConnInterface) ProjectServiceClient {
 	return &projectServiceClient{cc}
 }
 
-func (c *projectServiceClient) CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*Project, error) {
+func (c *projectServiceClient) CreateLocalProject(ctx context.Context, in *CreateLocalProjectRequest, opts ...grpc.CallOption) (*Project, error) {
 	out := new(Project)
-	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/CreateProject", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/CreateLocalProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) CreateProjectFromGit(ctx context.Context, in *CreateProjectFromGitRequest, opts ...grpc.CallOption) (*Project, error) {
+	out := new(Project)
+	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/CreateProjectFromGit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +87,8 @@ func (c *projectServiceClient) ListTemplates(ctx context.Context, in *emptypb.Em
 // All implementations must embed UnimplementedProjectServiceServer
 // for forward compatibility
 type ProjectServiceServer interface {
-	CreateProject(context.Context, *CreateProjectRequest) (*Project, error)
+	CreateLocalProject(context.Context, *CreateLocalProjectRequest) (*Project, error)
+	CreateProjectFromGit(context.Context, *CreateProjectFromGitRequest) (*Project, error)
 	GetProject(context.Context, *GetProjectRequest) (*Project, error)
 	ListProjects(context.Context, *emptypb.Empty) (*ListProjectsResponse, error)
 	ListTemplates(context.Context, *emptypb.Empty) (*ListTemplatesResponse, error)
@@ -88,8 +99,11 @@ type ProjectServiceServer interface {
 type UnimplementedProjectServiceServer struct {
 }
 
-func (UnimplementedProjectServiceServer) CreateProject(context.Context, *CreateProjectRequest) (*Project, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateProject not implemented")
+func (UnimplementedProjectServiceServer) CreateLocalProject(context.Context, *CreateLocalProjectRequest) (*Project, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateLocalProject not implemented")
+}
+func (UnimplementedProjectServiceServer) CreateProjectFromGit(context.Context, *CreateProjectFromGitRequest) (*Project, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProjectFromGit not implemented")
 }
 func (UnimplementedProjectServiceServer) GetProject(context.Context, *GetProjectRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
@@ -113,20 +127,38 @@ func RegisterProjectServiceServer(s grpc.ServiceRegistrar, srv ProjectServiceSer
 	s.RegisterService(&ProjectService_ServiceDesc, srv)
 }
 
-func _ProjectService_CreateProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateProjectRequest)
+func _ProjectService_CreateLocalProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateLocalProjectRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProjectServiceServer).CreateProject(ctx, in)
+		return srv.(ProjectServiceServer).CreateLocalProject(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/akira_proto.ProjectService/CreateProject",
+		FullMethod: "/akira_proto.ProjectService/CreateLocalProject",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProjectServiceServer).CreateProject(ctx, req.(*CreateProjectRequest))
+		return srv.(ProjectServiceServer).CreateLocalProject(ctx, req.(*CreateLocalProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectService_CreateProjectFromGit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProjectFromGitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).CreateProjectFromGit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.ProjectService/CreateProjectFromGit",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).CreateProjectFromGit(ctx, req.(*CreateProjectFromGitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -193,8 +225,12 @@ var ProjectService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ProjectServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateProject",
-			Handler:    _ProjectService_CreateProject_Handler,
+			MethodName: "CreateLocalProject",
+			Handler:    _ProjectService_CreateLocalProject_Handler,
+		},
+		{
+			MethodName: "CreateProjectFromGit",
+			Handler:    _ProjectService_CreateProjectFromGit_Handler,
 		},
 		{
 			MethodName: "GetProject",
