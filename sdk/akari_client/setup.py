@@ -10,4 +10,11 @@ setup(
     author_email="akari.tmc@gmail.com",
     install_requires=["dynamixel_sdk"],
     package_data={"akari_client": ["py.typed"]},
+    extras_require={
+        "grpc": [
+            "akari-proto>=0.1.0,<0.2.0",
+            "grpcio==1.44.0",
+            "protobuf==3.19.3",
+        ],
+    },
 )

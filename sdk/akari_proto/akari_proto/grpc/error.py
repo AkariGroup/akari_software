@@ -126,7 +126,7 @@ def serialize_error(
         @functools.wraps(f)
         def impl(self: Any, request: TRequest, context: grpc.ServicerContext) -> Any:
             with _serialize_error(serializer, context):
-                return f(request, context)
+                return f(self, request, context)
 
         return cast(TServicerCallable, impl)
 
