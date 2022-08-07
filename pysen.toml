@@ -9,6 +9,8 @@ enable_mypy = true
 mypy_preset = "strict"
 line_length = 88
 py_version = "py38"
+mypy_ignore_packages = ["akari_proto.*"]
+
 [[tool.pysen.lint.mypy_targets]]
   paths = [
     "samples/akari_sample/script",
@@ -17,13 +19,19 @@ py_version = "py38"
     "samples/m5serial_sample/",
     "sdk/akari_client/akari_client",
     "sdk/akari_client/tests/",
+    "sdk/akari_proto/akari_proto/",
     "sdk/depthai_uvc",
     "tools/python",
   ]
+
 [tool.pysen.lint.source]
   includes = [
+    "internal/",
     "sdk/",
     "tools/",
+  ]
+  excludes = [
+    "internal/akira_services/jupyter_lab/jupyter_lab_config.py",
   ]
   exclude_globs = [
     "sdk/akari_proto/akari_proto/*pb2*",
