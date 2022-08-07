@@ -68,16 +68,14 @@ export function ProjectsDetails() {
           <Card>
             <CardContent>
               <Box mb={1}>
-                <Grid container>
-                  <Grid item sm={11} >
-                    <Typography variant="h4">{project.manifest?.name}</Typography>
-                  </Grid>
-                  <Grid item sm={1} >
-                    <IconButton>
-                      <MoreVertIcon />
-                    </IconButton>
-                    </Grid>
-                </Grid>
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                    {project.manifest?.name}
+                  </Typography>
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                </Box>
                 <Typography
                   mt={1}
                   variant="body2"
