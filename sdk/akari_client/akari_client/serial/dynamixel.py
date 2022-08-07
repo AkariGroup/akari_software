@@ -1,9 +1,7 @@
 import dataclasses
 import math
-from typing import List
 
-from ..joint_controller import JointControllerConfig, RevoluteJointController
-from ..joint_manager import AkariJoint
+from ..joint_controller import RevoluteJointController
 from .dynamixel_communicator import DynamixelCommunicator
 
 PULSE_OFFSET = 2047
@@ -49,39 +47,31 @@ class DynamixelControlTable:
     PRESENT_POSITION = DynamixelControlItem("Present_Position", 132, 4)
 
 
-@dataclasses.dataclass(frozen=True)
-class DynamixelControllerConfig(JointControllerConfig):
-    dynamixel_id: int
-
-
 class DynamixelController(RevoluteJointController):
     def __init__(
         self,
-        config: DynamixelControllerConfig,
+        joint_name: str,
+        dynamixel_id: int,
         communicator: DynamixelCommunicator,
     ) -> None:
         """
         dynamixelのコントローラ
 
         Args:
-            config: DynamixelControllerの設定クラス
             communicator: dynamixel通信用クラス
         """
-        self._config = config
+        self._joint_name = joint_name
+        self._dynamixel_id = dynamixel_id
         self._communicator = communicator
 
     def __str__(self) -> str:
-        return self._config.joint_name
+        return self._joint_name
 
     def _read(self, item: DynamixelControlItem) -> int:
-        return self._communicator.read(
-            self._config.dynamixel_id, item.address, item.length
-        )
+        return self._communicator.read(self._dynamixel_id, item.address, item.length)
 
     def _write(self, item: DynamixelControlItem, value: int) -> None:
-        self._communicator.write(
-            self._config.dynamixel_id, item.address, item.length, value
-        )
+        self._communicator.write(self._dynamixel_id, item.address, item.length, value)
 
     def set_position_limit(self, lower_rad: float, upper_rad: float) -> None:
         """Positionの上限値と下限値を設定する。
@@ -100,7 +90,7 @@ class DynamixelController(RevoluteJointController):
     @property
     def joint_name(self) -> str:
         """関節名を取得する。"""
-        return self._config.joint_name
+        return self._joint_name
 
     def get_servo_enabled(self) -> bool:
         """サーボの有効無効状態を取得する。"""
@@ -154,32 +144,3 @@ class DynamixelController(RevoluteJointController):
         return dynamixel_pulse_to_rad(
             self._read(DynamixelControlTable.PRESENT_POSITION)
         )
-
-
-_DEFAULT_JOINT_CONFIGS: List[DynamixelControllerConfig] = [
-    DynamixelControllerConfig(
-        joint_name=AkariJoint.PAN,
-        dynamixel_id=1,
-    ),
-    DynamixelControllerConfig(
-        joint_name=AkariJoint.TILT,
-        dynamixel_id=2,
-    ),
-]
-
-
-def create_controllers(
-    communicator: DynamixelCommunicator,
-) -> List[DynamixelController]:
-    joints: List[DynamixelController] = []
-    for config in _DEFAULT_JOINT_CONFIGS:
-        # TODO: Dispatch ControllerInitialization by a config class
-        assert isinstance(config, DynamixelControllerConfig)
-        joints.append(
-            DynamixelController(
-                config,
-                communicator,
-            )
-        )
-
-    return joints

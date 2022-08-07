@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import pathlib
 import threading
 import time
 from typing import Any, Dict, Optional, cast
@@ -10,12 +11,17 @@ import serial
 from ..m5stack_client import M5ComDict
 
 BAUDRATE = 500000
-DEVICE_NAME = "/dev/ttyUSB_M5Stack"
+DEVICE_NAME = pathlib.Path("/dev/ttyUSB_M5Stack")
 TIMEOUT = 0.2
 
 
 class M5SerialCommunicator:
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        baudrate: int = BAUDRATE,
+        port: pathlib.Path = DEVICE_NAME,
+        timeout: float = TIMEOUT,
+    ) -> None:
         self._reference_time = time.time()
 
         self._condition = threading.Condition()
@@ -24,7 +30,9 @@ class M5SerialCommunicator:
         self._exit = False
 
         self._serial = serial.Serial(
-            baudrate=BAUDRATE, port=DEVICE_NAME, timeout=TIMEOUT
+            baudrate=baudrate,
+            port=str(port),
+            timeout=timeout,
         )
 
     def __enter__(self) -> M5SerialCommunicator:

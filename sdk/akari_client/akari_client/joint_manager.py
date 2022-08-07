@@ -21,6 +21,10 @@ class JointManager:
         for j in joint_controllers:
             self._joints[j.joint_name] = j
 
+    @property
+    def joint_controllers(self) -> Sequence[RevoluteJointController]:
+        return list(self._joints.values())
+
     def get_joint_names(self) -> List[str]:
         """関節名を取得する。"""
         return list(self._joints.keys())

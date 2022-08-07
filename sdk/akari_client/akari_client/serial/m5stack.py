@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import contextlib
 import dataclasses
 import enum
 import time
@@ -38,27 +37,13 @@ class _PinOut:
 
 
 class M5StackSerialClient(M5StackClient):
-    def __init__(self, communicator: Optional[M5SerialCommunicator] = None) -> None:
-        self._stack = contextlib.ExitStack()
-        if communicator is None:
-            self._communicator = self._stack.enter_context(M5SerialCommunicator())
-        else:
-            self._communicator = communicator
+    def __init__(self, communicator: M5SerialCommunicator) -> None:
+        self._communicator = communicator
 
         self._pin_out = _PinOut()
-
         self.reset_m5()
         self._communicator.start()
         time.sleep(0.1)
-
-    def __enter__(self) -> M5StackSerialClient:
-        return self
-
-    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
-        self.close()
-
-    def close(self) -> None:
-        self._stack.close()
 
     def _write_pin_out(self, sync: bool) -> None:
         data = {
