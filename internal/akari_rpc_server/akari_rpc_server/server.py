@@ -1,43 +1,22 @@
 import contextlib
 import signal
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict
 
 import grpc
-from akari_controller.akari_controller import DEFAULT_JOINT_CONFIGS
-from akari_controller.dynamixel_communicator import DynamixelCommunicator
-from akari_controller.dynamixel_controller import (
-    DynamixelController,
-    DynamixelControllerConfig,
-)
-from akari_controller.m5serial_server_py import M5SerialServer
+from akari_client.serial.dynamixel import create_controllers
+from akari_client.serial.dynamixel_communicator import DynamixelCommunicator
+from akari_client.serial.m5stack import M5StackSerialClient
 from akari_proto import joints_controller_pb2_grpc, m5stack_pb2_grpc
 
 from .dynamixel import DynamixelControllerServiceServicer
 from .m5stack import M5StackServiceServicer
 
 
-def initialize_dynamixel_controllers(
-    communicator: DynamixelCommunicator,
-) -> Dict[str, DynamixelController]:
-    joints: Dict[str, DynamixelController] = {}
-
-    for config in DEFAULT_JOINT_CONFIGS:
-        # TODO: Dispatch ControllerInitialization by a config class
-        assert isinstance(config, DynamixelControllerConfig)
-        joints[config.joint_name] = DynamixelController(
-            config,
-            communicator,
-        )
-
-    return joints
-
-
 def serve(port: int) -> None:
     with contextlib.ExitStack() as stack:
         dynamixel_communicator = stack.enter_context(DynamixelCommunicator.open())
-        joints = initialize_dynamixel_controllers(dynamixel_communicator)
-        m5stack = stack.enter_context(M5SerialServer())
+        joints = create_controllers(dynamixel_communicator)
+        m5stack = stack.enter_context(M5StackSerialClient())
 
         server = grpc.server(ThreadPoolExecutor(max_workers=10))
         joints_controller_pb2_grpc.add_JointsControllerServiceServicer_to_server(
