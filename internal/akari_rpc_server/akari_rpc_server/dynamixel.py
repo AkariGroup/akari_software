@@ -1,4 +1,4 @@
-from typing import List
+from typing import Sequence
 
 import grpc
 from akari_client.serial.dynamixel import DynamixelController
@@ -12,7 +12,7 @@ from ._error import serializer
 class DynamixelControllerServiceServicer(
     joints_controller_pb2_grpc.JointsControllerServiceServicer
 ):
-    def __init__(self, joints: List[DynamixelController]) -> None:
+    def __init__(self, joints: Sequence[DynamixelController]) -> None:
         self._joints = {j.joint_name: j for j in joints}
 
     def _select_joint(

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import contextlib
+import pathlib
 from typing import Iterator
 
 from dynamixel_sdk import COMM_SUCCESS, PacketHandler, PortHandler
 
 DEFAULT_BAUDRATE = 1000000
-DEFAULT_DEVICE_NAME = "/dev/ttyUSB_dynamixel"
+DEFAULT_DEVICE_NAME = pathlib.Path("/dev/ttyUSB_dynamixel")
 DEFAULT_PROTOCOL_VERSION = 2.0
 
 
@@ -39,13 +40,13 @@ class DynamixelCommunicator:
     @contextlib.contextmanager
     def open(
         cls,
-        device_name: str = DEFAULT_DEVICE_NAME,
+        serial_port: pathlib.Path = DEFAULT_DEVICE_NAME,
         baudrate: int = DEFAULT_BAUDRATE,
         protocol_version: float = DEFAULT_PROTOCOL_VERSION,
     ) -> Iterator[DynamixelCommunicator]:
         """dynamixelと通信を行うクラスを初期化する"""
 
-        port_handler = PortHandler(device_name)
+        port_handler = PortHandler(str(serial_port))
         try:
             if port_handler.setBaudRate(baudrate):
                 print("Succeeded to change the baudrate")

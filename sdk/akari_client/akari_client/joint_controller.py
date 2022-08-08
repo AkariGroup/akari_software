@@ -1,10 +1,4 @@
 import abc
-import dataclasses
-
-
-@dataclasses.dataclass(frozen=True)
-class JointControllerConfig:
-    joint_name: str
 
 
 class RevoluteJointController(abc.ABC):

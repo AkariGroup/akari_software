@@ -8,7 +8,10 @@ setup(
     long_description=open("README.md").read(),
     author="akari",
     author_email="akari.tmc@gmail.com",
-    install_requires=["dynamixel_sdk"],
+    install_requires=[
+        "dynamixel_sdk",
+        "pydantic>=1.5,<2.0",
+    ],
     package_data={"akari_client": ["py.typed"]},
     extras_require={
         "grpc": [
