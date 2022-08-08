@@ -4,5 +4,6 @@
 .git
 .vscode
 /setup
-__pycache__
-node_modules
+**/__pycache__
+**/node_modules
+**/.local
