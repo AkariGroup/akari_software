@@ -16,7 +16,7 @@ import (
 
 const (
 	DEFAULT_DAEMON_GRPC_ENDPOINT = "localhost:30001"
-	DEFAULT_GATEWAY_PORT         = ":8080"
+	GATEWAY_PORT                 = ":8080"
 )
 
 const (
@@ -60,6 +60,7 @@ func main() {
 		panic(fmt.Errorf("environ: %#v must be set", STATIC_DIR_ENV))
 	}
 
+	// TODO: Accept environment variable to change grpc endpoint
 	grpcMux, err := createGrpcGateway()
 	if err != nil {
 		panic(err)
@@ -74,8 +75,8 @@ func main() {
 		http.ServeFile(w, r, filepath.Join(staticDir, "index.html"))
 	})
 
-	fmt.Printf("Gateway Started at %s\n", DEFAULT_GATEWAY_PORT)
-	if err := http.ListenAndServe(DEFAULT_GATEWAY_PORT, r); err != nil {
+	fmt.Printf("Gateway Started at %s\n", GATEWAY_PORT)
+	if err := http.ListenAndServe(GATEWAY_PORT, r); err != nil {
 		panic(err)
 	}
 }
