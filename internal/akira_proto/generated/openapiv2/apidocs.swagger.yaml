@@ -186,6 +186,10 @@ paths:
           in: path
           required: true
           type: string
+        - name: apiHostname
+          in: query
+          required: false
+          type: string
       tags:
         - AkariServiceService
   /services/{id}/open_project:
@@ -204,6 +208,10 @@ paths:
         - name: id
           in: path
           required: true
+          type: string
+        - name: apiHostname
+          in: query
+          required: false
           type: string
         - name: projectId
           in: query

@@ -79,7 +79,11 @@ export function Services() {
 
       setBusy(true);
       try {
-        const res = await client.services._id(target.id).open.get();
+        const res = await client.services._id(target.id).open.get({
+          query: {
+            apiHostname: window.location.hostname,
+          },
+        });
         const url = res.body.url;
         window.open(url, "_blank", "noopener,noreferrer");
       } finally {

@@ -39,7 +39,10 @@ export function ProjectsDetails() {
       setBusy(true);
       try {
         const res = await client.services._id(s.id).open_project.get({
-          query: { projectId: project.id },
+          query: {
+            apiHostname: window.location.hostname,
+            projectId: project.id,
+          },
         });
         const url = res.body.url;
         window.open(url, "_blank", "noopener,noreferrer");

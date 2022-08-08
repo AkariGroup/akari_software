@@ -75,10 +75,10 @@ func (p *SystemService) Status() ServiceStatus {
 	return p.container.Status()
 }
 
-func (p *SystemService) GetOpenAddress() (string, error) {
+func (p *SystemService) GetOpenAddress(hostName string) (string, error) {
 	return "", errors.New("unsupported operation")
 }
 
-func (p *SystemService) GetOpenProjectAddress(projectDir string) (string, error) {
+func (p *SystemService) GetOpenProjectAddress(hostName string, projectDir string) (string, error) {
 	return "", errors.New("unsupported operation")
 }

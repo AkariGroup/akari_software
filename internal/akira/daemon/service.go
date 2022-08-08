@@ -187,7 +187,7 @@ func (m *AkariServiceServicer) Open(ctx context.Context, r *proto.OpenRequest) (
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 
-	if addr, err := s.GetOpenAddress(); err != nil {
+	if addr, err := s.GetOpenAddress(r.ApiHostname); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
 	} else {
 		return &proto.OpenResponse{
@@ -207,7 +207,7 @@ func (m *AkariServiceServicer) OpenProject(ctx context.Context, r *proto.OpenPro
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("project doesn't exist: %#v", r.ProjectId))
 	}
 
-	if addr, err := s.GetOpenProjectAddress(p.Path()); err != nil {
+	if addr, err := s.GetOpenProjectAddress(r.ApiHostname, p.Path()); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
 	} else {
 		return &proto.OpenProjectResponse{
