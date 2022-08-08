@@ -20,7 +20,7 @@ type Daemon struct {
 const (
 	PROJECT_DIR_ENV  = "AKIRA_PROJECT_DIR"
 	TEMPLATE_DIR_ENV = "AKIRA_TEMPLATE_DIR"
-	CONFIG_DIR_ENV   = "AKIRA_CONFIG_DIR"
+	ETC_DIR_ENV      = "AKIRA_ETC_DIR"
 	VAR_DIR_ENV      = "AKIRA_VAR_DIR"
 
 	DOCKER_REGISTRY_AUTH = "AKIRA_DOCKER_CREDENTIAL"
@@ -29,7 +29,7 @@ const (
 type NewDaemonConfig struct {
 	projectDir  *string
 	templateDir *string
-	configDir   *string
+	etcDir      *string
 	varDir      *string
 }
 
@@ -44,8 +44,8 @@ func configOrEnv(v *string, env string) (string, error) {
 	}
 }
 
-func setupDir(configDir string, entry string) (string, error) {
-	path := filepath.Join(configDir, entry)
+func setupDir(dir string, entry string) (string, error) {
+	path := filepath.Join(dir, entry)
 	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		return "", err
 	}
@@ -61,7 +61,8 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	if err != nil {
 		return nil, err
 	}
-	configDir, err := configOrEnv(config.configDir, CONFIG_DIR_ENV)
+	// TODO: Use etcDir
+	_, err = configOrEnv(config.etcDir, ETC_DIR_ENV)
 	if err != nil {
 		return nil, err
 	}
@@ -70,11 +71,11 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 		return nil, err
 	}
 
-	imageConfigDir, err := setupDir(configDir, "service_images")
+	imageConfigDir, err := setupDir(varDir, "configs/service_images")
 	if err != nil {
 		return nil, err
 	}
-	serviceConfigDir, err := setupDir(configDir, "services")
+	serviceConfigDir, err := setupDir(varDir, "configs/services")
 	if err != nil {
 		return nil, err
 	}

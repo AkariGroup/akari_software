@@ -13,6 +13,6 @@ export AKIRA_DOCKER_CREDENTIAL=$(cat .docker_credential)
 
 # for local development
 export AKIRA_TEMPLATE_DIR=${AKARI_REPOSITORY_DIR}/internal/akira_templates
-export AKIRA_PROJECT_DIR=${AKIRA_DEV_LOCAL_DIR}/projects
-export AKIRA_CONFIG_DIR=${AKIRA_DEV_LOCAL_DIR}/etc/akira
+export AKIRA_PROJECT_DIR=${AKIRA_DEV_LOCAL_DIR}/home/akari/projects
+export AKIRA_ETC_DIR=${AKIRA_DEV_LOCAL_DIR}/etc/akira
 export AKIRA_VAR_DIR=${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
