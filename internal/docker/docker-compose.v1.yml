@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   daemon:
-    image: akarirobot/akira-daemon:v1
+    image: akarirobot/akira-daemon:${AKIRA_IMAGE_TAG}
     volumes:
       - type: bind
         source: /etc/akira
@@ -27,5 +27,5 @@ services:
       AKIRA_DOCKER_CREDENTIAL: ${AKIRA_DOCKER_CREDENTIAL:?You need to run `source env.sh`}
     network_mode: host
   gateway:
-    image: akarirobot/akira-gateway:v1
+    image: akarirobot/akira-gateway:${AKIRA_IMAGE_TAG}
     network_mode: host

@@ -5,7 +5,7 @@ services:
       context: ../../
       dockerfile: internal/docker/Dockerfile
       target: daemon
-    image: akarirobot/akira-daemon:v1
+    image: akarirobot/akira-daemon:${AKIRA_IMAGE_TAG}
     volumes:
       - type: bind
         source: ${AKARI_REPOSITORY_DIR:?You need to run `source env.sh`}/internal/akira_templates
@@ -32,5 +32,5 @@ services:
       context: ../../
       dockerfile: internal/docker/Dockerfile
       target: gateway
-    image: akarirobot/akira-gateway:v1
+    image: akarirobot/akira-gateway:${AKIRA_IMAGE_TAG}
     network_mode: host

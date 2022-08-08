@@ -11,12 +11,22 @@
     dest: /etc/akira/client_configs.d/
     mode: "0755"
   become: true
+  notify:
+    - Restart akira.service
 - name: Copy daemon.d files
   copy:
     src: "{{ role_path }}/files/daemon.d/"
     dest: /etc/akira/daemon.d/
     mode: "0755"
   become: true
+  notify:
+    - Restart akira.service
+- name: Create override file
+  file:
+    path: /etc/akira/daemon.d/override.env
+    state: touch
+  become: true
+  changed_when: False
 - name: Create /var/lib/akira
   file:
     path: /var/lib/akira
