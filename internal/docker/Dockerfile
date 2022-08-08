@@ -1,7 +1,7 @@
 FROM golang:1.18.2-alpine3.16 AS build
 
 WORKDIR /src
-COPY akira .
+COPY internal/akira .
 
 ARG GOOS linux
 ARG GOARCH amd64
@@ -21,9 +21,9 @@ RUN apk add --no-cache shadow
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing gosu
 
 WORKDIR /app
-COPY docker/daemon-entrypoint.sh /entrypoint.sh
+COPY internal/docker/daemon-entrypoint.sh /entrypoint.sh
 COPY --from=build /build/daemon .
-COPY akira_templates /templates
+COPY internal/akira_templates /templates
 
 RUN mkdir -p /projects /etc/akira /var/lib/akira
 
