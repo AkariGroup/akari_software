@@ -31,3 +31,10 @@
   roles:
     - docker
     - docker_credential
+
+- name: Setup akira
+  hosts: mainpc
+  tags:
+    - akira
+  roles:
+    - akira
