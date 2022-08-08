@@ -37,7 +37,7 @@ func NewJupyterLab(image ImageConfig, config ServiceConfig, opts ServiceManagerO
 		image:  image,
 		opts:   opts,
 	}
-	p.container = NewServiceContainer(p.config.Id, p, opts.Docker)
+	p.container = NewServiceContainer(p, opts.Docker)
 	return p
 }
 
@@ -86,6 +86,7 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 	}
 
 	mountsConfig := []mount.Mount{
+		grpcClientConfigMount(p.opts.EtcDir),
 		{
 			Type:     mount.TypeBind,
 			Source:   p.opts.ProjectRootDir,
@@ -107,7 +108,8 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 		Ports: map[string]int{
 			containerPort: meta.servicePort,
 		},
-		Mounts: mountsConfig,
+		Mounts:          mountsConfig,
+		BindHostGateway: true,
 	}, meta, nil
 }
 

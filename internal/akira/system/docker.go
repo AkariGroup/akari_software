@@ -53,11 +53,13 @@ func NewDockerSystem(registryAuth *string) (*DockerSystem, error) {
 }
 
 type CreateContainerOption struct {
-	Image       string
-	Env         []string
-	Ports       map[string]int
-	Mounts      []mount.Mount
-	RequireRoot bool
+	Image           string
+	Env             []string
+	Ports           map[string]int
+	Mounts          []mount.Mount
+	RequireRoot     bool
+	Privileged      bool
+	BindHostGateway bool
 }
 
 func (d *DockerSystem) RemoveAllContainers() error {
@@ -148,9 +150,16 @@ func (d *DockerSystem) CreateContainer(config CreateContainerOption) (ContainerI
 		},
 		User: containerUser,
 	}
+	var extraHosts []string
+	if config.BindHostGateway {
+		extraHosts = append(extraHosts, "host.docker.internal:host-gateway")
+	}
+
 	hostConfig := container.HostConfig{
 		PortBindings: portBindings,
 		Mounts:       config.Mounts,
+		Privileged:   config.Privileged,
+		ExtraHosts:   extraHosts,
 	}
 	container, err := d.cli.ContainerCreate(
 		context.Background(),

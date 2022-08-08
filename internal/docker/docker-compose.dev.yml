@@ -21,8 +21,8 @@ services:
       HOST_UID: ${HOST_UID:?You need to run `source env.sh`}
       HOST_GID: ${HOST_GID:?You need to run `source env.sh`}
       DOCKER_GID: ${DOCKER_GID:?You need to run `source env.sh`}
-      AKIRA_PROJECT_DIR: ${AKIRA_DEV_LOCAL_DIR}/projects
-      AKIRA_CONFIG_DIR: ${AKIRA_DEV_LOCAL_DIR}/etc/akira
+      AKIRA_PROJECT_DIR: ${AKIRA_DEV_LOCAL_DIR}/home/akari/projects
+      AKIRA_ETC_DIR: ${AKIRA_DEV_LOCAL_DIR}/etc/akira
       AKIRA_VAR_DIR: ${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
       # Required until the project gets open-sourced
       AKIRA_DOCKER_CREDENTIAL: ${AKIRA_DOCKER_CREDENTIAL:?You need to run `source env.sh`}

@@ -1,0 +1,24 @@
+{
+    "joint_manager": {
+        "type": "dynamixel_serial",
+        "serial_port": "/dev/ttyUSB_dynamixel",
+        "baudrate": 1000000,
+        "protocol_version": 2.0,
+        "controllers": [
+            {
+                "joint_name": "pan",
+                "dynamixel_id": 1
+            },
+            {
+                "joint_name": "tilt",
+                "dynamixel_id": 2
+            }
+        ]
+    },
+    "m5stack": {
+        "type": "serial",
+        "serial_port": "/dev/ttyUSB_M5Stack",
+        "baudrate": 500000,
+        "serial_timeout": 0.2
+    }
+}

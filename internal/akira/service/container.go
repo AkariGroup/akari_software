@@ -14,7 +14,6 @@ type containerConfigFactory interface {
 }
 
 type ServiceContainer struct {
-	id     ServiceId
 	fa     containerConfigFactory
 	d      *system.DockerSystem
 	status ServiceStatus
@@ -26,9 +25,8 @@ type ServiceContainer struct {
 	mu sync.Mutex
 }
 
-func NewServiceContainer(id ServiceId, fa containerConfigFactory, d *system.DockerSystem) *ServiceContainer {
+func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *ServiceContainer {
 	return &ServiceContainer{
-		id:     id,
 		fa:     fa,
 		d:      d,
 		status: Terminated,
