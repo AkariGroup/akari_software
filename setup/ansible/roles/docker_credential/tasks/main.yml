@@ -1,0 +1,17 @@
+---
+- name: Login docker.io
+  shell:
+    docker login --username "{{ docker_registry_username }}" --password-stdin
+  args:
+    stdin: "{{ docker_registry_password }}"
+- name: Create .config/akira
+  file:
+    path: "/home/{{ ansible_user }}/.config/akira"
+    state: directory
+    mode: "0755"
+- name: Create .akira_docker_credential
+  copy:
+    dest: "/home/{{ ansible_user }}/.config/akira/.akira_docker_credential"
+    mode: "0600"
+    content: |
+      {{ akira_docker_credential }}

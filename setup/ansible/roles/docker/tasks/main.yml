@@ -1,0 +1,51 @@
+---
+- name: Install apt packages
+  apt:
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+  become: true
+
+- name: Create keyring directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Install keyring
+  changed_when: False
+  shell:
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --batch --yes -o /etc/apt/keyrings/docker.gpg
+  become: true
+
+- name: Get architecture
+  shell: dpkg --print-architecture
+  changed_when: False
+  register: host_architecture
+
+- name: Add repository
+  apt_repository:
+    repo: "deb [arch={{ host_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+  become: true
+
+- name: Install docker
+  apt:
+    update_cache: true
+    pkg:
+      - docker-ce={{ docker_version }}
+      - docker-ce-cli={{ docker_version }}
+      - containerd.io
+      - docker-compose-plugin
+  become: true
+  notify: Restart docker
+
+- name: Add user to docker
+  user:
+    name: '{{ ansible_user }}'
+    groups: docker
+    append: yes
+  become: true
