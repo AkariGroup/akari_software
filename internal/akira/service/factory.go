@@ -81,3 +81,21 @@ func jupyterLabImageConfig() ImageConfig {
 		},
 	}
 }
+
+func vscodeImageConfig() ImageConfig {
+	id := ImageId("f7e53430-5123-4be0-a55c-fd545cc56352")
+	return ImageConfig{
+		Id:          id,
+		Name:        VSCodeServiceName,
+		Version:     "v1",
+		DisplayName: "Visual Studio Code",
+		Description: "Launch a Visual Studio Code instance",
+		Capabilities: []ServiceCapability{
+			CapabilityOpen,
+			CapabilityOpenProject,
+		},
+		ContainerOption: ServiceContainerOption{
+			Image: "docker.io/akarirobot/akira-service-vscode",
+		},
+	}
+}

@@ -83,6 +83,9 @@ func (m *serviceManager) scanImages() error {
 	// TODO: Load Image from directory
 	img := jupyterLabImageConfig()
 	m.images[img.Id] = img
+
+	img = vscodeImageConfig()
+	m.images[img.Id] = img
 	return nil
 }
 
@@ -95,6 +98,9 @@ func (m *serviceManager) loadService(c ServiceConfig) (Service, error) {
 	switch s.Name {
 	case JupyterLabServiceName:
 		service := NewJupyterLab(s, c, m.opts)
+		return service, nil
+	case VSCodeServiceName:
+		service := NewVSCode(s, c, m.opts)
 		return service, nil
 	default:
 		return nil, fmt.Errorf("unsupported service name: %#v", s.Name)

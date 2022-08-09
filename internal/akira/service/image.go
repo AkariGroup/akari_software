@@ -26,4 +26,5 @@ type ImageConfig struct {
 
 const (
 	JupyterLabServiceName = "akari-srv.vbcpp.net/jupyer-lab"
+	VSCodeServiceName     = "akari-srv.vbcpp.net/vscode"
 )

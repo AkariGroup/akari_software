@@ -16,5 +16,5 @@ services:
     build:
       context: ../../
       dockerfile: internal/akira_services/vscode/Dockerfile
-    image: akarirobot/akira-vscode-service:v1
+    image: akarirobot/akira-service-vscode:v1
     command: exit 1
