@@ -15,12 +15,13 @@ import (
 )
 
 const (
-	DEFAULT_DAEMON_GRPC_ENDPOINT = "localhost:30001"
-	GATEWAY_PORT                 = ":8080"
+	DEFAULT_DAEMON_ENDPOINT = "localhost:30001"
+	GATEWAY_PORT            = ":8080"
 )
 
 const (
-	STATIC_DIR_ENV = "AKIRA_GATEWAY_STATIC_DIR"
+	STATIC_DIR_ENV      = "AKIRA_GATEWAY_STATIC_DIR"
+	DAEMON_ENDPOINT_ENV = "AKIRA_DAEMON_ENDPOINT"
 )
 
 func getEnvOrDefault(env string, defaultValue string) string {
@@ -31,19 +32,19 @@ func getEnvOrDefault(env string, defaultValue string) string {
 	}
 }
 
-func createGrpcGateway() (*runtime.ServeMux, error) {
+func createGrpcGateway(daemonEndpoint string) (*runtime.ServeMux, error) {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	if err := proto.RegisterSystemServiceHandlerFromEndpoint(context.Background(), mux, DEFAULT_DAEMON_GRPC_ENDPOINT, opts); err != nil {
+	if err := proto.RegisterSystemServiceHandlerFromEndpoint(context.Background(), mux, daemonEndpoint, opts); err != nil {
 		return nil, err
 	}
 
-	if err := proto.RegisterProjectServiceHandlerFromEndpoint(context.Background(), mux, DEFAULT_DAEMON_GRPC_ENDPOINT, opts); err != nil {
+	if err := proto.RegisterProjectServiceHandlerFromEndpoint(context.Background(), mux, daemonEndpoint, opts); err != nil {
 		return nil, err
 	}
 
-	if err := proto.RegisterAkariServiceServiceHandlerFromEndpoint(context.Background(), mux, DEFAULT_DAEMON_GRPC_ENDPOINT, opts); err != nil {
+	if err := proto.RegisterAkariServiceServiceHandlerFromEndpoint(context.Background(), mux, daemonEndpoint, opts); err != nil {
 		return nil, err
 	}
 
@@ -60,8 +61,8 @@ func main() {
 		panic(fmt.Errorf("environ: %#v must be set", STATIC_DIR_ENV))
 	}
 
-	// TODO: Accept environment variable to change grpc endpoint
-	grpcMux, err := createGrpcGateway()
+	daemonEndpoint := getEnvOrDefault(DAEMON_ENDPOINT_ENV, DEFAULT_DAEMON_ENDPOINT)
+	grpcMux, err := createGrpcGateway(daemonEndpoint)
 	if err != nil {
 		panic(err)
 	}
