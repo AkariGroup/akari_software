@@ -15,7 +15,7 @@ root.render(
     <DarkModeProvider>
       <SidebarOpenedProvider>
         <BackdropProvider>
-          <BrowserRouter basename="/ui">
+          <BrowserRouter basename="/">
             <App />
           </BrowserRouter>
         </BackdropProvider>

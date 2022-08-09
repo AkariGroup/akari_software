@@ -37,10 +37,25 @@ ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/app/daemon"]
 
 # =============================
+FROM node:18.7-buster-slim AS build-frontend
+
+WORKDIR /src/akira_frontend
+COPY internal/akira_frontend/package.json /src/akira_frontend/package.json
+COPY internal/akira_frontend/package-lock.json /src/akira_frontend/package-lock.json
+RUN npm install
+
+COPY internal/akira_proto /src/akira_proto
+COPY internal/akira_frontend /src/akira_frontend
+RUN npm run build
+
+# =============================
 FROM scratch as gateway
 
 WORKDIR /app
 COPY --from=build /build/gateway .
+COPY --from=build-frontend /src/akira_frontend/build /app/static
+
+ENV AKIRA_GATEWAY_STATIC_DIR=/app/static
 
 EXPOSE 8080
 CMD ["/app/gateway"]

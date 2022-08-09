@@ -5,7 +5,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { AspidaClient } from "aspida";
 
 export function getAspidaClient(): AspidaClient<AxiosRequestConfig> {
-  return aspida(axios, { baseURL: "/" });
+  return aspida(axios, { baseURL: "/api" });
 }
 
 export type ApiClient = ReturnType<typeof api<AspidaClient<AxiosRequestConfig<any>>>>;
