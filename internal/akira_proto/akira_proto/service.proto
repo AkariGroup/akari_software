@@ -86,6 +86,7 @@ message CleanServiceRequest {
 
 message OpenRequest {
   string id = 1;
+  string api_hostname = 2;
 }
 
 message OpenResponse {
@@ -94,7 +95,8 @@ message OpenResponse {
 
 message OpenProjectRequest {
   string id = 1;
-  string project_id = 2;
+  string api_hostname = 2;
+  string project_id = 3;
 }
 
 message OpenProjectResponse {

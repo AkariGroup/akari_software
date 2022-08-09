@@ -143,12 +143,12 @@ func (p *JupyterLab) Status() ServiceStatus {
 	return p.container.Status()
 }
 
-func (p *JupyterLab) GetOpenAddress() (string, error) {
+func (p *JupyterLab) GetOpenAddress(hostName string) (string, error) {
 	_, meta, ok := p.container.ContainerInfo()
 
 	if ok {
 		if meta, ok := meta.(jupyterLabContainerMeta); ok {
-			return fmt.Sprintf("http://localhost:%d/?token=%s", meta.servicePort, meta.token), nil
+			return fmt.Sprintf("http://%s:%d/?token=%s", hostName, meta.servicePort, meta.token), nil
 		} else {
 			return "", errors.New("invalid internal state")
 		}
@@ -157,7 +157,7 @@ func (p *JupyterLab) GetOpenAddress() (string, error) {
 	}
 }
 
-func (p *JupyterLab) GetOpenProjectAddress(projectDir string) (string, error) {
+func (p *JupyterLab) GetOpenProjectAddress(hostName string, projectDir string) (string, error) {
 	if !strings.HasPrefix(projectDir, p.opts.ProjectRootDir) {
 		return "", errors.New("project is not in the projects directory")
 	}
@@ -167,7 +167,7 @@ func (p *JupyterLab) GetOpenProjectAddress(projectDir string) (string, error) {
 
 	if ok {
 		if meta, ok := meta.(jupyterLabContainerMeta); ok {
-			return fmt.Sprintf("http://localhost:%d/lab/tree/%s?token=%s", meta.servicePort, relPath, meta.token), nil
+			return fmt.Sprintf("http://%s:%d/lab/tree/%s?token=%s", hostName, meta.servicePort, relPath, meta.token), nil
 		} else {
 			return "", errors.New("invalid internal state")
 		}

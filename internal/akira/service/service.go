@@ -60,8 +60,8 @@ type Service interface {
 	Clean() error
 	Status() ServiceStatus
 
-	GetOpenAddress() (string, error)
-	GetOpenProjectAddress(projectDir string) (string, error)
+	GetOpenAddress(hostName string) (string, error)
+	GetOpenProjectAddress(hostName string, projectDir string) (string, error)
 }
 
 func loadServiceConfig(p string) (ServiceConfig, error) {
