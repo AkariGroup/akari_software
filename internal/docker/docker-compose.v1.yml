@@ -25,7 +25,9 @@ services:
       AKIRA_VAR_DIR: /var/lib/akira
       # Required until the project gets open-sourced
       AKIRA_DOCKER_CREDENTIAL: ${AKIRA_DOCKER_CREDENTIAL:?You need to run `source env.sh`}
-    network_mode: host
   gateway:
     image: akarirobot/akira-gateway:${AKIRA_IMAGE_TAG}
-    network_mode: host
+    environment:
+      AKIRA_DAEMON_ENDPOINT: daemon:30001
+    ports:
+      - 8080:8080
