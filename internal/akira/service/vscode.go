@@ -171,7 +171,7 @@ func (p *VSCode) GetOpenProjectAddress(hostName string, projectDir string) (stri
 
 	if ok {
 		if meta, ok := meta.(vscodeContainerMeta); ok {
-			return fmt.Sprintf("http://%s:%d/?folder=/app/%s&tkn=%s", hostName, meta.servicePort, relPath, meta.token), nil
+			return fmt.Sprintf("http://%s:%d/?tkn=%s&folder=/app/%s", hostName, meta.servicePort, meta.token, relPath), nil
 		} else {
 			return "", errors.New("invalid internal state")
 		}
