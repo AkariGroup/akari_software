@@ -51,6 +51,10 @@ func (p *SystemService) Capabilities() []ServiceCapability {
 	return nil
 }
 
+func (p *SystemService) AutoStart() bool {
+	return true
+}
+
 func (p *SystemService) createContainerConfig() (system.CreateContainerOption, interface{}, error) {
 	return p.config.ContainerOption, nil, nil
 }

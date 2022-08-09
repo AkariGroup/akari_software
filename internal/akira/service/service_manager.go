@@ -63,7 +63,20 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	if err := m.scanServices(); err != nil {
 		return nil, err
 	}
+	m.triggerAutoStartServices()
 	return m, nil
+}
+
+func (m *serviceManager) triggerAutoStartServices() {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	for _, s := range m.services {
+		if !s.AutoStart() {
+			continue
+		}
+
+		s.Start()
+	}
 }
 
 func (m *serviceManager) scanImages() error {
