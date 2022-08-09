@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -56,9 +57,9 @@ type Service interface {
 	Capabilities() []ServiceCapability
 	AutoStart() bool
 
-	Start() error
-	Stop() error
-	Terminate() error
+	Start(ctx context.Context) error
+	Stop(ctx context.Context) error
+	Terminate(ctx context.Context) error
 	Clean() error
 	Status() ServiceStatus
 

@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"errors"
+
 	"github.com/AkariGroup/akari_software/internal/akira/system"
 )
 
@@ -59,16 +61,16 @@ func (p *SystemService) createContainerConfig() (system.CreateContainerOption, i
 	return p.config.ContainerOption, nil, nil
 }
 
-func (p *SystemService) Start() error {
-	return p.container.Start()
+func (p *SystemService) Start(ctx context.Context) error {
+	return p.container.Start(ctx)
 }
 
-func (p *SystemService) Stop() error {
-	return p.container.Stop()
+func (p *SystemService) Stop(ctx context.Context) error {
+	return p.container.Stop(ctx)
 }
 
-func (p *SystemService) Terminate() error {
-	return p.container.Terminate()
+func (p *SystemService) Terminate(ctx context.Context) error {
+	return p.container.Terminate(ctx)
 }
 
 func (p *SystemService) Clean() error {
