@@ -69,6 +69,10 @@ func (p *JupyterLab) Capabilities() []ServiceCapability {
 	return p.image.Capabilities
 }
 
+func (p *JupyterLab) AutoStart() bool {
+	return p.config.AutoStart
+}
+
 func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, interface{}, error) {
 	servicePort, err := util.GetAvailablePort()
 	if err != nil {

@@ -44,6 +44,7 @@ type ServiceConfig struct {
 
 	DisplayName string `json:"display_name" validate:"required"`
 	Description string `json:"description"`
+	AutoStart   bool   `json:"auto_start"`
 }
 
 type Service interface {
@@ -53,6 +54,7 @@ type Service interface {
 	ImageId() ImageId
 	Type() ServiceType
 	Capabilities() []ServiceCapability
+	AutoStart() bool
 
 	Start() error
 	Stop() error
