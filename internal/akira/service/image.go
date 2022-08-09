@@ -18,13 +18,13 @@ type ImageConfig struct {
 	Name    string       `json:"name" validate:"required"`
 	Version ImageVersion `json:"version" validate:"required"`
 
-	DisplayName     string                 `json:"name" validate:"required"`
+	DisplayName     string                 `json:"display_name" validate:"required"`
 	Description     string                 `json:"description"`
 	Capabilities    []ServiceCapability    `json:"capabilities"`
 	ContainerOption ServiceContainerOption `json:"container_option" validate:"required"`
 }
 
 const (
-	JupyterLabServiceName = "akari-srv.vbcpp.net/jupyer-lab"
+	JupyterLabServiceName = "docker.io/akarirobot/akira-service-jupyter"
 	VSCodeServiceName     = "docker.io/akarirobot/akira-service-vscode"
 )

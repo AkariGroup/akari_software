@@ -77,7 +77,7 @@ func jupyterLabImageConfig() ImageConfig {
 			CapabilityOpenProject,
 		},
 		ContainerOption: ServiceContainerOption{
-			Image: "docker.io/akarirobot/akira-jupyter-service",
+			Image: "docker.io/akarirobot/akira-service-jupyter",
 		},
 	}
 }
