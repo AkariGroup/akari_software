@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export AKIRA_IMAGE_TAG=${AKIRA_IMAGE_TAG:-develop}
+
 SCRIPT_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
 REPOSITORY_ROOT=$(realpath ${SCRIPT_DIR}/../../)
 

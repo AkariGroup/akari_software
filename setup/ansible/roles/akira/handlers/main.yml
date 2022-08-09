@@ -1,0 +1,7 @@
+---
+- name: Restart akira.service
+  systemd:
+    daemon_reload: yes
+    name: akira.service
+    state: restarted
+  become: yes

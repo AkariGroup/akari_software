@@ -1,19 +1,18 @@
 version: "3.7"
 services:
   daemon:
-    build:
-      context: ../../
-      dockerfile: internal/docker/Dockerfile
-      target: daemon
     image: akarirobot/akira-daemon:${AKIRA_IMAGE_TAG}
     volumes:
       - type: bind
-        source: ${AKARI_REPOSITORY_DIR:?You need to run `source env.sh`}/internal/akira_templates
-        target: /templates
+        source: /etc/akira
+        target: /etc/akira
         read_only: true
       - type: bind
-        source: ${AKIRA_DEV_LOCAL_DIR:?You need to run `source env.sh`}
-        target: ${AKIRA_DEV_LOCAL_DIR:?You need to run `source env.sh`}
+        source: /home/akari
+        target: /home/akari
+      - type: bind
+        source: /var/lib/akira
+        target: /var/lib/akira
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
@@ -21,16 +20,12 @@ services:
       HOST_UID: ${HOST_UID:?You need to run `source env.sh`}
       HOST_GID: ${HOST_GID:?You need to run `source env.sh`}
       DOCKER_GID: ${DOCKER_GID:?You need to run `source env.sh`}
-      AKIRA_PROJECT_DIR: ${AKIRA_DEV_LOCAL_DIR}/home/akari/projects
-      AKIRA_ETC_DIR: ${AKIRA_DEV_LOCAL_DIR}/etc/akira
-      AKIRA_VAR_DIR: ${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
+      AKIRA_PROJECT_DIR: /home/akari/akari_projects
+      AKIRA_ETC_DIR: /etc/akira
+      AKIRA_VAR_DIR: /var/lib/akira
       # Required until the project gets open-sourced
       AKIRA_DOCKER_CREDENTIAL: ${AKIRA_DOCKER_CREDENTIAL:?You need to run `source env.sh`}
     network_mode: host
   gateway:
-    build:
-      context: ../../
-      dockerfile: internal/docker/Dockerfile
-      target: gateway
     image: akarirobot/akira-gateway:${AKIRA_IMAGE_TAG}
     network_mode: host

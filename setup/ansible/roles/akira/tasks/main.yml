@@ -1,0 +1,65 @@
+---
+- name: Create /etc/akira
+  file:
+    path: /etc/akira
+    state: directory
+    mode: "0755"
+  become: true
+- name: Copy client_config.d files
+  copy:
+    src: "{{ role_path }}/files/client_configs.d/"
+    dest: /etc/akira/client_configs.d/
+    mode: "0755"
+  become: true
+  notify:
+    - Restart akira.service
+- name: Copy daemon.d files
+  copy:
+    src: "{{ role_path }}/files/daemon.d/"
+    dest: /etc/akira/daemon.d/
+    mode: "0755"
+  become: true
+  notify:
+    - Restart akira.service
+- name: Create override file
+  file:
+    path: /etc/akira/daemon.d/override.env
+    state: touch
+  become: true
+  changed_when: False
+- name: Create /var/lib/akira
+  file:
+    path: /var/lib/akira
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+
+- name: Create /etc/akari
+  file:
+    path: /etc/akari
+    state: directory
+    mode: "0755"
+  become: true
+- name: Create a symlink to use grpc config by default
+  file:
+    src: /etc/akira/client_configs.d/grpc_host.json
+    dest: /etc/akari/client_config.json
+    state: link
+    mode: "0755"
+  become: true
+
+- name: Install akira.service
+  template:
+    src: "{{ role_path }}/templates/akira.service.j2"
+    dest: /etc/systemd/system/akira.service
+    mode: "0644"
+  become: true
+  notify:
+    - Restart akira.service
+- name: Enable akira.service
+  systemd:
+    name: akira.service
+    enabled: true
+    daemon_reload: yes
+  become: true
