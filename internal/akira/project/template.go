@@ -1,9 +1,7 @@
 package project
 
 import (
-	"fmt"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -11,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	yaml "github.com/goccy/go-yaml"
 	cp "github.com/otiai10/copy"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -122,7 +121,7 @@ func (m *TemplateManager) UpdateTemplates() {
 
 	files, err := ioutil.ReadDir(m.baseDir)
 	if err != nil {
-		fmt.Printf("error while scanning templates: %#v\n", err)
+		log.Error().Msgf("error while scanning templates: %#v", err)
 		return
 	}
 
@@ -137,7 +136,7 @@ func (m *TemplateManager) UpdateTemplates() {
 		}
 
 		if meta, err := loadMetadata(filepath.Join(p, METADATA_FILENAME)); err != nil {
-			log.Printf("error while loading metadata: %#v\n", err)
+			log.Warn().Msgf("error while loading metadata: %#v", err)
 		} else {
 			m.templates[base] = &localTemplate{
 				id:   base,
