@@ -8,26 +8,16 @@ import {
 import { useApiClient } from "../../../hooks/api";
 import {
   Akira_protoCreateProjectFromGitRequest,
-  Akira_protoCreateLocalProjectRequest,
-  Akira_protoProjectManifest,
-  Akira_protoTemplate,
 } from "../../../api/@types";
 import { useCallback, useState } from "react";
 import {
-  Box,
   Button,
-  FormControl,
   FormControlLabel,
   FormGroup,
-  FormHelperText,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   Switch,
   TextField,
-  Typography,
 } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
@@ -35,33 +25,7 @@ import { ValidationMessages } from "../../../libs/messages";
 
 const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
 
-function TemplateItem({ template }: { template: Akira_protoTemplate }) {
-  return (
-    <Stack>
-      <Typography whiteSpace="nowrap">
-        <Box component="span" fontWeight="bold">
-          {template.name}
-        </Box>
-        &nbsp; - Version: {template.version}, Author: {template.author}&nbsp;
-        <Box component="span" color="text.secondary">
-          (ID: {template.id})
-        </Box>
-      </Typography>
-      <Typography
-        display="inline-block"
-        maxWidth="40vw"
-        overflow="hidden"
-        textOverflow="ellipsis"
-        color="text.secondary"
-      >
-        {template.description}
-      </Typography>
-    </Stack>
-  );
-}
-
 type CreateProjectFromGitInputs = {
-  path: string
   branch: string;
   dirname: string;
   gitUrl: string;
@@ -92,7 +56,7 @@ export function CreateProjectFromGit() {
 
       const request: Akira_protoCreateProjectFromGitRequest = {
         branch: data.branch,
-        dirname: customPath ? data.path : data.dirname,
+        dirname: customPath ? data.dirname : null,
         gitUrl: data.gitUrl,
       };
       // TODO: Handle error (e.g. Directory name conflicts)
@@ -108,7 +72,7 @@ export function CreateProjectFromGit() {
 
   const customPathElement = customPath ? (
     <Controller
-      name="path"
+      name="dirname"
       control={control}
       rules={{
         required: ValidationMessages.Required,
@@ -124,8 +88,8 @@ export function CreateProjectFromGit() {
           required
           label="ディレクトリ名"
           variant="filled"
-          error={!!errors.path}
-          helperText={errors.path && errors.path.message}
+          error={!!errors.dirname}
+          helperText={errors.dirname && errors.dirname.message}
         />
       )}
     />
