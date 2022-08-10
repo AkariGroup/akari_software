@@ -21,8 +21,8 @@ message CreateLocalProjectRequest {
 }
 
 message CreateProjectFromGitRequest {
-  string dirname = 1;
-  string git_url = 2;
+  string git_url = 1;
+  optional string dirname = 2;
   optional string branch = 3;
 }
 
