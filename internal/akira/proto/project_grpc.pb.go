@@ -25,6 +25,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ProjectServiceClient interface {
 	CreateLocalProject(ctx context.Context, in *CreateLocalProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	CreateProjectFromGit(ctx context.Context, in *CreateProjectFromGitRequest, opts ...grpc.CallOption) (*Project, error)
+	EditProject(ctx context.Context, in *EditProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	ListProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListProjectsResponse, error)
 	ListTemplates(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListTemplatesResponse, error)
@@ -50,6 +51,15 @@ func (c *projectServiceClient) CreateLocalProject(ctx context.Context, in *Creat
 func (c *projectServiceClient) CreateProjectFromGit(ctx context.Context, in *CreateProjectFromGitRequest, opts ...grpc.CallOption) (*Project, error) {
 	out := new(Project)
 	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/CreateProjectFromGit", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) EditProject(ctx context.Context, in *EditProjectRequest, opts ...grpc.CallOption) (*Project, error) {
+	out := new(Project)
+	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/EditProject", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,6 +99,7 @@ func (c *projectServiceClient) ListTemplates(ctx context.Context, in *emptypb.Em
 type ProjectServiceServer interface {
 	CreateLocalProject(context.Context, *CreateLocalProjectRequest) (*Project, error)
 	CreateProjectFromGit(context.Context, *CreateProjectFromGitRequest) (*Project, error)
+	EditProject(context.Context, *EditProjectRequest) (*Project, error)
 	GetProject(context.Context, *GetProjectRequest) (*Project, error)
 	ListProjects(context.Context, *emptypb.Empty) (*ListProjectsResponse, error)
 	ListTemplates(context.Context, *emptypb.Empty) (*ListTemplatesResponse, error)
@@ -104,6 +115,9 @@ func (UnimplementedProjectServiceServer) CreateLocalProject(context.Context, *Cr
 }
 func (UnimplementedProjectServiceServer) CreateProjectFromGit(context.Context, *CreateProjectFromGitRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProjectFromGit not implemented")
+}
+func (UnimplementedProjectServiceServer) EditProject(context.Context, *EditProjectRequest) (*Project, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditProject not implemented")
 }
 func (UnimplementedProjectServiceServer) GetProject(context.Context, *GetProjectRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
@@ -159,6 +173,24 @@ func _ProjectService_CreateProjectFromGit_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProjectServiceServer).CreateProjectFromGit(ctx, req.(*CreateProjectFromGitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectService_EditProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).EditProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.ProjectService/EditProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).EditProject(ctx, req.(*EditProjectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -231,6 +263,10 @@ var ProjectService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateProjectFromGit",
 			Handler:    _ProjectService_CreateProjectFromGit_Handler,
+		},
+		{
+			MethodName: "EditProject",
+			Handler:    _ProjectService_EditProject_Handler,
 		},
 		{
 			MethodName: "GetProject",

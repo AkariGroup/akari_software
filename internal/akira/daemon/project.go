@@ -70,6 +70,11 @@ func (s *ProjectServicer) CreateLocalProject(ctx context.Context, r *proto.Creat
 	}
 }
 
+func (s *ProjectServicer) EditProject(ctx context.Context, r *proto.EditProjectRequest) (*proto.Project, error) {
+	// TODO: Implement
+	return nil, status.Errorf(codes.Unimplemented, "method EditProject not implemented")
+}
+
 func (s *ProjectServicer) GetProject(ctx context.Context, r *proto.GetProjectRequest) (*proto.Project, error) {
 	p, ok := s.da.projects.GetProject(r.Id)
 	if !ok {
