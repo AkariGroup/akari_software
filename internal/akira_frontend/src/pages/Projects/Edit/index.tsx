@@ -7,9 +7,8 @@ import {
 } from "react-hook-form";
 import { useApiClient } from "../../../hooks/api";
 import {
-  Akira_protoCreateLocalProjectRequest,
+  //Akira_protoEditLocalProjectRequest,
   Akira_protoProjectManifest,
-  Akira_protoTemplate,
 } from "../../../api/@types";
 import { useCallback, useState } from "react";
 import {
@@ -29,73 +28,24 @@ import {
   Typography,
 } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 
 const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
 
-type TemplateSelectorProps = {
-  fields: ControllerRenderProps<CreateProjectFromTemplateInputs, "templateId">;
-  templates?: Akira_protoTemplate[];
-  error?: FieldError;
-};
-
-function TemplateItem({ template }: { template: Akira_protoTemplate }) {
-  return (
-    <Stack>
-      <Typography whiteSpace="nowrap">
-        <Box component="span" fontWeight="bold">
-          {template.name}
-        </Box>
-        &nbsp; - Version: {template.version}, Author: {template.author}&nbsp;
-        <Box component="span" color="text.secondary">
-          (ID: {template.id})
-        </Box>
-      </Typography>
-      <Typography
-        display="inline-block"
-        maxWidth="40vw"
-        overflow="hidden"
-        textOverflow="ellipsis"
-        color="text.secondary"
-      >
-        {template.description}
-      </Typography>
-    </Stack>
-  );
+type Akira_protoEditLocalProjectRequest = {
+  dirname?: string | undefined
+  manifest?: Akira_protoProjectManifest | undefined
+  templateId?: string | undefined
 }
 
-function TemplateSelector(props: TemplateSelectorProps) {
-  const error = !!props.error;
-  return (
-    <FormControl fullWidth variant="filled" error={error}>
-      <InputLabel id="template-selector-label">テンプレート</InputLabel>
-      <Select
-        {...props.fields}
-        labelId="template-selector-label"
-        label="テンプレート"
-        defaultValue=""
-        renderValue={(e) => `${e}`}
-        error={error}
-      >
-        {props.templates?.map((t) => (
-          <MenuItem key={t.id} value={t.id}>
-            <TemplateItem template={t} />
-          </MenuItem>
-        ))}
-      </Select>
-      {error ? <FormHelperText>{props.error?.message}</FormHelperText> : <></>}
-    </FormControl>
-  );
-}
-
-type CreateProjectFromTemplateInputs = {
+type EditProjectFromTemplateInputs = {
   path: string;
   templateId: string;
   manifest: Akira_protoProjectManifest;
 };
 
-export function CreateProjectFromTemplate() {
+export function ProjectsEdit() {
   const [customPath, setCustomPath] = useState(false);
   const handleCustomPathChange = useCallback(
     (_: any, checked: boolean) => {
@@ -107,18 +57,18 @@ export function CreateProjectFromTemplate() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateProjectFromTemplateInputs>();
+  } = useForm<EditProjectFromTemplateInputs>();
   const navigate = useNavigate();
 
   const client = useApiClient();
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
-  const onSubmit: SubmitHandler<CreateProjectFromTemplateInputs> = useCallback(
+  const onSubmit: SubmitHandler<EditProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;
 
-      const request: Akira_protoCreateLocalProjectRequest = {
+      const request: Akira_protoEditLocalProjectRequest = {
         dirname: customPath ? data.path : data.manifest.name,
         manifest: data.manifest,
         templateId: data.templateId,
@@ -233,21 +183,6 @@ export function CreateProjectFromTemplate() {
             )}
           />
 
-          <Controller
-            name="templateId"
-            control={control}
-            defaultValue=""
-            rules={{
-              required: ValidationMessages.Required,
-            }}
-            render={({ field }) => (
-              <TemplateSelector
-                fields={field}
-                templates={templates.templates}
-                error={errors.templateId}
-              />
-            )}
-          />
         </Stack>
       </Grid>
       <Grid item sm={12} md={6}>
@@ -279,6 +214,15 @@ export function CreateProjectFromTemplate() {
           onClick={handleSubmit(onSubmit)}
         >
           変更
+        </Button>
+        &nbsp;
+        &nbsp;
+        <Button
+          type="button"
+          variant="contained"
+          component={Link} to ="/projects"
+        >
+          キャンセル
         </Button>
       </Grid>
     </Grid>
