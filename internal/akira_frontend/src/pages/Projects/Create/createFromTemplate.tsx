@@ -245,6 +245,22 @@ export function CreateProjectFromTemplate() {
               />
             )}
           />
+          <Controller
+            name="manifest.gitUrl"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Git repository URL"
+                variant="filled"
+                error={!!errors.manifest?.gitUrl}
+                helperText={
+                  errors.manifest?.gitUrl && errors.manifest?.gitUrl.message
+                }
+              />
+            )}
+          />
 
           <Controller
             name="templateId"

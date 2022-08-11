@@ -31,6 +31,7 @@ func projectManifestToPb(p project.ProjectManifest) *proto.ProjectManifest {
 		Description: p.Description,
 		Author:      p.Author,
 		Url:         p.Url,
+		GitUrl:      p.GitUrl,
 	}
 }
 
@@ -48,6 +49,7 @@ func pbToProjectManifest(pb *proto.ProjectManifest) project.ProjectManifest {
 		Description: pb.Description,
 		Author:      pb.Author,
 		Url:         pb.Url,
+		GitUrl:      pb.GitUrl,
 	}
 }
 

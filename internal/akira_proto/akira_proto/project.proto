@@ -12,6 +12,7 @@ message ProjectManifest {
   string description = 2;
   string author = 3;
   string url = 4;
+  string git_url = 5;
 }
 
 message CreateLocalProjectRequest {

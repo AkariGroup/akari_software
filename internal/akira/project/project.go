@@ -21,6 +21,7 @@ type ProjectManifest struct {
 	Description string `json:"description"`
 	Author      string `json:"author"`
 	Url         string `json:"url"`
+	GitUrl      string `json:"git_url"`
 }
 
 type Project interface {

@@ -445,6 +445,8 @@ definitions:
         type: string
       description:
         type: string
+      gitUrl:
+        type: string
       name:
         type: string
       url:
