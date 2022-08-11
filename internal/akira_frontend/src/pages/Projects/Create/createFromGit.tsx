@@ -22,7 +22,7 @@ import {
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
-import { ValidNamePattern } from "../../../libs/validNamePattern";
+import { ValidNamePattern } from "../validNamePattern";
 
 type CreateProjectFromGitInputs = {
   branch: string;
@@ -55,7 +55,7 @@ export function CreateProjectFromGit() {
 
       const request: Akira_protoCreateProjectFromGitRequest = {
         branch: data.branch,
-        dirname: customPath ? data.dirname : null,
+        dirname: customPath ? data.dirname : undefined,
         gitUrl: data.gitUrl,
       };
       // TODO: Handle error (e.g. Directory name conflicts)
