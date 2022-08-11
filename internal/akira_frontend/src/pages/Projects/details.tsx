@@ -8,9 +8,11 @@ import {
   Grid,
   Stack,
   Typography,
+  IconButton
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import { Navigate, useSearchParams } from "react-router-dom";
+import EditIcon from '@mui/icons-material/Edit';
+import { Navigate, useSearchParams,Link } from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
 import { useCallback } from "react";
@@ -31,7 +33,6 @@ export function ProjectsDetails() {
     enabled: !!client,
   });
   const setBusy = useSetBackdropValue();
-
   const onOpenProject = useCallback(
     async (s: Akira_protoService) => {
       if (!client || !s.id || !project?.id) return;
@@ -68,7 +69,13 @@ export function ProjectsDetails() {
           <Card>
             <CardContent>
               <Box mb={1}>
-                <Typography variant="h4">{project.manifest?.name}</Typography>
+                <Typography variant="h4">
+                  {project.manifest?.name}
+                  &nbsp;
+                  <IconButton aria-label="Edit" component={Link} to ="/projects/edit">
+                    <EditIcon />
+                  </IconButton>
+                </Typography>
                 <Typography
                   mt={1}
                   variant="body2"
