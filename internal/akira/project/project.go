@@ -27,16 +27,18 @@ type Project interface {
 	Id() ProjectId
 	Manifest() ProjectManifest
 	Path() string
+
+	LoadManifest() error
+	SaveManifest() error
 }
 
 type localProject struct {
 	manifest     ProjectManifest
 	manifestPath string
-	path         string
 }
 
 func (p *localProject) Id() ProjectId {
-	return p.path
+	return p.Path()
 }
 
 func (p *localProject) Name() string {
@@ -48,13 +50,13 @@ func (p *localProject) Manifest() ProjectManifest {
 }
 
 func (p *localProject) Path() string {
-	return p.path
+	return filepath.Dir(p.manifestPath)
 }
 
-func loadManifest(p string) (ProjectManifest, error) {
-	content, err := ioutil.ReadFile(p)
+func (p *localProject) LoadManifest() error {
+	content, err := ioutil.ReadFile(p.manifestPath)
 	if err != nil {
-		return ProjectManifest{}, err
+		return err
 	}
 
 	v := validator.New()
@@ -65,34 +67,55 @@ func loadManifest(p string) (ProjectManifest, error) {
 		yaml.Strict(),
 		yaml.Validator(v),
 	)
-	return m, err
+	if err != nil {
+		return err
+	}
+	p.manifest = m
+	return nil
 }
 
-func LoadLocalProject(manifestPath string) (*localProject, error) {
+func (p *localProject) SaveManifest() error {
+	m, err := yaml.Marshal(p.manifest)
+	if err != nil {
+		return err
+	}
+
+	fs, err := os.Create(p.manifestPath)
+	if err != nil {
+		return err
+	}
+
+	fs.Write(m)
+	fs.Close()
+	return nil
+}
+
+func newLocalProject(manifestPath string) (*localProject, error) {
 	var err error
 	manifestPath, err = filepath.Abs(manifestPath)
 	if err != nil {
 		return nil, err
 	}
-	manifest, err := loadManifest(manifestPath)
-	if err != nil {
-		return nil, err
-	}
 
-	dirname := filepath.Dir(manifestPath)
 	return &localProject{
-		manifest:     manifest,
 		manifestPath: manifestPath,
-		path:         dirname,
 	}, nil
 }
 
-func CreateEmptyLocalProject(path string, m ProjectManifest) (*localProject, error) {
-	manifest, err := yaml.Marshal(m)
+func OpenLocalProject(manifestPath string) (*localProject, error) {
+	p, err := newLocalProject(manifestPath)
 	if err != nil {
 		return nil, err
 	}
 
+	if err := p.LoadManifest(); err != nil {
+		return nil, err
+	} else {
+		return p, nil
+	}
+}
+
+func CreateLocalProject(path string, m ProjectManifest) (*localProject, error) {
 	if util.DirExists(path) {
 		return nil, fmt.Errorf("dir: %#v already exits", path)
 	}
@@ -101,13 +124,16 @@ func CreateEmptyLocalProject(path string, m ProjectManifest) (*localProject, err
 	}
 
 	manifestPath := filepath.Join(path, ManifestFileName)
-	fs, err := os.Create(manifestPath)
+	p, err := newLocalProject(manifestPath)
 	if err != nil {
 		return nil, err
 	}
 
-	fs.Write(manifest)
-	fs.Close()
-
-	return LoadLocalProject(manifestPath)
+	p.manifest = m
+	if err := p.SaveManifest(); err != nil {
+		os.RemoveAll(path)
+		return nil, err
+	} else {
+		return p, nil
+	}
 }
