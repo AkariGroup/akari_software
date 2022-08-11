@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/AkariGroup/akari_software/internal/akira/internal/util"
+	"github.com/rs/zerolog/log"
 )
 
 type ProjectManager struct {
@@ -61,14 +62,14 @@ func (m *ProjectManager) UpdateProjects() {
 		}
 
 		// Detected a file named "akari_manifest.yaml"
-		project, err := LoadLocalProject(manifest)
+		project, err := OpenLocalProject(manifest)
 		if err != nil {
-			fmt.Printf("error occured while loading: %s\n", manifest)
+			log.Warn().Msgf("error occurred while loading: %s", manifest)
 			return nil
 		}
 
 		if err := m.registerProject(project); err != nil {
-			fmt.Printf("error occured while registering project: %v\n", project)
+			log.Error().Msgf("error occurred while registering project: %v", project)
 			return nil
 		}
 
@@ -76,7 +77,7 @@ func (m *ProjectManager) UpdateProjects() {
 	})
 
 	if err != nil {
-		fmt.Printf("error while walking the path: %q", m.baseDir)
+		log.Error().Msgf("error while walking the path: %q", m.baseDir)
 		return
 	}
 }
@@ -94,7 +95,7 @@ func (m *ProjectManager) CreateProject(dirname string, manifest ProjectManifest,
 		m.mu.Lock()
 		defer m.mu.Unlock()
 
-		if proj, err := CreateEmptyLocalProject(dir, manifest); err != nil {
+		if proj, err := CreateLocalProject(dir, manifest); err != nil {
 			return nil, err
 		} else {
 			m.registerProject(proj)
@@ -106,7 +107,7 @@ func (m *ProjectManager) CreateProject(dirname string, manifest ProjectManifest,
 	}
 
 	if err := template.Setup(dir); err != nil {
-		fmt.Printf("error occured while setting up template: %v\n", err)
+		log.Error().Msgf("error occurred while setting up template: %v", err)
 	}
 	return proj, nil
 }

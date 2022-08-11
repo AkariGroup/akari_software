@@ -84,6 +84,26 @@ paths:
           type: string
       tags:
         - ProjectService
+  /projects/edit:
+    post:
+      operationId: ProjectService_EditProject
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/akira_protoProject'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/akira_protoEditProjectRequest'
+      tags:
+        - ProjectService
   /service-images:
     get:
       operationId: AkariServiceService_ListImages
@@ -364,6 +384,13 @@ definitions:
         type: string
       imageId:
         type: string
+  akira_protoEditProjectRequest:
+    type: object
+    properties:
+      id:
+        type: string
+      manifest:
+        $ref: '#/definitions/akira_protoProjectManifest'
   akira_protoListImagesResponse:
     type: object
     properties:

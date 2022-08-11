@@ -25,6 +25,8 @@ require (
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
+	github.com/rs/zerolog v1.27.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
+	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664 // indirect
 	gotest.tools/v3 v3.3.0 // indirect
 )

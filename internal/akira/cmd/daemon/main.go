@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"net"
+	"os"
 
 	"github.com/AkariGroup/akari_software/internal/akira/daemon"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 )
 
@@ -13,6 +15,8 @@ const (
 )
 
 func main() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+
 	srv := grpc.NewServer()
 	d, err := daemon.NewDaemon(daemon.NewDaemonConfig{})
 	if err != nil {
@@ -28,7 +32,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("Daemon Started at %s\n", DAEMON_PORT)
+	log.Info().Msgf("Daemon Started at %s", DAEMON_PORT)
 	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}

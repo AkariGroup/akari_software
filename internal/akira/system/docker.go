@@ -18,6 +18,7 @@ import (
 	"github.com/docker/docker/pkg/jsonmessage"
 	"github.com/docker/docker/pkg/term"
 	"github.com/docker/go-connections/nat"
+	"github.com/rs/zerolog/log"
 )
 
 type ContainerId string
@@ -78,7 +79,7 @@ func (d *DockerSystem) RemoveAllContainers() error {
 	}
 
 	for _, c := range cs {
-		fmt.Printf("Removing container: %s\n", c.ID)
+		log.Debug().Msgf("Removing container: %s", c.ID)
 		d.StopContainer(ContainerId(c.ID), time.Second*10)
 		d.RemoveContainer(ContainerId(c.ID))
 	}
@@ -93,7 +94,7 @@ func waitPullCompleted(ctx context.Context, in io.ReadCloser, out io.Writer) err
 			if jerr.Code == 0 {
 				jerr.Code = 1
 			}
-			return fmt.Errorf("Status: %s, Code: %d\n", jerr.Message, jerr.Code)
+			return fmt.Errorf("Status: %s, Code: %d", jerr.Message, jerr.Code)
 		}
 	}
 
