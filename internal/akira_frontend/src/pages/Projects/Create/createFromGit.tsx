@@ -22,8 +22,7 @@ import {
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
-
-const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
+import { ValidNamePattern } from "../../../libs/validNamePattern";
 
 type CreateProjectFromGitInputs = {
   branch: string;
@@ -109,7 +108,7 @@ export function CreateProjectFromGit() {
       noValidate
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Grid item sm={12} md={6}>
+      <Grid item sm={12}>
         <Stack spacing={2}>
           <Controller
             name="gitUrl"
