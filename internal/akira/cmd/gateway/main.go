@@ -10,6 +10,8 @@ import (
 	"github.com/AkariGroup/akari_software/internal/akira/proto"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -56,6 +58,8 @@ func createStaticFileServer(staticDir string) http.Handler {
 }
 
 func main() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+
 	staticDir := getEnvOrDefault(STATIC_DIR_ENV, "")
 	if staticDir == "" {
 		panic(fmt.Errorf("environ: %#v must be set", STATIC_DIR_ENV))
@@ -76,7 +80,7 @@ func main() {
 		http.ServeFile(w, r, filepath.Join(staticDir, "index.html"))
 	})
 
-	fmt.Printf("Gateway Started at %s\n", GATEWAY_PORT)
+	log.Info().Msgf("Gateway Started at %s", GATEWAY_PORT)
 	if err := http.ListenAndServe(GATEWAY_PORT, r); err != nil {
 		panic(err)
 	}

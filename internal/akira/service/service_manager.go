@@ -3,13 +3,13 @@ package service
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/AkariGroup/akari_software/internal/akira/system"
+	"github.com/rs/zerolog/log"
 )
 
 type ServiceManager interface {
@@ -114,12 +114,12 @@ func (m *serviceManager) scanServices() error {
 
 	files, err := ioutil.ReadDir(m.opts.ServiceConfigDir)
 	if err != nil {
-		return fmt.Errorf("error while scanning services: %#v\n", err)
+		return fmt.Errorf("error while scanning services: %#v", err)
 	}
 
 	// TODO: scan system services
 	if rpcServerConfig, err := akariRpcServerSystemServiceConfig(m.opts.EtcDir); err != nil {
-		log.Printf("error while initializing rpc server: %#v\n", err)
+		log.Error().Msgf("error while initializing rpc server: %#v", err)
 	} else {
 		registerService(
 			NewSystemService(rpcServerConfig, m.opts),
@@ -138,12 +138,12 @@ func (m *serviceManager) scanServices() error {
 
 		config, err := loadServiceConfig(p)
 		if err != nil {
-			log.Printf("error while loading metadata: %#v\n", err)
+			log.Warn().Msgf("error while loading metadata: %#v", err)
 			continue
 		}
 		service, err := m.loadService(config)
 		if err != nil {
-			log.Printf("failed to load service: %#v\n", err)
+			log.Warn().Msgf("failed to load service: %#v", err)
 			continue
 		} else {
 			registerService(service)

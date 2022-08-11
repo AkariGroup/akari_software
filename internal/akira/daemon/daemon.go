@@ -8,6 +8,7 @@ import (
 	"github.com/AkariGroup/akari_software/internal/akira/project"
 	"github.com/AkariGroup/akari_software/internal/akira/service"
 	"github.com/AkariGroup/akari_software/internal/akira/system"
+	"github.com/rs/zerolog/log"
 )
 
 type Daemon struct {
@@ -86,16 +87,16 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	var dockerAuth *string
 	if e, ok := os.LookupEnv(DOCKER_REGISTRY_AUTH); ok {
 		dockerAuth = &e
-		fmt.Println("use custom credential for docker system")
+		log.Debug().Msg("use custom credential for docker system")
 	}
 
 	docker, err := system.NewDockerSystem(dockerAuth)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("removing remaining containers of the last session")
+	log.Debug().Msg("removing remaining containers of the last session")
 	if err := docker.RemoveAllContainers(); err != nil {
-		fmt.Printf("failed to remove containers: %#v\n", err)
+		log.Error().Msgf("failed to remove containers: %#v", err)
 	}
 
 	pm, err := project.NewProjectManager(projectDir)

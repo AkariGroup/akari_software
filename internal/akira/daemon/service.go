@@ -3,7 +3,6 @@ package daemon
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/AkariGroup/akari_software/internal/akira/proto"
 	"github.com/AkariGroup/akari_software/internal/akira/service"
+	"github.com/rs/zerolog/log"
 )
 
 type AkariServiceServicer struct {
@@ -58,7 +58,7 @@ func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
 		if c, ok := m.GetImage(imgId); ok {
 			image = imageToPb(c)
 		} else {
-			log.Printf("failed to find service of id: %#v\n", imgId)
+			log.Error().Msgf("failed to find service of id: %#v", imgId)
 		}
 	}
 
