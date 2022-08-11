@@ -62,7 +62,7 @@ func (m *ProjectManager) UpdateProjects() {
 		}
 
 		// Detected a file named "akari_manifest.yaml"
-		project, err := LoadLocalProject(manifest)
+		project, err := OpenLocalProject(manifest)
 		if err != nil {
 			log.Warn().Msgf("error occurred while loading: %s", manifest)
 			return nil
@@ -95,7 +95,7 @@ func (m *ProjectManager) CreateProject(dirname string, manifest ProjectManifest,
 		m.mu.Lock()
 		defer m.mu.Unlock()
 
-		if proj, err := CreateEmptyLocalProject(dir, manifest); err != nil {
+		if proj, err := CreateLocalProject(dir, manifest); err != nil {
 			return nil, err
 		} else {
 			m.registerProject(proj)
