@@ -31,8 +31,7 @@ import {
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
-
-const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
+import { ValidNamePattern } from "../validNamePattern";
 
 type TemplateSelectorProps = {
   fields: ControllerRenderProps<CreateProjectFromTemplateInputs, "templateId">;
