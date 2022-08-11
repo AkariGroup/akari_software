@@ -26,6 +26,11 @@ message CreateProjectFromGitRequest {
   optional string branch = 3;
 }
 
+message EditProjectRequest {
+  string id = 1;
+  ProjectManifest manifest = 2;
+}
+
 message Project {
   string id = 1;
   ProjectManifest manifest = 2;
@@ -65,6 +70,13 @@ service ProjectService {
   rpc CreateProjectFromGit(CreateProjectFromGitRequest) returns (Project) {
     option (google.api.http) = {
       post: "/projects/create/git"
+      body: "*"
+    };
+  }
+
+  rpc EditProject(EditProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      post: "/projects/edit"
       body: "*"
     };
   }
