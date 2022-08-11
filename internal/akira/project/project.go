@@ -50,7 +50,7 @@ func (p *localProject) Manifest() ProjectManifest {
 }
 
 func (p *localProject) Path() string {
-	return filepath.Base(p.manifestPath)
+	return filepath.Dir(p.manifestPath)
 }
 
 func (p *localProject) LoadManifest() error {
@@ -90,16 +90,24 @@ func (p *localProject) SaveManifest() error {
 	return nil
 }
 
-func OpenLocalProject(manifestPath string) (*localProject, error) {
+func newLocalProject(manifestPath string) (*localProject, error) {
 	var err error
 	manifestPath, err = filepath.Abs(manifestPath)
 	if err != nil {
 		return nil, err
 	}
 
-	p := &localProject{
+	return &localProject{
 		manifestPath: manifestPath,
+	}, nil
+}
+
+func OpenLocalProject(manifestPath string) (*localProject, error) {
+	p, err := newLocalProject(manifestPath)
+	if err != nil {
+		return nil, err
 	}
+
 	if err := p.LoadManifest(); err != nil {
 		return nil, err
 	} else {
@@ -116,10 +124,12 @@ func CreateLocalProject(path string, m ProjectManifest) (*localProject, error) {
 	}
 
 	manifestPath := filepath.Join(path, ManifestFileName)
-	p := &localProject{
-		manifestPath: manifestPath,
-		manifest:     m,
+	p, err := newLocalProject(manifestPath)
+	if err != nil {
+		return nil, err
 	}
+
+	p.manifest = m
 	if err := p.SaveManifest(); err != nil {
 		os.RemoveAll(path)
 		return nil, err
