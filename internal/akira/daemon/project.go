@@ -71,8 +71,17 @@ func (s *ProjectServicer) CreateLocalProject(ctx context.Context, r *proto.Creat
 }
 
 func (s *ProjectServicer) EditProject(ctx context.Context, r *proto.EditProjectRequest) (*proto.Project, error) {
-	// TODO: Implement
-	return nil, status.Errorf(codes.Unimplemented, "method EditProject not implemented")
+	p, ok := s.da.projects.GetProject(r.Id)
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("project doesn't exist: %#v", r.Id))
+	}
+	if err := p.SetManifest(pbToProjectManifest(r.Manifest)); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid manifest: %#v", err))
+	}
+	if err := p.SaveManifest(); err != nil {
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("error occurred while saving manifest: %#v", err))
+	}
+	return projectToPb(p), nil
 }
 
 func (s *ProjectServicer) GetProject(ctx context.Context, r *proto.GetProjectRequest) (*proto.Project, error) {
