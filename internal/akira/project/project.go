@@ -26,6 +26,7 @@ type ProjectManifest struct {
 type Project interface {
 	Id() ProjectId
 	Manifest() ProjectManifest
+	SetManifest(m ProjectManifest) error
 	Path() string
 
 	LoadManifest() error
@@ -47,6 +48,15 @@ func (p *localProject) Name() string {
 
 func (p *localProject) Manifest() ProjectManifest {
 	return p.manifest
+}
+
+func (p *localProject) SetManifest(m ProjectManifest) error {
+	v := validator.New()
+	if err := v.Struct(m); err != nil {
+		return fmt.Errorf("invalid manifest: %#v", err)
+	}
+	p.manifest = m
+	return nil
 }
 
 func (p *localProject) Path() string {
