@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import { useApiClient } from "../../../hooks/api";
 import {
-  //Akira_protoEditLocalProjectRequest,
+  Akira_protoEditProjectRequest,
   Akira_protoProjectManifest,
 } from "../../../api/@types";
 import { useCallback, useState } from "react";
@@ -28,31 +28,17 @@ import {
   Typography,
 } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 
 const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
 
-type Akira_protoEditLocalProjectRequest = {
-  dirname?: string | undefined
-  manifest?: Akira_protoProjectManifest | undefined
-  templateId?: string | undefined
-}
-
 type EditProjectFromTemplateInputs = {
-  path: string;
-  templateId: string;
+  id: string;
   manifest: Akira_protoProjectManifest;
 };
 
 export function ProjectsEdit() {
-  const [customPath, setCustomPath] = useState(false);
-  const handleCustomPathChange = useCallback(
-    (_: any, checked: boolean) => {
-      setCustomPath(checked);
-    },
-    [setCustomPath]
-  );
   const {
     control,
     handleSubmit,
@@ -64,51 +50,26 @@ export function ProjectsEdit() {
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
+  const prevPage = () => {
+    navigate(-1);
+  }
   const onSubmit: SubmitHandler<EditProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;
 
-      const request: Akira_protoEditLocalProjectRequest = {
-        dirname: customPath ? data.path : data.manifest.name,
+      const request: Akira_protoEditProjectRequest = {
         manifest: data.manifest,
-        templateId: data.templateId,
+        id: data.id,
       };
       // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.create.local.post({
+      const res = await client.projects.edit.post({
         body: request,
       });
       const projectId = res.body.id;
 
       navigate(`/projects/details?id=${projectId}`);
     },
-    [customPath, client, navigate]
-  );
-
-  const customPathElement = customPath ? (
-    <Controller
-      name="path"
-      control={control}
-      rules={{
-        required: ValidationMessages.Required,
-        pattern: {
-          value: ValidNamePattern,
-          message: ValidationMessages.InvalidCharacter,
-        },
-      }}
-      defaultValue=""
-      render={({ field }) => (
-        <TextField
-          {...field}
-          required
-          label="ディレクトリ名"
-          variant="filled"
-          error={!!errors.path}
-          helperText={errors.path && errors.path.message}
-        />
-      )}
-    />
-  ) : (
-    <></>
+    [client, navigate]
   );
 
   if (!client || !templates) {
@@ -142,6 +103,7 @@ export function ProjectsEdit() {
                 required
                 label="プロジェクト名"
                 variant="filled"
+                defaultValue=""
                 error={!!errors.manifest?.name}
                 helperText={
                   errors.manifest?.name && errors.manifest?.name.message
@@ -219,8 +181,9 @@ export function ProjectsEdit() {
         &nbsp;
         <Button
           type="button"
-          variant="contained"
-          component={Link} to ="/projects"
+          variant="outlined"
+          color="error"
+          onClick={prevPage}
         >
           キャンセル
         </Button>
