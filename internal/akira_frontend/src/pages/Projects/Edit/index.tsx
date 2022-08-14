@@ -1,7 +1,5 @@
 import {
   Controller,
-  ControllerRenderProps,
-  FieldError,
   SubmitHandler,
   useForm,
 } from "react-hook-form";
@@ -10,28 +8,17 @@ import {
   Akira_protoEditProjectRequest,
   Akira_protoProjectManifest,
 } from "../../../api/@types";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import {
-  Box,
   Button,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
-  Switch,
   TextField,
-  Typography,
 } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { useNavigate, useSearchParams} from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
-
-const ValidNamePattern = /^[A-Za-z0-9-_]+$/;
+import { ValidNamePattern } from "../validNamePattern";
 
 type EditProjectFromTemplateInputs = {
   id: string;
@@ -45,34 +32,39 @@ export function ProjectsEdit() {
     formState: { errors },
   } = useForm<EditProjectFromTemplateInputs>();
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get("id") as string;
   const client = useApiClient();
-  const { data: templates } = useAspidaSWR(client.templates, {
-    enabled: !!client,
+  const { data: project } = useAspidaSWR(client?.projects.detail, {
+    query: {
+      id: projectId,
+    },
+    enabled: !!projectId && !!client,
   });
   const prevPage = () => {
     navigate(-1);
   }
+
   const onSubmit: SubmitHandler<EditProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;
 
       const request: Akira_protoEditProjectRequest = {
         manifest: data.manifest,
-        id: data.id,
+        id: projectId,
       };
+      console.log(data.manifest.name);
       // TODO: Handle error (e.g. Directory name conflicts)
       const res = await client.projects.edit.post({
         body: request,
       });
-      const projectId = res.body.id;
 
       navigate(`/projects/details?id=${projectId}`);
     },
     [client, navigate]
   );
 
-  if (!client || !templates) {
+  if (!project) {
     return <></>;
   }
   return (
@@ -96,14 +88,13 @@ export function ProjectsEdit() {
                 message: ValidationMessages.InvalidCharacter,
               },
             }}
-            defaultValue=""
+            defaultValue={project.manifest?.name}
             render={({ field }) => (
               <TextField
                 {...field}
                 required
                 label="プロジェクト名"
                 variant="filled"
-                defaultValue=""
                 error={!!errors.manifest?.name}
                 helperText={
                   errors.manifest?.name && errors.manifest?.name.message
@@ -115,7 +106,7 @@ export function ProjectsEdit() {
           <Controller
             name="manifest.author"
             control={control}
-            defaultValue=""
+            defaultValue={project.manifest?.author}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -131,7 +122,7 @@ export function ProjectsEdit() {
           <Controller
             name="manifest.url"
             control={control}
-            defaultValue=""
+            defaultValue={project.manifest?.url}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -151,7 +142,7 @@ export function ProjectsEdit() {
         <Controller
           name="manifest.description"
           control={control}
-          defaultValue=""
+          defaultValue={project.manifest?.description}
           render={({ field }) => (
             <TextField
               {...field}

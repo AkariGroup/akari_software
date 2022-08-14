@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from '@mui/icons-material/Edit';
-import { Navigate, useSearchParams,Link } from "react-router-dom";
+import { useNavigate,Navigate, useSearchParams} from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
 import { useCallback } from "react";
@@ -32,6 +32,10 @@ export function ProjectsDetails() {
   const { data: services } = useAspidaSWR(client?.services, {
     enabled: !!client,
   });
+  const navigate = useNavigate();
+  const editPage = () => {
+    navigate(`/projects/edit?id=${projectId}`);
+  }
   const setBusy = useSetBackdropValue();
   const onOpenProject = useCallback(
     async (s: Akira_protoService) => {
@@ -72,7 +76,8 @@ export function ProjectsDetails() {
                 <Typography variant="h4">
                   {project.manifest?.name}
                   &nbsp;
-                  <IconButton aria-label="Edit" component={Link} to ="/projects/edit">
+                  <IconButton aria-label="Edit"
+                    onClick={editPage}>
                     <EditIcon />
                   </IconButton>
                 </Typography>
