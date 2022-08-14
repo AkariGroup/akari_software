@@ -119,15 +119,15 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 	}, meta, nil
 }
 
-func (p *VSCode) Start(ctx context.Context) error {
+func (p *VSCode) Start(ctx context.Context) (ServiceTask, error) {
 	return p.container.Start(ctx)
 }
 
-func (p *VSCode) Stop(ctx context.Context) error {
+func (p *VSCode) Stop(ctx context.Context) (ServiceTask, error) {
 	return p.container.Stop(ctx)
 }
 
-func (p *VSCode) Terminate(ctx context.Context) error {
+func (p *VSCode) Terminate(ctx context.Context) (ServiceTask, error) {
 	return p.container.Terminate(ctx)
 }
 

@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/go-playground/validator/v10"
 	yaml "github.com/goccy/go-yaml"
@@ -48,6 +49,31 @@ type ServiceConfig struct {
 	AutoStart   bool   `json:"auto_start"`
 }
 
+type serviceTask struct {
+	err error
+	wg  sync.WaitGroup
+}
+
+func runServiceTask(f func() error) *serviceTask {
+	s := &serviceTask{}
+	s.wg.Add(1)
+	go func() {
+		s.err = f()
+		s.wg.Done()
+	}()
+
+	return s
+}
+
+func (s *serviceTask) Wait() error {
+	s.wg.Wait()
+	return s.err
+}
+
+type ServiceTask interface {
+	Wait() error
+}
+
 type Service interface {
 	Id() ServiceId
 	DisplayName() string
@@ -57,9 +83,9 @@ type Service interface {
 	Capabilities() []ServiceCapability
 	AutoStart() bool
 
-	Start(ctx context.Context) error
-	Stop(ctx context.Context) error
-	Terminate(ctx context.Context) error
+	Start(context.Context) (ServiceTask, error)
+	Stop(context.Context) (ServiceTask, error)
+	Terminate(context.Context) (ServiceTask, error)
 	Clean() error
 	Status() ServiceStatus
 

@@ -34,12 +34,14 @@ func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *Ser
 	}
 }
 
-func goRunConditional(async bool, f func() error) error {
+func goRunConditional(async bool, f func() error) ServiceTask {
 	if async {
-		go f()
-		return nil
+		return runServiceTask(f)
 	} else {
-		return f()
+		err := f()
+		return &serviceTask{
+			err: err,
+		}
 	}
 }
 
@@ -79,8 +81,7 @@ func (p *ServiceContainer) ContainerInfo() (system.CreateContainerOption, interf
 	return p.containerConfig, p.containerMeta, p.containerId != nil
 }
 
-func (p *ServiceContainer) Start(ctx context.Context) error {
-	async := GetAsync(ctx)
+func (p *ServiceContainer) Start(ctx context.Context) (ServiceTask, error) {
 	err := func() error {
 		p.mu.Lock()
 		defer p.mu.Unlock()
@@ -92,9 +93,10 @@ func (p *ServiceContainer) Start(ctx context.Context) error {
 		return nil
 	}()
 	if err != nil {
-		return err
+		return &serviceTask{}, err
 	}
 
+	async := GetAsync(ctx)
 	return goRunConditional(async, func() error {
 		err := func() error {
 			cid, err := p.createContainer()
@@ -111,7 +113,7 @@ func (p *ServiceContainer) Start(ctx context.Context) error {
 			p.changeStatus(Running)
 		}
 		return err
-	})
+	}), nil
 }
 
 func (p *ServiceContainer) getContainerId() (system.ContainerId, bool) {
@@ -122,8 +124,7 @@ func (p *ServiceContainer) getContainerId() (system.ContainerId, bool) {
 	}
 }
 
-func (p *ServiceContainer) Stop(ctx context.Context) error {
-	async := GetAsync(ctx)
+func (p *ServiceContainer) Stop(ctx context.Context) (ServiceTask, error) {
 	cid, err := func() (system.ContainerId, error) {
 		p.mu.Lock()
 		defer p.mu.Unlock()
@@ -139,9 +140,10 @@ func (p *ServiceContainer) Stop(ctx context.Context) error {
 		}
 	}()
 	if err != nil {
-		return err
+		return &serviceTask{}, err
 	}
 
+	async := GetAsync(ctx)
 	return goRunConditional(async, func() error {
 		timeout := 10 * time.Second
 		err := p.d.StopContainer(cid, timeout)
@@ -151,11 +153,10 @@ func (p *ServiceContainer) Stop(ctx context.Context) error {
 			p.changeStatus(Stopped)
 		}
 		return err
-	})
+	}), nil
 }
 
-func (p *ServiceContainer) Terminate(ctx context.Context) error {
-	async := GetAsync(ctx)
+func (p *ServiceContainer) Terminate(ctx context.Context) (ServiceTask, error) {
 	cid, err := func() (system.ContainerId, error) {
 		p.mu.Lock()
 		defer p.mu.Unlock()
@@ -168,20 +169,21 @@ func (p *ServiceContainer) Terminate(ctx context.Context) error {
 		if !ok {
 			return "", errors.New("container already removed")
 		}
-		p.changeStatus(Terminated)
+		p.status = Terminated
 		p.containerId = nil
 		return cid, nil
 	}()
 	if err != nil {
-		return err
+		return &serviceTask{}, err
 	}
 
+	async := GetAsync(ctx)
 	return goRunConditional(async, func() error {
 		if err := p.d.RemoveContainer(cid); err != nil {
 			return fmt.Errorf("got an error while removing the container: %#v, %#v", p.containerId, err)
 		}
 		return nil
-	})
+	}), nil
 }
 
 func (p *ServiceContainer) Status() ServiceStatus {

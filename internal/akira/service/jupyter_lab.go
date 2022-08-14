@@ -119,15 +119,15 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 	}, meta, nil
 }
 
-func (p *JupyterLab) Start(ctx context.Context) error {
+func (p *JupyterLab) Start(ctx context.Context) (ServiceTask, error) {
 	return p.container.Start(ctx)
 }
 
-func (p *JupyterLab) Stop(ctx context.Context) error {
+func (p *JupyterLab) Stop(ctx context.Context) (ServiceTask, error) {
 	return p.container.Stop(ctx)
 }
 
-func (p *JupyterLab) Terminate(ctx context.Context) error {
+func (p *JupyterLab) Terminate(ctx context.Context) (ServiceTask, error) {
 	return p.container.Terminate(ctx)
 }
 

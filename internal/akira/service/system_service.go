@@ -61,15 +61,15 @@ func (p *SystemService) createContainerConfig() (system.CreateContainerOption, i
 	return p.config.ContainerOption, nil, nil
 }
 
-func (p *SystemService) Start(ctx context.Context) error {
+func (p *SystemService) Start(ctx context.Context) (ServiceTask, error) {
 	return p.container.Start(ctx)
 }
 
-func (p *SystemService) Stop(ctx context.Context) error {
+func (p *SystemService) Stop(ctx context.Context) (ServiceTask, error) {
 	return p.container.Stop(ctx)
 }
 
-func (p *SystemService) Terminate(ctx context.Context) error {
+func (p *SystemService) Terminate(ctx context.Context) (ServiceTask, error) {
 	return p.container.Terminate(ctx)
 }
 

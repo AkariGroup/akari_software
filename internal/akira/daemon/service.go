@@ -144,7 +144,7 @@ func (m *AkariServiceServicer) StartService(ctx context.Context, r *proto.StartS
 	}
 
 	ctx = service.SetAsync(ctx, true)
-	if err := s.Start(ctx); err != nil {
+	if _, err := s.Start(ctx); err != nil {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("error: %#v", err))
 	} else {
 		return &emptypb.Empty{}, nil
@@ -158,15 +158,16 @@ func (m *AkariServiceServicer) StopService(ctx context.Context, r *proto.StopSer
 	}
 
 	ctx = service.SetAsync(ctx, true)
-	if err := s.Stop(ctx); err != nil {
+	task, err := s.Stop(ctx)
+	if err != nil {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("error: %#v", err))
 	}
 
 	if r.Terminate {
-		ctx = service.SetAsync(ctx, true)
-		if err := s.Terminate(ctx); err != nil {
-			return nil, status.Errorf(codes.Internal, fmt.Sprintf("error: %#v", err))
-		}
+		go func() {
+			task.Wait()
+			s.Terminate(ctx)
+		}()
 	}
 	return &emptypb.Empty{}, nil
 }
@@ -178,7 +179,7 @@ func (m *AkariServiceServicer) TerminateService(ctx context.Context, r *proto.Te
 	}
 
 	ctx = service.SetAsync(ctx, true)
-	if err := s.Terminate(ctx); err != nil {
+	if _, err := s.Terminate(ctx); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
 	} else {
 		return &emptypb.Empty{}, nil
