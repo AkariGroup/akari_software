@@ -53,9 +53,7 @@ export function ProjectsEdit() {
         manifest: data.manifest,
         id: projectId,
       };
-      console.log(data.manifest.name);
-      // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.edit.post({
+      await client.projects.edit.post({
         body: request,
       });
 
