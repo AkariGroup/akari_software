@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
-	"github.com/docker/docker/api/types/mount"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/docker/docker/api/types/mount"
 
 	"github.com/AkariGroup/akari_software/internal/akira/internal/util"
 	"github.com/AkariGroup/akari_software/internal/akira/system"
@@ -117,16 +119,16 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 	}, meta, nil
 }
 
-func (p *JupyterLab) Start() error {
-	return p.container.Start()
+func (p *JupyterLab) Start(ctx context.Context) (ServiceTask, error) {
+	return p.container.Start(ctx)
 }
 
-func (p *JupyterLab) Stop() error {
-	return p.container.Stop()
+func (p *JupyterLab) Stop(ctx context.Context) (ServiceTask, error) {
+	return p.container.Stop(ctx)
 }
 
-func (p *JupyterLab) Terminate() error {
-	return p.container.Terminate()
+func (p *JupyterLab) Terminate(ctx context.Context) (ServiceTask, error) {
+	return p.container.Terminate(ctx)
 }
 
 func (p *JupyterLab) Clean() error {

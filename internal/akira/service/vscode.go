@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
-	"github.com/docker/docker/api/types/mount"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/docker/docker/api/types/mount"
 
 	"github.com/AkariGroup/akari_software/internal/akira/internal/util"
 	"github.com/AkariGroup/akari_software/internal/akira/system"
@@ -117,16 +119,16 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 	}, meta, nil
 }
 
-func (p *VSCode) Start() error {
-	return p.container.Start()
+func (p *VSCode) Start(ctx context.Context) (ServiceTask, error) {
+	return p.container.Start(ctx)
 }
 
-func (p *VSCode) Stop() error {
-	return p.container.Stop()
+func (p *VSCode) Stop(ctx context.Context) (ServiceTask, error) {
+	return p.container.Stop(ctx)
 }
 
-func (p *VSCode) Terminate() error {
-	return p.container.Terminate()
+func (p *VSCode) Terminate(ctx context.Context) (ServiceTask, error) {
+	return p.container.Terminate(ctx)
 }
 
 func (p *VSCode) Clean() error {

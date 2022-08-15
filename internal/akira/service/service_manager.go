@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -70,12 +71,14 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 func (m *serviceManager) triggerAutoStartServices() {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	ctx := SetAsync(context.Background(), true)
+
 	for _, s := range m.services {
 		if !s.AutoStart() {
 			continue
 		}
 
-		s.Start()
+		s.Start(ctx)
 	}
 }
 
@@ -230,8 +233,10 @@ func (m *serviceManager) RemoveUserService(id ServiceId) error {
 		return fmt.Errorf("cannot remove non-user service: %#v", id)
 	}
 
-	s.Stop()
-	s.Terminate()
+	ctx := context.Background()
+	s.Stop(ctx)
+	s.Terminate(ctx)
+
 	s.Clean()
 
 	m.mu.Lock()
