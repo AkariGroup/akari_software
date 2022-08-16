@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useNavigate,Navigate, useSearchParams} from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
@@ -73,14 +74,20 @@ export function ProjectsDetails() {
           <Card>
             <CardContent>
               <Box mb={1}>
-                <Typography variant="h4">
-                  {project.manifest?.name}
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h4">
+                    {project.manifest?.name}
+                  </Typography>
                   &nbsp;
-                  <IconButton aria-label="Edit"
-                    onClick={editPage}>
+                  <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                  <IconButton aria-label="Edit" onClick={editPage}>
                     <EditIcon />
                   </IconButton>
-                </Typography>
+                  </Typography>
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                </Box>
                 <Typography
                   mt={1}
                   variant="body2"
