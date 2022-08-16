@@ -24,7 +24,7 @@ export function ProjectList({ project }: Prop) {
 
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 }}} style={{ height: 20 }}>
-      <TableCell sx={{ width: 300 }} > <div onClick={projectPage}>{project.manifest?.name}</div> </TableCell>
+      <TableCell sx={{ width: 300 }}  > <div onClick={projectPage} style={{}}>{project.manifest?.name}</div> </TableCell>
       <TableCell sx={{ width: 300 }}> {project.manifest?.author}</TableCell>
       <TableCell sx={{ width: 600 }}> {project.manifest?.description}</TableCell>
       <TableCell><IconButton disabled>

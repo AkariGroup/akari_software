@@ -10,7 +10,10 @@ import {
   TableRow,
   Box,
   Button,
+  Grid,
 } from "@mui/material";
+import GridViewIcon from '@mui/icons-material/GridView';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 import AddIcon from '@mui/icons-material/Add';
 import { ReactNode, useState, } from "react";
 import { LayoutRouteProps, Link } from "react-router-dom";
@@ -67,40 +70,50 @@ export function Projects() {
     //setLayout(currentLayout); // only set if state is changed.
   }
 
-
+  const listView=() => {
+  
+}
   return (
-    <Container maxWidth="xl">
-        <Stack spacing={2} sx={{ margin: 1 }} direction="row" >
-          <Tabs value={mode}>
-            <Tab label="Card" value={0} onClick={() => {
-              setMode(0);
-            }} />
-            <Tab label="Table" value={1} onClick={() => {
-              setMode(1);
-            }} />
-          </Tabs>
-      </Stack>
-      <Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          color="success"
-          component={Link} to="/projects/create"
-        >
-          新規プロジェクト
-        </Button>
-      </Box>
-      <Header />
+    <Grid container>
+      <Grid container justifyContent="flex-end">
+        <Stack sx={{ margin: 1 }} direction="row" >
+          <Button onClick={() => { setMode(0); }}
+          >
+            <GridViewIcon />
+          </Button>
+          <Button
+            onClick={() => { setMode(1); }}
+          >
+            <TableRowsIcon />
+          </Button>
+        </Stack>
+      </Grid>
+      <Grid item xs={0.5}>
+      </Grid>
+      <Grid item xs={11.5}>
+        <Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            color="success"
+            component={Link} to="/projects/create"
+          >
+            新規プロジェクト
+          </Button>
+        </Box>
+      </Grid>
+      <Container maxWidth="xl">
+        <Header />
         {data.projects?.map((p) => (
           <ProjectList key={p.id} project={p} />
         ))}
-    </Container>
-
+      </Container>
+    </Grid>
     /*<Stack spacing={2} sx={{ margin: 1 }} direction="row">
         <NewProjectButtonCard />
-      {data.projects?.map((p) => (
-        <ProjectCard key={p.id} project={p} />
-      ))}
-    </Stack>*/
-  );
+        {data.projects?.map((p) => (
+          <ProjectCard key={p.id} project={p} />
+        ))}
+      </Stack>*/
+      );
 }

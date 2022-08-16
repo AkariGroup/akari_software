@@ -49,6 +49,9 @@ export function CreateProjectFromGit() {
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
+  const prevPage = () => {
+    navigate(-1);
+  }
   const onSubmit: SubmitHandler<CreateProjectFromGitInputs> = useCallback(
     async (data) => {
       if (!client) return;
@@ -173,13 +176,23 @@ export function CreateProjectFromGit() {
           {customPathElement}
         </Stack>
       </Grid>
-      <Grid item md={12}>
+      <Grid item md={0}>
         <Button
           type="button"
           variant="contained"
           onClick={handleSubmit(onSubmit)}
         >
           作成
+        </Button>
+      </Grid>
+      <Grid item md={0}>
+        <Button
+          type="button"
+          color="error"
+          variant="outlined"
+          onClick={prevPage}
+        >
+          キャンセル
         </Button>
       </Grid>
     </Grid>
