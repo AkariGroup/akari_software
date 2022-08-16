@@ -30,6 +30,7 @@
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint-fix": "eslint --fix './src/**/*.{js,ts,tsx}' && prettier --write './src/**/*.{js,ts,tsx}'",
     "eject": "react-scripts eject",
     "prebuild": "rm -rf src/api && mkdir -p src/api && openapi2aspida && aspida"
   },
@@ -53,6 +54,11 @@
     ]
   },
   "devDependencies": {
-    "openapi2aspida": "^0.19.0"
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "openapi2aspida": "^0.19.0",
+    "prettier": "^2.7.1"
   }
 }
