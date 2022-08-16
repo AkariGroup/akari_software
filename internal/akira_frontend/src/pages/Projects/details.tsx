@@ -8,12 +8,12 @@ import {
   Grid,
   Stack,
   Typography,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useNavigate,Navigate, useSearchParams} from "react-router-dom";
+import { useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
 import { useCallback } from "react";
@@ -36,7 +36,7 @@ export function ProjectsDetails() {
   const navigate = useNavigate();
   const editPage = () => {
     navigate(`/projects/edit?id=${projectId}`);
-  }
+  };
   const setBusy = useSetBackdropValue();
   const onOpenProject = useCallback(
     async (s: Akira_protoService) => {
@@ -79,10 +79,10 @@ export function ProjectsDetails() {
                     {project.manifest?.name}
                   </Typography>
                   &nbsp;
-                  <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                  <IconButton aria-label="Edit" onClick={editPage}>
-                    <EditIcon />
-                  </IconButton>
+                  <Typography sx={{ flexGrow: 1 }}>
+                    <IconButton aria-label="Edit" onClick={editPage}>
+                      <EditIcon />
+                    </IconButton>
                   </Typography>
                   <IconButton>
                     <MoreVertIcon />

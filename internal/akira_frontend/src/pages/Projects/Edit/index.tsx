@@ -16,7 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
-import { useNavigate, useSearchParams} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 import { ValidNamePattern } from "../validNamePattern";
 
@@ -59,7 +59,7 @@ export function ProjectsEdit() {
 
       navigate(`/projects/details?id=${projectId}`);
     },
-    [client, navigate]
+    [client, projectId, navigate]
   );
 
   if (!project) {
