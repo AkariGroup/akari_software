@@ -8,9 +8,12 @@ import {
   Grid,
   Stack,
   Typography,
+  IconButton,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import { Navigate, useSearchParams } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { OpenProjectWithServiceButton } from "../../components/OpenProjectWithServiceButton";
 import { useApiClient } from "../../hooks/api";
 import { useCallback } from "react";
@@ -30,8 +33,11 @@ export function ProjectsDetails() {
   const { data: services } = useAspidaSWR(client?.services, {
     enabled: !!client,
   });
+  const navigate = useNavigate();
+  const editPage = () => {
+    navigate(`/projects/edit?id=${projectId}`);
+  };
   const setBusy = useSetBackdropValue();
-
   const onOpenProject = useCallback(
     async (s: Akira_protoService) => {
       if (!client || !s.id || !project?.id) return;
@@ -68,7 +74,20 @@ export function ProjectsDetails() {
           <Card>
             <CardContent>
               <Box mb={1}>
-                <Typography variant="h4">{project.manifest?.name}</Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h4">
+                    {project.manifest?.name}
+                  </Typography>
+                  &nbsp;
+                  <Typography sx={{ flexGrow: 1 }}>
+                    <IconButton aria-label="Edit" onClick={editPage}>
+                      <EditIcon />
+                    </IconButton>
+                  </Typography>
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                </Box>
                 <Typography
                   mt={1}
                   variant="body2"
