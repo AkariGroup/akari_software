@@ -8,12 +8,15 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import GridViewIcon from '@mui/icons-material/GridView';
-import TableRowsIcon from '@mui/icons-material/TableRows';
-import AddIcon from '@mui/icons-material/Add';
-import { useState, } from "react";
+import GridViewIcon from "@mui/icons-material/GridView";
+import TableRowsIcon from "@mui/icons-material/TableRows";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { NewProjectButtonCard, ProjectCard } from "../../components/ProjectCard";
+import {
+  NewProjectButtonCard,
+  ProjectCard,
+} from "../../components/ProjectCard";
 import { ProjectList } from "../../components/ProjectList";
 import { useApiClient } from "../../hooks/api";
 
@@ -24,7 +27,7 @@ function Header() {
         <TableCell sx={{ width: 300 }}>プロジェクト名</TableCell>
         <TableCell sx={{ width: 300 }}>作者名</TableCell>
         <TableCell sx={{ width: 600 }}>概要</TableCell>
-        <TableCell ></TableCell>
+        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -42,26 +45,34 @@ export function Projects() {
   return (
     <Grid container>
       <Grid container justifyContent="flex-end">
-        <Stack sx={{ margin: 1 }} direction="row" >
-          <Button variant={mode ? "contained" : undefined} onClick={() => { setMode(1); }}
+        <Stack sx={{ margin: 1 }} direction="row">
+          <Button
+            variant={mode ? "contained" : undefined}
+            onClick={() => {
+              setMode(1);
+            }}
           >
             <GridViewIcon />
           </Button>
           <Button
-            variant={mode ? undefined : "contained"} onClick={() => { setMode(0); }}
+            variant={mode ? undefined : "contained"}
+            onClick={() => {
+              setMode(0);
+            }}
           >
             <TableRowsIcon />
           </Button>
         </Stack>
       </Grid>
-      <div style={{ display: mode ? 'none' : '' }}>
+      <div style={{ display: mode ? "none" : "" }}>
         <Grid container>
           <Container maxWidth="xl">
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               color="success"
-              component={Link} to="/projects/create"
+              component={Link}
+              to="/projects/create"
             >
               新規プロジェクト
             </Button>
@@ -71,8 +82,8 @@ export function Projects() {
             ))}
           </Container>
         </Grid>
-      </div >
-      <div style={{ display: mode ? '' : 'none' }}>
+      </div>
+      <div style={{ display: mode ? "" : "none" }}>
         <Stack spacing={2} sx={{ margin: 1 }} direction="row">
           <NewProjectButtonCard />
           {data.projects?.map((p) => (

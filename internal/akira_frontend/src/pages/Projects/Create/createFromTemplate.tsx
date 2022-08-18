@@ -115,7 +115,7 @@ export function CreateProjectFromTemplate() {
   });
   const prevPage = () => {
     navigate(-1);
-  }
+  };
   const onSubmit: SubmitHandler<CreateProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;

@@ -1,14 +1,6 @@
-import {
-  Controller,
-  ControllerRenderProps,
-  FieldError,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useApiClient } from "../../../hooks/api";
-import {
-  Akira_protoCreateProjectFromGitRequest,
-} from "../../../api/@types";
+import { Akira_protoCreateProjectFromGitRequest } from "../../../api/@types";
 import { useCallback, useState } from "react";
 import {
   Button,
@@ -51,7 +43,7 @@ export function CreateProjectFromGit() {
   });
   const prevPage = () => {
     navigate(-1);
-  }
+  };
   const onSubmit: SubmitHandler<CreateProjectFromGitInputs> = useCallback(
     async (data) => {
       if (!client) return;
@@ -131,12 +123,11 @@ export function CreateProjectFromGit() {
                 label="git URL"
                 variant="filled"
                 error={!!errors.gitUrl}
-                helperText={
-                  errors.gitUrl && errors.gitUrl.message
-                }
+                helperText={errors.gitUrl && errors.gitUrl.message}
               />
             )}
-          /><Controller
+          />
+          <Controller
             name="branch"
             control={control}
             rules={{
@@ -154,9 +145,7 @@ export function CreateProjectFromGit() {
                 label="gitブランチ名"
                 variant="filled"
                 error={!!errors.branch}
-                helperText={
-                  errors.branch && errors.branch.message
-                }
+                helperText={errors.branch && errors.branch.message}
               />
             )}
           />
