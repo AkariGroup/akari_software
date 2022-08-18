@@ -20,9 +20,7 @@ export function useSetDarkmodeValue() {
 }
 
 export function DarkModeProvider({ children }: { children: React.ReactNode }) {
-  const [darkmode, setDarkmode] = React.useState(
-    localStorage.getItem("darkMode") === "on" ? true : false
-  );
+  const [darkmode, setDarkmode] = React.useState(() => localStorage.getItem("darkMode") === "on");
   return (
     <darkmodeContext.Provider value={darkmode}>
       <setDarkmodeContext.Provider value={setDarkmode}>

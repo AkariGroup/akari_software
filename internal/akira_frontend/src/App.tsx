@@ -5,6 +5,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
+import { useEffect } from "react";
 import { useRoutes } from "react-router-dom";
 import { useBackdropValue } from "./contexts/BackdropContext";
 import { useDarkmodeValue } from "./contexts/DarkmodeContext";
@@ -13,6 +14,9 @@ import { AppRoute } from "./routes";
 export function App() {
   const content = useRoutes([AppRoute]);
   const darkmode = useDarkmodeValue();
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkmode? "on":"off");
+  }, [darkmode]);
   const backdrop = useBackdropValue();
   const theme = createTheme({
     palette: {
