@@ -33,7 +33,7 @@ function Header() {
   );
 }
 export function Projects() {
-  const [mode, setMode] = useState(0);
+  const [mode, setMode] = useState(localStorage.getItem("projectDispMode") === "1" ? 1 : 0);
   const client = useApiClient();
 
   const { data, error } = useAspidaSWR(client?.projects, { enabled: !!client });
@@ -49,6 +49,7 @@ export function Projects() {
           <Button
             variant={mode ? "contained" : undefined}
             onClick={() => {
+              localStorage.setItem("projectDispMode", "1");
               setMode(1);
             }}
           >
@@ -57,6 +58,7 @@ export function Projects() {
           <Button
             variant={mode ? undefined : "contained"}
             onClick={() => {
+              localStorage.setItem("projectDispMode", "0");
               setMode(0);
             }}
           >
