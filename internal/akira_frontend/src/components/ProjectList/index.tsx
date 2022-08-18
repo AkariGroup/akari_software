@@ -17,17 +17,15 @@ export function ProjectList({ project }: Prop) {
       style={{ height: 20 }}
     >
       <TableCell sx={{ width: 300 }}>
-        {" "}
         <Link to={`/projects/details?id=${project.id}`}>
           {project.manifest?.name}
         </Link>
       </TableCell>
       <TableCell sx={{ width: 300 }}> {project.manifest?.author}</TableCell>
       <TableCell sx={{ width: 600 }}>
-        {" "}
         {project.manifest?.description}
       </TableCell>
-      <TableCell>
+      <TableCell sx={{ width: 200 }}>
         <IconButton disabled>
           <FavoriteIcon />
         </IconButton>

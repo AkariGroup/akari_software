@@ -27,7 +27,7 @@ function Header() {
         <TableCell sx={{ width: 300 }}>プロジェクト名</TableCell>
         <TableCell sx={{ width: 300 }}>作者名</TableCell>
         <TableCell sx={{ width: 600 }}>概要</TableCell>
-        <TableCell></TableCell>
+        <TableCell sx={{ width: 200 }}></TableCell>
       </TableRow>
     </TableHead>
   );
