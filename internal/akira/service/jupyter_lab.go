@@ -1,11 +1,9 @@
 package service
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/docker/docker/api/types/mount"
@@ -22,10 +20,7 @@ const (
 )
 
 type JupyterLab struct {
-	config    ServiceConfig
-	image     ImageConfig
-	opts      ServiceManagerOptions
-	container *ServiceContainer
+	*UserServiceProvider
 }
 
 type jupyterLabContainerMeta struct {
@@ -33,46 +28,10 @@ type jupyterLabContainerMeta struct {
 	token       string
 }
 
-func NewJupyterLab(image ImageConfig, config ServiceConfig, opts ServiceManagerOptions) *JupyterLab {
-	p := &JupyterLab{
-		config: config,
-		image:  image,
-		opts:   opts,
-	}
-	p.container = NewServiceContainer(p, opts.Docker)
+func NewJupyterLab(image ImageConfig, config ServiceConfig, configPath string, opts ServiceManagerOptions) *JupyterLab {
+	p := &JupyterLab{}
+	p.UserServiceProvider = NewUserServiceProvider(p, config, configPath, image, opts)
 	return p
-}
-
-func (p *JupyterLab) varDir() string {
-	return filepath.Join(p.opts.ServiceVarDir, string(p.config.Id))
-}
-
-func (p *JupyterLab) Id() ServiceId {
-	return p.config.Id
-}
-
-func (p *JupyterLab) DisplayName() string {
-	return p.config.DisplayName
-}
-
-func (p *JupyterLab) Description() string {
-	return p.config.Description
-}
-
-func (p *JupyterLab) ImageId() ImageId {
-	return p.config.ImageId
-}
-
-func (p *JupyterLab) Type() ServiceType {
-	return ServiceTypeUser
-}
-
-func (p *JupyterLab) Capabilities() []ServiceCapability {
-	return p.image.Capabilities
-}
-
-func (p *JupyterLab) AutoStart() bool {
-	return p.config.AutoStart
 }
 
 func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, interface{}, error) {
@@ -119,38 +78,8 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 	}, meta, nil
 }
 
-func (p *JupyterLab) Start(ctx context.Context) (ServiceTask, error) {
-	return p.container.Start(ctx)
-}
-
-func (p *JupyterLab) Stop(ctx context.Context) (ServiceTask, error) {
-	return p.container.Stop(ctx)
-}
-
-func (p *JupyterLab) Terminate(ctx context.Context) (ServiceTask, error) {
-	return p.container.Terminate(ctx)
-}
-
-func (p *JupyterLab) Clean() error {
-	ret := p.container.onCriticalSection(func() interface{} {
-		if p.container.Status() != Terminated {
-			return errors.New("cannot remove directory of existing container")
-		}
-
-		return os.RemoveAll(p.varDir())
-	})
-	if err, ok := ret.(error); ok {
-		return err
-	}
-	return nil
-}
-
-func (p *JupyterLab) Status() ServiceStatus {
-	return p.container.Status()
-}
-
 func (p *JupyterLab) GetOpenAddress(hostName string) (string, error) {
-	_, meta, ok := p.container.ContainerInfo()
+	_, meta, ok := p.UserServiceProvider.ContainerInfo()
 
 	if ok {
 		if meta, ok := meta.(jupyterLabContainerMeta); ok {
@@ -169,7 +98,7 @@ func (p *JupyterLab) GetOpenProjectAddress(hostName string, projectDir string) (
 	}
 	relPath := strings.TrimPrefix(projectDir, p.opts.ProjectRootDir)
 
-	_, meta, ok := p.container.ContainerInfo()
+	_, meta, ok := p.UserServiceProvider.ContainerInfo()
 
 	if ok {
 		if meta, ok := meta.(jupyterLabContainerMeta); ok {
