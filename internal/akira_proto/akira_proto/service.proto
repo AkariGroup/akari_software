@@ -39,6 +39,7 @@ message Service {
   ServiceStatus status = 5;
   ServiceType type = 6;
   repeated string capabilities = 7;
+  bool auto_start = 8;
 }
 
 message ListImagesResponse {
@@ -61,6 +62,17 @@ message CreateServiceRequest {
 
 message GetServiceRequest {
   string id = 1;
+}
+
+message EditServiceRequest {
+  string id = 1;
+  string display_name = 2;
+  string description = 3;
+}
+
+message SetAutoStartRequest {
+  string id = 1;
+  bool auto_start = 2;
 }
 
 message RemoveServiceRequest {
@@ -132,6 +144,20 @@ service AkariServiceService {
   rpc GetService(GetServiceRequest) returns (Service) {
     option (google.api.http) = {
       get: "/services/{id}"
+    };
+  }
+
+  rpc EditService(EditServiceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/services/{id}/edit"
+      body: "*"
+    };
+  }
+
+  rpc SetAutoStartService(SetAutoStartRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/services/{id}/auto_start"
+      body: "*"
     };
   }
 
