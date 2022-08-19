@@ -28,6 +28,8 @@ type AkariServiceServiceClient interface {
 	ListServices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListServicesResponse, error)
 	CreateService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*Service, error)
 	GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*Service, error)
+	EditService(ctx context.Context, in *EditServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SetAutoStartService(ctx context.Context, in *SetAutoStartRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	RemoveService(ctx context.Context, in *RemoveServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	StartService(ctx context.Context, in *StartServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	StopService(ctx context.Context, in *StopServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -83,6 +85,24 @@ func (c *akariServiceServiceClient) CreateService(ctx context.Context, in *Creat
 func (c *akariServiceServiceClient) GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*Service, error) {
 	out := new(Service)
 	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *akariServiceServiceClient) EditService(ctx context.Context, in *EditServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/EditService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *akariServiceServiceClient) SetAutoStartService(ctx context.Context, in *SetAutoStartRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/SetAutoStartService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -152,6 +172,8 @@ type AkariServiceServiceServer interface {
 	ListServices(context.Context, *emptypb.Empty) (*ListServicesResponse, error)
 	CreateService(context.Context, *CreateServiceRequest) (*Service, error)
 	GetService(context.Context, *GetServiceRequest) (*Service, error)
+	EditService(context.Context, *EditServiceRequest) (*emptypb.Empty, error)
+	SetAutoStartService(context.Context, *SetAutoStartRequest) (*emptypb.Empty, error)
 	RemoveService(context.Context, *RemoveServiceRequest) (*emptypb.Empty, error)
 	StartService(context.Context, *StartServiceRequest) (*emptypb.Empty, error)
 	StopService(context.Context, *StopServiceRequest) (*emptypb.Empty, error)
@@ -179,6 +201,12 @@ func (UnimplementedAkariServiceServiceServer) CreateService(context.Context, *Cr
 }
 func (UnimplementedAkariServiceServiceServer) GetService(context.Context, *GetServiceRequest) (*Service, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetService not implemented")
+}
+func (UnimplementedAkariServiceServiceServer) EditService(context.Context, *EditServiceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditService not implemented")
+}
+func (UnimplementedAkariServiceServiceServer) SetAutoStartService(context.Context, *SetAutoStartRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetAutoStartService not implemented")
 }
 func (UnimplementedAkariServiceServiceServer) RemoveService(context.Context, *RemoveServiceRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveService not implemented")
@@ -297,6 +325,42 @@ func _AkariServiceService_GetService_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AkariServiceServiceServer).GetService(ctx, req.(*GetServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AkariServiceService_EditService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AkariServiceServiceServer).EditService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.AkariServiceService/EditService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AkariServiceServiceServer).EditService(ctx, req.(*EditServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AkariServiceService_SetAutoStartService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAutoStartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AkariServiceServiceServer).SetAutoStartService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.AkariServiceService/SetAutoStartService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AkariServiceServiceServer).SetAutoStartService(ctx, req.(*SetAutoStartRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -435,6 +499,14 @@ var AkariServiceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetService",
 			Handler:    _AkariServiceService_GetService_Handler,
+		},
+		{
+			MethodName: "EditService",
+			Handler:    _AkariServiceService_EditService_Handler,
+		},
+		{
+			MethodName: "SetAutoStartService",
+			Handler:    _AkariServiceService_SetAutoStartService_Handler,
 		},
 		{
 			MethodName: "RemoveService",
