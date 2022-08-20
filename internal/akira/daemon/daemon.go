@@ -79,6 +79,10 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	if err != nil {
 		return nil, err
 	}
+	serviceManagerConfigDir, err := setupDir(varDir, "configs/service_manager")
+	if err != nil {
+		return nil, err
+	}
 	serviceVarDir, err := setupDir(varDir, "services")
 	if err != nil {
 		return nil, err
@@ -108,12 +112,13 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 	tm := project.NewTemplateManager(templateDir)
 	tm.UpdateTemplates()
 	opts := service.ServiceManagerOptions{
-		ImageConfigDir:   imageConfigDir,
-		ServiceConfigDir: serviceConfigDir,
-		ServiceVarDir:    serviceVarDir,
-		EtcDir:           etcDir,
-		ProjectRootDir:   projectDir,
-		Docker:           docker,
+		ImageConfigDir:          imageConfigDir,
+		ServiceConfigDir:        serviceConfigDir,
+		ServiceManagerConfigDir: serviceManagerConfigDir,
+		ServiceVarDir:           serviceVarDir,
+		EtcDir:                  etcDir,
+		ProjectRootDir:          projectDir,
+		Docker:                  docker,
 	}
 	svr, err := service.NewServiceManager(opts)
 	if err != nil {
