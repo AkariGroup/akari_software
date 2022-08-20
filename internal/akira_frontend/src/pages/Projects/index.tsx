@@ -12,7 +12,7 @@ import {
 import GridViewIcon from "@mui/icons-material/GridView";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   NewProjectButtonCard,
@@ -21,20 +21,18 @@ import {
 import { ProjectListItem, ProjectListHeader } from "./ProjectList";
 import { useApiClient } from "../../hooks/api";
 
-const enum DISP_MODE {
-  TABLE,
-  CARD
-}
+type DisplayMode = "card" | "table";
 
-const projectDispModeKey = "projectDispMode"
+const projectDisplayModeKey = "projectDisplayMode"
 export function Projects() {
-  const [mode, setMode] = useState(() => localStorage.getItem(projectDispModeKey) === "TABLE" ? DISP_MODE.TABLE : DISP_MODE.CARD
-  );
+  const [mode, setMode] = useState<DisplayMode>(() => localStorage.getItem(projectDisplayModeKey) as DisplayMode);
   const client = useApiClient();
-
+  useEffect(() => {
+    localStorage.setItem(projectDisplayModeKey,mode);
+  }, [mode]);
   const { data, error } = useAspidaSWR(client?.projects, { enabled: !!client });
   let element = null;
-  if (!mode) {
+  if (mode==="table") {
     element = (
       <Grid container>
         <Container maxWidth="xl">
@@ -74,19 +72,17 @@ export function Projects() {
       <Grid container justifyContent="flex-end">
         <Stack sx={{ margin: 1 }} direction="row">
           <Button
-            variant={mode === DISP_MODE.CARD ? "contained" : undefined}
+            variant={mode === "card" ? "contained" : undefined}
             onClick={() => {
-              localStorage.setItem(projectDispModeKey, "CARD");
-              setMode(DISP_MODE.CARD);
+              setMode("card");
             }}
           >
             <GridViewIcon />
           </Button>
           <Button
-            variant={mode === DISP_MODE.TABLE ? "contained" : undefined}
+            variant={mode === "table" ? "contained" : undefined}
             onClick={() => {
-              localStorage.setItem(projectDispModeKey, "TABLE");
-              setMode(DISP_MODE.TABLE);
+              setMode("table");
             }}
           >
             <TableRowsIcon />
