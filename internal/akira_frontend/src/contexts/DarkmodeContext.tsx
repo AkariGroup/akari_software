@@ -15,7 +15,6 @@ export function useDarkmodeValue() {
   return useContext(darkmodeContext);
 }
 export function useSetDarkmodeValue() {
-  localStorage.setItem(DARKMODE_LOCALSTORAGE_KEY, useContext(darkmodeContext) ? "on" : "off");
   return useContext(setDarkmodeContext);
 }
 
