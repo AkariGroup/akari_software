@@ -21,10 +21,14 @@ import {
 import { ProjectListItem, ProjectListHeader } from "./ProjectList";
 import { useApiClient } from "../../hooks/api";
 
+const enum DISP_MODE {
+  TABLE,
+  CARD
+}
+
 const projectDispModeKey = "projectDispMode"
 export function Projects() {
-  const [mode, setMode] = useState(
-    localStorage.getItem(projectDispModeKey) === "1" ? 1 : 0
+  const [mode, setMode] = useState(() => localStorage.getItem(projectDispModeKey) === "TABLE" ? DISP_MODE.TABLE : DISP_MODE.CARD
   );
   const client = useApiClient();
 
@@ -52,14 +56,12 @@ export function Projects() {
     );
   } else {
     element = (
-      <div style={{ display: mode ? "" : "none" }}>
-        <Stack spacing={2} sx={{ margin: 1 }} direction="row">
-          <NewProjectButtonCard />
-          {data?.projects?.map((p) => (
-            <ProjectCard key={p.id} project={p} />
-          ))}
-        </Stack>
-      </div>
+      <Stack spacing={2} sx={{ margin: 1 }} direction="row">
+        <NewProjectButtonCard />
+        {data?.projects?.map((p) => (
+          <ProjectCard key={p.id} project={p} />
+        ))}
+      </Stack>
     );
   }
 
@@ -72,19 +74,19 @@ export function Projects() {
       <Grid container justifyContent="flex-end">
         <Stack sx={{ margin: 1 }} direction="row">
           <Button
-            variant={mode ? "contained" : undefined}
+            variant={mode === DISP_MODE.CARD ? "contained" : undefined}
             onClick={() => {
-              localStorage.setItem(projectDispModeKey, "1");
-              setMode(1);
+              localStorage.setItem(projectDispModeKey, "CARD");
+              setMode(DISP_MODE.CARD);
             }}
           >
             <GridViewIcon />
           </Button>
           <Button
-            variant={mode ? undefined : "contained"}
+            variant={mode === DISP_MODE.TABLE ? "contained" : undefined}
             onClick={() => {
-              localStorage.setItem(projectDispModeKey, "0");
-              setMode(0);
+              localStorage.setItem(projectDispModeKey, "TABLE");
+              setMode(DISP_MODE.TABLE);
             }}
           >
             <TableRowsIcon />

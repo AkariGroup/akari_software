@@ -47,7 +47,7 @@ export function ProjectListItem({ project }: Prop) {
           <IconButton disabled>
             <DeleteIcon />
           </IconButton>
-          <IconButton sx={{ marginLeft: "auto" }}>
+          <IconButton>
             <MoreVertIcon />
           </IconButton>
         </TableCell>
