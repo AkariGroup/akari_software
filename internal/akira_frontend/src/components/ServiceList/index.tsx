@@ -108,8 +108,6 @@ function PowerButton(props: PowerButtonProps) {
   );
   const powerButtonDisabled =
     props.service.status === "STARTING" || props.service.status === "STOPPING";
-
-
   const powerIcon = (() => {
     if (powerButtonDisabled) {
       return <CircularProgress/>;
