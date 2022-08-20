@@ -92,7 +92,7 @@ func (m *serviceManager) scanImages() error {
 	return nil
 }
 
-func (m *serviceManager) loadService(path string) (Service, error) {
+func (m *serviceManager) loadUserService(path string) (UserService, error) {
 	var config ServiceConfig
 	loader := ServiceConfigLoader{
 		config:     &config,
@@ -147,7 +147,7 @@ func (m *serviceManager) scanServices() error {
 			continue
 		}
 
-		if service, err := m.loadService(p); err != nil {
+		if service, err := m.loadUserService(p); err != nil {
 			log.Warn().Msgf("failed to load service: %#v", err)
 			continue
 		} else {
@@ -211,8 +211,7 @@ func (m *serviceManager) CreateUserService(s ImageId, displayName string, descri
 	if err := writer.SaveConfig(); err != nil {
 		return nil, fmt.Errorf("failed to save service config: %#v", err)
 	}
-	// We suppose that loadService only returns a UserService
-	service, err := m.loadService(configPath)
+	service, err := m.loadUserService(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load service: %#v", err)
 	}
