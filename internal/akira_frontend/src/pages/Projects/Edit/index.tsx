@@ -1,20 +1,11 @@
-import {
-  Controller,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useApiClient } from "../../../hooks/api";
 import {
   Akira_protoEditProjectRequest,
   Akira_protoProjectManifest,
 } from "../../../api/@types";
 import { useCallback } from "react";
-import {
-  Button,
-  Grid,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Button, Grid, Stack, TextField } from "@mui/material";
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
@@ -43,7 +34,7 @@ export function ProjectsEdit() {
   });
   const prevPage = () => {
     navigate(-1);
-  }
+  };
 
   const onSubmit: SubmitHandler<EditProjectFromTemplateInputs> = useCallback(
     async (data) => {
@@ -133,7 +124,6 @@ export function ProjectsEdit() {
               />
             )}
           />
-
         </Stack>
       </Grid>
       <Grid item sm={12} md={6}>
@@ -166,8 +156,7 @@ export function ProjectsEdit() {
         >
           変更
         </Button>
-        &nbsp;
-        &nbsp;
+        &nbsp; &nbsp;
         <Button
           type="button"
           variant="outlined"

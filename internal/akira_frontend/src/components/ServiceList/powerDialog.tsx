@@ -18,7 +18,10 @@ type Props = {
 
 export function PowerDialog(props: Props) {
   return (
-    <Dialog open={true} onClose={() => props.onResponse(PowerDialogResult.CANCEL)}>
+    <Dialog
+      open={true}
+      onClose={() => props.onResponse(PowerDialogResult.CANCEL)}
+    >
       <DialogTitle>確認</DialogTitle>
       <DialogContent>
         <DialogContentText>
