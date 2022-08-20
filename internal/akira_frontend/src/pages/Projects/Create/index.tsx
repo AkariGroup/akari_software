@@ -21,12 +21,20 @@ export function ProjectsCreate() {
     <Container maxWidth="xl">
       <Paper sx={{ mt: 2, pb: 1 }}>
         <Tabs value={mode}>
-          <Tab label="テンプレートから作成" value={0} onClick={() => {
-            setMode(0);
-          }} />
-          <Tab label="Gitレポジトリから作成" value={1} onClick={() => {
-            setMode(1);
-          }} />
+          <Tab
+            label="テンプレートから作成"
+            value={0}
+            onClick={() => {
+              setMode(0);
+            }}
+          />
+          <Tab
+            label="Gitレポジトリから作成"
+            value={1}
+            onClick={() => {
+              setMode(1);
+            }}
+          />
         </Tabs>
         <TabPanel visible={mode === 0}>
           <CreateProjectFromTemplate />
