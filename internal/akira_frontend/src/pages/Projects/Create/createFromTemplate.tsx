@@ -114,9 +114,6 @@ export function CreateProjectFromTemplate() {
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
-  const prevPage = () => {
-    navigate(-1);
-  };
   const onSubmit: SubmitHandler<CreateProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;
