@@ -5,7 +5,7 @@ import React, {
   useContext,
 } from "react";
 
-export const darkmodeKey = "darkmode"
+export const DARKMODE_LOCALSTORAGE_KEY = "darkmode"
 const darkmodeContext = createContext<boolean>(false);
 const setDarkmodeContext = createContext<Dispatch<SetStateAction<boolean>>>(
   () => undefined
