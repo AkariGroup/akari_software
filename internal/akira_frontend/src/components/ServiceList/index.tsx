@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   IconButton,
   Link,
   Paper,
@@ -107,12 +108,15 @@ function PowerButton(props: PowerButtonProps) {
   );
   const powerButtonDisabled =
     props.service.status === "STARTING" || props.service.status === "STOPPING";
-  const powerIcon =
-    props.service.status === "RUNNING" ? (
-      <PowerSettingsNewIcon color="error" />
-    ) : (
-      <PlayArrowIcon color="success" />
-    );
+  const powerIcon = (() => {
+    if (powerButtonDisabled) {
+      return <CircularProgress/>;
+    } else if (props.service.status === "RUNNING") {
+      return <PowerSettingsNewIcon color="error" />;
+    } else {
+      return <PlayArrowIcon color="success" />;
+    }
+  })();
 
   return (
     <>
