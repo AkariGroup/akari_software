@@ -15,12 +15,12 @@ export function useDarkmodeValue() {
   return useContext(darkmodeContext);
 }
 export function useSetDarkmodeValue() {
-  localStorage.setItem(darkmodeKey, useContext(darkmodeContext) ? "on" : "off");
+  localStorage.setItem(DARKMODE_LOCALSTORAGE_KEY, useContext(darkmodeContext) ? "on" : "off");
   return useContext(setDarkmodeContext);
 }
 
 export function DarkModeProvider({ children }: { children: React.ReactNode }) {
-  const [darkmode, setDarkmode] = React.useState(() => localStorage.getItem(darkmodeKey) === "on");
+  const [darkmode, setDarkmode] = React.useState(() => localStorage.getItem(DARKMODE_LOCALSTORAGE_KEY) === "on");
   return (
     <darkmodeContext.Provider value={darkmode}>
       <setDarkmodeContext.Provider value={setDarkmode}>
