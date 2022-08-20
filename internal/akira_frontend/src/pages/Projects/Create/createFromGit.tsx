@@ -15,7 +15,7 @@ import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 import { ValidNamePattern } from "../validNamePattern";
-
+import { CancelButton } from "../../../components/CancelButton";
 type CreateProjectFromGitInputs = {
   branch: string;
   dirname: string;
@@ -41,9 +41,6 @@ export function CreateProjectFromGit() {
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
-  const prevPage = () => {
-    navigate(-1);
-  };
   const onSubmit: SubmitHandler<CreateProjectFromGitInputs> = useCallback(
     async (data) => {
       if (!client) return;
@@ -175,14 +172,7 @@ export function CreateProjectFromGit() {
         </Button>
       </Grid>
       <Grid item md={0}>
-        <Button
-          type="button"
-          color="error"
-          variant="outlined"
-          onClick={prevPage}
-        >
-          キャンセル
-        </Button>
+        <CancelButton />
       </Grid>
     </Grid>
   );
