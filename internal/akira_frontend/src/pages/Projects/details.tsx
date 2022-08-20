@@ -75,9 +75,7 @@ export function ProjectsDetails() {
             <CardContent>
               <Box mb={1}>
                 <Box sx={{ display: "flex" }}>
-                  <Typography variant="h4">
-                    {project.manifest?.name}
-                  </Typography>
+                  <Typography variant="h4">{project.manifest?.name}</Typography>
                   &nbsp;
                   <Typography sx={{ flexGrow: 1 }}>
                     <IconButton aria-label="Edit" onClick={editPage}>

@@ -8,14 +8,17 @@ import { ThemeProvider } from "@mui/system";
 import { useEffect } from "react";
 import { useRoutes } from "react-router-dom";
 import { useBackdropValue } from "./contexts/BackdropContext";
-import { useDarkmodeValue, DARKMODE_LOCALSTORAGE_KEY } from "./contexts/DarkmodeContext";
+import {
+  useDarkmodeValue,
+  DARKMODE_LOCALSTORAGE_KEY,
+} from "./contexts/DarkmodeContext";
 import { AppRoute } from "./routes";
 
 export function App() {
   const content = useRoutes([AppRoute]);
   const darkmode = useDarkmodeValue();
   useEffect(() => {
-    localStorage.setItem(DARKMODE_LOCALSTORAGE_KEY, darkmode? "on":"off");
+    localStorage.setItem(DARKMODE_LOCALSTORAGE_KEY, darkmode ? "on" : "off");
   }, [darkmode]);
   const backdrop = useBackdropValue();
   const theme = createTheme({

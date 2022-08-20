@@ -1,10 +1,5 @@
 import useAspidaSWR from "@aspida/swr";
-import {
-  Stack,
-  Container,
-  Button,
-  Grid,
-} from "@mui/material";
+import { Stack, Container, Button, Grid } from "@mui/material";
 import GridViewIcon from "@mui/icons-material/GridView";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,16 +14,18 @@ import { useApiClient } from "../../hooks/api";
 
 type DisplayMode = "card" | "table";
 
-const projectDisplayModeKey = "projectDisplayMode"
+const projectDisplayModeKey = "projectDisplayMode";
 export function Projects() {
-  const [mode, setMode] = useState<DisplayMode>(() => localStorage.getItem(projectDisplayModeKey) as DisplayMode);
+  const [mode, setMode] = useState<DisplayMode>(
+    () => localStorage.getItem(projectDisplayModeKey) as DisplayMode
+  );
   const client = useApiClient();
   useEffect(() => {
-    localStorage.setItem(projectDisplayModeKey,mode);
+    localStorage.setItem(projectDisplayModeKey, mode);
   }, [mode]);
   const { data, error } = useAspidaSWR(client?.projects, { enabled: !!client });
   let element = null;
-  if (mode==="table") {
+  if (mode === "table") {
     element = (
       <Grid container>
         <Container maxWidth="xl">
