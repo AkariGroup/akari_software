@@ -162,7 +162,7 @@ export function CreateProjectFromGit() {
           {customPathElement}
         </Stack>
       </Grid>
-      <Grid item md={0}>
+      <Grid item>
         <Button
           type="button"
           variant="contained"
@@ -171,7 +171,7 @@ export function CreateProjectFromGit() {
           作成
         </Button>
       </Grid>
-      <Grid item md={0}>
+      <Grid item>
         <CancelButton />
       </Grid>
     </Grid>

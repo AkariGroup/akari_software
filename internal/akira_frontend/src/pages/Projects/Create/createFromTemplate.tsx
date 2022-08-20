@@ -286,7 +286,7 @@ export function CreateProjectFromTemplate() {
           )}
         />
       </Grid>
-      <Grid item md={0}>
+      <Grid item>
         <Button
           type="button"
           variant="contained"
@@ -295,7 +295,7 @@ export function CreateProjectFromTemplate() {
           作成
         </Button>
       </Grid>
-      <Grid item md={0}>
+      <Grid item>
         <CancelButton />
       </Grid>
     </Grid>
