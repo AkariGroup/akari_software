@@ -75,3 +75,11 @@ type Service interface {
 	GetOpenAddress(hostName string) (string, error)
 	GetOpenProjectAddress(hostName string, projectDir string) (string, error)
 }
+
+type UserService interface {
+	Service
+
+	SetConfig(c ServiceConfig) error
+	LoadConfig() error
+	SaveConfig() error
+}

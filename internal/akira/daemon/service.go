@@ -131,6 +131,31 @@ func (m *AkariServiceServicer) GetService(ctx context.Context, r *proto.GetServi
 	return serviceToPb(m.da.service, p), nil
 }
 
+func (m *AkariServiceServicer) EditService(ctx context.Context, r *proto.EditServiceRequest) (*emptypb.Empty, error) {
+	p, ok := m.da.service.GetService(service.ServiceId(r.Id))
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
+	}
+	s, ok := p.(service.UserService)
+	if !ok {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("service: %s cannot be updated", r.Id))
+	}
+
+	config := s.Config()
+	config.DisplayName = r.DisplayName
+	config.Description = r.Description
+
+	if err := s.SetConfig(config); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid config value: %#v", err))
+	}
+
+	if err := s.SaveConfig(); err != nil {
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("failed to save config: %#v", err))
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
 func (m *AkariServiceServicer) RemoveService(ctx context.Context, r *proto.RemoveServiceRequest) (*emptypb.Empty, error) {
 	if err := m.da.service.RemoveUserService(service.ServiceId(r.Id)); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
