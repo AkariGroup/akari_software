@@ -21,9 +21,10 @@ import {
 import { ProjectListItem, ProjectListHeader } from "./ProjectList";
 import { useApiClient } from "../../hooks/api";
 
+const projectDispModeKey = "projectDispMode"
 export function Projects() {
   const [mode, setMode] = useState(
-    localStorage.getItem("projectDispMode") === "1" ? 1 : 0
+    localStorage.getItem(projectDispModeKey) === "1" ? 1 : 0
   );
   const client = useApiClient();
 
@@ -73,7 +74,7 @@ export function Projects() {
           <Button
             variant={mode ? "contained" : undefined}
             onClick={() => {
-              localStorage.setItem("projectDispMode", "1");
+              localStorage.setItem(projectDispModeKey, "1");
               setMode(1);
             }}
           >
@@ -82,7 +83,7 @@ export function Projects() {
           <Button
             variant={mode ? undefined : "contained"}
             onClick={() => {
-              localStorage.setItem("projectDispMode", "0");
+              localStorage.setItem(projectDispModeKey, "0");
               setMode(0);
             }}
           >
