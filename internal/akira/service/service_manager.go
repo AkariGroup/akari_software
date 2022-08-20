@@ -74,7 +74,7 @@ func (m *serviceManager) triggerAutoStartServices() {
 	ctx := SetAsync(context.Background(), true)
 
 	for _, s := range m.services {
-		if !s.AutoStart() {
+		if !s.Config().AutoStart {
 			continue
 		}
 
@@ -92,19 +92,27 @@ func (m *serviceManager) scanImages() error {
 	return nil
 }
 
-func (m *serviceManager) loadService(c ServiceConfig) (Service, error) {
-	s, ok := m.images[c.ImageId]
+func (m *serviceManager) loadService(path string) (Service, error) {
+	var config ServiceConfig
+	loader := ServiceConfigLoader{
+		config:     &config,
+		configPath: path,
+	}
+	if err := loader.LoadConfig(); err != nil {
+		log.Warn().Msgf("error while loading metadata: %#v", err)
+		return nil, err
+	}
+
+	s, ok := m.images[config.ImageId]
 	if !ok {
-		return nil, fmt.Errorf("service id: %#v not found", c.ImageId)
+		return nil, fmt.Errorf("service id: %#v not found", config.ImageId)
 	}
 
 	switch s.Name {
 	case JupyterLabServiceName:
-		service := NewJupyterLab(s, c, m.opts)
-		return service, nil
+		return NewJupyterLab(s, config, path, m.opts), nil
 	case VSCodeServiceName:
-		service := NewVSCode(s, c, m.opts)
-		return service, nil
+		return NewVSCode(s, config, path, m.opts), nil
 	default:
 		return nil, fmt.Errorf("unsupported service name: %#v", s.Name)
 	}
@@ -121,11 +129,11 @@ func (m *serviceManager) scanServices() error {
 	}
 
 	// TODO: scan system services
-	if rpcServerConfig, err := akariRpcServerSystemServiceConfig(m.opts.EtcDir); err != nil {
+	if config, containerOpts, err := akariRpcServerSystemServiceConfig(m.opts.EtcDir); err != nil {
 		log.Error().Msgf("error while initializing rpc server: %#v", err)
 	} else {
 		registerService(
-			NewSystemService(rpcServerConfig, m.opts),
+			NewSystemService(config, containerOpts, m.opts),
 		)
 	}
 
@@ -139,13 +147,7 @@ func (m *serviceManager) scanServices() error {
 			continue
 		}
 
-		config, err := loadServiceConfig(p)
-		if err != nil {
-			log.Warn().Msgf("error while loading metadata: %#v", err)
-			continue
-		}
-		service, err := m.loadService(config)
-		if err != nil {
+		if service, err := m.loadService(p); err != nil {
 			log.Warn().Msgf("failed to load service: %#v", err)
 			continue
 		} else {
@@ -201,14 +203,16 @@ func (m *serviceManager) CreateUserService(s ImageId, displayName string, descri
 		DisplayName: displayName,
 		Description: description,
 	}
-	if err := saveServiceConfig(
-		config,
-		filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(config.Id))),
-	); err != nil {
+	configPath := filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(config.Id)))
+	writer := ServiceConfigLoader{
+		config:     &config,
+		configPath: configPath,
+	}
+	if err := writer.SaveConfig(); err != nil {
 		return nil, fmt.Errorf("failed to save service config: %#v", err)
 	}
 	// We suppose that loadService only returns a UserService
-	service, err := m.loadService(config)
+	service, err := m.loadService(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load service: %#v", err)
 	}

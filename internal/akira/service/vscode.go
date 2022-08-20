@@ -1,11 +1,9 @@
 package service
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/docker/docker/api/types/mount"
@@ -22,10 +20,7 @@ const (
 )
 
 type VSCode struct {
-	config    ServiceConfig
-	image     ImageConfig
-	opts      ServiceManagerOptions
-	container *ServiceContainer
+	*UserServiceProvider
 }
 
 type vscodeContainerMeta struct {
@@ -33,46 +28,15 @@ type vscodeContainerMeta struct {
 	token       string
 }
 
-func NewVSCode(image ImageConfig, config ServiceConfig, opts ServiceManagerOptions) *VSCode {
-	p := &VSCode{
-		config: config,
-		image:  image,
-		opts:   opts,
-	}
-	p.container = NewServiceContainer(p, opts.Docker)
+func NewVSCode(
+	image ImageConfig,
+	config ServiceConfig,
+	configPath string,
+	opts ServiceManagerOptions,
+) *VSCode {
+	p := &VSCode{}
+	p.UserServiceProvider = NewUserServiceProvider(p, config, configPath, image, opts)
 	return p
-}
-
-func (p *VSCode) varDir() string {
-	return filepath.Join(p.opts.ServiceVarDir, string(p.config.Id))
-}
-
-func (p *VSCode) Id() ServiceId {
-	return p.config.Id
-}
-
-func (p *VSCode) DisplayName() string {
-	return p.config.DisplayName
-}
-
-func (p *VSCode) Description() string {
-	return p.config.Description
-}
-
-func (p *VSCode) ImageId() ImageId {
-	return p.config.ImageId
-}
-
-func (p *VSCode) Type() ServiceType {
-	return ServiceTypeUser
-}
-
-func (p *VSCode) Capabilities() []ServiceCapability {
-	return p.image.Capabilities
-}
-
-func (p *VSCode) AutoStart() bool {
-	return p.config.AutoStart
 }
 
 func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interface{}, error) {
@@ -119,38 +83,8 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 	}, meta, nil
 }
 
-func (p *VSCode) Start(ctx context.Context) (ServiceTask, error) {
-	return p.container.Start(ctx)
-}
-
-func (p *VSCode) Stop(ctx context.Context) (ServiceTask, error) {
-	return p.container.Stop(ctx)
-}
-
-func (p *VSCode) Terminate(ctx context.Context) (ServiceTask, error) {
-	return p.container.Terminate(ctx)
-}
-
-func (p *VSCode) Clean() error {
-	ret := p.container.onCriticalSection(func() interface{} {
-		if p.container.Status() != Terminated {
-			return errors.New("cannot remove directory of existing container")
-		}
-
-		return os.RemoveAll(p.varDir())
-	})
-	if err, ok := ret.(error); ok {
-		return err
-	}
-	return nil
-}
-
-func (p *VSCode) Status() ServiceStatus {
-	return p.container.Status()
-}
-
 func (p *VSCode) GetOpenAddress(hostName string) (string, error) {
-	_, meta, ok := p.container.ContainerInfo()
+	_, meta, ok := p.UserServiceProvider.ContainerInfo()
 
 	if ok {
 		if meta, ok := meta.(vscodeContainerMeta); ok {
@@ -169,7 +103,7 @@ func (p *VSCode) GetOpenProjectAddress(hostName string, projectDir string) (stri
 	}
 	relPath := strings.TrimPrefix(projectDir, p.opts.ProjectRootDir)
 
-	_, meta, ok := p.container.ContainerInfo()
+	_, meta, ok := p.UserServiceProvider.ContainerInfo()
 
 	if ok {
 		if meta, ok := meta.(vscodeContainerMeta); ok {

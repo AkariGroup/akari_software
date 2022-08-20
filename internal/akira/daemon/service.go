@@ -53,8 +53,10 @@ func imageToPb(c service.ImageConfig) *proto.ServiceImage {
 }
 
 func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
+	config := s.Config()
+
 	var image *proto.ServiceImage = nil
-	if imgId := s.ImageId(); imgId != service.NullImageId {
+	if imgId := config.ImageId; imgId != service.NullImageId {
 		if c, ok := m.GetImage(imgId); ok {
 			image = imageToPb(c)
 		} else {
@@ -65,8 +67,8 @@ func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
 	return &proto.Service{
 		Id:           string(s.Id()),
 		Image:        image,
-		DisplayName:  s.DisplayName(),
-		Description:  s.Description(),
+		DisplayName:  config.DisplayName,
+		Description:  config.Description,
 		Status:       serviceStatusToPb(s.Status()),
 		Type:         serviceTypeToPb(s.Type()),
 		Capabilities: capabilitiesToPb(s.Capabilities()),
