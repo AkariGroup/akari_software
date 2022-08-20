@@ -64,6 +64,13 @@ func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
 		}
 	}
 
+	autoStart := false
+	if v, err := m.GetServiceAutoStartEnabled(s.Id()); err != nil {
+		log.Error().Msgf("failed to get autoStart of service id %#v: %#v", s.Id(), err)
+	} else {
+		autoStart = v
+	}
+
 	return &proto.Service{
 		Id:           string(s.Id()),
 		Image:        image,
@@ -72,6 +79,7 @@ func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
 		Status:       serviceStatusToPb(s.Status()),
 		Type:         serviceTypeToPb(s.Type()),
 		Capabilities: capabilitiesToPb(s.Capabilities()),
+		AutoStart:    autoStart,
 	}
 }
 
@@ -154,6 +162,14 @@ func (m *AkariServiceServicer) EditService(ctx context.Context, r *proto.EditSer
 	}
 
 	return &emptypb.Empty{}, nil
+}
+
+func (m *AkariServiceServicer) SetAutoStartService(ctx context.Context, r *proto.SetAutoStartRequest) (*emptypb.Empty, error) {
+	if err := m.da.service.SetServiceAutoStartEnabled(service.ServiceId(r.Id), r.AutoStart); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
+	} else {
+		return &emptypb.Empty{}, nil
+	}
 }
 
 func (m *AkariServiceServicer) RemoveService(ctx context.Context, r *proto.RemoveServiceRequest) (*emptypb.Empty, error) {
