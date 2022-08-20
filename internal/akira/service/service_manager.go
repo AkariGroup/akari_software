@@ -22,21 +22,27 @@ type ServiceManager interface {
 	CreateUserService(s ImageId, displayName string, description string) (Service, error)
 	GetService(s ServiceId) (Service, bool)
 	RemoveUserService(s ServiceId) error
+
+	SetServiceAutoStartEnabled(id ServiceId, enabled bool) error
+	GetServiceAutoStartEnabled(id ServiceId) (bool, error)
 }
 
 type ServiceManagerOptions struct {
-	ImageConfigDir   string
-	ServiceConfigDir string
-	ServiceVarDir    string
-	EtcDir           string
-	ProjectRootDir   string
-	Docker           *system.DockerSystem
+	ImageConfigDir          string
+	ServiceConfigDir        string
+	ServiceManagerConfigDir string
+	ServiceVarDir           string
+	EtcDir                  string
+	ProjectRootDir          string
+	Docker                  *system.DockerSystem
 }
 
 type serviceManager struct {
-	images   map[ImageId]ImageConfig
-	services map[ServiceId]Service
-	opts     ServiceManagerOptions
+	images    map[ImageId]ImageConfig
+	services  map[ServiceId]Service
+	autoStart *ServiceAutoStartManager
+
+	opts ServiceManagerOptions
 
 	mu sync.RWMutex
 }
@@ -57,6 +63,9 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 		images:   make(map[ImageId]ImageConfig),
 		services: make(map[ServiceId]Service),
 		opts:     opts,
+		autoStart: NewServiceAutoStartManager(
+			filepath.Join(opts.ServiceManagerConfigDir, "auto_start.yaml"),
+		),
 	}
 	if err := m.scanImages(); err != nil {
 		return nil, err
@@ -64,22 +73,34 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	if err := m.scanServices(); err != nil {
 		return nil, err
 	}
-	m.triggerAutoStartServices()
+	if err := m.initializeAutoStartServices(); err != nil {
+		return nil, err
+	}
 	return m, nil
 }
 
-func (m *serviceManager) triggerAutoStartServices() {
+func (m *serviceManager) initializeAutoStartServices() error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	ctx := SetAsync(context.Background(), true)
 
-	for _, s := range m.services {
-		if !s.Config().AutoStart {
+	if err := m.autoStart.LoadConfig(); err != nil {
+		return err
+	}
+	sids := make(map[ServiceId]interface{})
+	for s, _ := range m.services {
+		sids[s] = struct{}{}
+	}
+	m.autoStart.Cleanup(sids)
+
+	ctx := SetAsync(context.Background(), true)
+	for sid, s := range m.services {
+		if !m.autoStart.GetEnabled(sid) {
 			continue
 		}
-
 		s.Start(ctx)
 	}
+
+	return nil
 }
 
 func (m *serviceManager) scanImages() error {
@@ -249,4 +270,30 @@ func (m *serviceManager) RemoveUserService(id ServiceId) error {
 	p := filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(s.Id())))
 	os.Remove(p)
 	return nil
+}
+
+func (m *serviceManager) serviceExists(id ServiceId) bool {
+	_, ok := m.services[id]
+	return ok
+}
+
+func (m *serviceManager) GetServiceAutoStartEnabled(id ServiceId) (bool, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if !m.serviceExists(id) {
+		return false, fmt.Errorf("service doesn't exist: %#v", id)
+	}
+	return m.autoStart.GetEnabled(id), nil
+}
+
+func (m *serviceManager) SetServiceAutoStartEnabled(id ServiceId, enabled bool) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if !m.serviceExists(id) {
+		return fmt.Errorf("service doesn't exist: %#v", id)
+	}
+	m.autoStart.SetEnabled(id, enabled)
+	return m.autoStart.SaveConfig()
 }

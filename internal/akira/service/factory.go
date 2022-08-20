@@ -52,7 +52,6 @@ func akariRpcServerSystemServiceConfig(etcDir string) (ServiceConfig, system.Cre
 		ImageId:     NullImageId,
 		DisplayName: "AkariRpcServer",
 		Description: "gRPC server for host devices",
-		AutoStart:   true,
 	}
 	containerOpts := system.CreateContainerOption{
 		Image: "akarirobot/akari-rpc-server:v1",

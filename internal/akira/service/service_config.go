@@ -14,7 +14,6 @@ type ServiceConfig struct {
 	ImageId     ImageId   `json:"image_id" validate:"required"`
 	DisplayName string    `json:"display_name" validate:"required"`
 	Description string    `json:"description"`
-	AutoStart   bool      `json:"auto_start"`
 }
 
 type ServiceConfigAccessor struct {
