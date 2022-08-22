@@ -71,52 +71,79 @@ export function Controller(props: Props) {
                         />
                     </div>
                 </Grid>
-                <Grid item xl={6}>
+                <Grid item xl={3}>
+                    <h4>Input</h4>
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 30 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>din0</TableCell>
-                                    <TableCell>din1</TableCell>
-                                    <TableCell>ain0</TableCell>
-                                    <TableCell>Temperature</TableCell>
-                                    <TableCell>Pressure</TableCell>
-                                    <TableCell>Brightness</TableCell>
+                                    <TableCell width='30%' align='center'>Button A</TableCell>
+                                    <TableCell width='30%' align='center'>Button B</TableCell>
+                                    <TableCell width='30%' align='center'>Button C</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>0</TableCell>
-                                    <TableCell>1</TableCell>
-                                    <TableCell>100</TableCell>
-                                    <TableCell>25.6</TableCell>
-                                    <TableCell>1014.02</TableCell>
-                                    <TableCell>100</TableCell>
+                                    <TableCell width='30%' align='center'>0</TableCell>
+                                    <TableCell width='30%' align='center'>1</TableCell>
+                                    <TableCell width='30%' align='center'>0</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell width='30%' align='center'>din0</TableCell>
+                                    <TableCell width='30%' align='center'>din1</TableCell>
+                                    <TableCell width='30%' align='center'>ain0</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell width='30%' align='center'>0</TableCell>
+                                    <TableCell width='30%' align='center'>1</TableCell>
+                                    <TableCell width='30%' align='center'>100</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell width='30%' align='center'>Temperature</TableCell>
+                                    <TableCell width='30%' align='center'>Pressure</TableCell>
+                                    <TableCell width='30%' align='center'>Brightness</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell width='30%' align='center'>25.6</TableCell>
+                                    <TableCell width='30%' align='center'>1014.02</TableCell>
+                                    <TableCell width='30%' align='center'>100</TableCell>
                                 </TableRow>
                             </TableHead>
                         </Table>
                     </TableContainer>
                 </Grid>
             </Grid>
-            <Grid container mt={2} spacing={3}>
+            <Grid container mt={1}>
+                <Grid item xl={4.5}>
+                    <h4 >Motor control</h4>
+                </Grid>
+                <Grid item xl={1.5}>
+                    <h4>Pinout</h4>
+                </Grid>
+                <Grid item xl={2}>
+                    <h4>Display</h4>
+                </Grid>
+            </Grid>
+            <Grid container mt={1}>
                 <Grid item xl={2}>
                     <div>
                         <Joystick size={200} />
                     </div>
                 </Grid>
-                <Grid item xl={3}>
+                <Grid item xl={2}>
                     <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 30 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Pan</TableCell>
-                                    <TableCell>100</TableCell>
-                                    <TableCell>Tilt</TableCell>
-                                    <TableCell>200</TableCell>
-                                </TableRow>
-                            </TableHead>
+                        <Table sx={{ minWidth: 30 }}>
+                            <TableRow>
+                                <TableCell width='30%'>Pan</TableCell>
+                                <TableCell width='30%'>Tilt</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell width='30%'>100</TableCell>
+                                <TableCell width='30%'>200</TableCell>
+                            </TableRow>
                         </Table>
                     </TableContainer>
-                    <TextField id="pan" label="pan" variant="outlined" />
-                    <TextField id="tilt" label="tilt" variant="outlined" />
+                    <TextField sx={{ width: { sm: "40%" } }} id="pan" label="pan" variant="outlined" />
+                    &nbsp;
+                    <TextField sx={{ width: { sm: "40%" } }} id="tilt" label="tilt" variant="outlined" />
                     <Button
                         type="button"
                         variant="contained"
@@ -124,9 +151,10 @@ export function Controller(props: Props) {
                         Send
                     </Button>
                 </Grid>
-                <Grid item xl={3}>
+
+                <Grid item xl={0.5}></Grid>
+                <Grid item xl={1.5}>
                     <FormControl component="fieldset" variant="standard">
-                        <FormLabel component="legend">GPIO pinout</FormLabel>
                         <FormGroup>
                             <FormControlLabel
                                 control={
@@ -148,33 +176,36 @@ export function Controller(props: Props) {
                     </FormControl>
                 </Grid>
                 <Grid item xl={3}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Color</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Color"
+                    <Grid >
+                            <FormControl style={{ width: "80%" }}>
+                                <InputLabel id="color">Color</InputLabel>
+                                <Select
+                                    label="Color"
+                                >
+                                    <MenuItem value={"Red"}>Red</MenuItem>
+                                    <MenuItem value={"Green"}>Green</MenuItem>
+                                    <MenuItem value={"Blue"}>Blue</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Button
+                                type="button"
+                                variant="contained"
+                            >
+                                Send
+                            </Button>
+                    </Grid>
+                    <Grid container mt={2}>
+                    </Grid>
+                    <Grid >
+                        <TextField style={{ width: "80%" }} id="display" label="display" variant="outlined" />
+                        <Button
+                            align-items="center"
+                            type="button"
+                            variant="contained"
                         >
-                            <MenuItem value={"Red"}>Red</MenuItem>
-                            <MenuItem value={"Green"}>Green</MenuItem>
-                            <MenuItem value={"Blue"}>Blue</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        type="button"
-                        variant="contained"
-                    >
-                        Send
-                    </Button>
-                    <TextField id="display" label="display" variant="outlined" />
-                    <Button
-                        type="button"
-                        variant="contained"
-                    >
-                        Send
-                    </Button>
-                </Grid>
-                <Grid item xl={3}>
+                            Send
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
         </Container >
