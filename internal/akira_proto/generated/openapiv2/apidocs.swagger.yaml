@@ -189,6 +189,64 @@ paths:
           type: string
       tags:
         - AkariServiceService
+  /services/{id}/auto_start:
+    post:
+      operationId: AkariServiceService_SetAutoStartService
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              autoStart:
+                type: boolean
+      tags:
+        - AkariServiceService
+  /services/{id}/edit:
+    post:
+      operationId: AkariServiceService_EditService
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+              displayName:
+                type: string
+      tags:
+        - AkariServiceService
   /services/{id}/open:
     get:
       operationId: AkariServiceService_Open
@@ -452,6 +510,8 @@ definitions:
   akira_protoService:
     type: object
     properties:
+      autoStart:
+        type: boolean
       capabilities:
         type: array
         items:

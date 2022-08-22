@@ -1,14 +1,6 @@
-import {
-  Controller,
-  ControllerRenderProps,
-  FieldError,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useApiClient } from "../../../hooks/api";
-import {
-  Akira_protoCreateProjectFromGitRequest,
-} from "../../../api/@types";
+import { Akira_protoCreateProjectFromGitRequest } from "../../../api/@types";
 import { useCallback, useState } from "react";
 import {
   Button,
@@ -23,7 +15,7 @@ import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 import { ValidNamePattern } from "../validNamePattern";
-
+import { CancelButton } from "../../../components/CancelButton";
 type CreateProjectFromGitInputs = {
   branch: string;
   dirname: string;
@@ -128,12 +120,11 @@ export function CreateProjectFromGit() {
                 label="git URL"
                 variant="filled"
                 error={!!errors.gitUrl}
-                helperText={
-                  errors.gitUrl && errors.gitUrl.message
-                }
+                helperText={errors.gitUrl && errors.gitUrl.message}
               />
             )}
-          /><Controller
+          />
+          <Controller
             name="branch"
             control={control}
             rules={{
@@ -151,9 +142,7 @@ export function CreateProjectFromGit() {
                 label="gitブランチ名"
                 variant="filled"
                 error={!!errors.branch}
-                helperText={
-                  errors.branch && errors.branch.message
-                }
+                helperText={errors.branch && errors.branch.message}
               />
             )}
           />
@@ -173,7 +162,7 @@ export function CreateProjectFromGit() {
           {customPathElement}
         </Stack>
       </Grid>
-      <Grid item md={12}>
+      <Grid item>
         <Button
           type="button"
           variant="contained"
@@ -181,6 +170,9 @@ export function CreateProjectFromGit() {
         >
           作成
         </Button>
+      </Grid>
+      <Grid item>
+        <CancelButton />
       </Grid>
     </Grid>
   );

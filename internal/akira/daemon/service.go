@@ -53,8 +53,10 @@ func imageToPb(c service.ImageConfig) *proto.ServiceImage {
 }
 
 func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
+	config := s.Config()
+
 	var image *proto.ServiceImage = nil
-	if imgId := s.ImageId(); imgId != service.NullImageId {
+	if imgId := config.ImageId; imgId != service.NullImageId {
 		if c, ok := m.GetImage(imgId); ok {
 			image = imageToPb(c)
 		} else {
@@ -62,14 +64,22 @@ func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
 		}
 	}
 
+	autoStart := false
+	if v, err := m.GetServiceAutoStartEnabled(s.Id()); err != nil {
+		log.Error().Msgf("failed to get autoStart of service id %#v: %#v", s.Id(), err)
+	} else {
+		autoStart = v
+	}
+
 	return &proto.Service{
 		Id:           string(s.Id()),
 		Image:        image,
-		DisplayName:  s.DisplayName(),
-		Description:  s.Description(),
+		DisplayName:  config.DisplayName,
+		Description:  config.Description,
 		Status:       serviceStatusToPb(s.Status()),
 		Type:         serviceTypeToPb(s.Type()),
 		Capabilities: capabilitiesToPb(s.Capabilities()),
+		AutoStart:    autoStart,
 	}
 }
 
@@ -127,6 +137,39 @@ func (m *AkariServiceServicer) GetService(ctx context.Context, r *proto.GetServi
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
 	}
 	return serviceToPb(m.da.service, p), nil
+}
+
+func (m *AkariServiceServicer) EditService(ctx context.Context, r *proto.EditServiceRequest) (*emptypb.Empty, error) {
+	p, ok := m.da.service.GetService(service.ServiceId(r.Id))
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
+	}
+	s, ok := p.(service.UserService)
+	if !ok {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("service: %s cannot be updated", r.Id))
+	}
+
+	config := s.Config()
+	config.DisplayName = r.DisplayName
+	config.Description = r.Description
+
+	if err := s.SetConfig(config); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid config value: %#v", err))
+	}
+
+	if err := s.SaveConfig(); err != nil {
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("failed to save config: %#v", err))
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (m *AkariServiceServicer) SetAutoStartService(ctx context.Context, r *proto.SetAutoStartRequest) (*emptypb.Empty, error) {
+	if err := m.da.service.SetServiceAutoStartEnabled(service.ServiceId(r.Id), r.AutoStart); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error: %#v", err))
+	} else {
+		return &emptypb.Empty{}, nil
+	}
 }
 
 func (m *AkariServiceServicer) RemoveService(ctx context.Context, r *proto.RemoveServiceRequest) (*emptypb.Empty, error) {

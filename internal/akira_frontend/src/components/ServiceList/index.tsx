@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   IconButton,
   Link,
   Paper,
@@ -107,12 +108,15 @@ function PowerButton(props: PowerButtonProps) {
   );
   const powerButtonDisabled =
     props.service.status === "STARTING" || props.service.status === "STOPPING";
-  const powerIcon =
-    props.service.status === "RUNNING" ? (
-      <PowerSettingsNewIcon color="error" />
-    ) : (
-      <PlayArrowIcon color="success" />
-    );
+  const powerIcon = (() => {
+    if (powerButtonDisabled) {
+      return <CircularProgress />;
+    } else if (props.service.status === "RUNNING") {
+      return <PowerSettingsNewIcon color="error" />;
+    } else {
+      return <PlayArrowIcon color="success" />;
+    }
+  })();
 
   return (
     <>
@@ -229,7 +233,7 @@ export function ServiceList(props: Props) {
     (lhs: Akira_protoService, rhs: Akira_protoService) => {
       const lhsStatus = lhs.status?.toString() ?? "";
       const rhsStatus = rhs.status?.toString() ?? "";
-      if (lhsStatus == rhsStatus) {
+      if (lhsStatus === rhsStatus) {
         const lhsDisplayName = lhs.displayName ?? "";
         const rhsDisplayName = rhs.displayName ?? "";
         if (lhsDisplayName === rhsDisplayName) {

@@ -31,6 +31,7 @@ import {
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
+import { CancelButton } from "../../../components/CancelButton";
 import { ValidNamePattern } from "../validNamePattern";
 
 type TemplateSelectorProps = {
@@ -285,7 +286,7 @@ export function CreateProjectFromTemplate() {
           )}
         />
       </Grid>
-      <Grid item md={12}>
+      <Grid item>
         <Button
           type="button"
           variant="contained"
@@ -293,6 +294,9 @@ export function CreateProjectFromTemplate() {
         >
           作成
         </Button>
+      </Grid>
+      <Grid item>
+        <CancelButton />
       </Grid>
     </Grid>
   );

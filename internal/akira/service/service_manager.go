@@ -22,21 +22,27 @@ type ServiceManager interface {
 	CreateUserService(s ImageId, displayName string, description string) (Service, error)
 	GetService(s ServiceId) (Service, bool)
 	RemoveUserService(s ServiceId) error
+
+	SetServiceAutoStartEnabled(id ServiceId, enabled bool) error
+	GetServiceAutoStartEnabled(id ServiceId) (bool, error)
 }
 
 type ServiceManagerOptions struct {
-	ImageConfigDir   string
-	ServiceConfigDir string
-	ServiceVarDir    string
-	EtcDir           string
-	ProjectRootDir   string
-	Docker           *system.DockerSystem
+	ImageConfigDir          string
+	ServiceConfigDir        string
+	ServiceManagerConfigDir string
+	ServiceVarDir           string
+	EtcDir                  string
+	ProjectRootDir          string
+	Docker                  *system.DockerSystem
 }
 
 type serviceManager struct {
-	images   map[ImageId]ImageConfig
-	services map[ServiceId]Service
-	opts     ServiceManagerOptions
+	images    map[ImageId]ImageConfig
+	services  map[ServiceId]Service
+	autoStart *ServiceAutoStartManager
+
+	opts ServiceManagerOptions
 
 	mu sync.RWMutex
 }
@@ -57,6 +63,9 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 		images:   make(map[ImageId]ImageConfig),
 		services: make(map[ServiceId]Service),
 		opts:     opts,
+		autoStart: NewServiceAutoStartManager(
+			filepath.Join(opts.ServiceManagerConfigDir, "auto_start.yaml"),
+		),
 	}
 	if err := m.scanImages(); err != nil {
 		return nil, err
@@ -64,22 +73,34 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	if err := m.scanServices(); err != nil {
 		return nil, err
 	}
-	m.triggerAutoStartServices()
+	if err := m.initializeAutoStartServices(); err != nil {
+		return nil, err
+	}
 	return m, nil
 }
 
-func (m *serviceManager) triggerAutoStartServices() {
+func (m *serviceManager) initializeAutoStartServices() error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	ctx := SetAsync(context.Background(), true)
 
-	for _, s := range m.services {
-		if !s.AutoStart() {
+	if err := m.autoStart.LoadConfig(); err != nil {
+		return err
+	}
+	sids := make(map[ServiceId]interface{})
+	for s, _ := range m.services {
+		sids[s] = struct{}{}
+	}
+	m.autoStart.Cleanup(sids)
+
+	ctx := SetAsync(context.Background(), true)
+	for sid, s := range m.services {
+		if !m.autoStart.GetEnabled(sid) {
 			continue
 		}
-
 		s.Start(ctx)
 	}
+
+	return nil
 }
 
 func (m *serviceManager) scanImages() error {
@@ -92,19 +113,27 @@ func (m *serviceManager) scanImages() error {
 	return nil
 }
 
-func (m *serviceManager) loadService(c ServiceConfig) (Service, error) {
-	s, ok := m.images[c.ImageId]
+func (m *serviceManager) loadUserService(path string) (UserService, error) {
+	var config ServiceConfig
+	loader := ServiceConfigLoader{
+		config:     &config,
+		configPath: path,
+	}
+	if err := loader.LoadConfig(); err != nil {
+		log.Warn().Msgf("error while loading metadata: %#v", err)
+		return nil, err
+	}
+
+	s, ok := m.images[config.ImageId]
 	if !ok {
-		return nil, fmt.Errorf("service id: %#v not found", c.ImageId)
+		return nil, fmt.Errorf("service id: %#v not found", config.ImageId)
 	}
 
 	switch s.Name {
 	case JupyterLabServiceName:
-		service := NewJupyterLab(s, c, m.opts)
-		return service, nil
+		return NewJupyterLab(s, config, path, m.opts), nil
 	case VSCodeServiceName:
-		service := NewVSCode(s, c, m.opts)
-		return service, nil
+		return NewVSCode(s, config, path, m.opts), nil
 	default:
 		return nil, fmt.Errorf("unsupported service name: %#v", s.Name)
 	}
@@ -121,11 +150,11 @@ func (m *serviceManager) scanServices() error {
 	}
 
 	// TODO: scan system services
-	if rpcServerConfig, err := akariRpcServerSystemServiceConfig(m.opts.EtcDir); err != nil {
+	if config, containerOpts, err := akariRpcServerSystemServiceConfig(m.opts.EtcDir); err != nil {
 		log.Error().Msgf("error while initializing rpc server: %#v", err)
 	} else {
 		registerService(
-			NewSystemService(rpcServerConfig, m.opts),
+			NewSystemService(config, containerOpts, m.opts),
 		)
 	}
 
@@ -139,13 +168,7 @@ func (m *serviceManager) scanServices() error {
 			continue
 		}
 
-		config, err := loadServiceConfig(p)
-		if err != nil {
-			log.Warn().Msgf("error while loading metadata: %#v", err)
-			continue
-		}
-		service, err := m.loadService(config)
-		if err != nil {
+		if service, err := m.loadUserService(p); err != nil {
 			log.Warn().Msgf("failed to load service: %#v", err)
 			continue
 		} else {
@@ -201,14 +224,15 @@ func (m *serviceManager) CreateUserService(s ImageId, displayName string, descri
 		DisplayName: displayName,
 		Description: description,
 	}
-	if err := saveServiceConfig(
-		config,
-		filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(config.Id))),
-	); err != nil {
+	configPath := filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(config.Id)))
+	writer := ServiceConfigLoader{
+		config:     &config,
+		configPath: configPath,
+	}
+	if err := writer.SaveConfig(); err != nil {
 		return nil, fmt.Errorf("failed to save service config: %#v", err)
 	}
-	// We suppose that loadService only returns a UserService
-	service, err := m.loadService(config)
+	service, err := m.loadUserService(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load service: %#v", err)
 	}
@@ -246,4 +270,30 @@ func (m *serviceManager) RemoveUserService(id ServiceId) error {
 	p := filepath.Join(m.opts.ServiceConfigDir, fmt.Sprintf("%s.yaml", string(s.Id())))
 	os.Remove(p)
 	return nil
+}
+
+func (m *serviceManager) serviceExists(id ServiceId) bool {
+	_, ok := m.services[id]
+	return ok
+}
+
+func (m *serviceManager) GetServiceAutoStartEnabled(id ServiceId) (bool, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if !m.serviceExists(id) {
+		return false, fmt.Errorf("service doesn't exist: %#v", id)
+	}
+	return m.autoStart.GetEnabled(id), nil
+}
+
+func (m *serviceManager) SetServiceAutoStartEnabled(id ServiceId, enabled bool) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if !m.serviceExists(id) {
+		return fmt.Errorf("service doesn't exist: %#v", id)
+	}
+	m.autoStart.SetEnabled(id, enabled)
+	return m.autoStart.SaveConfig()
 }

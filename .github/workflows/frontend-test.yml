@@ -1,0 +1,23 @@
+name: Frontend Test
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  frontend-test:
+    name: Frontend Test
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: false
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.6
+    - name: Run lint
+      run: |
+        npm install
+        npm run lint
+      working-directory: internal/akira_frontend

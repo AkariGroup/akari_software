@@ -1,10 +1,5 @@
-
-type Props = {
-
-};
+type Props = {};
 
 export function HomeDashboard(props: Props) {
-    return (
-        <>Top page</>
-    );
+  return <>Top page</>;
 }

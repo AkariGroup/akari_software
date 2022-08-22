@@ -26,10 +26,10 @@ func grpcClientConfigMount(etcDir string) mount.Mount {
 	}
 }
 
-func akariRpcServerSystemServiceConfig(etcDir string) (SystemServiceConfig, error) {
+func akariRpcServerSystemServiceConfig(etcDir string) (ServiceConfig, system.CreateContainerOption, error) {
 	etcPath := filepath.Join(etcDir, AkariClientConfigHostRpcServer)
 	if _, err := os.Stat(etcPath); err != nil {
-		return SystemServiceConfig{}, fmt.Errorf("file error: %#v", err)
+		return ServiceConfig{}, system.CreateContainerOption{}, fmt.Errorf("file error: %#v", err)
 	}
 
 	id := ServiceId("daa0fee2-2390-43ad-bed8-88d7365311b1")
@@ -47,21 +47,24 @@ func akariRpcServerSystemServiceConfig(etcDir string) (SystemServiceConfig, erro
 		},
 	}
 	containerPort := fmt.Sprintf("%d/tcp", AkariRpcServerServicePort)
-	return SystemServiceConfig{
+	serviceConfig := ServiceConfig{
 		Id:          id,
+		ImageId:     NullImageId,
 		DisplayName: "AkariRpcServer",
 		Description: "gRPC server for host devices",
-		ContainerOption: system.CreateContainerOption{
-			Image: "akarirobot/akari-rpc-server:v1",
-			Env:   []string{},
-			Ports: map[string]int{
-				containerPort: AkariRpcServerServicePort,
-			},
-			Mounts:      mountsConfig,
-			RequireRoot: true,
-			Privileged:  true,
+	}
+	containerOpts := system.CreateContainerOption{
+		Image: "akarirobot/akari-rpc-server:v1",
+		Env:   []string{},
+		Ports: map[string]int{
+			containerPort: AkariRpcServerServicePort,
 		},
-	}, nil
+		Mounts:      mountsConfig,
+		RequireRoot: true,
+		Privileged:  true,
+	}
+
+	return serviceConfig, containerOpts, nil
 }
 
 func jupyterLabImageConfig() ImageConfig {
