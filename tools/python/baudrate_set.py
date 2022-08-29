@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from akari_client.dynamixel_communicator import (
+from akari_client.serial.dynamixel import DynamixelControlTable
+from akari_client.serial.dynamixel_communicator import (
     DynamixelCommunicator,
     get_baudrate_control_value,
 )
-from akari_client.dynamixel_controller import DynamixelControlTable
 
 # Note: you can choose 57600 or 1000000 as a baud rate value for now.
 CURRENT_BAUDRATE = 57600
