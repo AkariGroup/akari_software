@@ -20,6 +20,7 @@ import {
     FormControlLabel,
     Slider,
     Input,
+    Box,
 } from "@mui/material";
 import { useRef, useState, useCallback } from "react";
 import { Joystick } from 'react-joystick-component';
@@ -76,15 +77,15 @@ export function Controller(props: Props) {
                         />
                     </div>
                 </Grid>
-                <Grid item xl={3}>
+                <Grid item xl={5}>
                     <h4>Input</h4>
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 30 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell width='30%' align='center'>Button A</TableCell>
-                                    <TableCell width='30%' align='center'>Button B</TableCell>
-                                    <TableCell width='30%' align='center'>Button C</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>Button A</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>Button B</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>Button C</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell width='30%' align='center'>0</TableCell>
@@ -92,9 +93,9 @@ export function Controller(props: Props) {
                                     <TableCell width='30%' align='center'>0</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell width='30%' align='center'>din0</TableCell>
-                                    <TableCell width='30%' align='center'>din1</TableCell>
-                                    <TableCell width='30%' align='center'>ain0</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>din0</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>din1</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>ain0</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell width='30%' align='center'>0</TableCell>
@@ -102,9 +103,9 @@ export function Controller(props: Props) {
                                     <TableCell width='30%' align='center'>100</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell width='30%' align='center'>Temperature</TableCell>
-                                    <TableCell width='30%' align='center'>Pressure</TableCell>
-                                    <TableCell width='30%' align='center'>Brightness</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>Temperature</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>Pressure</TableCell>
+                                    <TableCell width='30%' align='center' style={{ fontWeight: 'bold' }}>Brightness</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell width='30%' align='center'>25.6</TableCell>
@@ -117,45 +118,54 @@ export function Controller(props: Props) {
                 </Grid>
             </Grid>
             <Grid container mt={1}>
-                <Grid item xl={2}>
+                <Grid item xl={2.5}>
                     <Grid container mt={1}>
                         <h4 >Motor control</h4>
                     </Grid>
                     <div>
-                        <Joystick size={200} />
+                        <Joystick size={250} />
                     </div>
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item xl={2.5}>
                     <Grid item xl={9}>
-                        <Grid container mt={10}>
+                        <Grid container mt={9}>
                         </Grid>
                         <Grid container mt={1}>
-                            <TextField sx={{ width: { sm: "40%" } }} id="pan" label="pan" variant="outlined" defaultValue="0" />
+                            <TextField id="pan" label="pan" variant="outlined" defaultValue="0" />
                         </Grid>
                         <Grid container mt={1}>
-                            <TextField sx={{ width: { sm: "40%" } }} id="tilt" label="tilt" variant="outlined" defaultValue="0" />
+                            <TextField id="tilt" label="tilt" variant="outlined" defaultValue="0" />
+                        </Grid>
+                        <Grid container mt={1}>
+                        <Button
+                            align-items="center"
+                            type="button"
+                            variant="contained"
+                        >
+                            Send
+                        </Button>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xl={1.5}>
+                <Grid item xl={2}>
                     <Grid container mt={1}>
                         <h4 >Pinout</h4>
                     </Grid>
                     <FormControl>
-                        <FormGroup>
+                        <FormGroup row>
                             <FormControlLabel
                                 control={
                                     <Switch name="dout0" />
                                 }
                                 label="dout0"
-                                labelPlacement="start"
+                                labelPlacement="top"
                             />
                             <FormControlLabel
                                 control={
                                     <Switch name="dout1" />
                                 }
                                 label="dout1"
-                                labelPlacement="start"
+                                labelPlacement="top"
                             />
                         </FormGroup>
                         pwmout0
@@ -166,8 +176,6 @@ export function Controller(props: Props) {
                                 min={0}
                                 max={255}
                             />
-                        </Stack>
-                        <Stack>
                             <Input
                                 value={value}
                                 size="small"
@@ -180,9 +188,16 @@ export function Controller(props: Props) {
                                 }}
                             />
                         </Stack>
+                        <Button
+                            align-items="center"
+                            type="button"
+                            variant="contained"
+                        >
+                            Send
+                        </Button>
                     </FormControl>
                 </Grid>
-                <Grid item xl={3}>
+                <Grid item xl={5}>
                     <Grid container mt={1}>
                         <h4 >Display</h4>
                     </Grid>
@@ -197,7 +212,8 @@ export function Controller(props: Props) {
                                 <MenuItem value={"Blue"}>Blue</MenuItem>
                             </Select>
                         </FormControl>
-                        <Button
+                        &nbsp;
+                       <Button
                             type="button"
                             variant="contained"
                         >
@@ -208,6 +224,7 @@ export function Controller(props: Props) {
                     </Grid>
                     <Grid container direction="row" alignItems="center">
                         <TextField style={{ width: "80%" }} id="display" label="display" variant="outlined" />
+                        &nbsp;
                         <Button
                             align-items="center"
                             type="button"
