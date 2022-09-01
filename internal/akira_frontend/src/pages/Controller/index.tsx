@@ -21,6 +21,8 @@ import {
     Slider,
     Input,
     Box,
+    makeStyles,
+    Theme,
 } from "@mui/material";
 import { useRef, useState, useCallback } from "react";
 import { Joystick } from 'react-joystick-component';
@@ -137,13 +139,13 @@ export function Controller(props: Props) {
                             <TextField id="tilt" label="tilt" variant="outlined" defaultValue="0" />
                         </Grid>
                         <Grid container mt={1}>
-                        <Button
-                            align-items="center"
-                            type="button"
-                            variant="contained"
-                        >
-                            Send
-                        </Button>
+                            <Button
+                                align-items="center"
+                                type="button"
+                                variant="contained"
+                            >
+                                Send
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -213,7 +215,7 @@ export function Controller(props: Props) {
                             </Select>
                         </FormControl>
                         &nbsp;
-                       <Button
+                        <Button
                             type="button"
                             variant="contained"
                         >
