@@ -25,7 +25,8 @@ def main() -> None:
         print("Start!")
         # 2秒停止
         time.sleep(2)
-
+        pos_x: int
+        pos_y: int
         # アプリが終了されるまでループする。
         while True:
             # STEP1. '1.AKARI'を左上表示

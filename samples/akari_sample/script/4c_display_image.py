@@ -25,6 +25,8 @@ def main() -> None:
         # 2秒停止
         time.sleep(2)
 
+        pos_x: int
+        pos_y: int
         # アプリが終了されるまでループする。
         while True:
             # STEP1. M5のSDカード内の画像'/logo320_ex.jpg'を表示
