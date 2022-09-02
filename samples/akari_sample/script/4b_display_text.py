@@ -11,6 +11,7 @@ import time
 
 from akari_client import AkariClient
 from akari_client.color import Colors
+from akari_client.position import Positions
 
 
 def main() -> None:
@@ -31,10 +32,10 @@ def main() -> None:
             print("STEP1. display 1.AKARI at top left")
             # textは'1.AKARI'
             text = "1.AKARI"
-            # pos_xは0-320で座標指定。0が左
-            pos_x = 0
-            # pos_yは0-240で座標指定。0が上
-            pos_y = 0
+            # pos_xは0-320で座標指定。0もしくはPositions.LEFTが左
+            pos_x = Positions.LEFT
+            # pos_yは0-240で座標指定。0もしくはPositions.TOPが上
+            pos_y = Positions.TOP
             # 文字サイズは3
             size = 3
             # 文字色は黒
@@ -55,10 +56,10 @@ def main() -> None:
             # STEP2. '2.あかり'を中央に表示
             print("STEP2. display 2.あかり at middle center")
             text = "2.あかり"
-            # pos_xは-999で左右中央
-            pos_x = -999
-            # pos_yは-999で上下中央
-            pos_y = -999
+            # pos_xはPositions.CENTERで左右中央
+            pos_x = Positions.CENTER
+            # pos_yはPositions.CENTERで上下中央
+            pos_y = Positions.CENTER
             # 文字サイズは3
             size = 3
             # 文字色は赤
@@ -80,10 +81,10 @@ def main() -> None:
             print("STEP3. display 3.灯り at bottom right")
             # textは'3.灯り'
             text = "3.灯り"
-            # pos_xは999で右揃え
-            pos_x = 999
-            # pos_yは999で下揃え
-            pos_y = 999
+            # pos_xはPositions.RIGHTで右揃え
+            pos_x = Positions.RIGHT
+            # pos_yはPositions.BOTTOMで下揃え
+            pos_y = Positions.BOTTOM
             # 文字サイズは4
             size = 4
             # 文字色は白
@@ -198,10 +199,10 @@ def main() -> None:
             print("STEP9. display 9.灯 at middle center")
             # textは'9.灯'
             text = "9.灯"
-            # pos_xは-999で左右中央
-            pos_x = -999
-            # pos_yは-999で上下中央
-            pos_y = -999
+            # pos_xはPositions.CENTERで左右中央
+            pos_x = Positions.CENTER
+            # pos_yはPositions.CENTERで上下中央
+            pos_y = Positions.CENTER
             # 文字サイズは6
             size = 6
             # 文字色は白
