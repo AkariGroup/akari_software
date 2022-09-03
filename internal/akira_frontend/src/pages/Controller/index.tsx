@@ -16,13 +16,9 @@ import {
     Select,
     MenuItem,
     Switch,
-    FormGroup,
     FormControlLabel,
     Slider,
     Input,
-    Box,
-    makeStyles,
-    Theme,
 } from "@mui/material";
 import { useRef, useState, useCallback } from "react";
 import { Joystick } from 'react-joystick-component';
@@ -32,10 +28,6 @@ import Webcam from "react-webcam";
 type Props = {
 
 };
-
-function valuetext(value: number) {
-    return `${value}°C`;
-}
 
 export function Controller(props: Props) {
     const videoConstraints = {
@@ -130,14 +122,28 @@ export function Controller(props: Props) {
                 </Grid>
                 <Grid item xl={2.5}>
                     <Grid item xl={9}>
-                        <Grid container mt={9}>
+                        <Grid container mt={8}>
                         </Grid>
-                        <Grid container mt={1}>
+                        <Stack spacing={2} sx={{ mb: 2 }} alignItems="center">
+                            <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 30 }}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align='center' style={{ fontWeight: 'bold' }}>Pan</TableCell>
+                                            <TableCell align='center' style={{ fontWeight: 'bold' }}>Tilt</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align='center'>0.34</TableCell>
+                                            <TableCell align='center'>-0.66</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                </Table>
+                            </TableContainer>
+                        </Stack>
+                        <Stack direction="row" spacing={2} alignItems="center">
                             <TextField id="pan" label="pan" variant="outlined" defaultValue="0" />
-                        </Grid>
-                        <Grid container mt={1}>
                             <TextField id="tilt" label="tilt" variant="outlined" defaultValue="0" />
-                        </Grid>
+                        </Stack>
                         <Grid container mt={1}>
                             <Button
                                 align-items="center"
@@ -153,9 +159,9 @@ export function Controller(props: Props) {
                     <Grid container mt={1}>
                         <h4 >Pinout</h4>
                     </Grid>
-                    <FormControl>
-                        <FormGroup row>
-                            <FormControlLabel
+                    <Stack direction="row" sx={{ mb: 2 }}>
+                        <Grid container mt={1}>
+                            <FormControlLabel sx={{ margin: 0, width: 36 }}
                                 control={
                                     <Switch name="dout0" />
                                 }
@@ -169,15 +175,21 @@ export function Controller(props: Props) {
                                 label="dout1"
                                 labelPlacement="top"
                             />
-                        </FormGroup>
-                        pwmout0
-                        <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
+                        </Grid>
+                    </Stack>
+                    pwmout0
+                    <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+
+                        <Grid item xl={5}>
                             <Slider aria-label="Volume"
                                 value={typeof value === 'number' ? value : 0}
                                 onChange={handleSliderChange}
                                 min={0}
                                 max={255}
+
                             />
+                        </Grid>
+                        <Grid item xl={2}>
                             <Input
                                 value={value}
                                 size="small"
@@ -189,54 +201,59 @@ export function Controller(props: Props) {
                                     'aria-labelledby': 'input-slider',
                                 }}
                             />
-                        </Stack>
-                        <Button
-                            align-items="center"
-                            type="button"
-                            variant="contained"
-                        >
-                            Send
-                        </Button>
-                    </FormControl>
+                        </Grid>
+                    </Stack>
+                    <Button
+                        align-items="center"
+                        type="button"
+                        variant="contained"
+                    >
+                        Send
+                    </Button>
                 </Grid>
-                <Grid item xl={5}>
+                <Grid item xl={4}>
                     <Grid container mt={1}>
                         <h4 >Display</h4>
                     </Grid>
-                    <Grid container direction="row" alignItems="center">
-                        <FormControl style={{ width: "80%" }}>
-                            <InputLabel id="color">Color</InputLabel>
-                            <Select
-                                label="Color"
+
+                    <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+                        <Grid item xl={9}>
+                            <FormControl style={{ width: "100%" }}>
+                                <InputLabel id="color">Color</InputLabel>
+                                <Select
+                                    label="Color"
+                                >
+                                    <MenuItem value={"Red"}>Red</MenuItem>
+                                    <MenuItem value={"Green"}>Green</MenuItem>
+                                    <MenuItem value={"Blue"}>Blue</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xl={3}>
+                            <Button
+                                type="button"
+                                variant="contained"
                             >
-                                <MenuItem value={"Red"}>Red</MenuItem>
-                                <MenuItem value={"Green"}>Green</MenuItem>
-                                <MenuItem value={"Blue"}>Blue</MenuItem>
-                            </Select>
-                        </FormControl>
-                        &nbsp;
-                        <Button
-                            type="button"
-                            variant="contained"
-                        >
-                            Send
-                        </Button>
-                    </Grid>
-                    <Grid container mt={2}>
-                    </Grid>
-                    <Grid container direction="row" alignItems="center">
-                        <TextField style={{ width: "80%" }} id="display" label="display" variant="outlined" />
-                        &nbsp;
-                        <Button
-                            align-items="center"
-                            type="button"
-                            variant="contained"
-                        >
-                            Send
-                        </Button>
-                    </Grid>
+                                Send
+                            </Button>
+                        </Grid>
+                    </Stack>
+                    <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center" >
+                        <Grid item xl={9}>
+                            <TextField style={{ width: "100%" }} id="display" label="display" variant="outlined" />
+                        </Grid>
+                        <Grid item xl={3}>
+                            <Button
+                                type="button"
+                                variant="contained"
+
+                            >
+                                Send
+                            </Button>
+                        </Grid>
+                    </Stack>
                 </Grid>
-            </Grid>
+            </Grid >
         </Container >
     );
 }
