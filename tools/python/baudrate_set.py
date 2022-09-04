@@ -18,6 +18,7 @@ def main() -> None:
         try:
             with DynamixelCommunicator.open(baudrate=cur) as comm:
                 control = DynamixelControlTable.TORQUE_ENABLE
+                comm.write(1, control.address, control.length, False)
                 comm.write(2, control.address, control.length, False)
                 control = DynamixelControlTable.BAUD_RATE
                 baudrate_entry = get_baudrate_control_value(TARGET_BAUDRATE)
