@@ -10,6 +10,7 @@ Created on 2021/06/11
 import time
 
 from akari_client import AkariClient
+from akari_client.position import Positions
 
 
 def main() -> None:
@@ -24,16 +25,18 @@ def main() -> None:
         # 2秒停止
         time.sleep(2)
 
+        pos_x: int
+        pos_y: int
         # アプリが終了されるまでループする。
         while True:
             # STEP1. M5のSDカード内の画像'/logo320_ex.jpg'を表示
             print("STEP1. display /logo320_ex.jpg in SD")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320_ex.jpg"
-            # pos_xは0-320で座標指定。0が左
-            pos_x = 0
-            # pos_yは0-240で座標指定。0が上
-            pos_y = 0
+            # pos_xは0-320で座標指定。0もしくはPositions.LEFTで左揃え
+            pos_x = Positions.LEFT
+            # pos_yは0-240で座標指定。0もしくはPositions.TOPで上揃え
+            pos_y = Positions.TOP
             # scaleでサイズ指定。マイナス値を入れると画面サイズに合わせて自動調整される。
             scale = -1.0
             # set_display_imageを実行
@@ -47,10 +50,10 @@ def main() -> None:
             print("STEP2. display /logo320.jpg in SD at x2 size at middle center")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。-999が中央
-            pos_x = -999
-            # pos_yは0-240で座標指定。-999が中央
-            pos_y = -999
+            # pos_xは0-320で座標指定。Positions.CENTERで左右中央
+            pos_x = Positions.CENTER
+            # pos_yは0-240で座標指定。Positions.CENTERで上下中央
+            pos_y = Positions.CENTER
             # scaleでサイズ指定。
             scale = 2.0
             # set_display_imageを実行
@@ -64,10 +67,10 @@ def main() -> None:
             print("STEP3. display /logo320.jpg in SD at x0.3 at bottom right")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。999が右揃え
-            pos_x = 999
-            # pos_yは0-240で座標指定。999が下揃え
-            pos_y = 999
+            # pos_xはPositions.RIGHTで右揃え
+            pos_x = Positions.RIGHT
+            # pos_yはPositions.BOTTOMで下揃え
+            pos_y = Positions.BOTTOM
             # scaleでサイズ指定。
             scale = 0.3
             # set_display_imageを実行
@@ -81,10 +84,10 @@ def main() -> None:
             print("STEP4. display /logo320.jpg in SD at x0.7 at middle left")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。
-            pos_x = 0
-            # pos_yは0-240で座標指定。-999が中央揃え。
-            pos_y = -999
+            # pos_xは0-320で座標指定。0もしくはPositions.LEFTで左揃え
+            pos_x = Positions.LEFT
+            # pos_yは0-240で座標指定。Positions.CENTERで上下中央
+            pos_y = Positions.CENTER
             # scaleでサイズ指定。
             scale = 0.7
             # set_display_imageを実行
@@ -98,10 +101,10 @@ def main() -> None:
             print("STEP5. display /logo320.jpg in SD at x0.4 at top right")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。999が右揃え
-            pos_x = 999
-            # pos_yは0-240で座標指定。
-            pos_y = 0
+            # pos_xはPositions.RIGHTで右揃え
+            pos_x = Positions.RIGHT
+            # pos_yは0もしくはPositions.TOPで上揃え
+            pos_y = Positions.TOP
             # scaleでサイズ指定。
             scale = 0.4
             # set_display_imageを実行
@@ -115,10 +118,10 @@ def main() -> None:
             print("STEP6. display /logo320.jpg in SD at x0.2 at bottom left")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。
-            pos_x = 0
-            # pos_yは0-240で座標指定。999が下揃え
-            pos_y = 999
+            # pos_xは0もしくはPositions.LEFTで左揃え
+            pos_x = Positions.LEFT
+            # pos_yはPositions.BOTTOMで下揃え
+            pos_y = Positions.BOTTOM
             # scaleでサイズ指定。
             scale = 0.2
             # set_display_imageを実行
@@ -149,10 +152,10 @@ def main() -> None:
             print("STEP8. display /logo320.jpg in SD")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。0が左
-            pos_x = 0
-            # pos_yは0-240で座標指定。0が上
-            pos_y = 0
+            # pos_xは0もしくはPositions.LEFTで左揃え
+            pos_x = Positions.LEFT
+            # pos_yは0もしくはPositions.TOPで上揃え
+            pos_y = Positions.TOP
             # scaleでサイズ指定。マイナス値で画面に合わせて自動調整。
             scale = -1.0
             # set_display_imageを実行
