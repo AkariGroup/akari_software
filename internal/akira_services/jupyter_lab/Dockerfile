@@ -5,9 +5,16 @@ RUN apt-get update && \
         curl \
         git \
         wget \
+        locales \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pip install wheel
+RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8 \
+    && LANGUAGE ja_JP:ja \
+    && LC_ALL ja_JP.UTF-8 \
+    && TZ JST-9
+
+RUN pip install wheel \
 RUN mkdir -p /wheel \
     && pip wheel -w /wheel jupyterlab==3.4.3
 COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
