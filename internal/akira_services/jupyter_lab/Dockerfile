@@ -14,7 +14,7 @@ ENV LANG ja_JP.UTF-8 \
     && LC_ALL ja_JP.UTF-8 \
     && TZ JST-9
 
-RUN pip install wheel \
+RUN pip install wheel
 RUN mkdir -p /wheel \
     && pip wheel -w /wheel jupyterlab==3.4.3
 COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
