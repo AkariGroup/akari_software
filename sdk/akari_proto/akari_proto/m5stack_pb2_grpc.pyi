@@ -30,8 +30,12 @@ class M5StackServiceStub:
         akari_proto.m5stack_pb2.SetDisplayImageRequest,
         google.protobuf.empty_pb2.Empty]
 
-    UseJapaneseFont: grpc.UnaryUnaryMultiCallable[
-        akari_proto.m5stack_pb2.UseJapaneseFontRequest,
+    PlayMp3: grpc.UnaryUnaryMultiCallable[
+        akari_proto.m5stack_pb2.PlayMp3Request,
+        google.protobuf.empty_pb2.Empty]
+
+    StopMp3: grpc.UnaryUnaryMultiCallable[
+        akari_proto.m5stack_pb2.StopMp3Request,
         google.protobuf.empty_pb2.Empty]
 
     Reset: grpc.UnaryUnaryMultiCallable[
@@ -79,8 +83,14 @@ class M5StackServiceServicer(metaclass=abc.ABCMeta):
     ) -> google.protobuf.empty_pb2.Empty: ...
 
     @abc.abstractmethod
-    def UseJapaneseFont(self,
-        request: akari_proto.m5stack_pb2.UseJapaneseFontRequest,
+    def PlayMp3(self,
+        request: akari_proto.m5stack_pb2.PlayMp3Request,
+        context: grpc.ServicerContext,
+    ) -> google.protobuf.empty_pb2.Empty: ...
+
+    @abc.abstractmethod
+    def StopMp3(self,
+        request: akari_proto.m5stack_pb2.StopMp3Request,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
 

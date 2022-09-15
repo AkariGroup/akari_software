@@ -6,11 +6,14 @@
 
 #include <ArduinoJson.h>
 #include "Wire.h"
-#include <efontEnableJa.h>
-#include <efontFontData.h>
 #include <M5Stack.h>
 #include <M5GFX.h>
 #include "UNIT_ENV.h"
+#include <WiFi.h>
+#include "AudioFileSourceSD.h"
+#include "AudioFileSourceID3.h"
+#include "AudioGeneratorMP3.h"
+#include "AudioOutputI2S.h"
 
 SemaphoreHandle_t xMutex = NULL;
 M5GFX lcd;
@@ -23,6 +26,11 @@ M5GFX lcd;
 #define DOUT1PIN 2
 #define PWMOUT0PIN 17
 #define LIGHTSENSORINPIN 36
+
+AudioGeneratorMP3* mp3;
+AudioFileSourceSD* file;
+AudioOutputI2S* out;
+AudioFileSourceID3* id3;
 
 bool isStart;
 int seq = 0;
@@ -45,7 +53,8 @@ QMP6988 qmp6988;
 #define FILLDISPLAY 10
 #define DISPLAYSTRING 11
 #define DISPLAYIMG 12
-#define USEJAPANESEFONT 13
+#define PLAYMP3 13
+#define STOPMP3 14
 #define RESETM5 99
 #define STARTM5 98
 
@@ -53,16 +62,15 @@ float general0Val = 0.0F;
 float general1Val = 0.0F;
 
 //SD内のフォントファイルパス。
-const char *f18 = "/Fonts/MotoyaLMaru_18.vlw";
-const char *f36 = "/Fonts/MotoyaLMaru_36.vlw";
-const char *f54 = "/Fonts/MotoyaLMaru_54.vlw";
-const char *f72 = "/Fonts/MotoyaLMaru_72.vlw";
-const char *f90 = "/Fonts/MotoyaLMaru_90.vlw";
-const char *f108 = "/Fonts/MotoyaLMaru_108.vlw";
-const char *f126 = "/Fonts/MotoyaLMaru_126.vlw";
+const char *f18 = "Fonts/MotoyaLMaru_18";
+const char *f36 = "Fonts/MotoyaLMaru_36";
+const char *f54 = "Fonts/MotoyaLMaru_54";
+const char *f72 = "Fonts/MotoyaLMaru_72";
+const char *f90 = "Fonts/MotoyaLMaru_90";
+const char *f108 = "Fonts/MotoyaLMaru_108";
+const char *f126 = "Fonts/MotoyaLMaru_126";
 
 int text_size = 0;
-bool isJapaneseFont = true;
 int fill_color = WHITE;
 int text_color = BLACK;
 int back_color = WHITE;
@@ -71,6 +79,8 @@ int req_y;
 int req_fill_color;
 int req_text_color;
 int req_back_color;
+
+bool mp3_stop_flg = false;
 
 //buttonの入力をMEASURETIME回の平均から決定(チャタリング対策)
 bool buttonResult(int measure)
@@ -132,25 +142,25 @@ void loadJapaneseFont(int size)
   switch (size)
   {
   case 1:
-    lcd.loadFont(f18);
+    lcd.loadFont(f18, SD);
     break;
   case 2:
-    lcd.loadFont(f36);
+    lcd.loadFont(f36, SD);
     break;
   case 3:
-    lcd.loadFont(f54);
+    lcd.loadFont(f54, SD);
     break;
   case 4:
-    lcd.loadFont(f72);
+    lcd.loadFont(f72, SD);
     break;
   case 5:
-    lcd.loadFont(f90);
+    lcd.loadFont(f90, SD);
     break;
   case 6:
-    lcd.loadFont(f108);
+    lcd.loadFont(f108, SD);
     break;
   case 7:
-    lcd.loadFont(f126);
+    lcd.loadFont(f126, SD);
     break;
   }
 }
@@ -217,14 +227,7 @@ void subSerial(void *arg)
           updateTextColor(req_text_color, req_back_color);
           if (updateTextSize(rec["lcd"]["sz"].as<int>()))
           {
-            if (isJapaneseFont)
-            {
-              loadJapaneseFont(text_size);
-            }
-            else
-            {
-              lcd.setTextSize(text_size);
-            }
+            loadJapaneseFont(text_size);
           }
           if (rec["lcd"]["rf"].as<bool>())
           {
@@ -357,19 +360,19 @@ void subSerial(void *arg)
           break;
         }
         
-        case USEJAPANESEFONT:
-          if (rec["lcd"]["jp"].as<bool>())
-          {
-            isJapaneseFont = true;
-            lcd.setTextSize(1);
-            loadJapaneseFont(text_size);
-          }
-          else
-          {
-            isJapaneseFont = false;
-            lcd.unloadFont();
-            lcd.setFont(&fonts::efont);
-          }
+        case PLAYMP3:
+          file = new AudioFileSourceSD(rec["mp3"]["pth"].as<char *>());
+          id3 = new AudioFileSourceID3(file);
+          out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
+          out->SetGain(0.3);
+          out->SetOutputModeMono(true);
+          mp3 = new AudioGeneratorMP3();
+          mp3->begin(id3, out);
+          commandFlg = true;
+          break;
+
+        case STOPMP3:
+          mp3_stop_flg = true;
           commandFlg = true;
           break;
 
@@ -394,6 +397,12 @@ void pubSerial(void *arg)
   xSemaphoreGive(xMutex);
   while (1)
   {
+  if (mp3->isRunning()) {
+    if (!mp3->loop() || mp3_stop_flg){
+      mp3->stop();
+      mp3_stop_flg = false;
+    }
+  }
     StaticJsonDocument<500> doc;
     int buttonAMeasure = 0;
     int buttonBMeasure = 0;
@@ -456,6 +465,12 @@ void setup()
   M5.begin();
   M5.Power.begin();
   M5.Power.setPowerVin(false); //電源供給断時の自動再起動をOFFに
+  WiFi.mode(WIFI_OFF); 
+  delay(500);
+
+  M5.Lcd.setTextFont(2);
+  M5.Lcd.printf("Sample MP3 playback begins...\n");
+  Serial.printf("Sample MP3 playback begins...\n");
   lcd.begin();
   Wire.begin();
   lcd.setRotation(1);
@@ -463,7 +478,6 @@ void setup()
   lcd.setColorDepth(24);
   lcd.drawJpgFile(SD, "/logo320_ex.jpg");
   qmp6988.init();
-  dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
   Serial.setTimeout(1);
   pinMode(DIN0PIN, INPUT_PULLUP);
@@ -507,6 +521,14 @@ void setup()
   }
   xMutex = xSemaphoreCreateMutex();
   lcd.drawJpgFile(SD, "/logo320.jpg");
+    delay(1);
+  file = new AudioFileSourceSD("/booted.mp3");
+  id3 = new AudioFileSourceID3(file);
+  out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
+  out->SetGain(0.3);
+  out->SetOutputModeMono(true);
+  mp3 = new AudioGeneratorMP3();
+  mp3->begin(id3, out);
   loopStart = millis();
   //esp32の各コアにタスク割当
   xTaskCreatePinnedToCore(pubSerial, "pubSerial", 8192, NULL, 1, NULL, 0);

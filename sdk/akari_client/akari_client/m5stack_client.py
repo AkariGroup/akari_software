@@ -83,9 +83,16 @@ class M5StackClient(ABC):
         ...
 
     @abstractmethod
-    def use_japanese_font(
+    def play_mp3(
         self,
-        enabled: bool,
+        filepath: str,
+        sync: bool = True,
+    ) -> None:
+        ...
+
+    @abstractmethod
+    def stop_mp3(
+        self,
         sync: bool = True,
     ) -> None:
         ...

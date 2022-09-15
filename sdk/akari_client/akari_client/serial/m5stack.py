@@ -16,7 +16,8 @@ class CommandId(enum.IntEnum):
     SETDISPLAYCOLOR = 10
     SETDISPLAYTEXT = 11
     SETDISPLAYIMG = 12
-    USEJAPANESEFONT = 13
+    PLAYMP3 = 13
+    STOPMP3 = 14
     STARTM5 = 98
     RESETM5 = 99
 
@@ -144,8 +145,15 @@ class M5StackSerialClient(M5StackClient):
         }
         self._communicator.send_data(data, sync)
 
-    def use_japanese_font(self, enabled: bool, sync: bool = True) -> None:
-        data = {"com": CommandId.USEJAPANESEFONT, "lcd": {"jp": enabled}}
+    def play_mp3(self, filepath: str, sync: bool = True) -> None:
+        data = {
+            "com": CommandId.PLAYMP3,
+            "mp3": {"pth": filepath},
+        }
+        self._communicator.send_data(data, sync)
+
+    def stop_mp3(self, sync: bool = True) -> None:
+        data = {"com": CommandId.STOPMP3}
         self._communicator.send_data(data, sync)
 
     def reset_m5(self) -> None:

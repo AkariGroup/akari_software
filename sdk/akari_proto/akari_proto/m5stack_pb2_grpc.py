@@ -40,9 +40,14 @@ class M5StackServiceStub(object):
                 request_serializer=akari__proto_dot_m5stack__pb2.SetDisplayImageRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
-        self.UseJapaneseFont = channel.unary_unary(
-                '/akari_proto.M5StackService/UseJapaneseFont',
-                request_serializer=akari__proto_dot_m5stack__pb2.UseJapaneseFontRequest.SerializeToString,
+        self.PlayMp3 = channel.unary_unary(
+                '/akari_proto.M5StackService/PlayMp3',
+                request_serializer=akari__proto_dot_m5stack__pb2.PlayMp3Request.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
+        self.StopMp3 = channel.unary_unary(
+                '/akari_proto.M5StackService/StopMp3',
+                request_serializer=akari__proto_dot_m5stack__pb2.StopMp3Request.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.Reset = channel.unary_unary(
@@ -95,7 +100,13 @@ class M5StackServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def UseJapaneseFont(self, request, context):
+    def PlayMp3(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StopMp3(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -147,9 +158,14 @@ def add_M5StackServiceServicer_to_server(servicer, server):
                     request_deserializer=akari__proto_dot_m5stack__pb2.SetDisplayImageRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
-            'UseJapaneseFont': grpc.unary_unary_rpc_method_handler(
-                    servicer.UseJapaneseFont,
-                    request_deserializer=akari__proto_dot_m5stack__pb2.UseJapaneseFontRequest.FromString,
+            'PlayMp3': grpc.unary_unary_rpc_method_handler(
+                    servicer.PlayMp3,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.PlayMp3Request.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'StopMp3': grpc.unary_unary_rpc_method_handler(
+                    servicer.StopMp3,
+                    request_deserializer=akari__proto_dot_m5stack__pb2.StopMp3Request.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'Reset': grpc.unary_unary_rpc_method_handler(
@@ -263,7 +279,7 @@ class M5StackService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UseJapaneseFont(request,
+    def PlayMp3(request,
             target,
             options=(),
             channel_credentials=None,
@@ -273,8 +289,25 @@ class M5StackService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/UseJapaneseFont',
-            akari__proto_dot_m5stack__pb2.UseJapaneseFontRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/PlayMp3',
+            akari__proto_dot_m5stack__pb2.PlayMp3Request.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def StopMp3(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.M5StackService/StopMp3',
+            akari__proto_dot_m5stack__pb2.StopMp3Request.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

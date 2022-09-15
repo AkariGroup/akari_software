@@ -38,9 +38,13 @@ message SetDisplayImageRequest {
   bool sync = 5;
 }
 
-message UseJapaneseFontRequest {
-  bool enabled = 1;
+message PlayMp3Request {
+  string path = 1;
   bool sync = 2;
+}
+
+message StopMp3Request {
+  bool sync = 1;
 }
 
 message Color {
@@ -64,7 +68,9 @@ service M5StackService {
         returns (google.protobuf.Empty);
     rpc SetDisplayImage(SetDisplayImageRequest)
         returns (google.protobuf.Empty);
-    rpc UseJapaneseFont(UseJapaneseFontRequest)
+    rpc PlayMp3(PlayMp3Request)
+        returns (google.protobuf.Empty);
+    rpc StopMp3(StopMp3Request)
         returns (google.protobuf.Empty);
     rpc Reset(google.protobuf.Empty)
         returns (google.protobuf.Empty);
