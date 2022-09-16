@@ -6,7 +6,14 @@ RUN apt-get update && \
         git \
         gnome-keyring \
         wget \
+        locales \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8 \
+    && LANGUAGE ja_JP:ja \
+    && LC_ALL ja_JP.UTF-8 \
+    && TZ JST-9
 
 RUN wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
 
