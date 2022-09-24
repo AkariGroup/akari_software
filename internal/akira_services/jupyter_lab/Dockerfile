@@ -4,8 +4,15 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl \
         git \
+        locales \
         wget \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG="ja_JP.UTF-8" \
+    LANGUAGE="ja_JP:ja" \
+    LC_ALL="ja_JP.UTF-8" \
+    TZ="Asia/Tokyo"
 
 RUN pip install wheel
 RUN mkdir -p /wheel \
