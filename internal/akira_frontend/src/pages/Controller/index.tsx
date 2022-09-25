@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import { useRef, useState, useCallback } from "react";
 import { Joystick } from 'react-joystick-component';
+import { ColorPicker } from "./ColorPicker";
 //TODO: Remove from npm
 import Webcam from "react-webcam";
 
@@ -218,16 +219,8 @@ export function Controller(props: Props) {
 
                     <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
                         <Grid item xl={9}>
-                            <FormControl style={{ width: "100%" }}>
-                                <InputLabel id="color">Color</InputLabel>
-                                <Select
-                                    label="Color"
-                                >
-                                    <MenuItem value={"Red"}>Red</MenuItem>
-                                    <MenuItem value={"Green"}>Green</MenuItem>
-                                    <MenuItem value={"Blue"}>Blue</MenuItem>
-                                </Select>
-                            </FormControl>
+
+                                <ColorPicker/>
                         </Grid>
                         <Grid item xl={3}>
                             <Button
@@ -240,7 +233,7 @@ export function Controller(props: Props) {
                     </Stack>
                     <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center" >
                         <Grid item xl={9}>
-                            <TextField style={{ width: "100%" }} id="display" label="display" variant="outlined" />
+                            <TextField style={{ width: "100%" }} id="display" label="display text" variant="outlined" />
                         </Grid>
                         <Grid item xl={3}>
                             <Button
