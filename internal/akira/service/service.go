@@ -71,6 +71,7 @@ type Service interface {
 	Terminate(context.Context) (ServiceTask, error)
 	Clean() error
 	Status() ServiceStatus
+	Logs() string
 
 	GetOpenAddress(hostName string) (string, error)
 	GetOpenProjectAddress(hostName string, projectDir string) (string, error)
