@@ -14,6 +14,7 @@ import time
 from akari_client import AkariClient
 from akari_client.m5stack_client import M5StackClient
 from akari_client.color import Colors
+from akari_client.position import Positions
 
 CLOCK_MODE = 1
 SENSOR_MODE = 2
@@ -41,7 +42,7 @@ class M5serialSample(object):
         dt_now = datetime.datetime.now()
         self.m5.set_display_text(
             dt_now.strftime("%Y/%m/%d %a"),
-            -999,
+            Positions.CENTER,
             0,
             2,
             text_color=Colors.WHITE,
@@ -55,8 +56,8 @@ class M5serialSample(object):
             dt_now = datetime.datetime.now()
             self.m5.set_display_text(
                 dt_now.strftime("%H:%M:%S "),
-                -999,
-                -999,
+                Positions.CENTER,
+                Positions.CENTER,
                 4,
                 text_color=Colors.WHITE,
                 back_color=Colors.BLACK,
