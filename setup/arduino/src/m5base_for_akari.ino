@@ -521,7 +521,7 @@ void setup()
   }
   xMutex = xSemaphoreCreateMutex();
   lcd.drawJpgFile(SD, "/logo320.jpg");
-    delay(1);
+  delay(1);
   file = new AudioFileSourceSD("/booted.mp3");
   id3 = new AudioFileSourceID3(file);
   out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
