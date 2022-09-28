@@ -3,6 +3,7 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import {
   Akira_protoCreateServiceRequest,
+  Akira_protoEditServiceRequest,
   Akira_protoService,
 } from "../../api/@types";
 import { ServiceList } from "../../components/ServiceList";
@@ -40,6 +41,25 @@ export function Services() {
       },
       [client, setBusy, setCreateDrawerOpened, mutate]
     );
+    const onServiceEdit: SubmitHandler<Akira_protoEditServiceRequest> =
+    useCallback(
+      async (data) => {
+        if (!client) return;
+
+        // TODO: Handle error (e.g. Directory name conflicts)
+        setBusy(true);
+        try {
+          await client.services.post({
+            body: data,
+          });
+          setEditDrawerOpened(false);
+          mutate();
+        } finally {
+          setBusy(false);
+        }
+      },
+      [client, setBusy, setEditDrawerOpened, mutate]
+      );
 
   const onStartService = useCallback(
     async (target: Akira_protoService) => {
