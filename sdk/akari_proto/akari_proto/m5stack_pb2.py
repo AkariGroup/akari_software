@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19\x61kari_proto/m5stack.proto\x12\x0b\x61kari_proto\x1a\x1bgoogle/protobuf/empty.proto\"\xb8\x02\n\x10SetPinOutRequest\x12N\n\x0b\x62inary_pins\x18\x01 \x03(\x0b\x32-.akari_proto.SetPinOutRequest.BinaryPinsEntryR\nbinaryPins\x12\x45\n\x08int_pins\x18\x02 \x03(\x0b\x32*.akari_proto.SetPinOutRequest.IntPinsEntryR\x07intPins\x12\x12\n\x04sync\x18\x03 \x01(\x08R\x04sync\x1a=\n\x0f\x42inaryPinsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x08R\x05value:\x02\x38\x01\x1a:\n\x0cIntPinsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x05R\x05value:\x02\x38\x01\"(\n\x12ResetPinOutRequest\x12\x12\n\x04sync\x18\x01 \x01(\x08R\x04sync\"V\n\x16SetDisplayColorRequest\x12(\n\x05\x63olor\x18\x01 \x01(\x0b\x32\x12.akari_proto.ColorR\x05\x63olor\x12\x12\n\x04sync\x18\x02 \x01(\x08R\x04sync\"\xf9\x01\n\x15SetDisplayTextRequest\x12\x12\n\x04text\x18\x01 \x01(\tR\x04text\x12\x13\n\x05pos_x\x18\x02 \x01(\x05R\x04posX\x12\x13\n\x05pos_y\x18\x03 \x01(\x05R\x04posY\x12\x12\n\x04size\x18\x04 \x01(\x05R\x04size\x12\x31\n\ntext_color\x18\x05 \x01(\x0b\x32\x12.akari_proto.ColorR\ttextColor\x12-\n\x08\x62g_color\x18\x06 \x01(\x0b\x32\x12.akari_proto.ColorR\x07\x62gColor\x12\x18\n\x07refresh\x18\x07 \x01(\x08R\x07refresh\x12\x12\n\x04sync\x18\x08 \x01(\x08R\x04sync\"\x80\x01\n\x16SetDisplayImageRequest\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x13\n\x05pos_x\x18\x02 \x01(\x05R\x04posX\x12\x13\n\x05pos_y\x18\x03 \x01(\x05R\x04posY\x12\x14\n\x05scale\x18\x04 \x01(\x02R\x05scale\x12\x12\n\x04sync\x18\x05 \x01(\x08R\x04sync\"F\n\x16UseJapaneseFontRequest\x12\x18\n\x07\x65nabled\x18\x01 \x01(\x08R\x07\x65nabled\x12\x12\n\x04sync\x18\x02 \x01(\x08R\x04sync\"C\n\x05\x43olor\x12\x10\n\x03red\x18\x01 \x01(\x05R\x03red\x12\x14\n\x05green\x18\x02 \x01(\x05R\x05green\x12\x12\n\x04\x62lue\x18\x03 \x01(\x05R\x04\x62lue\"0\n\rM5StackStatus\x12\x1f\n\x0bstatus_json\x18\x01 \x01(\tR\nstatusJson2\x91\x05\n\x0eM5StackService\x12\x42\n\tSetPinOut\x12\x1d.akari_proto.SetPinOutRequest\x1a\x16.google.protobuf.Empty\x12\x46\n\x0bResetPinOut\x12\x1f.akari_proto.ResetPinOutRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetDisplayColor\x12#.akari_proto.SetDisplayColorRequest\x1a\x16.google.protobuf.Empty\x12L\n\x0eSetDisplayText\x12\".akari_proto.SetDisplayTextRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetDisplayImage\x12#.akari_proto.SetDisplayImageRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fUseJapaneseFont\x12#.akari_proto.UseJapaneseFontRequest\x1a\x16.google.protobuf.Empty\x12\x37\n\x05Reset\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12\x39\n\x03Get\x12\x16.google.protobuf.Empty\x1a\x1a.akari_proto.M5StackStatus\x12\x41\n\tGetStream\x12\x16.google.protobuf.Empty\x1a\x1a.akari_proto.M5StackStatus0\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19\x61kari_proto/m5stack.proto\x12\x0b\x61kari_proto\x1a\x1bgoogle/protobuf/empty.proto\"\xb8\x02\n\x10SetPinOutRequest\x12N\n\x0b\x62inary_pins\x18\x01 \x03(\x0b\x32-.akari_proto.SetPinOutRequest.BinaryPinsEntryR\nbinaryPins\x12\x45\n\x08int_pins\x18\x02 \x03(\x0b\x32*.akari_proto.SetPinOutRequest.IntPinsEntryR\x07intPins\x12\x12\n\x04sync\x18\x03 \x01(\x08R\x04sync\x1a=\n\x0f\x42inaryPinsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x08R\x05value:\x02\x38\x01\x1a:\n\x0cIntPinsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x05R\x05value:\x02\x38\x01\"(\n\x12ResetPinOutRequest\x12\x12\n\x04sync\x18\x01 \x01(\x08R\x04sync\"V\n\x16SetDisplayColorRequest\x12(\n\x05\x63olor\x18\x01 \x01(\x0b\x32\x12.akari_proto.ColorR\x05\x63olor\x12\x12\n\x04sync\x18\x02 \x01(\x08R\x04sync\"\xf9\x01\n\x15SetDisplayTextRequest\x12\x12\n\x04text\x18\x01 \x01(\tR\x04text\x12\x13\n\x05pos_x\x18\x02 \x01(\x05R\x04posX\x12\x13\n\x05pos_y\x18\x03 \x01(\x05R\x04posY\x12\x12\n\x04size\x18\x04 \x01(\x05R\x04size\x12\x31\n\ntext_color\x18\x05 \x01(\x0b\x32\x12.akari_proto.ColorR\ttextColor\x12-\n\x08\x62g_color\x18\x06 \x01(\x0b\x32\x12.akari_proto.ColorR\x07\x62gColor\x12\x18\n\x07refresh\x18\x07 \x01(\x08R\x07refresh\x12\x12\n\x04sync\x18\x08 \x01(\x08R\x04sync\"\x80\x01\n\x16SetDisplayImageRequest\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x13\n\x05pos_x\x18\x02 \x01(\x05R\x04posX\x12\x13\n\x05pos_y\x18\x03 \x01(\x05R\x04posY\x12\x14\n\x05scale\x18\x04 \x01(\x02R\x05scale\x12\x12\n\x04sync\x18\x05 \x01(\x08R\x04sync\"8\n\x0ePlayMp3Request\x12\x12\n\x04path\x18\x01 \x01(\tR\x04path\x12\x12\n\x04sync\x18\x02 \x01(\x08R\x04sync\"$\n\x0eStopMp3Request\x12\x12\n\x04sync\x18\x01 \x01(\x08R\x04sync\"C\n\x05\x43olor\x12\x10\n\x03red\x18\x01 \x01(\x05R\x03red\x12\x14\n\x05green\x18\x02 \x01(\x05R\x05green\x12\x12\n\x04\x62lue\x18\x03 \x01(\x05R\x04\x62lue\"0\n\rM5StackStatus\x12\x1f\n\x0bstatus_json\x18\x01 \x01(\tR\nstatusJson2\xc1\x05\n\x0eM5StackService\x12\x42\n\tSetPinOut\x12\x1d.akari_proto.SetPinOutRequest\x1a\x16.google.protobuf.Empty\x12\x46\n\x0bResetPinOut\x12\x1f.akari_proto.ResetPinOutRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetDisplayColor\x12#.akari_proto.SetDisplayColorRequest\x1a\x16.google.protobuf.Empty\x12L\n\x0eSetDisplayText\x12\".akari_proto.SetDisplayTextRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetDisplayImage\x12#.akari_proto.SetDisplayImageRequest\x1a\x16.google.protobuf.Empty\x12>\n\x07PlayMp3\x12\x1b.akari_proto.PlayMp3Request\x1a\x16.google.protobuf.Empty\x12>\n\x07StopMp3\x12\x1b.akari_proto.StopMp3Request\x1a\x16.google.protobuf.Empty\x12\x37\n\x05Reset\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12\x39\n\x03Get\x12\x16.google.protobuf.Empty\x1a\x1a.akari_proto.M5StackStatus\x12\x41\n\tGetStream\x12\x16.google.protobuf.Empty\x1a\x1a.akari_proto.M5StackStatus0\x01\x62\x06proto3')
 
 
 
@@ -26,7 +26,8 @@ _RESETPINOUTREQUEST = DESCRIPTOR.message_types_by_name['ResetPinOutRequest']
 _SETDISPLAYCOLORREQUEST = DESCRIPTOR.message_types_by_name['SetDisplayColorRequest']
 _SETDISPLAYTEXTREQUEST = DESCRIPTOR.message_types_by_name['SetDisplayTextRequest']
 _SETDISPLAYIMAGEREQUEST = DESCRIPTOR.message_types_by_name['SetDisplayImageRequest']
-_USEJAPANESEFONTREQUEST = DESCRIPTOR.message_types_by_name['UseJapaneseFontRequest']
+_PLAYMP3REQUEST = DESCRIPTOR.message_types_by_name['PlayMp3Request']
+_STOPMP3REQUEST = DESCRIPTOR.message_types_by_name['StopMp3Request']
 _COLOR = DESCRIPTOR.message_types_by_name['Color']
 _M5STACKSTATUS = DESCRIPTOR.message_types_by_name['M5StackStatus']
 SetPinOutRequest = _reflection.GeneratedProtocolMessageType('SetPinOutRequest', (_message.Message,), {
@@ -80,12 +81,19 @@ SetDisplayImageRequest = _reflection.GeneratedProtocolMessageType('SetDisplayIma
   })
 _sym_db.RegisterMessage(SetDisplayImageRequest)
 
-UseJapaneseFontRequest = _reflection.GeneratedProtocolMessageType('UseJapaneseFontRequest', (_message.Message,), {
-  'DESCRIPTOR' : _USEJAPANESEFONTREQUEST,
+PlayMp3Request = _reflection.GeneratedProtocolMessageType('PlayMp3Request', (_message.Message,), {
+  'DESCRIPTOR' : _PLAYMP3REQUEST,
   '__module__' : 'akari_proto.m5stack_pb2'
-  # @@protoc_insertion_point(class_scope:akari_proto.UseJapaneseFontRequest)
+  # @@protoc_insertion_point(class_scope:akari_proto.PlayMp3Request)
   })
-_sym_db.RegisterMessage(UseJapaneseFontRequest)
+_sym_db.RegisterMessage(PlayMp3Request)
+
+StopMp3Request = _reflection.GeneratedProtocolMessageType('StopMp3Request', (_message.Message,), {
+  'DESCRIPTOR' : _STOPMP3REQUEST,
+  '__module__' : 'akari_proto.m5stack_pb2'
+  # @@protoc_insertion_point(class_scope:akari_proto.StopMp3Request)
+  })
+_sym_db.RegisterMessage(StopMp3Request)
 
 Color = _reflection.GeneratedProtocolMessageType('Color', (_message.Message,), {
   'DESCRIPTOR' : _COLOR,
@@ -123,12 +131,14 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _SETDISPLAYTEXTREQUEST._serialized_end=766
   _SETDISPLAYIMAGEREQUEST._serialized_start=769
   _SETDISPLAYIMAGEREQUEST._serialized_end=897
-  _USEJAPANESEFONTREQUEST._serialized_start=899
-  _USEJAPANESEFONTREQUEST._serialized_end=969
-  _COLOR._serialized_start=971
-  _COLOR._serialized_end=1038
-  _M5STACKSTATUS._serialized_start=1040
-  _M5STACKSTATUS._serialized_end=1088
-  _M5STACKSERVICE._serialized_start=1091
-  _M5STACKSERVICE._serialized_end=1748
+  _PLAYMP3REQUEST._serialized_start=899
+  _PLAYMP3REQUEST._serialized_end=955
+  _STOPMP3REQUEST._serialized_start=957
+  _STOPMP3REQUEST._serialized_end=993
+  _COLOR._serialized_start=995
+  _COLOR._serialized_end=1062
+  _M5STACKSTATUS._serialized_start=1064
+  _M5STACKSTATUS._serialized_end=1112
+  _M5STACKSERVICE._serialized_start=1115
+  _M5STACKSERVICE._serialized_end=1820
 # @@protoc_insertion_point(module_scope)

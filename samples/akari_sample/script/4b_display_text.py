@@ -13,7 +13,6 @@ from akari_client import AkariClient
 from akari_client.color import Colors
 from akari_client.position import Positions
 
-
 def main() -> None:
     """
     メイン関数
@@ -21,21 +20,20 @@ def main() -> None:
     with AkariClient() as akari:
         # m5と通信するクラスを呼び出す
         m5 = akari.m5stack
-
+        pos_x: int
+        pos_y: int
         print("Start!")
         # 2秒停止
         time.sleep(2)
-        pos_x: int
-        pos_y: int
         # アプリが終了されるまでループする。
         while True:
             # STEP1. '1.AKARI'を左上表示
             print("STEP1. display 1.AKARI at top left")
             # textは'1.AKARI'
             text = "1.AKARI"
-            # pos_xは0-320で座標指定。0もしくはPositions.LEFTが左
+            # pos_xは0-320で座標指定。0もしくはPositions.LEFTで左
             pos_x = Positions.LEFT
-            # pos_yは0-240で座標指定。0もしくはPositions.TOPが上
+            # pos_yは0-240で座標指定。0もしくはPositions.TOPで上
             pos_y = Positions.TOP
             # 文字サイズは3
             size = 3
@@ -153,24 +151,16 @@ def main() -> None:
             time.sleep(2)
             print()
 
-            # STEP.6 フォントを軽量内蔵フォントに変更する。
-            print("STEP6. Change font")
-            # dataをFalseにすることで、フォントを内蔵フォントに変更可能
-            data = False
-            m5.use_japanese_font(data)
-            print("-> Set")
-            print()
-
-            # STEP7. 変更したフォントで'7.アカリ'を(50,170)にリフレッシュなしで重ねて表示
-            print("STEP7. display 7.アカリ at (50,170) with new font")
-            # textは'7.アカリ'
-            text = "7.アカリ"
+            # STEP6. '6.アカリ'を(50,170)にリフレッシュなしで重ねて表示
+            print("STEP6. display 6.アカリ at (50,170) with new font")
+            # textは'6.アカリ'
+            text = "6.アカリ"
             # pos_xは50
             pos_x = 50
             # pos_yは170
             pos_y = 170
-            # 文字サイズは4
-            size = 4
+            # 文字サイズは2
+            size = 2
             # 文字色はピンク
             text_color = Colors.PINK
             # 背景色は灰
@@ -186,20 +176,10 @@ def main() -> None:
             time.sleep(2)
             print()
 
-            # STEP.8 フォントをデフォルトフォントに変更する。
-            print("STEP8. Change font to default")
-            # dataをTrueにすることで、フォントをデフォルトフォントに変更可能
-            data = True
-            m5.use_japanese_font(data)
-            print("-> Set")
-            # 2秒停止
-            time.sleep(2)
-            print()
-
-            # STEP9. '9.灯'を中央に表示
-            print("STEP9. display 9.灯 at middle center")
-            # textは'9.灯'
-            text = "9.灯"
+            # STEP7. '7.灯'を中央に表示
+            print("STEP7. display 7.灯 at middle center")
+            # textは'7.灯'
+            text = "7.灯"
             # pos_xはPositions.CENTERで左右中央
             pos_x = Positions.CENTER
             # pos_yはPositions.CENTERで上下中央
