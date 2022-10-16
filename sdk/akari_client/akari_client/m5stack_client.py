@@ -3,7 +3,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional, TypedDict
 
-from .color import Color
+from .color import Color, Colors
+from .position import Positions
 
 
 class M5ComDict(TypedDict):
@@ -61,12 +62,12 @@ class M5StackClient(ABC):
     def set_display_text(
         self,
         text: str,
-        pos_x: int,
-        pos_y: int,
-        size: int,
-        text_color: Optional[Color] = None,
-        back_color: Optional[Color] = None,
-        refresh: bool = False,
+        pos_x: int = Positions.CENTER,
+        pos_y: int = Positions.CENTER,
+        size: int = 3,
+        text_color: Optional[Color] = Colors.BLACK,
+        back_color: Optional[Color] = Colors.WHITE,
+        refresh: bool = True,
         sync: bool = True,
     ) -> None:
         ...
@@ -75,9 +76,9 @@ class M5StackClient(ABC):
     def set_display_image(
         self,
         filepath: str,
-        pos_x: int,
-        pos_y: int,
-        scale: float,
+        pos_x: int = Positions.CENTER,
+        pos_y: int = Positions.CENTER,
+        scale: float = -1.0,
         sync: bool = True,
     ) -> None:
         ...

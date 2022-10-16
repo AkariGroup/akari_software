@@ -5,8 +5,9 @@ import enum
 import time
 from typing import Any, Dict, Optional
 
-from ..color import Color
+from ..color import Color, Colors
 from ..m5stack_client import M5ComDict, M5StackClient
+from ..position import Positions
 from .m5stack_communicator import M5SerialCommunicator
 
 
@@ -106,12 +107,12 @@ class M5StackSerialClient(M5StackClient):
     def set_display_text(
         self,
         text: str,
-        pos_x: int,
-        pos_y: int,
-        size: int,
-        text_color: Optional[Color] = None,
-        back_color: Optional[Color] = None,
-        refresh: bool = False,
+        pos_x: int = Positions.CENTER,
+        pos_y: int = Positions.CENTER,
+        size: int = 3,
+        text_color: Optional[Color] = Colors.BLACK,
+        back_color: Optional[Color] = Colors.WHITE,
+        refresh: bool = True,
         sync: bool = True,
     ) -> None:
         text_color_value = -1
@@ -137,7 +138,12 @@ class M5StackSerialClient(M5StackClient):
         self._communicator.send_data(data, sync)
 
     def set_display_image(
-        self, filepath: str, pos_x: int, pos_y: int, scale: float, sync: bool = True
+        self,
+        filepath: str,
+        pos_x: int = Positions.CENTER,
+        pos_y: int = Positions.CENTER,
+        scale: float = -1.0,
+        sync: bool = True,
     ) -> None:
         data = {
             "com": CommandId.SETDISPLAYIMG,
