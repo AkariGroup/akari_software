@@ -1,3 +1,4 @@
+import useAspidaSWR from "@aspida/swr";
 import {
   CircularProgress,
   IconButton,
@@ -20,9 +21,24 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCallback, useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
+import { useApiClient } from "../../hooks/api";
+import { useSetBackdropValue } from "../../contexts/BackdropContext";
+
+export interface EditServiceRequest {
+  id: string;
+  display_name: string;
+  description: string;
+}
+
+export interface SetAutoStartRequest {
+  id: string;
+  auto_start: boolean;
+}
+
 
 type Props = {
   services: Akira_protoService[];
@@ -229,6 +245,33 @@ function ServiceRow({
 }
 
 export function ServiceList(props: Props) {
+  const client = useApiClient();
+  const { data, error, mutate } = useAspidaSWR(client?.services, {
+    enabled: !!client,
+    refreshInterval: 5 * 1000, // in ms
+  });
+  const [EditDrawerOpened, setEditDrawerOpened] = useState(false);
+  const setBusy = useSetBackdropValue();
+  const onServiceEdit: SubmitHandler<EditServiceRequest> =
+  useCallback(
+    async (data) => {
+      if (!client) return;
+
+      // TODO: Handle error (e.g. Directory name conflicts)
+      setBusy(true);
+      try {
+        await client.services.post({
+          body: data,
+        });
+        setEditDrawerOpened(false);
+        mutate();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy, setEditDrawerOpened, mutate]
+  );
+  
   const sortKey = useCallback(
     (lhs: Akira_protoService, rhs: Akira_protoService) => {
       const lhsStatus = lhs.status?.toString() ?? "";

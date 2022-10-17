@@ -3,15 +3,15 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import {
   Akira_protoCreateServiceRequest,
-  Akira_protoEditServiceRequest,
   Akira_protoService,
 } from "../../api/@types";
-import { ServiceList } from "../../components/ServiceList";
+import { ServiceList, EditServiceRequest, SetAutoStartRequest} from "../../components/ServiceList";
 import { useApiClient } from "../../hooks/api";
 import { ServiceCreateDrawer } from "./create";
 import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
+
 
 export function Services() {
   const client = useApiClient();
@@ -41,25 +41,7 @@ export function Services() {
       },
       [client, setBusy, setCreateDrawerOpened, mutate]
     );
-    const onServiceEdit: SubmitHandler<Akira_protoEditServiceRequest> =
-    useCallback(
-      async (data) => {
-        if (!client) return;
-
-        // TODO: Handle error (e.g. Directory name conflicts)
-        setBusy(true);
-        try {
-          await client.services.post({
-            body: data,
-          });
-          setEditDrawerOpened(false);
-          mutate();
-        } finally {
-          setBusy(false);
-        }
-      },
-      [client, setBusy, setEditDrawerOpened, mutate]
-      );
+    
 
   const onStartService = useCallback(
     async (target: Akira_protoService) => {
