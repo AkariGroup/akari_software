@@ -2,7 +2,7 @@
 # coding:utf-8
 
 """
-Display _text sample
+Display text sample
 Created on 2021/06/11
 @author: Kazuya Yamamoto
 """
