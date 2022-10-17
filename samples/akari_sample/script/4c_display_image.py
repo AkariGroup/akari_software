@@ -59,13 +59,13 @@ def main() -> None:
 
             # STEP3. M5のSDカード内の画像'/logo320.jpg'を0.3倍、右下揃えで表示
             print("STEP3. display /logo320.jpg in SD at x0.3 at bottom right")
-            # _filepathでM5のSDカード内の画像パスを指定
+            # filepathでM5のSDカード内の画像パスを指定
             _filepath = "/logo320.jpg"
-            # _pos_xはPositions.RIGHTで右揃え
+            # pos_xはPositions.RIGHTで右揃え
             _pos_x = Positions.RIGHT
-            # _pos_yはPositions.BOTTOMで下揃え
+            # pos_yはPositions.BOTTOMで下揃え
             _pos_y = Positions.BOTTOM
-            # _scaleでサイズ指定。
+            # scaleでサイズ指定。
             _scale = 0.3
             # set_display_imageを実行
             m5.set_display_image(_filepath, _pos_x, _pos_y, _scale)
@@ -76,13 +76,13 @@ def main() -> None:
 
             # STEP4. M5のSDカード内の画像'/logo320.jpg'を0.7倍、左中央揃えで表示
             print("STEP4. display /logo320.jpg in SD at x0.7 at middle left")
-            # _filepathでM5のSDカード内の画像パスを指定
+            # filepathでM5のSDカード内の画像パスを指定
             _filepath = "/logo320.jpg"
-            # _pos_xは0-320で座標指定。0もしくはPositions.LEFTで左揃え
+            # pos_xは0-320で座標指定。0もしくはPositions.LEFTで左揃え
             _pos_x = Positions.LEFT
-            # _pos_yは0-240で座標指定。Positions.CENTERで上下中央
+            # pos_yは0-240で座標指定。Positions.CENTERで上下中央
             _pos_y = Positions.CENTER
-            # _scaleでサイズ指定。
+            # scaleでサイズ指定。
             _scale = 0.7
             # set_display_imageを実行
             m5.set_display_image(_filepath, _pos_x, _pos_y, _scale)
@@ -93,13 +93,13 @@ def main() -> None:
 
             # STEP5. M5のSDカード内の画像'/logo320.jpg'を0.4倍、右上揃えで表示
             print("STEP5. display /logo320.jpg in SD at x0.4 at top right")
-            # _filepathでM5のSDカード内の画像パスを指定
+            # filepathでM5のSDカード内の画像パスを指定
             _filepath = "/logo320.jpg"
-            # _pos_xはPositions.RIGHTで右揃え
+            # pos_xはPositions.RIGHTで右揃え
             _pos_x = Positions.RIGHT
-            # _pos_yは0もしくはPositions.TOPで上揃え
+            # pos_yは0もしくはPositions.TOPで上揃え
             _pos_y = Positions.TOP
-            # _scaleでサイズ指定。
+            # scaleでサイズ指定。
             _scale = 0.4
             # set_display_imageを実行
             m5.set_display_image(_filepath, _pos_x, _pos_y, _scale)
@@ -110,13 +110,13 @@ def main() -> None:
 
             # STEP6. M5のSDカード内の画像'/logo320.jpg'を0.2倍、左下揃えで表示
             print("STEP6. display /logo320.jpg in SD at x0.2 at bottom left")
-            # _filepathでM5のSDカード内の画像パスを指定
+            # filepathでM5のSDカード内の画像パスを指定
             _filepath = "/logo320.jpg"
-            # _pos_xは0もしくはPositions.LEFTで左揃え
+            # pos_xは0もしくはPositions.LEFTで左揃え
             _pos_x = Positions.LEFT
-            # _pos_yはPositions.BOTTOMで下揃え
+            # pos_yはPositions.BOTTOMで下揃え
             _pos_y = Positions.BOTTOM
-            # _scaleでサイズ指定。
+            # scaleでサイズ指定。
             _scale = 0.2
             # set_display_imageを実行
             m5.set_display_image(_filepath, _pos_x, _pos_y, _scale)
@@ -127,13 +127,13 @@ def main() -> None:
 
             # STEP7. M5のSDカード内の画像'/logo320.jpg'を0.3倍で(50,20)に表示
             print("STEP7. display /logo320.jpg in SD at x0.3 size at (50,20)")
-            # _filepathでM5のSDカード内の画像パスを指定
+            # filepathでM5のSDカード内の画像パスを指定
             _filepath = "/logo320.jpg"
-            # _pos_xは0-320で座標指定。
+            # pos_xは0-320で座標指定。
             _pos_x = 50
-            # _pos_yは0-240で座標指定。
+            # pos_yは0-240で座標指定。
             _pos_y = 20
-            # _scaleでサイズ指定。
+            # scaleでサイズ指定。
             _scale = 0.3
             # set_display_imageを実行
             m5.set_display_image(_filepath, _pos_x, _pos_y, _scale)
@@ -144,7 +144,7 @@ def main() -> None:
 
             # STEP8. M5のSDカード内の画像'/logo320.jpg'を表示
             print("STEP8. display /logo320.jpg in SD")
-            # _filepathでM5のSDカード内の画像パスを指定
+            # filepathでM5のSDカード内の画像パスを指定
             _filepath = "/logo320.jpg"
             # set_display_imageを実行
             # pos_x, pos_y, sizeはデフォルト引数を使用

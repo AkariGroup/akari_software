@@ -29,11 +29,11 @@ def main() -> None:
         while True:
             # STEP1. '1.AKARI'を左上表示
             print("STEP1. display 1.AKARI at top left")
-            # _textは'1.AKARI'
+            # textは'1.AKARI'
             _text = "1.AKARI"
-            # _pos_xは0-320で座標指定。0もしくはPositions.LEFTで左
+            # pos_xは0-320で座標指定。0もしくはPositions.LEFTで左
             _pos_x = Positions.LEFT
-            # _pos_yは0-240で座標指定。0もしくはPositions.TOPで上
+            # pos_yは0-240で座標指定。0もしくはPositions.TOPで上
             _pos_y = Positions.TOP
             # 文字サイズは3
             _size = 3
@@ -65,11 +65,11 @@ def main() -> None:
 
             # STEP3. '3.灯り'を右下揃えに表示
             print("STEP3. display 3.灯り at bottom right")
-            # _textは'3.灯り'
+            # textは'3.灯り'
             _text = "3.灯り"
-            # _pos_xはPositions.RIGHTで右揃え
+            # pos_xはPositions.RIGHTで右揃え
             _pos_x = Positions.RIGHT
-            # _pos_yはPositions.BOTTOMで下揃え
+            # pos_yはPositions.BOTTOMで下揃え
             _pos_y = Positions.BOTTOM
             # 文字サイズは4
             _size = 4
@@ -90,11 +90,11 @@ def main() -> None:
 
             # STEP4. '4.アカリ'を(50,40)に表示
             print("STEP4. display 4.アカリ at (50,40)")
-            # _textは'4.アカリ'
+            # textは'4.アカリ'
             _text = "4.アカリ"
-            # _pos_xは60
+            # pos_xは60
             _pos_x = 50
-            # _pos_yは40
+            # pos_yは40
             _pos_y = 40
             # 文字サイズは2
             _size = 2
@@ -115,11 +115,11 @@ def main() -> None:
 
             # STEP5. '5.アカリ'を(50,100)に背景リフレッシュなしで重ねて表示
             print("STEP5. display 5.アカリ at (50,100) without background refresh")
-            # _textは'5.アカリ'
+            # textは'5.アカリ'
             _text = "5.アカリ"
-            # _pos_xは50
+            # pos_xは50
             _pos_x = 50
-            # _pos_yは40
+            # pos_yは40
             _pos_y = 100
             # 文字サイズは3
             _size = 3
@@ -140,11 +140,11 @@ def main() -> None:
 
             # STEP6. '6.アカリ'を(50,170)にリフレッシュなしで重ねて表示
             print("STEP6. display 6.アカリ at (50,170) without background refresh")
-            # _textは'6.アカリ'
+            # textは'6.アカリ'
             _text = "6.アカリ"
-            # _pos_xは50
+            # pos_xは50
             _pos_x = 50
-            # _pos_yは170
+            # pos_yは170
             _pos_y = 170
             # 文字サイズは2
             _size = 2
@@ -165,7 +165,7 @@ def main() -> None:
 
             # STEP7. '7.灯'を中央に表示
             print("STEP7. display 7.灯 at middle center")
-            # _textは'7.灯'
+            # textは'7.灯'
             _text = "7.灯"
             # 文字サイズは6
             _size = 6
