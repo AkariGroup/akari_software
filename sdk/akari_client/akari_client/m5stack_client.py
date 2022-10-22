@@ -33,8 +33,8 @@ class M5StackClient(ABC):
 
         Args:
             pin_id: pin番号。0でdout0、1でdout1を指定する。
-            value: デジタル出力の値。Falseで0V,Trueで3.3V出力。
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
+            value: デジタル出力の値。``False``で0V,``True``で3.3V出力。
+            sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         example:
         >>> from akari_client.color import Colors, Color
@@ -53,7 +53,7 @@ class M5StackClient(ABC):
         Args:
             pin_id: pin番号。デフォルトではpwmout0しかないため、0を指定すること。
             value: PWM出力の値。 0-255で指定し、0で0V、255で3.3Vを出力する。
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
+            sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         example:
         >>> from akari_client.color import Colors, Color
@@ -77,10 +77,10 @@ class M5StackClient(ABC):
         """ヘッド部GPIOピンの出力をまとめて設定する。
 
         Args:
-            dout0: dout0の出力値。Falseで0V,Trueで3.3V出力。
-            dout1: dout1の出力値。Falseで0V,Trueで3.3V出力。
+            dout0: dout0の出力値。``False``で0V,``True``で3.3V出力。
+            dout1: dout1の出力値。``False``で0V,``True``で3.3V出力。
             pwmout0: pwmout0の出力値。0-255で指定し、0で0V、255で3.3Vを出力する。
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
+            sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
         
         example:
         >>> from akari_client.color import Colors, Color
@@ -98,7 +98,7 @@ class M5StackClient(ABC):
         dout0、dout1はFalse、pwmout0は0となる。
 
         Args:
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
+            sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
         
         example:
         >>> from akari_client.color import Colors, Color
@@ -119,8 +119,8 @@ class M5StackClient(ABC):
         """ボディー部M5のディスプレイ背景色を変更する。
 
         Args:
-            color: 背景色を指定。色はcolor.Colorsから色名を引用する、もしくはRGBの数値指定も可能。
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
+            color: 背景色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。
+            sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         example:
         >>> from akari_client.color import Colors, Color
@@ -152,11 +152,11 @@ class M5StackClient(ABC):
 
         Args:
             text: 表示する文字列。文字列の最後に空白を挿入したい場合は空白の後ろに"\n"をつけること。
-            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。position.Positionsを用いた位置指定も可能。
-            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。position.Positionsを用いた位置指定も可能。
+            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。``position.Positions``を用いた位置指定も可能。
+            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。``position.Positions``を用いた位置指定も可能。
             size: 文字サイズを1-7の7段階で指定。
-            text_color: 文字色を指定。色はcolor.Colorsから色名を引用する、もしくはRGBの数値指定も可能。
-            back_color: 背景色を指定。色はcolor.Colorsから色名を引用する、もしくはRGBの数値指定も可能。
+            text_color: 文字色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。
+            back_color: 背景色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。
             refresh: trueの場合画面全体をback_colorで更新する。falseの場合は現在の表示を維持しつつ、文字を描画する範囲のみ更新する。
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
@@ -192,8 +192,8 @@ class M5StackClient(ABC):
 
         Args:
             filepath: M5のSDカード内のファイルパス。(例;"image/hoge.jpg")
-            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。position.Positionsを用いた位置指定も可能。
-            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。position.Positionsを用いた位置指定も可能。
+            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。``position.Positions``を用いた位置指定も可能。
+            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。``position.Positions``を用いた位置指定も可能。
             scale: 画像の拡大縮小倍率を指定。1.0で等倍表示。マイナスの値を入れた場合、画面サイズに合わせて自動でサイズ調整される。
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
@@ -246,7 +246,7 @@ class M5StackClient(ABC):
         """mp3ファイルの再生を停止する。
 
         Args:
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
+            sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         example:
         >>> from akari_client.position import Positions

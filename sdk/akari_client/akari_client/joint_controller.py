@@ -22,7 +22,7 @@ class RevoluteJointController(abc.ABC):
         """サーボの有効無効状態を設定する。
 
         Args:
-            enabled: ``True`` であればサーボを有効にする
+            enabled : ``True`` であればサーボを有効にする
 
         """
         ...
@@ -33,6 +33,7 @@ class RevoluteJointController(abc.ABC):
 
         Args:
             rad_per_sec2: 加速度 [rad/s^2]
+
         """
         ...
 
@@ -42,6 +43,7 @@ class RevoluteJointController(abc.ABC):
 
         Args:
             rad_per_sec: 速度 [rad/s]
+
         """
         ...
 
@@ -52,6 +54,7 @@ class RevoluteJointController(abc.ABC):
 
         Args:
             rad: 目標角度 [rad]
+
         """
         ...
 
@@ -60,6 +63,7 @@ class RevoluteJointController(abc.ABC):
         """サーボの現在角度を取得する。
 
         Returns:
-            現在角度 [rad]
+            float: 現在角度 [rad]
+
         """
         ...
