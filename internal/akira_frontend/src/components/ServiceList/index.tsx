@@ -1,32 +1,45 @@
 import useAspidaSWR from "@aspida/swr";
 import {
+  Box,
+  Button,
   CircularProgress,
+  Divider,
+  Drawer,
   IconButton,
   Link,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Akira_protoServiceStatus,
   Akira_protoService,
   Akira_protoServiceImage,
 } from "../../api/@types";
+import {
+  Controller,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCallback, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
-import { useApiClient } from "../../hooks/api";
+import { ApiClient, useApiClient } from "../../hooks/api";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
+import { ValidationMessages } from "../../libs/messages";
+import { useSearchParams } from "react-router-dom";
 
 export interface EditServiceRequest {
   id: string;
@@ -208,19 +221,110 @@ function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
   );
 }
 
+
+type editProps = {
+  client: ApiClient;
+  onClose: () => void;
+  onSubmit: SubmitHandler<EditServiceRequest>;
+};
+
+export function ServiceEditDrawer(props: editProps) {
+  const { data: service } = useAspidaSWR(props.client?.services, {
+    enabled: !!props.client,
+  });
+  const [searchParams] = useSearchParams();
+  const serviceId = searchParams.get("id") as string;
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EditServiceRequest>();
+  return (
+    <Drawer
+      anchor="right"
+      open={true}
+      onClose={props.onClose}
+      PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
+    >
+      <Stack margin={2} spacing={2}>
+        <Box>
+          <Stack direction="row" alignItems="center">
+            <IconButton onClick={props.onClose}>
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h5" ml={1}>
+              インスタンスの編集
+            </Typography>
+          </Stack>
+          <Divider sx={{ mt: 1 }} />
+        </Box>
+        <Controller
+          name="display_name"
+          control={control}
+          defaultValue="{service?.id}"
+          rules={{
+            required: ValidationMessages.Required,
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="表示名"
+              variant="filled"
+              error={!!errors.display_name}
+              helperText={errors.display_name && errors.display_name.message}
+            />
+          )}
+        />
+
+        <Controller
+          name="description"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              multiline
+              rows={5}
+              label="概要"
+              variant="filled"
+              fullWidth
+              error={!!errors.description}
+              helperText={errors.description && errors.description.message}
+            />
+          )}
+        />
+        <Button
+          type="button"
+          variant="contained"
+          onClick={handleSubmit(props.onSubmit)}
+        >
+          変更
+        </Button>
+        <Button type="button" color="error" variant="outlined" onClick={props.onClose}>
+          キャンセル
+        </Button>
+      </Stack>
+    </Drawer>
+  );
+}
+
+export function ServiceList(props: Props) {
+
 function ServiceRow({
   service,
   onStart,
   onStop,
   onLaunch,
-  onRemove,
+  onRemove
 }: ServiceRowProps) {
   return (
     <>
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-        <TableCell component="th">{service.displayName}</TableCell>
+        <TableCell component="th" onClick={() => setEditDrawerOpened(true)}>
+          {service.displayName}
+        </TableCell>
         <TableCell>
-          <ServiceImageLink image={service.image} />
+            <ServiceImageLink image={service.image} />
         </TableCell>
         <TableCell>
           <Status status={service.status} />
@@ -243,15 +347,15 @@ function ServiceRow({
     </>
   );
 }
-
-export function ServiceList(props: Props) {
+  
   const client = useApiClient();
   const { data, error, mutate } = useAspidaSWR(client?.services, {
     enabled: !!client,
     refreshInterval: 5 * 1000, // in ms
   });
-  const [EditDrawerOpened, setEditDrawerOpened] = useState(false);
   const setBusy = useSetBackdropValue();
+  const [editDrawerOpened, setEditDrawerOpened] = useState(false);
+
   const onServiceEdit: SubmitHandler<EditServiceRequest> =
   useCallback(
     async (data) => {
@@ -294,6 +398,17 @@ export function ServiceList(props: Props) {
   );
   return (
     <TableContainer component={Paper}>
+    {editDrawerOpened ? (
+      <ServiceEditDrawer
+        client={client}
+        onClose={() => {
+          setEditDrawerOpened(false);
+        }}
+        onSubmit={onServiceEdit}
+      />
+    ) : (
+      <></>
+    )}
       <Table>
         <Header />
         <TableBody>
