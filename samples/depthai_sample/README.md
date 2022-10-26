@@ -15,6 +15,6 @@ mobilenetによる物体検出のサンプル。
 
 ### 物体検出(yolo)  
 yoloによる物体検出のサンプル。  
-`cd object_recognition`
-(yolo v4の場合)`python3 tiny-yolo.py`  
-(yolo v3の場合)`python3 tiny-yolo.py -n models/yolo-v3-tiny-tf_openvino_2021.4_6shave.blob`  
+`cd object_recognition`  
+(yolo v3の場合)`python3 tiny_yolo.py`  
+(yolo v4の場合)`python3 tiny_yolo.py -n models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob`  
