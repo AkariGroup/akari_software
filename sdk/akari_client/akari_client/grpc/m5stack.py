@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Iterator, Optional, cast
+from typing import Dict, Iterator, cast
 
 import grpc
 from akari_client.color import Color, Colors
@@ -13,10 +13,7 @@ from ..m5stack_client import M5ComDict, M5StackClient
 from ._error import serializer
 
 
-def _as_proto_color(color: Optional[Color]) -> m5stack_pb2.Color:
-    if color is None:
-        return m5stack_pb2.Color(red=-1, green=-1, blue=-1)
-
+def _as_proto_color(color: Color) -> m5stack_pb2.Color:
     return m5stack_pb2.Color(
         red=color.red,
         green=color.green,

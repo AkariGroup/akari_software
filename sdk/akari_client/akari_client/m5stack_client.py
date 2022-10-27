@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Optional, TypedDict
+from typing import TypedDict
 
 from .color import Color, Colors
 from .position import Positions

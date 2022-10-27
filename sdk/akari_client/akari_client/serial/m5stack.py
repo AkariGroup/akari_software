@@ -3,7 +3,7 @@ from __future__ import annotations
 import dataclasses
 import enum
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from ..color import Color, Colors
 from ..m5stack_client import M5ComDict, M5StackClient
