@@ -81,7 +81,7 @@ class M5StackClient(ABC):
             dout1: dout1の出力値。``False``で0V,``True``で3.3V出力。
             pwmout0: pwmout0の出力値。0-255で指定し、0で0V、255で3.3Vを出力する。
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
-        
+
         example:
         >>> from akari_client.color import Colors, Color
         >>> with AkariClient() as akari:
@@ -99,7 +99,7 @@ class M5StackClient(ABC):
 
         Args:
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
-        
+
         example:
         >>> from akari_client.color import Colors, Color
         >>> with AkariClient() as akari:
