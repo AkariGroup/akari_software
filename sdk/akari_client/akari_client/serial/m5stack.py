@@ -110,8 +110,8 @@ class M5StackSerialClient(M5StackClient):
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
         size: int = 3,
-        text_color: Optional[Color] = Colors.BLACK,
-        back_color: Optional[Color] = Colors.WHITE,
+        text_color: Color = Colors.BLACK,
+        back_color: Color = Colors.WHITE,
         refresh: bool = True,
         sync: bool = True,
     ) -> None:
