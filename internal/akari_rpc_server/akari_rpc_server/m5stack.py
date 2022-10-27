@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Dict, Iterator
 
 import grpc
 from akari_client.color import Color
@@ -11,10 +11,7 @@ from google.protobuf.empty_pb2 import Empty
 from ._error import serializer
 
 
-def _as_akari_color(color: m5stack_pb2.Color) -> Optional[Color]:
-    if color.red == -1 and color.green == -1 and color.blue == -1:
-        return None
-
+def _as_akari_color(color: m5stack_pb2.Color) -> Color:
     return Color(
         color.red,
         color.green,
