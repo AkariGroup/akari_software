@@ -1,8 +1,8 @@
 import json
-from typing import Dict, Iterator, cast
+from typing import Dict, Iterator, Optional, cast
 
 import grpc
-from akari_client.color import Color, Colors
+from akari_client.color import Color
 from akari_client.position import Positions
 from akari_proto import m5stack_pb2
 from akari_proto.grpc.error import deserialize_error
@@ -13,7 +13,10 @@ from ..m5stack_client import M5ComDict, M5StackClient
 from ._error import serializer
 
 
-def _as_proto_color(color: Color) -> m5stack_pb2.Color:
+def _as_proto_color(color: Optional[Color]) -> m5stack_pb2.Color:
+    if color is None:
+        return m5stack_pb2.Color(red=-1, green=-1, blue=-1)
+
     return m5stack_pb2.Color(
         red=color.red,
         green=color.green,
@@ -97,8 +100,8 @@ class GrpcM5StackClient(M5StackClient):
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
         size: int = 3,
-        text_color: Color = Colors.BLACK,
-        back_color: Color = Colors.WHITE,
+        text_color: Optional[Color] = None,
+        back_color: Optional[Color] = None,
         refresh: bool = True,
         sync: bool = True,
     ) -> None:

@@ -3,9 +3,9 @@ from __future__ import annotations
 import dataclasses
 import enum
 import time
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-from ..color import Color, Colors
+from ..color import Color
 from ..m5stack_client import M5ComDict, M5StackClient
 from ..position import Positions
 from .m5stack_communicator import M5SerialCommunicator
@@ -110,8 +110,8 @@ class M5StackSerialClient(M5StackClient):
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
         size: int = 3,
-        text_color: Color = Colors.BLACK,
-        back_color: Color = Colors.WHITE,
+        text_color: Optional[Color] = None,
+        back_color: Optional[Color] = None,
         refresh: bool = True,
         sync: bool = True,
     ) -> None:
