@@ -3,6 +3,7 @@ from typing import Dict, Iterator, Optional, cast
 
 import grpc
 from akari_client.color import Color
+from akari_client.position import Positions
 from akari_proto import m5stack_pb2
 from akari_proto.grpc.error import deserialize_error
 from akari_proto.m5stack_pb2_grpc import M5StackServiceStub
@@ -96,12 +97,12 @@ class GrpcM5StackClient(M5StackClient):
     def set_display_text(
         self,
         text: str,
-        pos_x: int,
-        pos_y: int,
-        size: int,
+        pos_x: int = Positions.CENTER,
+        pos_y: int = Positions.CENTER,
+        size: int = 3,
         text_color: Optional[Color] = None,
         back_color: Optional[Color] = None,
-        refresh: bool = False,
+        refresh: bool = True,
         sync: bool = True,
     ) -> None:
         request = m5stack_pb2.SetDisplayTextRequest(
@@ -118,7 +119,12 @@ class GrpcM5StackClient(M5StackClient):
 
     @deserialize_error(serializer)
     def set_display_image(
-        self, filepath: str, pos_x: int, pos_y: int, scale: float, sync: bool = True
+        self,
+        filepath: str,
+        pos_x: int = Positions.CENTER,
+        pos_y: int = Positions.CENTER,
+        scale: float = -1.0,
+        sync: bool = True,
     ) -> None:
         request = m5stack_pb2.SetDisplayImageRequest(
             path=filepath,

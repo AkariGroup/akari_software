@@ -33,14 +33,10 @@ def main() -> None:
             print("STEP1. display /logo320_ex.jpg in SD")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320_ex.jpg"
-            # pos_xは0-320で座標指定。0もしくはPositions.LEFTで左揃え
-            pos_x = Positions.LEFT
-            # pos_yは0-240で座標指定。0もしくはPositions.TOPで上揃え
-            pos_y = Positions.TOP
-            # scaleでサイズ指定。マイナス値を入れると画面サイズに合わせて自動調整される。
-            scale = -1.0
             # set_display_imageを実行
-            m5.set_display_image(filepath, pos_x, pos_y, scale)
+            # pos_x, pos_y, sizeはデフォルト引数を使用
+            # pos_x, pos_yはPositions.CENTER、scaleは画面サイズに合わせた表示がデフォルトとなる
+            m5.set_display_image(filepath)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
@@ -50,14 +46,12 @@ def main() -> None:
             print("STEP2. display /logo320.jpg in SD at x2 size at middle center")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0-320で座標指定。Positions.CENTERで左右中央
-            pos_x = Positions.CENTER
-            # pos_yは0-240で座標指定。Positions.CENTERで上下中央
-            pos_y = Positions.CENTER
             # scaleでサイズ指定。
             scale = 2.0
             # set_display_imageを実行
-            m5.set_display_image(filepath, pos_x, pos_y, scale)
+            # pos_x, pos_yはデフォルト引数を使用
+            # pos_x, pos_yはPositions.CENTERがデフォルトとなる
+            m5.set_display_image(filepath, scale=scale)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
@@ -152,14 +146,10 @@ def main() -> None:
             print("STEP8. display /logo320.jpg in SD")
             # filepathでM5のSDカード内の画像パスを指定
             filepath = "/logo320.jpg"
-            # pos_xは0もしくはPositions.LEFTで左揃え
-            pos_x = Positions.LEFT
-            # pos_yは0もしくはPositions.TOPで上揃え
-            pos_y = Positions.TOP
-            # scaleでサイズ指定。マイナス値で画面に合わせて自動調整。
-            scale = -1.0
             # set_display_imageを実行
-            m5.set_display_image(filepath, pos_x, pos_y, scale)
+            # pos_x, pos_y, sizeはデフォルト引数を使用
+            # pos_x, pos_yはPositions.CENTER、scaleは画面サイズに合わせた表示がデフォルトとなる
+            m5.set_display_image(filepath)
             print("-> Set")
             # 2秒停止
             time.sleep(2)

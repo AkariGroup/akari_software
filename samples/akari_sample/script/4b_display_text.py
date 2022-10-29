@@ -27,6 +27,9 @@ def main() -> None:
         time.sleep(2)
         # アプリが終了されるまでループする。
         while True:
+
+            color = Colors.RED
+            m5.set_display_color(color)
             # STEP1. '1.AKARI'を左上表示
             print("STEP1. display 1.AKARI at top left")
             # textは'1.AKARI'
@@ -52,25 +55,12 @@ def main() -> None:
             time.sleep(2)
             print()
 
-            # STEP2. '2.あかり'を中央に表示
+            # STEP2. '2.あかり'を中央に表示。位置、サイズ、文字色はデフォルト
+            # 文字色、背景色はSTEP.1と同様、文字サイズは3、背景リセットはTrueとなる。
             print("STEP2. display 2.あかり at middle center")
             text = "2.あかり"
-            # pos_xはPositions.CENTERで左右中央
-            pos_x = Positions.CENTER
-            # pos_yはPositions.CENTERで上下中央
-            pos_y = Positions.CENTER
-            # 文字サイズは3
-            size = 3
-            # 文字色は赤
-            text_color = Colors.RED
-            # 背景色は白
-            back_color = Colors.WHITE
-            # 背景全体をリセット
-            refresh = True
             # set_display_textを実行
-            m5.set_display_text(
-                text, pos_x, pos_y, size, text_color, back_color, refresh
-            )
+            m5.set_display_text(text)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
@@ -152,7 +142,7 @@ def main() -> None:
             print()
 
             # STEP6. '6.アカリ'を(50,170)にリフレッシュなしで重ねて表示
-            print("STEP6. display 6.アカリ at (50,170) with new font")
+            print("STEP6. display 6.アカリ at (50,170) without background refresh")
             # textは'6.アカリ'
             text = "6.アカリ"
             # pos_xは50
@@ -180,22 +170,16 @@ def main() -> None:
             print("STEP7. display 7.灯 at middle center")
             # textは'7.灯'
             text = "7.灯"
-            # pos_xはPositions.CENTERで左右中央
-            pos_x = Positions.CENTER
-            # pos_yはPositions.CENTERで上下中央
-            pos_y = Positions.CENTER
             # 文字サイズは6
             size = 6
             # 文字色は白
             text_color = Colors.WHITE
             # 背景色は黒
             back_color = Colors.BLACK
-            # 背景全体をリセット
-            refresh = True
             # set_display_textを実行
+            # pos_x,pos_yのみデフォルト引数を使用
             m5.set_display_text(
-                text, pos_x, pos_y, size, text_color, back_color, refresh
-            )
+                text, size=size)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
