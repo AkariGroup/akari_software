@@ -50,6 +50,11 @@ class JointsControllerServiceStub(object):
                 request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
                 response_deserializer=akari__proto_dot_joints__controller__pb2.GetPresentPositionResponse.FromString,
                 )
+        self.GetMovingState = channel.unary_unary(
+                '/akari_proto.JointsControllerService/GetMovingState',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetMovingStateResponse.FromString,
+                )
 
 
 class JointsControllerServiceServicer(object):
@@ -97,6 +102,12 @@ class JointsControllerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetMovingState(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_JointsControllerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -134,6 +145,11 @@ def add_JointsControllerServiceServicer_to_server(servicer, server):
                     servicer.GetPresentPosition,
                     request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
                     response_serializer=akari__proto_dot_joints__controller__pb2.GetPresentPositionResponse.SerializeToString,
+            ),
+            'GetMovingState': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetMovingState,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetMovingStateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -261,5 +277,22 @@ class JointsControllerService(object):
         return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetPresentPosition',
             akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
             akari__proto_dot_joints__controller__pb2.GetPresentPositionResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetMovingState(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetMovingState',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetMovingStateResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

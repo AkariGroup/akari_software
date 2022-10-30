@@ -57,3 +57,12 @@ class RevoluteJointController(abc.ABC):
             現在角度 [rad]
         """
         ...
+
+    @abc.abstractmethod
+    def get_moving_state(self) -> bool:
+        """モーターが動作中かどうか判定する。
+
+        Returns:
+            現在のモーター状態。
+        """
+        ...

@@ -40,6 +40,10 @@ message GetPresentPositionResponse {
   float rad = 1;
 }
 
+message GetMovingStateResponse {
+  bool moving = 1;
+}
+
 service JointsControllerService {
     rpc GetJointNames(google.protobuf.Empty)
         returns (GetJointNamesResponse);
@@ -55,4 +59,6 @@ service JointsControllerService {
         returns (google.protobuf.Empty);
     rpc GetPresentPosition(JointSpecifier)
         returns (GetPresentPositionResponse);
+    rpc GetMovingState(JointSpecifier)
+        returns (GetMovingStateResponse);
 }

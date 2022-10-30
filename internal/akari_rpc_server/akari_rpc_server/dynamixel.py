@@ -95,3 +95,14 @@ class DynamixelControllerServiceServicer(
         return joints_controller_pb2.GetPresentPositionResponse(
             rad=joint.get_present_position(),
         )
+
+    @serialize_error(serializer)
+    def GetMovingState(
+        self,
+        request: joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> joints_controller_pb2.GetMovingStateResponse:
+        joint = self._select_joint(request)
+        return joints_controller_pb2.GetMovingStateResponse(
+            moving=joint.get_moving_state(),
+        )

@@ -77,12 +77,22 @@ class JointManager:
     def move_joint_positions(
         self,
         *,
+        sync: bool = False,
         pan: Optional[float] = None,
         tilt: Optional[float] = None,
         **kwargs: float,
     ) -> None:
         for joint, position in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_goal_position(position)
+        if sync:
+            all_joint_finished = False
+            while not all_joint_finished:
+                all_joint_finished = True
+                for joint, position in self._iter_joint_value_pairs(
+                    pan, tilt, **kwargs
+                ):
+                    if not joint.get_moving_state():
+                        all_joint_finished = False
 
     def get_joint_positions(self) -> Dict[str, float]:
         ret: Dict[str, float] = {}

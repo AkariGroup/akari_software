@@ -45,6 +45,7 @@ class DynamixelControlTable:
     PROFILE_VELOCITY = DynamixelControlItem("Profile_Velocity", 112, 4)
     GOAL_POSITION = DynamixelControlItem("Goal_Position", 116, 4)
     PRESENT_POSITION = DynamixelControlItem("Present_Position", 132, 4)
+    MOVING_STATUS = DynamixelControlItem("Moving_Status", 123, 1)
 
 
 class DynamixelController(RevoluteJointController):
@@ -144,3 +145,17 @@ class DynamixelController(RevoluteJointController):
         return dynamixel_pulse_to_rad(
             self._read(DynamixelControlTable.PRESENT_POSITION)
         )
+
+    def get_moving_state(self) -> bool:
+        """モーターが動作中かどうか判定する。
+
+        Returns:
+            現在のモーター状態。
+        """
+        val = bin(self._read(DynamixelControlTable.MOVING_STATUS))
+        print(val)
+        if len(val) < 7:
+            return True
+        elif int(bin(self._read(DynamixelControlTable.MOVING_STATUS))[-2]) < 1:
+            return True
+        return False
