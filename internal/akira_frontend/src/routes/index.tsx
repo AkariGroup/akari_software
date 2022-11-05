@@ -6,6 +6,7 @@ import { ProjectsCreate } from "../pages/Projects/Create";
 import { ProjectsEdit } from "../pages/Projects/Edit";
 import { ProjectsDetails } from "../pages/Projects/details";
 import { Services } from "../pages/Services";
+import { Controller } from "../pages/Controller";
 
 export const AppRoute: RouteObject = {
   path: "",
@@ -48,6 +49,10 @@ export const AppRoute: RouteObject = {
     {
       path: "*",
       element: <Navigate to="/" />,
+    },
+    {
+      path: "/controller",
+      element: <Controller />,
     },
   ],
 };

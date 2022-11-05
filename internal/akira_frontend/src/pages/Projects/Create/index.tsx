@@ -2,7 +2,6 @@ import { Box, Container, Paper, Tab, Tabs } from "@mui/material";
 import { ReactNode, useState } from "react";
 import { CreateProjectFromTemplate } from "./createFromTemplate";
 import { CreateProjectFromGit } from "./createFromGit";
-
 type TabPanelProps = {
   visible: boolean;
   children?: ReactNode;
