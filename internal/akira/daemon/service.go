@@ -229,6 +229,19 @@ func (m *AkariServiceServicer) TerminateService(ctx context.Context, r *proto.Te
 	}
 }
 
+func (m *AkariServiceServicer) GetServiceLog(ctx context.Context, r *proto.GetServiceLogRequest) (*proto.GetServiceLogResponse, error) {
+	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("service doesn't exist: %#v", r.Id))
+	}
+
+	ctx = service.SetAsync(ctx, true)
+	logs := s.Logs()
+	return &proto.GetServiceLogResponse{
+		Logs: logs,
+	}, nil
+}
+
 func (m *AkariServiceServicer) Open(ctx context.Context, r *proto.OpenRequest) (*proto.OpenResponse, error) {
 	s, ok := m.da.service.GetService(service.ServiceId(r.Id))
 	if !ok {
