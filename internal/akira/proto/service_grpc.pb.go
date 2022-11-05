@@ -34,6 +34,7 @@ type AkariServiceServiceClient interface {
 	StartService(ctx context.Context, in *StartServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	StopService(ctx context.Context, in *StopServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	TerminateService(ctx context.Context, in *TerminateServiceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetServiceLog(ctx context.Context, in *GetServiceLogRequest, opts ...grpc.CallOption) (*GetServiceLogResponse, error)
 	Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*OpenResponse, error)
 	OpenProject(ctx context.Context, in *OpenProjectRequest, opts ...grpc.CallOption) (*OpenProjectResponse, error)
 }
@@ -145,6 +146,15 @@ func (c *akariServiceServiceClient) TerminateService(ctx context.Context, in *Te
 	return out, nil
 }
 
+func (c *akariServiceServiceClient) GetServiceLog(ctx context.Context, in *GetServiceLogRequest, opts ...grpc.CallOption) (*GetServiceLogResponse, error) {
+	out := new(GetServiceLogResponse)
+	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/GetServiceLog", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *akariServiceServiceClient) Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*OpenResponse, error) {
 	out := new(OpenResponse)
 	err := c.cc.Invoke(ctx, "/akira_proto.AkariServiceService/Open", in, out, opts...)
@@ -178,6 +188,7 @@ type AkariServiceServiceServer interface {
 	StartService(context.Context, *StartServiceRequest) (*emptypb.Empty, error)
 	StopService(context.Context, *StopServiceRequest) (*emptypb.Empty, error)
 	TerminateService(context.Context, *TerminateServiceRequest) (*emptypb.Empty, error)
+	GetServiceLog(context.Context, *GetServiceLogRequest) (*GetServiceLogResponse, error)
 	Open(context.Context, *OpenRequest) (*OpenResponse, error)
 	OpenProject(context.Context, *OpenProjectRequest) (*OpenProjectResponse, error)
 	mustEmbedUnimplementedAkariServiceServiceServer()
@@ -219,6 +230,9 @@ func (UnimplementedAkariServiceServiceServer) StopService(context.Context, *Stop
 }
 func (UnimplementedAkariServiceServiceServer) TerminateService(context.Context, *TerminateServiceRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TerminateService not implemented")
+}
+func (UnimplementedAkariServiceServiceServer) GetServiceLog(context.Context, *GetServiceLogRequest) (*GetServiceLogResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetServiceLog not implemented")
 }
 func (UnimplementedAkariServiceServiceServer) Open(context.Context, *OpenRequest) (*OpenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Open not implemented")
@@ -437,6 +451,24 @@ func _AkariServiceService_TerminateService_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AkariServiceService_GetServiceLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetServiceLogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AkariServiceServiceServer).GetServiceLog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.AkariServiceService/GetServiceLog",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AkariServiceServiceServer).GetServiceLog(ctx, req.(*GetServiceLogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AkariServiceService_Open_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OpenRequest)
 	if err := dec(in); err != nil {
@@ -523,6 +555,10 @@ var AkariServiceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TerminateService",
 			Handler:    _AkariServiceService_TerminateService_Handler,
+		},
+		{
+			MethodName: "GetServiceLog",
+			Handler:    _AkariServiceService_GetServiceLog_Handler,
 		},
 		{
 			MethodName: "Open",

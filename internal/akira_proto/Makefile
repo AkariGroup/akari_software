@@ -14,3 +14,6 @@ lint:
 
 generate:
 	$(call BUF,generate)
+
+update:
+	$(call BUF,mod update)

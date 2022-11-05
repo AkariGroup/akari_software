@@ -8,7 +8,11 @@ import (
 	"time"
 
 	"github.com/AkariGroup/akari_software/internal/akira/system"
+	CircBuffer "github.com/armon/circbuf"
+	"github.com/rs/zerolog"
 )
+
+const LogBufferSize = 10000
 
 type containerConfigFactory interface {
 	createContainerConfig() (system.CreateContainerOption, interface{}, error)
@@ -23,14 +27,28 @@ type ServiceContainer struct {
 	containerConfig system.CreateContainerOption
 	containerMeta   interface{}
 
+	logger    zerolog.Logger
+	logBuffer *CircBuffer.Buffer
+
 	mu sync.Mutex
 }
 
 func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *ServiceContainer {
+	logBuffer, err := CircBuffer.NewBuffer(LogBufferSize)
+	var logger zerolog.Logger
+	if err != nil {
+		logBuffer = nil
+		logger = zerolog.Nop()
+	} else {
+		logger = zerolog.New(logBuffer).With().Timestamp().Logger()
+	}
+
 	return &ServiceContainer{
-		fa:     fa,
-		d:      d,
-		status: Terminated,
+		fa:        fa,
+		d:         d,
+		status:    Terminated,
+		logBuffer: logBuffer,
+		logger:    logger,
 	}
 }
 
@@ -188,6 +206,17 @@ func (p *ServiceContainer) Terminate(ctx context.Context) (ServiceTask, error) {
 
 func (p *ServiceContainer) Status() ServiceStatus {
 	return p.status
+}
+
+func (p *ServiceContainer) Logs() string {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	if p.logBuffer == nil {
+		return ""
+	}
+
+	return p.logBuffer.String()
 }
 
 func (p *ServiceContainer) onCriticalSection(f func() interface{}) interface{} {
