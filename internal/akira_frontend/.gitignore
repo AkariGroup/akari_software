@@ -24,3 +24,4 @@ yarn-error.log*
 
 # generated api files by openapi2aspida
 src/api/*
+src/service-apis/*
