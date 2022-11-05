@@ -86,3 +86,10 @@ class GrpcJointController(RevoluteJointController):
             self._client.stub.GetPresentPosition(self.joint_specifier)
         )
         return res.rad
+
+    @deserialize_error(serializer)
+    def get_moving_state(self) -> bool:
+        res: joints_controller_pb2.GetMovingStateResponse = (
+            self._client.stub.GetMovingState(self.joint_specifier)
+        )
+        return res.moving

@@ -119,3 +119,14 @@ class GetPresentPositionResponse(google.protobuf.message.Message):
         ) -> None: ...
     def ClearField(self, field_name: typing_extensions.Literal["rad",b"rad"]) -> None: ...
 global___GetPresentPositionResponse = GetPresentPositionResponse
+
+class GetMovingStateResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    MOVING_FIELD_NUMBER: builtins.int
+    moving: builtins.bool
+    def __init__(self,
+        *,
+        moving: builtins.bool = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["moving",b"moving"]) -> None: ...
+global___GetMovingStateResponse = GetMovingStateResponse

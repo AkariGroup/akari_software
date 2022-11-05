@@ -37,6 +37,10 @@ class JointsControllerServiceStub:
         akari_proto.joints_controller_pb2.JointSpecifier,
         akari_proto.joints_controller_pb2.GetPresentPositionResponse]
 
+    GetMovingState: grpc.UnaryUnaryMultiCallable[
+        akari_proto.joints_controller_pb2.JointSpecifier,
+        akari_proto.joints_controller_pb2.GetMovingStateResponse]
+
 
 class JointsControllerServiceServicer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -80,6 +84,12 @@ class JointsControllerServiceServicer(metaclass=abc.ABCMeta):
         request: akari_proto.joints_controller_pb2.JointSpecifier,
         context: grpc.ServicerContext,
     ) -> akari_proto.joints_controller_pb2.GetPresentPositionResponse: ...
+
+    @abc.abstractmethod
+    def GetMovingState(self,
+        request: akari_proto.joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> akari_proto.joints_controller_pb2.GetMovingStateResponse: ...
 
 
 def add_JointsControllerServiceServicer_to_server(servicer: JointsControllerServiceServicer, server: grpc.Server) -> None: ...

@@ -7,4 +7,4 @@ with AkariClient() as akari:
     akari.joints.enable_all_servo()
     akari.joints.set_joint_velocities(pan=8, tilt=8)
     akari.joints.set_joint_accelerations(pan=8, tilt=8)
-    akari.joints.move_joint_positions(pan=0, tilt=0)
+    akari.joints.move_joint_positions(sync=True, pan=0, tilt=0)

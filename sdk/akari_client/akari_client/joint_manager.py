@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import enum
+import time
 from typing import Dict, Iterator, List, Optional, Sequence, Tuple, TypeVar
 
 from .joint_controller import RevoluteJointController
@@ -77,12 +78,23 @@ class JointManager:
     def move_joint_positions(
         self,
         *,
+        sync: bool = False,
         pan: Optional[float] = None,
         tilt: Optional[float] = None,
         **kwargs: float,
     ) -> None:
         for joint, position in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_goal_position(position)
+        if sync:
+            while True:
+                for joint, position in self._iter_joint_value_pairs(
+                    pan, tilt, **kwargs
+                ):
+                    if not joint.get_moving_state():
+                        break
+                else:
+                    break
+                time.sleep(0.01)
 
     def get_joint_positions(self) -> Dict[str, float]:
         ret: Dict[str, float] = {}
