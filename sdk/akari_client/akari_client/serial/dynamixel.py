@@ -153,7 +153,6 @@ class DynamixelController(RevoluteJointController):
             現在のモーター状態。
         """
         val = bin(self._read(DynamixelControlTable.MOVING_STATUS))
-        print(val)
         if len(val) < 7:
             return True
         elif int(bin(self._read(DynamixelControlTable.MOVING_STATUS))[-2]) < 1:
