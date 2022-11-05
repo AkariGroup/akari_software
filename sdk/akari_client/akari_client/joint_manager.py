@@ -85,14 +85,15 @@ class JointManager:
         for joint, position in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_goal_position(position)
         if sync:
-            all_joint_finished = False
-            while not all_joint_finished:
-                all_joint_finished = True
+            while True:
                 for joint, position in self._iter_joint_value_pairs(
                     pan, tilt, **kwargs
                 ):
                     if not joint.get_moving_state():
-                        all_joint_finished = False
+                        break
+                else:
+                    break
+                time.sleep(0.01)
 
     def get_joint_positions(self) -> Dict[str, float]:
         ret: Dict[str, float] = {}
