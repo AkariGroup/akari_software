@@ -41,17 +41,12 @@ import { useSetBackdropValue } from "../../contexts/BackdropContext";
 import { ValidationMessages } from "../../libs/messages";
 import { useSearchParams } from "react-router-dom";
 
+
 export interface EditServiceRequest {
-  id: string;
-  display_name: string;
-  description: string;
+  id?: string| undefined;
+  display_name?: string| undefined;
+  description?: string| undefined;
 }
-
-export interface SetAutoStartRequest {
-  id: string;
-  auto_start: boolean;
-}
-
 
 type Props = {
   services: Akira_protoService[];
@@ -221,161 +216,173 @@ function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
   );
 }
 
-
 type editProps = {
+  service: Akira_protoService;
   client: ApiClient;
   onClose: () => void;
-  onSubmit: SubmitHandler<EditServiceRequest>;
 };
 
-export function ServiceEditDrawer(props: editProps) {
-  const { data: service } = useAspidaSWR(props.client?.services, {
-    enabled: !!props.client,
-  });
-  const [searchParams] = useSearchParams();
-  const serviceId = searchParams.get("id") as string;
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<EditServiceRequest>();
-  return (
-    <Drawer
-      anchor="right"
-      open={true}
-      onClose={props.onClose}
-      PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
-    >
-      <Stack margin={2} spacing={2}>
-        <Box>
-          <Stack direction="row" alignItems="center">
-            <IconButton onClick={props.onClose}>
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h5" ml={1}>
-              インスタンスの編集
-            </Typography>
-          </Stack>
-          <Divider sx={{ mt: 1 }} />
-        </Box>
-        <Controller
-          name="display_name"
-          control={control}
-          defaultValue="{service?.id}"
-          rules={{
-            required: ValidationMessages.Required,
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="表示名"
-              variant="filled"
-              error={!!errors.display_name}
-              helperText={errors.display_name && errors.display_name.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="description"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              rows={5}
-              label="概要"
-              variant="filled"
-              fullWidth
-              error={!!errors.description}
-              helperText={errors.description && errors.description.message}
-            />
-          )}
-        />
-        <Button
-          type="button"
-          variant="contained"
-          onClick={handleSubmit(props.onSubmit)}
-        >
-          変更
-        </Button>
-        <Button type="button" color="error" variant="outlined" onClick={props.onClose}>
-          キャンセル
-        </Button>
-      </Stack>
-    </Drawer>
-  );
-}
-
 export function ServiceList(props: Props) {
-
-function ServiceRow({
-  service,
-  onStart,
-  onStop,
-  onLaunch,
-  onRemove
-}: ServiceRowProps) {
-  return (
-    <>
-      <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-        <TableCell component="th" onClick={() => setEditDrawerOpened(true)}>
-          {service.displayName}
-        </TableCell>
-        <TableCell>
-            <ServiceImageLink image={service.image} />
-        </TableCell>
-        <TableCell>
-          <Status status={service.status} />
-        </TableCell>
-        <TableCell align="right">
-          {!!onLaunch && service.capabilities?.includes("open") ? (
-            <IconButton
-              onClick={() => onLaunch(service)}
-              disabled={service.status !== "RUNNING"}
-            >
-              <LaunchIcon />
-            </IconButton>
-          ) : null}
-          <PowerButton service={service} onStart={onStart} onStop={onStop} />
-          {!!onRemove ? (
-            <RemoveButton service={service} onRemove={onRemove} />
-          ) : null}
-        </TableCell>
-      </TableRow>
-    </>
-  );
-}
-  
   const client = useApiClient();
+  const setBusy = useSetBackdropValue();
   const { data, error, mutate } = useAspidaSWR(client?.services, {
     enabled: !!client,
-    refreshInterval: 5 * 1000, // in ms
   });
-  const setBusy = useSetBackdropValue();
   const [editDrawerOpened, setEditDrawerOpened] = useState(false);
-
-  const onServiceEdit: SubmitHandler<EditServiceRequest> =
-  useCallback(
-    async (data) => {
-      if (!client) return;
-
-      // TODO: Handle error (e.g. Directory name conflicts)
-      setBusy(true);
-      try {
-        await client.services.post({
-          body: data,
-        });
-        setEditDrawerOpened(false);
-        mutate();
-      } finally {
-        setBusy(false);
-      }
-    },
-    [client, setBusy, setEditDrawerOpened, mutate]
-  );
   
+  
+
+  function ServiceEditDrawer(props: editProps) {
+    const {
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<EditServiceRequest>();
+
+    const onServiceEdit: SubmitHandler<EditServiceRequest> =
+    useCallback(
+      async (data) => {
+        if (!client || !props.service.id) return;
+        // TODO: Handle error (e.g. Directory name conflicts)
+        const request: EditServiceRequest = {
+          id: props.service.id,
+          display_name: props.service.displayName,
+          description: props.service.description
+        };
+        setBusy(true);
+        try {
+          await client.services._id(props.service.id).edit.post({
+            body: {
+              displayName: request.display_name,
+              description: request.description
+            }
+          });
+          setEditDrawerOpened(false);
+          mutate();
+        } finally {
+          setBusy(false);
+        }
+      },
+      [client, setBusy, setEditDrawerOpened, mutate]
+      );
+    
+    return (
+      <Drawer
+        anchor="right"
+        open={true}
+        onClose={props.onClose}
+        PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
+      >
+        <Stack margin={2} spacing={2}>
+          <Box>
+            <Stack direction="row" alignItems="center">
+              <IconButton onClick={props.onClose}>
+                <CloseIcon />
+              </IconButton>
+              <Typography variant="h5" ml={1}>
+                インスタンスの編集
+              </Typography>
+            </Stack>
+            <Divider sx={{ mt: 1 }} />
+          </Box>
+          <Controller
+            name="display_name"
+            control={control}
+            defaultValue={props.service.displayName}
+            rules={{
+              required: ValidationMessages.Required,
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="表示名"
+                variant="filled"
+                error={!!errors.display_name}
+                helperText={errors.display_name && errors.display_name.message}
+              />
+            )}
+          />
+          <Controller
+            name="description"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                multiline
+                rows={5}
+                label="概要"
+                variant="filled"
+                fullWidth
+                error={!!errors.description}
+                helperText={errors.description && errors.description.message}
+              />
+            )}
+          />
+          <Button
+            type="button"
+            variant="contained"
+            onClick={handleSubmit(onServiceEdit)}
+          >
+            変更
+          </Button>
+          <Button type="button" color="error" variant="outlined" onClick={props.onClose}>
+            キャンセル
+          </Button>
+        </Stack>
+      </Drawer>
+    );
+  }
+  function ServiceRow({
+    service,
+    onStart,
+    onStop,
+    onLaunch,
+    onRemove
+  }: ServiceRowProps) {
+    return (
+      <>
+        {
+          editDrawerOpened ? (
+            <ServiceEditDrawer
+              service={service}
+              client={client}
+              onClose={() => {
+                setEditDrawerOpened(false);
+              }}
+            />
+          ) : (
+            <></>
+          )
+        }
+        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+          <TableCell style={{ textDecoration: "underline" }} component="th" onClick={() => setEditDrawerOpened(true)}>
+            {service.displayName}
+          </TableCell>
+          <TableCell >
+            <ServiceImageLink image={service.image} />
+          </TableCell>
+          <TableCell>
+            <Status status={service.status} />
+          </TableCell>
+          <TableCell align="right">
+            {!!onLaunch && service.capabilities?.includes("open") ? (
+              <IconButton
+                onClick={() => onLaunch(service)}
+                disabled={service.status !== "RUNNING"}
+              >
+                <LaunchIcon />
+              </IconButton>
+            ) : null}
+            <PowerButton service={service} onStart={onStart} onStop={onStop} />
+            {!!onRemove ? (
+              <RemoveButton service={service} onRemove={onRemove} />
+            ) : null}
+          </TableCell>
+        </TableRow>
+      </ >
+    );
+  }
   const sortKey = useCallback(
     (lhs: Akira_protoService, rhs: Akira_protoService) => {
       const lhsStatus = lhs.status?.toString() ?? "";
@@ -398,17 +405,6 @@ function ServiceRow({
   );
   return (
     <TableContainer component={Paper}>
-    {editDrawerOpened ? (
-      <ServiceEditDrawer
-        client={client}
-        onClose={() => {
-          setEditDrawerOpened(false);
-        }}
-        onSubmit={onServiceEdit}
-      />
-    ) : (
-      <></>
-    )}
       <Table>
         <Header />
         <TableBody>

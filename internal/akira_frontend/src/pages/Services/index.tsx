@@ -5,13 +5,18 @@ import {
   Akira_protoCreateServiceRequest,
   Akira_protoService,
 } from "../../api/@types";
-import { ServiceList, EditServiceRequest, SetAutoStartRequest} from "../../components/ServiceList";
+import { ServiceList } from "../../components/ServiceList";
 import { useApiClient } from "../../hooks/api";
 import { ServiceCreateDrawer } from "./create";
 import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
+
+export interface SetAutoStartRequest {
+  id: string;
+  auto_start: boolean;
+}
 
 export function Services() {
   const client = useApiClient();
@@ -41,7 +46,8 @@ export function Services() {
       },
       [client, setBusy, setCreateDrawerOpened, mutate]
     );
-    
+
+
 
   const onStartService = useCallback(
     async (target: Akira_protoService) => {
