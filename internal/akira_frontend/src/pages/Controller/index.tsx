@@ -17,24 +17,22 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Joystick } from "react-joystick-component";
-import { ColorPicker } from "./ColorPicker";
+import { ColorPicker } from "../../components/ColorPicker";
 //TODO: Remove from npm
 
 type Props = {};
 
 export function Controller(props: Props) {
-  const [value, setValue] = useState<number | string | Array<number | string>>(
-    0
-  );
-
+  const [value, setValue] = useState<number>(0);
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue);
-  };
-
+    const value = newValue as number;
+    setValue(value);
+  }
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value === "" ? "" : Number(event.target.value));
-  };
-
+    if (event.target.value) {
+      setValue(+event.target.value);
+    }
+  }
   return (
     <Container maxWidth="xl">
       <Grid container mt={1} spacing={1}>
