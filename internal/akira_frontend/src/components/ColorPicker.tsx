@@ -21,10 +21,7 @@ export function ColorPicker() {
             Choose Display Color
           </Button>
           <Popover {...bindPopover(popupState)}>
-            <SketchPicker
-              color={color}
-              onChange={handleChange}
-            />
+            <SketchPicker color={color} onChange={handleChange} />
           </Popover>
         </div>
       )}
