@@ -27,12 +27,12 @@ export function Controller(props: Props) {
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     const value = newValue as number;
     setValue(value);
-  }
+  };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) {
       setValue(+event.target.value);
     }
-  }
+  };
   return (
     <Container maxWidth="xl">
       <Grid container mt={1} spacing={1}>
