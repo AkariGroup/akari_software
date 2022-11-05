@@ -9,13 +9,8 @@ export function ColorPicker() {
   const handleChange = (value: ColorResult) => {
     setColor(value.hex);
   };
-  const [cell] = useState<HTMLElement | null>(null);
-  const handleChangeComplete = (value: ColorResult) => {
-    setColor(value.hex);
-    if (cell !== null) cell.style.backgroundColor = value.hex;
-  };
   return (
-    <PopupState variant="popover" popupId="demo-popup-popover">
+    <PopupState variant="popover">
       {(popupState) => (
         <div>
           <Button
@@ -29,7 +24,6 @@ export function ColorPicker() {
             <SketchPicker
               color={color}
               onChange={handleChange}
-              onChangeComplete={handleChangeComplete}
             />
           </Popover>
         </div>
