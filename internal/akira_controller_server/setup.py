@@ -12,5 +12,6 @@ setup(
         "fastapi>=0.60.0",
         "grpcio==1.44.0",
         "protobuf==3.19.3",
+        "uvicorn>=0.16.0",
     ],
 )

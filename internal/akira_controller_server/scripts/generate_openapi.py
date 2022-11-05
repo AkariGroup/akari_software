@@ -3,10 +3,9 @@
 import json
 import pathlib
 
+from akira_controller_server.api import api
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-
-from akira_controller_server.api import api
 
 PACKAGE_DIR = pathlib.Path(__file__).resolve().parents[1]
 OPENAPI_DIR = PACKAGE_DIR / "openapi"
