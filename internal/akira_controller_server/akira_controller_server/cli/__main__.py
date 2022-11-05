@@ -8,7 +8,7 @@ from ..routers._context import Context, set_context
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=51001)
+    parser.add_argument("--port", type=int, default=52001)
     args = parser.parse_args()
 
     with AkariClient() as client:

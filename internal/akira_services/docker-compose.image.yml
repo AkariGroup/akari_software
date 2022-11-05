@@ -12,6 +12,12 @@ services:
       dockerfile: internal/akira_services/akari_rpc_server/Dockerfile
     image: akarirobot/akari-rpc-server:v1
     command: exit 1
+  akira_controller_server:
+    build:
+      context: ../../
+      dockerfile: internal/akira_services/akira_controller_server/Dockerfile
+    image: akarirobot/akira-controller-server:v1
+    command: exit 1
   vscode:
     build:
       context: ../../

@@ -17,6 +17,27 @@ class GetPositionsResponse(BaseModel):
     tilt: float
 
 
+@router.get("/servo")
+def get_servo_status() -> bool:
+    context = get_context()
+    client = context.akari_client
+
+    pan_servo = client.joints.pan_joint.get_servo_enabled()
+    tilt_servo = client.joints.tilt_joint.get_servo_enabled()
+    return pan_servo and tilt_servo
+
+
+@router.post("/servo")
+def set_servo_status(enabled: bool) -> None:
+    context = get_context()
+    client = context.akari_client
+
+    if enabled:
+        client.joints.enable_all_servo()
+    else:
+        client.joints.disable_all_servo()
+
+
 @router.post("/positions")
 def set_positions(request: SetPositionsRequest) -> None:
     context = get_context()
@@ -28,7 +49,7 @@ def set_positions(request: SetPositionsRequest) -> None:
     )
 
 
-@router.get("/positions")
+@router.get("/positions", response_model=GetPositionsResponse)
 def get_positions() -> GetPositionsResponse:
     context = get_context()
     client = context.akari_client

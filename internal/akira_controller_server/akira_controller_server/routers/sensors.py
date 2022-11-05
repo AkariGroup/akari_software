@@ -18,7 +18,7 @@ class GetValuesResponse(BaseModel):
     brightness: int
 
 
-@router.get("/values")
+@router.get("/values", response_model=GetValuesResponse)
 def get_values() -> GetValuesResponse:
     context = get_context()
     client = context.akari_client
