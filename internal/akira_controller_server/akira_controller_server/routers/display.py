@@ -22,7 +22,8 @@ class ColorType(BaseModel):
 
 class SetRequest(BaseModel):
     text: str
-    bg_color: ColorType
+    display_color: ColorType
+    foreground_color: ColorType
 
 
 @router.post("/values")
@@ -31,11 +32,15 @@ def set_values(request: SetRequest) -> None:
     client = context.akari_client
 
     try:
-        bg_color = request.bg_color.to_akari()
+        foreground_color = request.foreground_color.to_akari()
+        display_color = request.display_color.to_akari()
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"bad request: {e}")
 
+    client.m5stack.set_display_color(
+        color=display_color,
+    )
     client.m5stack.set_display_text(
         text=request.text,
-        back_color=bg_color,
+        text_color=foreground_color,
     )

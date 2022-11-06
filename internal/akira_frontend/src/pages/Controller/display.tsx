@@ -4,19 +4,47 @@ import { RGBColor } from "react-color";
 import { ColorPicker } from "../../components/ColorPicker";
 import { AkiraControllerClient } from "./client";
 
-type Props = {
-  controllerClient: AkiraControllerClient;
+const DEFAULT_FOREGROUND_COLOR: RGBColor = {
+  r: 0,
+  g: 0,
+  b: 0,
 };
-
-const DEFAULT_BACKGROUND_COLOR: RGBColor = {
+const DEFAULT_DISPLAY_COLOR: RGBColor = {
   r: 255,
   g: 255,
   b: 255,
 };
 
+type ColorSectionProps = {
+  heading: string;
+  color: RGBColor;
+  onChangeColor: (c: RGBColor) => void;
+};
+
+function ColorSection(props: ColorSectionProps) {
+  return (
+    <Stack direction="row" alignItems="center" mr={1} mb={1}>
+      <Typography>{props.heading}</Typography>
+      &nbsp;
+      <ColorPicker
+        text="&nbsp;"
+        color={props.color}
+        onChangeColor={props.onChangeColor}
+      />
+    </Stack>
+  );
+}
+
+type Props = {
+  controllerClient: AkiraControllerClient;
+};
+
 export function DisplayPanel(props: Props) {
-  const [backgroundColor, setBackgroundColor] = useState<RGBColor>(
-    () => DEFAULT_BACKGROUND_COLOR
+  const [foregroundColor, setForegroundColor] = useState<RGBColor>(
+    () => DEFAULT_FOREGROUND_COLOR
+  );
+  const [displayColor, setDisplayColor] = useState<RGBColor>(
+    () => DEFAULT_DISPLAY_COLOR
   );
   const [text, setText] = useState<string>("");
 
@@ -24,12 +52,14 @@ export function DisplayPanel(props: Props) {
     await props.controllerClient.display.values.post({
       body: {
         text: text,
-        bg_color: backgroundColor,
+        display_color: displayColor,
+        foreground_color: foregroundColor,
       },
     });
   };
   const onReset = () => {
-    setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+    setForegroundColor(DEFAULT_FOREGROUND_COLOR);
+    setDisplayColor(DEFAULT_DISPLAY_COLOR);
     setText("");
   };
 
@@ -44,14 +74,18 @@ export function DisplayPanel(props: Props) {
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography>Background: </Typography>
-          <ColorPicker
-            text="&nbsp;"
-            color={backgroundColor}
-            onChangeColor={setBackgroundColor}
+        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+          <ColorSection
+            heading="FontColor: "
+            color={foregroundColor}
+            onChangeColor={setForegroundColor}
           />
-        </Stack>
+          <ColorSection
+            heading="DisplayColor: "
+            color={displayColor}
+            onChangeColor={setDisplayColor}
+          />
+        </Box>
         <Stack direction="row" spacing={1}>
           <Button type="button" variant="contained" onClick={onSubmit}>
             Send
