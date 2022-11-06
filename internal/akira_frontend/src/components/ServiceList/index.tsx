@@ -221,7 +221,7 @@ function ServiceRow({
         </TableCell>
         <TableCell align="right">
           {!!onEdit ? (
-            <IconButton onClick={() => onEdit?.(service)}>
+            <IconButton onClick={() => onEdit(service)}>
               <EditIcon />
             </IconButton>
           ) : null}
