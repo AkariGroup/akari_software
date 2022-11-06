@@ -27,6 +27,7 @@ class M5SerialCommunicator:
         self._condition = threading.Condition()
         self._latest_msg: Optional[M5ComDict] = None
         self._thread: Optional[threading.Thread] = None
+        self._send_lock = threading.Lock()
         self._exit = False
 
         self._serial = serial.Serial(
@@ -104,7 +105,8 @@ class M5SerialCommunicator:
         return time.time() - self.reference_time
 
     def send(self, data: bytes) -> None:
-        self._serial.write(data)
+        with self._send_lock:
+            self._serial.write(data)
 
     def send_data(self, data: Dict[str, Any], sync: bool = True) -> None:
         json_data = json.dumps(data, ensure_ascii=False)
