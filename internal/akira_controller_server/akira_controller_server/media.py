@@ -65,25 +65,23 @@ def capture_factory(mode: CaptureMode) -> CaptureProtocol:
 
 class SubscriptionCounter:
     def __init__(self) -> None:
-        self._cv = threading.Condition()
+        self._lock = threading.Lock()
         self._num_subscribers = 0
 
     def notify_subscribe(self) -> None:
-        with self._cv:
+        with self._lock:
             self._num_subscribers += 1
-            self._cv.notify_all()
 
     def notify_unsubscribe(self) -> None:
-        with self._cv:
+        with self._lock:
             self._num_subscribers -= 1
-            self._cv.notify_all()
 
     def is_subscribed(self) -> bool:
         return self._num_subscribers > 0
 
     def wait_for_subscription(self) -> None:
-        with self._cv:
-            self._cv.wait_for(lambda: self.is_subscribed())
+        while not self.is_subscribed():
+            time.sleep(0.01)
 
 
 class MediaController:
