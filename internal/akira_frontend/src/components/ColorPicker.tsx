@@ -1,5 +1,4 @@
 import { Button, Popover } from "@mui/material";
-import { useState } from "react";
 import { RGBColor, SketchPicker } from "react-color";
 import { ColorResult } from "react-color";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";

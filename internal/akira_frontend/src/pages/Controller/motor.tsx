@@ -146,7 +146,7 @@ export function MotorPanel({ controllerClient }: Props) {
         />
       </Box>
       <Grid container spacing={3}>
-        <Grid item xs={12} lg="auto" >
+        <Grid item xs={12} lg="auto">
           <Joystick size={250} disabled={!servoEnabled} />
         </Grid>
         <Grid item xs={12} lg>
