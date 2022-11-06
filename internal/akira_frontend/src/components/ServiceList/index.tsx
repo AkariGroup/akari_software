@@ -1,20 +1,14 @@
 import {
-  Box,
-  Button,
   CircularProgress,
-  Divider,
-  Drawer,
   IconButton,
   Link,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import {
@@ -200,7 +194,6 @@ function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
   );
 }
 
-
 export function ServiceList(props: Props) {
   function ServiceRow({
     service,
@@ -213,10 +206,14 @@ export function ServiceList(props: Props) {
     return (
       <>
         <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-          <TableCell style={{ textDecoration: "underline" }} component="th" onClick={() => onEdit?.(service)}>
+          <TableCell
+            style={{ textDecoration: "underline" }}
+            component="th"
+            onClick={() => onEdit?.(service)}
+          >
             {service.displayName}
           </TableCell>
-          <TableCell >
+          <TableCell>
             <ServiceImageLink image={service.image} />
           </TableCell>
           <TableCell>
@@ -237,7 +234,7 @@ export function ServiceList(props: Props) {
             ) : null}
           </TableCell>
         </TableRow>
-      </ >
+      </>
     );
   }
   const sortKey = useCallback(
@@ -273,6 +270,7 @@ export function ServiceList(props: Props) {
               onStop={props.onStop}
               onLaunch={props.onLaunch}
               onRemove={props.onRemove}
+              onEdit={props.onEdit}
             />
           ))}
         </TableBody>

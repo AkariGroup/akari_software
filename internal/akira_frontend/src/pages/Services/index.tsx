@@ -13,7 +13,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
-
 export interface SetAutoStartRequest {
   id: string;
   auto_start: boolean;
@@ -26,7 +25,8 @@ export function Services() {
     refreshInterval: 5 * 1000, // in ms
   });
   const [createDrawerOpened, setCreateDrawerOpened] = useState(false);
-  const [targetEditService, setTargetEditService] = useState<Akira_protoService | null>(null);
+  const [targetEditService, setTargetEditService] =
+    useState<Akira_protoService | null>(null);
   const setBusy = useSetBackdropValue();
 
   const onServiceCreate: SubmitHandler<Akira_protoCreateServiceRequest> =
@@ -48,8 +48,6 @@ export function Services() {
       },
       [client, setBusy, setCreateDrawerOpened, mutate]
     );
-
-
 
   const onStartService = useCallback(
     async (target: Akira_protoService) => {
@@ -121,9 +119,9 @@ export function Services() {
   const onEditService = useCallback(
     async (target: Akira_protoService) => {
       if (!client || !target) return;
-      setTargetEditService(target)
+      setTargetEditService(target);
     },
-  [client]
+    [client]
   );
   if (!data?.services || error) {
     return <></>;
@@ -143,7 +141,8 @@ export function Services() {
         ) : (
           <></>
         )}
-        {targetEditService ? (
+        console.log(targetEditService);
+        {targetEditService != null ? (
           <ServiceEditDrawer
             service={targetEditService}
             client={client}
@@ -155,7 +154,6 @@ export function Services() {
         ) : (
           <></>
         )}
-
         <Typography variant="h4" mb={1}>
           サービス
         </Typography>
