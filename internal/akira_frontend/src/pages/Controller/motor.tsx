@@ -19,6 +19,12 @@ import { AkiraControllerClient } from "./client";
 import { DEG2RAD, RAD2DEG } from "../../libs/math";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
+const JOYSTICK_CONTROL_HZ = 10;
+const JOYSTICK_CONTROL_MS = 1000 / JOYSTICK_CONTROL_HZ;
+
+// max speed is 100 deg/s
+const JOYSTICK_GAIN = (100 / JOYSTICK_CONTROL_HZ) * DEG2RAD;
+
 type JointControlProps = {
   current?: number;
   target: number;
@@ -124,9 +130,20 @@ export function MotorPanel({ controllerClient }: Props) {
     setPanTarget(0);
     setTiltTarget(0);
   };
-  const updateServoPosition = async () => {
+  const sendAbsolutePosition = async () => {
     await controllerClient.motor.positions.post({
       body: { pan: panTarget * DEG2RAD, tilt: tiltTarget * DEG2RAD },
+    });
+  };
+  const sendRelativePosition = async (x: number, y: number, amount: number) => {
+    if (!positionData) return;
+    const theta = Math.atan2(y, x);
+    const coeff = Math.pow(amount / 100.0, 2) * JOYSTICK_GAIN;
+
+    const relX = Math.cos(theta) * coeff;
+    const relY = Math.sin(theta) * coeff;
+    controllerClient.motor.positions.post({
+      body: { pan: positionData.pan + relX, tilt: positionData.tilt + relY },
     });
   };
 
@@ -147,7 +164,15 @@ export function MotorPanel({ controllerClient }: Props) {
       </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} lg="auto">
-          <Joystick size={250} disabled={!servoEnabled} />
+          <Joystick
+            size={250}
+            disabled={!servoEnabled}
+            throttle={JOYSTICK_CONTROL_MS}
+            move={(e) => {
+              if (!e.x || !e.y || !e.distance) return;
+              sendRelativePosition(e.x, e.y, e.distance);
+            }}
+          />
         </Grid>
         <Grid item xs={12} lg>
           <Stack>
@@ -175,7 +200,7 @@ export function MotorPanel({ controllerClient }: Props) {
               <Button
                 type="button"
                 variant="contained"
-                onClick={updateServoPosition}
+                onClick={sendAbsolutePosition}
                 disabled={!servoEnabled}
               >
                 Send
