@@ -106,11 +106,11 @@ export function DisplayPanel(props: Props) {
             marginBottom: 1,
           }}
         >
-          <Typography style={{ width: "20%" }}>font size</Typography>
+          <Typography style={{ width: "20%" }}>FontSize</Typography>
           <Slider
             style={{ width: "80%" }}
             value={fontSize}
-            aria-label="font size"
+            aria-label="FontSize"
             step={1}
             marks
             min={1}
