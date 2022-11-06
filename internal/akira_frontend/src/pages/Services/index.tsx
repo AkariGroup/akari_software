@@ -13,11 +13,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
-export interface SetAutoStartRequest {
-  id: string;
-  auto_start: boolean;
-}
-
 export function Services() {
   const client = useApiClient();
   const { data, error, mutate } = useAspidaSWR(client?.services, {

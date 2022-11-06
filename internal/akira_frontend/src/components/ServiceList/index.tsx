@@ -218,7 +218,7 @@ function ServiceRow({
         >
           {service.displayName}
         </TableCell>
-        <TableCell align="left">
+        <TableCell>
           <ServiceImageLink image={service.image} />
         </TableCell>
         <TableCell>
