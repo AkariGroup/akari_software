@@ -1,6 +1,5 @@
 import dataclasses
 import math
-import threading
 
 from ..joint_controller import RevoluteJointController
 from .dynamixel_communicator import DynamixelCommunicator
@@ -65,22 +64,15 @@ class DynamixelController(RevoluteJointController):
         self._joint_name = joint_name
         self._dynamixel_id = dynamixel_id
         self._communicator = communicator
-        self._lock = threading.Lock()
 
     def __str__(self) -> str:
         return self._joint_name
 
     def _read(self, item: DynamixelControlItem) -> int:
-        with self._lock:
-            return self._communicator.read(
-                self._dynamixel_id, item.address, item.length
-            )
+        return self._communicator.read(self._dynamixel_id, item.address, item.length)
 
     def _write(self, item: DynamixelControlItem, value: int) -> None:
-        with self._lock:
-            self._communicator.write(
-                self._dynamixel_id, item.address, item.length, value
-            )
+        self._communicator.write(self._dynamixel_id, item.address, item.length, value)
 
     def set_position_limit(self, lower_rad: float, upper_rad: float) -> None:
         """Positionの上限値と下限値を設定する。
