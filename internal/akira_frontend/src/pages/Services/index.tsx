@@ -110,10 +110,6 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
-  const onEditService = useCallback(async (target: Akira_protoService) => {
-    if (!target) return;
-    setTargetEditService(target);
-  }, []);
   if (!data?.services || error) {
     return <></>;
   }
@@ -165,7 +161,7 @@ export function Services() {
             onStop={onStopService}
             onLaunch={onLaunchService}
             onRemove={onRemoveService}
-            onEdit={onEditService}
+            onEdit={setTargetEditService}
           />
         </Box>
         <Box>
