@@ -71,7 +71,7 @@ export function DisplayPanel(props: Props) {
   const onReset = () => {
     setForegroundColor(DEFAULT_FOREGROUND_COLOR);
     setDisplayColor(DEFAULT_DISPLAY_COLOR);
-    setFontSize(3);
+    setFontSize(DEFAULT_FONT_SIZE);
     setText("");
   };
 
@@ -110,7 +110,7 @@ export function DisplayPanel(props: Props) {
           <Slider
             style={{ width: "80%" }}
             value={fontSize}
-            aria-label="Small steps"
+            aria-label="font size"
             defaultValue={DEFAULT_FONT_SIZE}
             step={1}
             marks

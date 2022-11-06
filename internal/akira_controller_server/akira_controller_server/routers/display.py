@@ -44,5 +44,5 @@ def set_values(request: SetRequest) -> None:
     client.m5stack.set_display_text(
         text=request.text,
         text_color=foreground_color,
-        size=font_size,
+        size=request.font_size,
     )
