@@ -46,6 +46,7 @@ RUN npm install
 
 COPY internal/akira_proto /src/akira_proto
 COPY internal/akira_frontend /src/akira_frontend
+COPY internal/akira_controller_server/openapi /src/akira_controller_server/openapi
 RUN npm run build
 
 # =============================
