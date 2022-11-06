@@ -6,6 +6,7 @@ import {
   Akira_protoService,
 } from "../../api/@types";
 import { ServiceList } from "../../components/ServiceList";
+import { ServiceEditDrawer } from "./edit";
 import { useApiClient } from "../../hooks/api";
 import { ServiceCreateDrawer } from "./create";
 import AddIcon from "@mui/icons-material/Add";
@@ -25,6 +26,7 @@ export function Services() {
     refreshInterval: 5 * 1000, // in ms
   });
   const [createDrawerOpened, setCreateDrawerOpened] = useState(false);
+  const [targetEditService, setTargetEditService] = useState<Akira_protoService | null>(null);
   const setBusy = useSetBackdropValue();
 
   const onServiceCreate: SubmitHandler<Akira_protoCreateServiceRequest> =
@@ -116,6 +118,13 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
+  const onEditService = useCallback(
+    async (target: Akira_protoService) => {
+      if (!client || !target) return;
+      setTargetEditService(target)
+    },
+  [client]
+  );
   if (!data?.services || error) {
     return <></>;
   }
@@ -130,6 +139,18 @@ export function Services() {
               setCreateDrawerOpened(false);
             }}
             onSubmit={onServiceCreate}
+          />
+        ) : (
+          <></>
+        )}
+        {targetEditService ? (
+          <ServiceEditDrawer
+            service={targetEditService}
+            client={client}
+            onSubmit={onEditService}
+            onClose={() => {
+              setTargetEditService(null);
+            }}
           />
         ) : (
           <></>
@@ -158,6 +179,7 @@ export function Services() {
             onStop={onStopService}
             onLaunch={onLaunchService}
             onRemove={onRemoveService}
+            onEdit={onEditService}
           />
         </Box>
         <Box>

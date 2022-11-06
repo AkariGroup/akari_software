@@ -1,4 +1,3 @@
-import useAspidaSWR from "@aspida/swr";
 import {
   Box,
   Button,
@@ -18,17 +17,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   Akira_protoServiceStatus,
   Akira_protoService,
   Akira_protoServiceImage,
 } from "../../api/@types";
-import {
-  Controller,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
 import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -36,17 +29,6 @@ import { useCallback, useState } from "react";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
-import { ApiClient, useApiClient } from "../../hooks/api";
-import { useSetBackdropValue } from "../../contexts/BackdropContext";
-import { ValidationMessages } from "../../libs/messages";
-import { useSearchParams } from "react-router-dom";
-
-
-export interface EditServiceRequest {
-  id?: string| undefined;
-  display_name?: string| undefined;
-  description?: string| undefined;
-}
 
 type Props = {
   services: Akira_protoService[];
@@ -54,6 +36,7 @@ type Props = {
   onStop: (target: Akira_protoService, terminate: boolean) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
+  onEdit?: (target: Akira_protoService) => void;
 };
 
 function Header() {
@@ -196,6 +179,7 @@ type ServiceRowProps = {
   onStop: (target: Akira_protoService, terminate: boolean) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
+  onEdit?: (target: Akira_protoService) => void;
 };
 
 function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
@@ -216,147 +200,20 @@ function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
   );
 }
 
-type editProps = {
-  service: Akira_protoService;
-  client: ApiClient;
-  onClose: () => void;
-};
 
 export function ServiceList(props: Props) {
-  const client = useApiClient();
-  const setBusy = useSetBackdropValue();
-  const { data, error, mutate } = useAspidaSWR(client?.services, {
-    enabled: !!client,
-  });
-  const [editDrawerOpened, setEditDrawerOpened] = useState(false);
-  
-  
-
-  function ServiceEditDrawer(props: editProps) {
-    const {
-      control,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<EditServiceRequest>();
-
-    const onServiceEdit: SubmitHandler<EditServiceRequest> =
-    useCallback(
-      async (data) => {
-        if (!client || !props.service.id) return;
-        // TODO: Handle error (e.g. Directory name conflicts)
-        const request: EditServiceRequest = {
-          id: props.service.id,
-          display_name: props.service.displayName,
-          description: props.service.description
-        };
-        setBusy(true);
-        try {
-          await client.services._id(props.service.id).edit.post({
-            body: {
-              displayName: request.display_name,
-              description: request.description
-            }
-          });
-          setEditDrawerOpened(false);
-          mutate();
-        } finally {
-          setBusy(false);
-        }
-      },
-      [client, setBusy, setEditDrawerOpened, mutate]
-      );
-    
-    return (
-      <Drawer
-        anchor="right"
-        open={true}
-        onClose={props.onClose}
-        PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
-      >
-        <Stack margin={2} spacing={2}>
-          <Box>
-            <Stack direction="row" alignItems="center">
-              <IconButton onClick={props.onClose}>
-                <CloseIcon />
-              </IconButton>
-              <Typography variant="h5" ml={1}>
-                インスタンスの編集
-              </Typography>
-            </Stack>
-            <Divider sx={{ mt: 1 }} />
-          </Box>
-          <Controller
-            name="display_name"
-            control={control}
-            defaultValue={props.service.displayName}
-            rules={{
-              required: ValidationMessages.Required,
-            }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="表示名"
-                variant="filled"
-                error={!!errors.display_name}
-                helperText={errors.display_name && errors.display_name.message}
-              />
-            )}
-          />
-          <Controller
-            name="description"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                {...field}
-                multiline
-                rows={5}
-                label="概要"
-                variant="filled"
-                fullWidth
-                error={!!errors.description}
-                helperText={errors.description && errors.description.message}
-              />
-            )}
-          />
-          <Button
-            type="button"
-            variant="contained"
-            onClick={handleSubmit(onServiceEdit)}
-          >
-            変更
-          </Button>
-          <Button type="button" color="error" variant="outlined" onClick={props.onClose}>
-            キャンセル
-          </Button>
-        </Stack>
-      </Drawer>
-    );
-  }
   function ServiceRow({
     service,
     onStart,
     onStop,
     onLaunch,
-    onRemove
+    onRemove,
+    onEdit,
   }: ServiceRowProps) {
     return (
       <>
-        {
-          editDrawerOpened ? (
-            <ServiceEditDrawer
-              service={service}
-              client={client}
-              onClose={() => {
-                setEditDrawerOpened(false);
-              }}
-            />
-          ) : (
-            <></>
-          )
-        }
         <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-          <TableCell style={{ textDecoration: "underline" }} component="th" onClick={() => setEditDrawerOpened(true)}>
+          <TableCell style={{ textDecoration: "underline" }} component="th" onClick={() => onEdit?.(service)}>
             {service.displayName}
           </TableCell>
           <TableCell >
