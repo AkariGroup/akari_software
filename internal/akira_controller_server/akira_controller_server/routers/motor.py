@@ -7,6 +7,10 @@ from ._context import get_context
 router = APIRouter()
 
 
+class GetServoStatusResponse(BaseModel):
+    enabled: bool
+
+
 class SetPositionsRequest(BaseModel):
     pan: float
     tilt: float
@@ -17,14 +21,16 @@ class GetPositionsResponse(BaseModel):
     tilt: float
 
 
-@router.get("/servo")
-def get_servo_status() -> bool:
+@router.get("/servo", response_model=GetServoStatusResponse)
+def get_servo_status() -> GetServoStatusResponse:
     context = get_context()
     client = context.akari_client
 
     pan_servo = client.joints.pan_joint.get_servo_enabled()
     tilt_servo = client.joints.tilt_joint.get_servo_enabled()
-    return pan_servo and tilt_servo
+    return GetServoStatusResponse(
+        enabled=pan_servo and tilt_servo,
+    )
 
 
 @router.post("/servo")

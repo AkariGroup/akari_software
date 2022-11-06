@@ -1,27 +1,37 @@
 import { Button, Popover } from "@mui/material";
-import { useState } from "react";
-import { SketchPicker } from "react-color";
+import { RGBColor, SketchPicker } from "react-color";
 import { ColorResult } from "react-color";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 
-export function ColorPicker() {
-  const [color, setColor] = useState("#333");
+type Props = {
+  text?: string;
+  color: RGBColor;
+  onChangeColor: (c: RGBColor) => void;
+};
+
+export function ColorPicker(props: Props) {
   const handleChange = (value: ColorResult) => {
-    setColor(value.hex);
+    props.onChangeColor(value.rgb);
   };
   return (
     <PopupState variant="popover">
       {(popupState) => (
         <div>
           <Button
-            style={{ backgroundColor: color }}
+            style={{
+              backgroundColor: `rgb(${props.color.r}, ${props.color.g}, ${props.color.b})`,
+            }}
             variant="contained"
             {...bindTrigger(popupState)}
           >
-            Choose Display Color
+            {props.text ?? "Choose Color"}
           </Button>
           <Popover {...bindPopover(popupState)}>
-            <SketchPicker color={color} onChange={handleChange} />
+            <SketchPicker
+              color={props.color}
+              onChange={handleChange}
+              disableAlpha
+            />
           </Popover>
         </div>
       )}
