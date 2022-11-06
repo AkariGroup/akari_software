@@ -2,11 +2,13 @@ import dataclasses
 from typing import Optional
 
 from akari_client import AkariClient
+from akira_controller_server.media import MediaController
 
 
 @dataclasses.dataclass
 class Context:
     akari_client: AkariClient
+    media_controller: MediaController
 
 
 _context: Optional[Context] = None

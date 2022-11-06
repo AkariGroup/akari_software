@@ -1,4 +1,5 @@
 import { Container, Grid } from "@mui/material";
+import { CameraPanel } from "./camera";
 import { useAkiraControllerClient } from "./client";
 import { DisplayPanel } from "./display";
 import { MotorPanel } from "./motor";
@@ -13,8 +14,10 @@ export function Controller(props: Props) {
   return (
     <Container maxWidth={false}>
       <Grid container mt={1} spacing={2}>
-        <Grid item sm={12} md={7}></Grid>
-        <Grid item sm={12} md={5}>
+        <Grid item sm={12} md={6}>
+          <CameraPanel controllerClient={controllerClient} />
+        </Grid>
+        <Grid item sm={12} md={6}>
           <SensorPanel controllerClient={controllerClient} />
         </Grid>
         <Grid item sm={12} md={6}>
