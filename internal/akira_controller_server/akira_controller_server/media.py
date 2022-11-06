@@ -146,10 +146,10 @@ class MediaController:
                 _logger.info("producer paused")
 
     async def _get_latest_frame(self, previous_stamp: float) -> Tuple[bytes, float]:
-        frame: Optional[bytes] = None
-        stamp: Optional[float] = None
+        frame: bytes
+        stamp: float
 
-        while frame is None or stamp is None:
+        while True:
             with self._lock:
                 # NOTE: No producer exists when time_stamp is a negative value.
                 # Some browsers don't update the content if the API returns a single frame.
@@ -160,8 +160,9 @@ class MediaController:
                 ):
                     frame = self._latest_frame
                     stamp = self._latest_frame_stamp
-                else:
-                    await asyncio.sleep(0.01)
+                    break
+
+            await asyncio.sleep(0.01)
 
         # NOTE: Suppress frequent update request
         if stamp < 0:
@@ -175,8 +176,6 @@ class MediaController:
             handled_stamp = 0.0
             while True:
                 frame, handled_stamp = await self._get_latest_frame(handled_stamp)
-                yield (
-                    b"--frame\r\n" b"Content-Type: image/bmp\r\n\r\n" + frame + b"\r\n"
-                )
+                yield (b"--frame\r\nContent-Type: image/bmp\r\n\r\n" + frame + b"\r\n")
         finally:
             self._subscriptions.notify_unsubscribe()

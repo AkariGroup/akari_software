@@ -6,11 +6,8 @@ import cv2
 import depthai as dai
 import numpy
 
-SCRIPT_DIR = pathlib.Path(__file__).resolve().parent
-WEIGHT_PATH = (
-    SCRIPT_DIR
-    / "../../../../samples/depthai_sample/object_recognition/models/mobilenet-ssd_openvino_2021.4_6shave.blob"
-)
+PACKAGE_DIR = pathlib.Path(__file__).resolve().parents[2]
+WEIGHT_PATH = PACKAGE_DIR / "data/mobilenet-ssd_openvino_2021.4_6shave.blob"
 
 WIDTH = 300
 HEIGHT = 300

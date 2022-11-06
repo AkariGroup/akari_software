@@ -6,7 +6,10 @@ setup(
     packages=find_packages(),
     author="akari",
     author_email="akari.tmc@gmail.com",
-    package_data={"akira_controller_server": ["py.typed"]},
+    package_data={
+        "akira_controller_server": ["py.typed"],
+        "": ["data/*.blob"],
+    },
     install_requires=[
         "akari-proto>=0.1.0,<0.2.0",
         "depthai==2.19.0.0",
@@ -17,4 +20,5 @@ setup(
         "protobuf==3.19.3",
         "uvicorn==0.19.0",
     ],
+    zip_safe=False,
 )
