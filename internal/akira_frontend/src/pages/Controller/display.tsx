@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Slider, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { RGBColor } from "react-color";
 import { ColorPicker } from "../../components/ColorPicker";
@@ -14,6 +14,8 @@ const DEFAULT_DISPLAY_COLOR: RGBColor = {
   g: 255,
   b: 255,
 };
+
+const DEFAULT_FONT_SIZE: number = 3;
 
 type ColorSectionProps = {
   heading: string;
@@ -46,6 +48,9 @@ export function DisplayPanel(props: Props) {
   const [displayColor, setDisplayColor] = useState<RGBColor>(
     () => DEFAULT_DISPLAY_COLOR
   );
+  const [fontSize, setFontSize] = useState<number>(
+    () => DEFAULT_FONT_SIZE
+  );
   const [text, setText] = useState<string>("");
 
   const onSubmit = async () => {
@@ -54,12 +59,14 @@ export function DisplayPanel(props: Props) {
         text: text,
         display_color: displayColor,
         foreground_color: foregroundColor,
+        font_size: fontSize,
       },
     });
   };
   const onReset = () => {
     setForegroundColor(DEFAULT_FOREGROUND_COLOR);
     setDisplayColor(DEFAULT_DISPLAY_COLOR);
+    setFontSize(3);
     setText("");
   };
 
@@ -85,6 +92,31 @@ export function DisplayPanel(props: Props) {
             color={displayColor}
             onChangeColor={setDisplayColor}
           />
+        </Box>
+        <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          marginBottom: 1,
+        }}
+        >
+        <Typography style={{ width: "20%"}}>font size</Typography>
+          <Slider
+          style={{ width: "80%"}}
+          value={fontSize}
+          aria-label="Small steps"
+          defaultValue={DEFAULT_FONT_SIZE}
+          step={1}
+          marks
+          min={1}
+          max={7}
+          valueLabelDisplay="auto"
+          onChange={(_, v) => {
+            const nv = v as number;
+            setFontSize(nv);
+          }}
+        />
         </Box>
         <Stack direction="row" spacing={1}>
           <Button type="button" variant="contained" onClick={onSubmit}>
