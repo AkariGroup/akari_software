@@ -19,6 +19,7 @@ import {
 import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useCallback, useState } from "react";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -39,8 +40,8 @@ function Header() {
       <TableRow>
         <TableCell>DisplayName</TableCell>
         <TableCell>Service</TableCell>
-        <TableCell sx={{ width: 200 }}>Status</TableCell>
-        <TableCell sx={{ width: 170 }}></TableCell>
+        <TableCell sx={{ width: 170 }}>Status</TableCell>
+        <TableCell sx={{ width: 200 }}></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -219,6 +220,11 @@ function ServiceRow({
           <Status status={service.status} />
         </TableCell>
         <TableCell align="right">
+          {!!onEdit ? (
+            <IconButton onClick={() => onEdit?.(service)}>
+              <EditIcon />
+            </IconButton>
+          ) : null}
           {!!onLaunch && service.capabilities?.includes("open") ? (
             <IconButton
               onClick={() => onLaunch(service)}
