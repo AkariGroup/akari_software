@@ -1,4 +1,3 @@
-import useAspidaSWR from "@aspida/swr";
 import {
   Box,
   Button,
@@ -13,12 +12,11 @@ import { useCallback } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Akira_protoService } from "../../api/@types";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
-import { ApiClient, useApiClient } from "../../hooks/api";
+import { ApiClient } from "../../hooks/api";
 import { ValidationMessages } from "../../libs/messages";
 import CloseIcon from "@mui/icons-material/Close";
 
-export interface EditServiceRequest {
-  id: string;
+interface EditServiceRequest {
   display_name: string;
   description: string;
 }
@@ -26,59 +24,45 @@ type Props = {
   service: Akira_protoService;
   client: ApiClient;
   onClose: () => void;
-  onSubmit: SubmitHandler<EditServiceRequest>;
 };
 
-export function ServiceEditDrawer(props: Props) {
+export function ServiceEditDrawer({ service, client, onClose }: Props) {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<EditServiceRequest>();
   const setBusy = useSetBackdropValue();
-  const client = useApiClient();
-  const { mutate } = useAspidaSWR(client?.services, {
-    enabled: !!client,
-    refreshInterval: 5 * 1000, // in ms
-  });
   const onServiceEdit: SubmitHandler<EditServiceRequest> = useCallback(
     async (data) => {
-      if (!client) return;
-      console.log(data);
-      // TODO: Handle error (e.g. Directory name conflicts)
-      const request: EditServiceRequest = {
-        id: props.service.id ?? "",
-        display_name: data.display_name,
-        description: data.description,
-      };
+      if (!client || !service.id) return;
       setBusy(true);
       try {
-        await client.services._id(request.id).edit.post({
+        await client.services._id(service.id).edit.post({
           body: {
-            displayName: request.display_name,
-            description: request.description,
+            displayName: data.display_name,
+            description: data.description,
           },
         });
-        props.onClose();
-        mutate();
+        onClose();
       } finally {
         setBusy(false);
       }
     },
-    [client, props, setBusy, mutate]
+    [service, client, onClose, setBusy]
   );
 
   return (
     <Drawer
       anchor="right"
       open={true}
-      onClose={props.onClose}
+      onClose={onClose}
       PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
     >
       <Stack margin={2} spacing={2}>
         <Box>
           <Stack direction="row" alignItems="center">
-            <IconButton onClick={props.onClose}>
+            <IconButton onClick={onClose}>
               <CloseIcon />
             </IconButton>
             <Typography variant="h5" ml={1}>
@@ -90,7 +74,7 @@ export function ServiceEditDrawer(props: Props) {
         <Controller
           name="display_name"
           control={control}
-          defaultValue={props.service.displayName}
+          defaultValue={service.displayName}
           rules={{
             required: ValidationMessages.Required,
           }}
@@ -107,7 +91,7 @@ export function ServiceEditDrawer(props: Props) {
         <Controller
           name="description"
           control={control}
-          defaultValue={props.service.description}
+          defaultValue={service.description}
           render={({ field }) => (
             <TextField
               {...field}
@@ -132,7 +116,7 @@ export function ServiceEditDrawer(props: Props) {
           type="button"
           color="error"
           variant="outlined"
-          onClick={props.onClose}
+          onClick={onClose}
         >
           キャンセル
         </Button>

@@ -13,11 +13,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
-export interface SetAutoStartRequest {
-  id: string;
-  auto_start: boolean;
-}
-
 export function Services() {
   const client = useApiClient();
   const { data, error, mutate } = useAspidaSWR(client?.services, {
@@ -67,7 +62,6 @@ export function Services() {
   const onStopService = useCallback(
     async (target: Akira_protoService, terminate: boolean) => {
       if (!client || !target.id) return;
-
       setBusy(true);
       try {
         await client.services._id(target.id).stop.post({
@@ -116,13 +110,10 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
-  const onEditService = useCallback(
-    async (target: Akira_protoService) => {
-      if (!client || !target) return;
-      setTargetEditService(target);
-    },
-    [client]
-  );
+  const onEditService = useCallback(async (target: Akira_protoService) => {
+    if (!target) return;
+    setTargetEditService(target);
+  }, []);
   if (!data?.services || error) {
     return <></>;
   }
@@ -141,18 +132,15 @@ export function Services() {
         ) : (
           <></>
         )}
-        console.log(targetEditService);
-        {targetEditService != null ? (
+        {targetEditService && (
           <ServiceEditDrawer
             service={targetEditService}
             client={client}
-            onSubmit={onEditService}
             onClose={() => {
+              mutate();
               setTargetEditService(null);
             }}
           />
-        ) : (
-          <></>
         )}
         <Typography variant="h4" mb={1}>
           サービス

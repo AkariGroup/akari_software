@@ -194,49 +194,50 @@ function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
   );
 }
 
+function ServiceRow({
+  service,
+  onStart,
+  onStop,
+  onLaunch,
+  onRemove,
+  onEdit,
+}: ServiceRowProps) {
+  return (
+    <>
+      <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+        <TableCell
+          style={{ textDecoration: "underline" }}
+          component="th"
+          onClick={() => onEdit?.(service)}
+        >
+          {service.displayName}
+        </TableCell>
+        <TableCell>
+          <ServiceImageLink image={service.image} />
+        </TableCell>
+        <TableCell>
+          <Status status={service.status} />
+        </TableCell>
+        <TableCell align="right">
+          {!!onLaunch && service.capabilities?.includes("open") ? (
+            <IconButton
+              onClick={() => onLaunch(service)}
+              disabled={service.status !== "RUNNING"}
+            >
+              <LaunchIcon />
+            </IconButton>
+          ) : null}
+          <PowerButton service={service} onStart={onStart} onStop={onStop} />
+          {!!onRemove ? (
+            <RemoveButton service={service} onRemove={onRemove} />
+          ) : null}
+        </TableCell>
+      </TableRow>
+    </>
+  );
+}
+
 export function ServiceList(props: Props) {
-  function ServiceRow({
-    service,
-    onStart,
-    onStop,
-    onLaunch,
-    onRemove,
-    onEdit,
-  }: ServiceRowProps) {
-    return (
-      <>
-        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-          <TableCell
-            style={{ textDecoration: "underline" }}
-            component="th"
-            onClick={() => onEdit?.(service)}
-          >
-            {service.displayName}
-          </TableCell>
-          <TableCell>
-            <ServiceImageLink image={service.image} />
-          </TableCell>
-          <TableCell>
-            <Status status={service.status} />
-          </TableCell>
-          <TableCell align="right">
-            {!!onLaunch && service.capabilities?.includes("open") ? (
-              <IconButton
-                onClick={() => onLaunch(service)}
-                disabled={service.status !== "RUNNING"}
-              >
-                <LaunchIcon />
-              </IconButton>
-            ) : null}
-            <PowerButton service={service} onStart={onStart} onStop={onStop} />
-            {!!onRemove ? (
-              <RemoveButton service={service} onRemove={onRemove} />
-            ) : null}
-          </TableCell>
-        </TableRow>
-      </>
-    );
-  }
   const sortKey = useCallback(
     (lhs: Akira_protoService, rhs: Akira_protoService) => {
       const lhsStatus = lhs.status?.toString() ?? "";
