@@ -1,4 +1,11 @@
-import { Box, Button, Slider, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Slider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { RGBColor } from "react-color";
 import { ColorPicker } from "../../components/ColorPicker";
@@ -48,9 +55,7 @@ export function DisplayPanel(props: Props) {
   const [displayColor, setDisplayColor] = useState<RGBColor>(
     () => DEFAULT_DISPLAY_COLOR
   );
-  const [fontSize, setFontSize] = useState<number>(
-    () => DEFAULT_FONT_SIZE
-  );
+  const [fontSize, setFontSize] = useState<number>(() => DEFAULT_FONT_SIZE);
   const [text, setText] = useState<string>("");
 
   const onSubmit = async () => {
@@ -94,29 +99,29 @@ export function DisplayPanel(props: Props) {
           />
         </Box>
         <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          alignItems: "center",
-          marginBottom: 1,
-        }}
-        >
-        <Typography style={{ width: "20%"}}>font size</Typography>
-          <Slider
-          style={{ width: "80%"}}
-          value={fontSize}
-          aria-label="Small steps"
-          defaultValue={DEFAULT_FONT_SIZE}
-          step={1}
-          marks
-          min={1}
-          max={7}
-          valueLabelDisplay="auto"
-          onChange={(_, v) => {
-            const nv = v as number;
-            setFontSize(nv);
+          sx={{
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            marginBottom: 1,
           }}
-        />
+        >
+          <Typography style={{ width: "20%" }}>font size</Typography>
+          <Slider
+            style={{ width: "80%" }}
+            value={fontSize}
+            aria-label="Small steps"
+            defaultValue={DEFAULT_FONT_SIZE}
+            step={1}
+            marks
+            min={1}
+            max={7}
+            valueLabelDisplay="auto"
+            onChange={(_, v) => {
+              const nv = v as number;
+              setFontSize(nv);
+            }}
+          />
         </Box>
         <Stack direction="row" spacing={1}>
           <Button type="button" variant="contained" onClick={onSubmit}>
