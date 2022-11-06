@@ -10,6 +10,9 @@ class Context:
     akari_client: AkariClient
     media_controller: MediaController
 
+    def close(self) -> None:
+        self.media_controller.close()
+
 
 _context: Optional[Context] = None
 

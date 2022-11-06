@@ -94,8 +94,13 @@ class MediaController:
         self._latest_frame_stamp = 0.0
 
         self._lock = threading.Lock()
-        self._thread = threading.Thread(target=self._produce, daemon=True)
+        self._closed = False
+        self._thread = threading.Thread(target=self._produce)
         self._thread.start()
+
+    def close(self) -> None:
+        self._closed = True
+        self._thread.join()
 
     @property
     def mode(self) -> CaptureMode:
@@ -111,7 +116,11 @@ class MediaController:
 
     def _produce_core(self, capture: CaptureProtocol, mode: CaptureMode) -> None:
         interval = 1.0 / self._producer_frequency
-        while mode == self._mode and self._subscriptions.is_subscribed():
+        while (
+            not self._closed
+            and mode == self._mode
+            and self._subscriptions.is_subscribed()
+        ):
             next_interval = time.time() + interval
 
             frame = capture.get_frame()
@@ -126,7 +135,7 @@ class MediaController:
                 time.sleep(sleep_sec)
 
     def _produce(self) -> None:
-        while True:
+        while not self._closed:
             self._update_frame(_NOW_LOADING_FRAME, _STATIC_FRAME_STAMP)
             self._subscriptions.wait_for_subscription()
             with contextlib.ExitStack() as stack:
@@ -149,7 +158,7 @@ class MediaController:
         frame: bytes
         stamp: float
 
-        while True:
+        while not self._closed:
             with self._lock:
                 # NOTE: No producer exists when time_stamp is a negative value.
                 # Some browsers don't update the content if the API returns a single frame.
