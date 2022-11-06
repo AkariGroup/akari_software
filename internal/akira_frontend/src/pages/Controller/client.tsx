@@ -5,7 +5,8 @@ import { AspidaClient } from "aspida";
 import api from "../../service-apis/akira-controller-server/$api";
 
 export function getAspidaClient(): AspidaClient<AxiosRequestConfig> {
-  return aspida(axios, { baseURL: "http://localhost:52001" });
+  const hostname = window.location.hostname;
+  return aspida(axios, { baseURL: `//${hostname}:52001` });
 }
 
 export type AkiraControllerClient = ReturnType<
