@@ -1,5 +1,10 @@
 import useAspidaSWR from "@aspida/swr";
-import { Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import {
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 import { CaptureMode } from "../../service-apis/akira-controller-server/@types";
@@ -53,7 +58,7 @@ export function CameraPanel(props: Props) {
           component="img"
           src={url}
           sx={{
-            maxHeight: "50vh",
+            maxHeight: "40vh",
             objectFit: "contain",
           }}
         />

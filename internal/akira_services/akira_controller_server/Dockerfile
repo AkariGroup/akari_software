@@ -7,7 +7,8 @@ RUN pip install \
         /resources/sdk/akari_proto/
 
 COPY internal/akira_controller_server /resources/sdk/akira_controller_server
-RUN pip install /resources/sdk/akira_controller_server/
+# NOTE: In order to avoid resource path issues, install package with editable option
+RUN pip install -e /resources/sdk/akira_controller_server/
 
 EXPOSE 52001
 CMD ["python3", "-m", "akira_controller_server.cli"]
