@@ -40,11 +40,11 @@ function Header() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>DisplayName</TableCell>
-        <TableCell>Service</TableCell>
-        <TableCell sx={{ width: 150 }}>Status</TableCell>
-        <TableCell sx={{ width: 150 }}>AutoStart</TableCell>
-        <TableCell sx={{ width: 200 }}></TableCell>
+        <TableCell width="20%">DisplayName</TableCell>
+        <TableCell width="30%">Service</TableCell>
+        <TableCell width="20%">Status</TableCell>
+        <TableCell width="10%">AutoStart</TableCell>
+        <TableCell width="20%"></TableCell>
       </TableRow>
     </TableHead>
   );
