@@ -22,6 +22,20 @@ class JointSpecifier(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["joint_name",b"joint_name"]) -> None: ...
 global___JointSpecifier = JointSpecifier
 
+class GetPositionLimitResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    MIN_FIELD_NUMBER: builtins.int
+    MAX_FIELD_NUMBER: builtins.int
+    min: builtins.float
+    max: builtins.float
+    def __init__(self,
+        *,
+        min: builtins.float = ...,
+        max: builtins.float = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["max",b"max","min",b"min"]) -> None: ...
+global___GetPositionLimitResponse = GetPositionLimitResponse
+
 class GetJointNamesResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     JOINT_NAMES_FIELD_NUMBER: builtins.int
@@ -77,6 +91,17 @@ class SetProfileAccelerationRequest(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["rad_per_sec2",b"rad_per_sec2","target_joint",b"target_joint"]) -> None: ...
 global___SetProfileAccelerationRequest = SetProfileAccelerationRequest
 
+class GetProfileAccelerationResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    RAD_PER_SEC2_FIELD_NUMBER: builtins.int
+    rad_per_sec2: builtins.float
+    def __init__(self,
+        *,
+        rad_per_sec2: builtins.float = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["rad_per_sec2",b"rad_per_sec2"]) -> None: ...
+global___GetProfileAccelerationResponse = GetProfileAccelerationResponse
+
 class SetProfileVelocityRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     TARGET_JOINT_FIELD_NUMBER: builtins.int
@@ -92,6 +117,17 @@ class SetProfileVelocityRequest(google.protobuf.message.Message):
     def HasField(self, field_name: typing_extensions.Literal["target_joint",b"target_joint"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["rad_per_sec",b"rad_per_sec","target_joint",b"target_joint"]) -> None: ...
 global___SetProfileVelocityRequest = SetProfileVelocityRequest
+
+class GetProfileVelocityResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    RAD_PER_SEC_FIELD_NUMBER: builtins.int
+    rad_per_sec: builtins.float
+    def __init__(self,
+        *,
+        rad_per_sec: builtins.float = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["rad_per_sec",b"rad_per_sec"]) -> None: ...
+global___GetProfileVelocityResponse = GetProfileVelocityResponse
 
 class SetGoalPositionRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor

@@ -6,7 +6,7 @@ from akari_proto.grpc.error import deserialize_error
 from akari_proto.joints_controller_pb2_grpc import JointsControllerServiceStub
 from google.protobuf.empty_pb2 import Empty
 
-from ..joint_controller import RevoluteJointController
+from ..joint_controller import Limit, RevoluteJointController
 from ._error import serializer
 
 
@@ -30,6 +30,14 @@ class GrpcJointController(RevoluteJointController):
     def __init__(self, joint_name: str, client: _GrpcJointsController) -> None:
         self._joint_name = joint_name
         self._client = client
+
+    @deserialize_error(serializer)
+    def get_position_limit(self) -> Limit:
+        res: joints_controller_pb2.GetPositionLimitResponse = (
+            self._client.stub.GetPositionLimit(self.joint_specifier)
+        )
+        limit = Limit(min=res.min, max=res.max)
+        return limit
 
     @property
     def joint_name(self) -> str:
@@ -65,12 +73,26 @@ class GrpcJointController(RevoluteJointController):
         self._client.stub.SetProfileAcceleration(request)
 
     @deserialize_error(serializer)
+    def get_profile_acceleration(self) -> float:
+        res: joints_controller_pb2.GetProfileAccelerationResponse = (
+            self._client.stub.GetProfileAcceleration(self.joint_specifier)
+        )
+        return res.rad_per_sec2
+
+    @deserialize_error(serializer)
     def set_profile_velocity(self, rad_per_sec: float) -> None:
         request = joints_controller_pb2.SetProfileVelocityRequest(
             target_joint=self.joint_specifier,
             rad_per_sec=rad_per_sec,
         )
         self._client.stub.SetProfileVelocity(request)
+
+    @deserialize_error(serializer)
+    def get_profile_velocity(self) -> float:
+        res: joints_controller_pb2.GetProfileVelocityResponse = (
+            self._client.stub.GetProfileVelocity(self.joint_specifier)
+        )
+        return res.rad_per_sec
 
     @deserialize_error(serializer)
     def set_goal_position(self, rad: float) -> None:

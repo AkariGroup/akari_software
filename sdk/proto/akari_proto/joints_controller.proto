@@ -8,6 +8,11 @@ message JointSpecifier {
   string joint_name = 1;
 }
 
+message GetPositionLimitResponse {
+  float min = 1;
+  float max = 2;
+}
+
 message GetJointNamesResponse {
   repeated string joint_names = 1;
 }
@@ -26,9 +31,17 @@ message SetProfileAccelerationRequest {
   float rad_per_sec2 = 2;
 }
 
+message GetProfileAccelerationResponse {
+  float rad_per_sec2 = 1;
+}
+
 message SetProfileVelocityRequest {
   JointSpecifier target_joint = 1;
   float rad_per_sec = 2;
+}
+
+message GetProfileVelocityResponse {
+  float rad_per_sec = 1;
 }
 
 message SetGoalPositionRequest {
@@ -45,6 +58,8 @@ message GetMovingStateResponse {
 }
 
 service JointsControllerService {
+    rpc GetPositionLimit(JointSpecifier)
+        returns (GetPositionLimitResponse);
     rpc GetJointNames(google.protobuf.Empty)
         returns (GetJointNamesResponse);
     rpc GetServoEnabled(JointSpecifier)
@@ -53,8 +68,12 @@ service JointsControllerService {
         returns (google.protobuf.Empty);
     rpc SetProfileAcceleration(SetProfileAccelerationRequest)
         returns (google.protobuf.Empty);
+    rpc GetProfileAcceleration(JointSpecifier)
+        returns (GetProfileAccelerationResponse);
     rpc SetProfileVelocity(SetProfileVelocityRequest)
         returns (google.protobuf.Empty);
+    rpc GetProfileVelocity(JointSpecifier)
+        returns (GetProfileVelocityResponse);
     rpc SetGoalPosition(SetGoalPositionRequest)
         returns (google.protobuf.Empty);
     rpc GetPresentPosition(JointSpecifier)

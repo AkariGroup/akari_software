@@ -15,16 +15,19 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n#akari_proto/joints_controller.proto\x12\x0b\x61kari_proto\x1a\x1bgoogle/protobuf/empty.proto\"/\n\x0eJointSpecifier\x12\x1d\n\njoint_name\x18\x01 \x01(\tR\tjointName\"8\n\x15GetJointNamesResponse\x12\x1f\n\x0bjoint_names\x18\x01 \x03(\tR\njointNames\"3\n\x17GetServoEnabledResponse\x12\x18\n\x07\x65nabled\x18\x01 \x01(\x08R\x07\x65nabled\"r\n\x16SetServoEnabledRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x18\n\x07\x65nabled\x18\x02 \x01(\x08R\x07\x65nabled\"\x81\x01\n\x1dSetProfileAccelerationRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12 \n\x0crad_per_sec2\x18\x02 \x01(\x02R\nradPerSec2\"{\n\x19SetProfileVelocityRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x1e\n\x0brad_per_sec\x18\x02 \x01(\x02R\tradPerSec\"j\n\x16SetGoalPositionRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x10\n\x03rad\x18\x02 \x01(\x02R\x03rad\".\n\x1aGetPresentPositionResponse\x12\x10\n\x03rad\x18\x01 \x01(\x02R\x03rad\"0\n\x16GetMovingStateResponse\x12\x16\n\x06moving\x18\x01 \x01(\x08R\x06moving2\xc0\x05\n\x17JointsControllerService\x12K\n\rGetJointNames\x12\x16.google.protobuf.Empty\x1a\".akari_proto.GetJointNamesResponse\x12T\n\x0fGetServoEnabled\x12\x1b.akari_proto.JointSpecifier\x1a$.akari_proto.GetServoEnabledResponse\x12N\n\x0fSetServoEnabled\x12#.akari_proto.SetServoEnabledRequest\x1a\x16.google.protobuf.Empty\x12\\\n\x16SetProfileAcceleration\x12*.akari_proto.SetProfileAccelerationRequest\x1a\x16.google.protobuf.Empty\x12T\n\x12SetProfileVelocity\x12&.akari_proto.SetProfileVelocityRequest\x1a\x16.google.protobuf.Empty\x12N\n\x0fSetGoalPosition\x12#.akari_proto.SetGoalPositionRequest\x1a\x16.google.protobuf.Empty\x12Z\n\x12GetPresentPosition\x12\x1b.akari_proto.JointSpecifier\x1a\'.akari_proto.GetPresentPositionResponse\x12R\n\x0eGetMovingState\x12\x1b.akari_proto.JointSpecifier\x1a#.akari_proto.GetMovingStateResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n#akari_proto/joints_controller.proto\x12\x0b\x61kari_proto\x1a\x1bgoogle/protobuf/empty.proto\"/\n\x0eJointSpecifier\x12\x1d\n\njoint_name\x18\x01 \x01(\tR\tjointName\">\n\x18GetPositionLimitResponse\x12\x10\n\x03min\x18\x01 \x01(\x02R\x03min\x12\x10\n\x03max\x18\x02 \x01(\x02R\x03max\"8\n\x15GetJointNamesResponse\x12\x1f\n\x0bjoint_names\x18\x01 \x03(\tR\njointNames\"3\n\x17GetServoEnabledResponse\x12\x18\n\x07\x65nabled\x18\x01 \x01(\x08R\x07\x65nabled\"r\n\x16SetServoEnabledRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x18\n\x07\x65nabled\x18\x02 \x01(\x08R\x07\x65nabled\"\x81\x01\n\x1dSetProfileAccelerationRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12 \n\x0crad_per_sec2\x18\x02 \x01(\x02R\nradPerSec2\"B\n\x1eGetProfileAccelerationResponse\x12 \n\x0crad_per_sec2\x18\x01 \x01(\x02R\nradPerSec2\"{\n\x19SetProfileVelocityRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x1e\n\x0brad_per_sec\x18\x02 \x01(\x02R\tradPerSec\"<\n\x1aGetProfileVelocityResponse\x12\x1e\n\x0brad_per_sec\x18\x01 \x01(\x02R\tradPerSec\"j\n\x16SetGoalPositionRequest\x12>\n\x0ctarget_joint\x18\x01 \x01(\x0b\x32\x1b.akari_proto.JointSpecifierR\x0btargetJoint\x12\x10\n\x03rad\x18\x02 \x01(\x02R\x03rad\".\n\x1aGetPresentPositionResponse\x12\x10\n\x03rad\x18\x01 \x01(\x02R\x03rad\"0\n\x16GetMovingStateResponse\x12\x16\n\x06moving\x18\x01 \x01(\x08R\x06moving2\xd8\x07\n\x17JointsControllerService\x12V\n\x10GetPositionLimit\x12\x1b.akari_proto.JointSpecifier\x1a%.akari_proto.GetPositionLimitResponse\x12K\n\rGetJointNames\x12\x16.google.protobuf.Empty\x1a\".akari_proto.GetJointNamesResponse\x12T\n\x0fGetServoEnabled\x12\x1b.akari_proto.JointSpecifier\x1a$.akari_proto.GetServoEnabledResponse\x12N\n\x0fSetServoEnabled\x12#.akari_proto.SetServoEnabledRequest\x1a\x16.google.protobuf.Empty\x12\\\n\x16SetProfileAcceleration\x12*.akari_proto.SetProfileAccelerationRequest\x1a\x16.google.protobuf.Empty\x12\x62\n\x16GetProfileAcceleration\x12\x1b.akari_proto.JointSpecifier\x1a+.akari_proto.GetProfileAccelerationResponse\x12T\n\x12SetProfileVelocity\x12&.akari_proto.SetProfileVelocityRequest\x1a\x16.google.protobuf.Empty\x12Z\n\x12GetProfileVelocity\x12\x1b.akari_proto.JointSpecifier\x1a\'.akari_proto.GetProfileVelocityResponse\x12N\n\x0fSetGoalPosition\x12#.akari_proto.SetGoalPositionRequest\x1a\x16.google.protobuf.Empty\x12Z\n\x12GetPresentPosition\x12\x1b.akari_proto.JointSpecifier\x1a\'.akari_proto.GetPresentPositionResponse\x12R\n\x0eGetMovingState\x12\x1b.akari_proto.JointSpecifier\x1a#.akari_proto.GetMovingStateResponseb\x06proto3')
 
 
 
 _JOINTSPECIFIER = DESCRIPTOR.message_types_by_name['JointSpecifier']
+_GETPOSITIONLIMITRESPONSE = DESCRIPTOR.message_types_by_name['GetPositionLimitResponse']
 _GETJOINTNAMESRESPONSE = DESCRIPTOR.message_types_by_name['GetJointNamesResponse']
 _GETSERVOENABLEDRESPONSE = DESCRIPTOR.message_types_by_name['GetServoEnabledResponse']
 _SETSERVOENABLEDREQUEST = DESCRIPTOR.message_types_by_name['SetServoEnabledRequest']
 _SETPROFILEACCELERATIONREQUEST = DESCRIPTOR.message_types_by_name['SetProfileAccelerationRequest']
+_GETPROFILEACCELERATIONRESPONSE = DESCRIPTOR.message_types_by_name['GetProfileAccelerationResponse']
 _SETPROFILEVELOCITYREQUEST = DESCRIPTOR.message_types_by_name['SetProfileVelocityRequest']
+_GETPROFILEVELOCITYRESPONSE = DESCRIPTOR.message_types_by_name['GetProfileVelocityResponse']
 _SETGOALPOSITIONREQUEST = DESCRIPTOR.message_types_by_name['SetGoalPositionRequest']
 _GETPRESENTPOSITIONRESPONSE = DESCRIPTOR.message_types_by_name['GetPresentPositionResponse']
 _GETMOVINGSTATERESPONSE = DESCRIPTOR.message_types_by_name['GetMovingStateResponse']
@@ -34,6 +37,13 @@ JointSpecifier = _reflection.GeneratedProtocolMessageType('JointSpecifier', (_me
   # @@protoc_insertion_point(class_scope:akari_proto.JointSpecifier)
   })
 _sym_db.RegisterMessage(JointSpecifier)
+
+GetPositionLimitResponse = _reflection.GeneratedProtocolMessageType('GetPositionLimitResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETPOSITIONLIMITRESPONSE,
+  '__module__' : 'akari_proto.joints_controller_pb2'
+  # @@protoc_insertion_point(class_scope:akari_proto.GetPositionLimitResponse)
+  })
+_sym_db.RegisterMessage(GetPositionLimitResponse)
 
 GetJointNamesResponse = _reflection.GeneratedProtocolMessageType('GetJointNamesResponse', (_message.Message,), {
   'DESCRIPTOR' : _GETJOINTNAMESRESPONSE,
@@ -63,12 +73,26 @@ SetProfileAccelerationRequest = _reflection.GeneratedProtocolMessageType('SetPro
   })
 _sym_db.RegisterMessage(SetProfileAccelerationRequest)
 
+GetProfileAccelerationResponse = _reflection.GeneratedProtocolMessageType('GetProfileAccelerationResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETPROFILEACCELERATIONRESPONSE,
+  '__module__' : 'akari_proto.joints_controller_pb2'
+  # @@protoc_insertion_point(class_scope:akari_proto.GetProfileAccelerationResponse)
+  })
+_sym_db.RegisterMessage(GetProfileAccelerationResponse)
+
 SetProfileVelocityRequest = _reflection.GeneratedProtocolMessageType('SetProfileVelocityRequest', (_message.Message,), {
   'DESCRIPTOR' : _SETPROFILEVELOCITYREQUEST,
   '__module__' : 'akari_proto.joints_controller_pb2'
   # @@protoc_insertion_point(class_scope:akari_proto.SetProfileVelocityRequest)
   })
 _sym_db.RegisterMessage(SetProfileVelocityRequest)
+
+GetProfileVelocityResponse = _reflection.GeneratedProtocolMessageType('GetProfileVelocityResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETPROFILEVELOCITYRESPONSE,
+  '__module__' : 'akari_proto.joints_controller_pb2'
+  # @@protoc_insertion_point(class_scope:akari_proto.GetProfileVelocityResponse)
+  })
+_sym_db.RegisterMessage(GetProfileVelocityResponse)
 
 SetGoalPositionRequest = _reflection.GeneratedProtocolMessageType('SetGoalPositionRequest', (_message.Message,), {
   'DESCRIPTOR' : _SETGOALPOSITIONREQUEST,
@@ -97,22 +121,28 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _JOINTSPECIFIER._serialized_start=81
   _JOINTSPECIFIER._serialized_end=128
-  _GETJOINTNAMESRESPONSE._serialized_start=130
-  _GETJOINTNAMESRESPONSE._serialized_end=186
-  _GETSERVOENABLEDRESPONSE._serialized_start=188
-  _GETSERVOENABLEDRESPONSE._serialized_end=239
-  _SETSERVOENABLEDREQUEST._serialized_start=241
-  _SETSERVOENABLEDREQUEST._serialized_end=355
-  _SETPROFILEACCELERATIONREQUEST._serialized_start=358
-  _SETPROFILEACCELERATIONREQUEST._serialized_end=487
-  _SETPROFILEVELOCITYREQUEST._serialized_start=489
-  _SETPROFILEVELOCITYREQUEST._serialized_end=612
-  _SETGOALPOSITIONREQUEST._serialized_start=614
-  _SETGOALPOSITIONREQUEST._serialized_end=720
-  _GETPRESENTPOSITIONRESPONSE._serialized_start=722
-  _GETPRESENTPOSITIONRESPONSE._serialized_end=768
-  _GETMOVINGSTATERESPONSE._serialized_start=770
-  _GETMOVINGSTATERESPONSE._serialized_end=818
-  _JOINTSCONTROLLERSERVICE._serialized_start=821
-  _JOINTSCONTROLLERSERVICE._serialized_end=1525
+  _GETPOSITIONLIMITRESPONSE._serialized_start=130
+  _GETPOSITIONLIMITRESPONSE._serialized_end=192
+  _GETJOINTNAMESRESPONSE._serialized_start=194
+  _GETJOINTNAMESRESPONSE._serialized_end=250
+  _GETSERVOENABLEDRESPONSE._serialized_start=252
+  _GETSERVOENABLEDRESPONSE._serialized_end=303
+  _SETSERVOENABLEDREQUEST._serialized_start=305
+  _SETSERVOENABLEDREQUEST._serialized_end=419
+  _SETPROFILEACCELERATIONREQUEST._serialized_start=422
+  _SETPROFILEACCELERATIONREQUEST._serialized_end=551
+  _GETPROFILEACCELERATIONRESPONSE._serialized_start=553
+  _GETPROFILEACCELERATIONRESPONSE._serialized_end=619
+  _SETPROFILEVELOCITYREQUEST._serialized_start=621
+  _SETPROFILEVELOCITYREQUEST._serialized_end=744
+  _GETPROFILEVELOCITYRESPONSE._serialized_start=746
+  _GETPROFILEVELOCITYRESPONSE._serialized_end=806
+  _SETGOALPOSITIONREQUEST._serialized_start=808
+  _SETGOALPOSITIONREQUEST._serialized_end=914
+  _GETPRESENTPOSITIONRESPONSE._serialized_start=916
+  _GETPRESENTPOSITIONRESPONSE._serialized_end=962
+  _GETMOVINGSTATERESPONSE._serialized_start=964
+  _GETMOVINGSTATERESPONSE._serialized_end=1012
+  _JOINTSCONTROLLERSERVICE._serialized_start=1015
+  _JOINTSCONTROLLERSERVICE._serialized_end=1999
 # @@protoc_insertion_point(module_scope)
