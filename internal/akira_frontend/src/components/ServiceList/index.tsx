@@ -3,6 +3,7 @@ import {
   IconButton,
   Link,
   Paper,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -32,16 +33,18 @@ type Props = {
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
+  onAutoStart: (target: Akira_protoService) => void;
 };
 
 function Header() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>DisplayName</TableCell>
-        <TableCell>Service</TableCell>
-        <TableCell sx={{ width: 170 }}>Status</TableCell>
-        <TableCell sx={{ width: 200 }}></TableCell>
+        <TableCell width="20%">DisplayName</TableCell>
+        <TableCell width="30%">Service</TableCell>
+        <TableCell width="20%">Status</TableCell>
+        <TableCell width="10%">AutoStart</TableCell>
+        <TableCell width="20%"></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -175,6 +178,7 @@ type ServiceRowProps = {
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
+  onAutoStart?: (target: Akira_protoService) => void;
 };
 
 function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
@@ -202,6 +206,7 @@ function ServiceRow({
   onLaunch,
   onRemove,
   onEdit,
+  onAutoStart,
 }: ServiceRowProps) {
   return (
     <>
@@ -218,6 +223,12 @@ function ServiceRow({
         </TableCell>
         <TableCell>
           <Status status={service.status} />
+        </TableCell>
+        <TableCell>
+          <Switch
+            checked={service.autoStart}
+            onChange={() => onAutoStart?.(service)}
+          />
         </TableCell>
         <TableCell align="right">
           {!!onEdit ? (
@@ -278,6 +289,7 @@ export function ServiceList(props: Props) {
               onLaunch={props.onLaunch}
               onRemove={props.onRemove}
               onEdit={props.onEdit}
+              onAutoStart={props.onAutoStart}
             />
           ))}
         </TableBody>
