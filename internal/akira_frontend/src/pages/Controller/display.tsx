@@ -111,7 +111,6 @@ export function DisplayPanel(props: Props) {
             style={{ width: "80%" }}
             value={fontSize}
             aria-label="font size"
-            defaultValue={DEFAULT_FONT_SIZE}
             step={1}
             marks
             min={1}
