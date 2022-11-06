@@ -13,6 +13,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
+export interface SetAutoStartRequest {
+  id: string;
+  auto_start: boolean;
+}
+
 export function Services() {
   const client = useApiClient();
   const { data, error, mutate } = useAspidaSWR(client?.services, {
@@ -110,6 +115,23 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
+  const onAutoStartService = useCallback(
+    async (target: Akira_protoService) => {
+      if (!client || !target.id) return;
+
+      setBusy(true);
+      try {
+        await client.services._id(target.id).auto_start.post({
+          body: { autoStart: !target.autoStart },
+        });
+        mutate?.();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy, mutate]
+  );
+
   if (!data?.services || error) {
     return <></>;
   }
@@ -162,6 +184,7 @@ export function Services() {
             onLaunch={onLaunchService}
             onRemove={onRemoveService}
             onEdit={setTargetEditService}
+            onAutoStart={onAutoStartService}
           />
         </Box>
         <Box>
@@ -172,6 +195,7 @@ export function Services() {
             services={data.services.filter((x) => x.type === "SYSTEM")}
             onStart={onStartService}
             onStop={onStopService}
+            onAutoStart={onAutoStartService}
           />
         </Box>
       </Stack>

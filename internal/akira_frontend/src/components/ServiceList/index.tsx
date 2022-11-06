@@ -3,6 +3,7 @@ import {
   IconButton,
   Link,
   Paper,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -32,6 +33,7 @@ type Props = {
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
+  onAutoStart: (target: Akira_protoService) => void;
 };
 
 function Header() {
@@ -40,7 +42,8 @@ function Header() {
       <TableRow>
         <TableCell>DisplayName</TableCell>
         <TableCell>Service</TableCell>
-        <TableCell sx={{ width: 170 }}>Status</TableCell>
+        <TableCell sx={{ width: 150 }}>Status</TableCell>
+        <TableCell sx={{ width: 150 }}>AutoStart</TableCell>
         <TableCell sx={{ width: 200 }}></TableCell>
       </TableRow>
     </TableHead>
@@ -175,6 +178,7 @@ type ServiceRowProps = {
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
+  onAutoStart?: (target: Akira_protoService) => void;
 };
 
 function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
@@ -202,6 +206,7 @@ function ServiceRow({
   onLaunch,
   onRemove,
   onEdit,
+  onAutoStart,
 }: ServiceRowProps) {
   return (
     <>
@@ -213,11 +218,17 @@ function ServiceRow({
         >
           {service.displayName}
         </TableCell>
-        <TableCell>
+        <TableCell align="left">
           <ServiceImageLink image={service.image} />
         </TableCell>
         <TableCell>
           <Status status={service.status} />
+        </TableCell>
+        <TableCell>
+          <Switch
+            checked={service.autoStart}
+            onChange={() => onAutoStart?.(service)}
+          />
         </TableCell>
         <TableCell align="right">
           {!!onEdit ? (
@@ -278,6 +289,7 @@ export function ServiceList(props: Props) {
               onLaunch={props.onLaunch}
               onRemove={props.onRemove}
               onEdit={props.onEdit}
+              onAutoStart={props.onAutoStart}
             />
           ))}
         </TableBody>
