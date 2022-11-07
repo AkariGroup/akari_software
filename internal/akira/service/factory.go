@@ -80,6 +80,11 @@ func akiraControllerServerServiceConfig(etcDir string) (ServiceConfig, system.Cr
 
 	mountsConfig := []mount.Mount{
 		grpcClientConfigMount(etcDir),
+		{
+			Type:   mount.TypeBind,
+			Source: "/dev",
+			Target: "/dev",
+		},
 	}
 	containerPort := fmt.Sprintf("%d/tcp", AkiraControllerServerServicePort)
 	serviceConfig := ServiceConfig{
@@ -97,6 +102,7 @@ func akiraControllerServerServiceConfig(etcDir string) (ServiceConfig, system.Cr
 		Mounts:          mountsConfig,
 		RequireRoot:     true,
 		BindHostGateway: true,
+		Privileged:      true,
 	}
 
 	return serviceConfig, containerOpts, nil
