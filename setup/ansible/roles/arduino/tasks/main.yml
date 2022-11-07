@@ -14,8 +14,12 @@
   synchronize:
     src: "{{ role_path }}/files/arduino/"
     dest: /home/{{ ansible_user }}/arduino/
+    checksum: true
+    times: false
+  register: upload_workspace
 
 - name: Upload app to M5Stack
   shell: platformio run --target=upload
   args:
     chdir: /home/{{ ansible_user }}/arduino/
+  when: upload_workspace.changed
