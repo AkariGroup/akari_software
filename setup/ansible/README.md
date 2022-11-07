@@ -42,21 +42,6 @@ AKARIに初期インストールするためのソフトウェア環境を管理
 
 **NOTE**: PythonのModuleエラーや "ansible-playbook" が見つからないといったエラーが発生する場合には `--clean` オプションを指定してください
 
-### AKARIソフトウェアのインストール
-
-**注意**: この手順は lattepanda 本体で実行する必要があります。
-
-1. `akari_main` を Clone
-   ```sh
-   $ git clone git@github.com:AkariGroup/akari_main.git
-   ```
-2. 構成を適用
-   ```sh
-   $ ./run-ansible.py -c local ./local.yml -K --diff
-   (初回実行時だけ時間がかかります)
-   BECOME password: <Akariユーザーのパスワードを入力する>
-   ```
-
 ### AKARI本体の再起動
 
 `run-ansible` コマンドを実行した後は、かならずAKARI本体を再起動してください。
