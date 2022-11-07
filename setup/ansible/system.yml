@@ -21,13 +21,6 @@
   hosts: mainpc
   tags:
     - docker
-  vars_prompt:
-    - name: docker_registry_username
-      prompt: Enter username for hub.docker.com
-    - name: docker_registry_password
-      prompt: Enter API token for hub.docker.com
-    - name: akira_docker_credential
-      prompt: Enter encoded Docker token for Akira
   roles:
     - docker
     - docker_credential

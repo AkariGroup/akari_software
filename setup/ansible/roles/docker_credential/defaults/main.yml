@@ -1,8 +1,4 @@
 ---
-ansible_python_interpreter: /usr/bin/python3
-ansible_user: akari
-arduino_src_dir: /usr/local/src/arduino-1.8.19
-
 akari_docker_config: !vault |
   $ANSIBLE_VAULT;1.2;AES256;docker
   36643237636637646439666631303661393836393435343636333633323633363230656534343138
