@@ -31,9 +31,10 @@ AKARIに初期インストールするためのソフトウェア環境を管理
 2. `hosts` の `[mainpc]` 以下に lattepanda の IPアドレスを追加
 2. 構成を適用
    ```sh
-   $ ./run-ansible.py -i hosts ./system.yml -Kk --diff
+   $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff
    (初回実行時だけ時間がかかります)
    BECOME password: <Akariユーザーのパスワードを入力する>
+   Vault password: <シークレットファイル復号化用のパスワードを入力する>
    ```
 
 **NOTE**: lattepanda上でスクリプトを実行するときには、IPアドレスとして `127.0.0.1` を指定し、オプションに`-c local`を追加してください

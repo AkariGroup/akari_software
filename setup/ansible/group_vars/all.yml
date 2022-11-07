@@ -1,7 +1,4 @@
 ---
 ansible_python_interpreter: /usr/bin/python3
 ansible_user: akari
-
 arduino_src_dir: /usr/local/src/arduino-1.8.19
-
-akari_main_dir: /opt/akari/akari_main
