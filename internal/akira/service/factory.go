@@ -107,9 +107,6 @@ func akiraControllerServerServiceConfig(etcDir string) (ServiceConfig, system.Cr
 		Mounts:          mountsConfig,
 		RequireRoot:     true,
 		BindHostGateway: true,
-		DeviceCgroupRules: []string{
-			"c 189:* rmw",
-		},
 	}
 	containerOpts = withOakdAccess(containerOpts)
 
