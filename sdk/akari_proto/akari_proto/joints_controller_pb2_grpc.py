@@ -15,6 +15,11 @@ class JointsControllerServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.GetPositionLimit = channel.unary_unary(
+                '/akari_proto.JointsControllerService/GetPositionLimit',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetPositionLimitResponse.FromString,
+                )
         self.GetJointNames = channel.unary_unary(
                 '/akari_proto.JointsControllerService/GetJointNames',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
@@ -35,10 +40,20 @@ class JointsControllerServiceStub(object):
                 request_serializer=akari__proto_dot_joints__controller__pb2.SetProfileAccelerationRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
+        self.GetProfileAcceleration = channel.unary_unary(
+                '/akari_proto.JointsControllerService/GetProfileAcceleration',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetProfileAccelerationResponse.FromString,
+                )
         self.SetProfileVelocity = channel.unary_unary(
                 '/akari_proto.JointsControllerService/SetProfileVelocity',
                 request_serializer=akari__proto_dot_joints__controller__pb2.SetProfileVelocityRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
+        self.GetProfileVelocity = channel.unary_unary(
+                '/akari_proto.JointsControllerService/GetProfileVelocity',
+                request_serializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+                response_deserializer=akari__proto_dot_joints__controller__pb2.GetProfileVelocityResponse.FromString,
                 )
         self.SetGoalPosition = channel.unary_unary(
                 '/akari_proto.JointsControllerService/SetGoalPosition',
@@ -59,6 +74,12 @@ class JointsControllerServiceStub(object):
 
 class JointsControllerServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def GetPositionLimit(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def GetJointNames(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -84,7 +105,19 @@ class JointsControllerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetProfileAcceleration(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SetProfileVelocity(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetProfileVelocity(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -111,6 +144,11 @@ class JointsControllerServiceServicer(object):
 
 def add_JointsControllerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'GetPositionLimit': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPositionLimit,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetPositionLimitResponse.SerializeToString,
+            ),
             'GetJointNames': grpc.unary_unary_rpc_method_handler(
                     servicer.GetJointNames,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
@@ -131,10 +169,20 @@ def add_JointsControllerServiceServicer_to_server(servicer, server):
                     request_deserializer=akari__proto_dot_joints__controller__pb2.SetProfileAccelerationRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
+            'GetProfileAcceleration': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetProfileAcceleration,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetProfileAccelerationResponse.SerializeToString,
+            ),
             'SetProfileVelocity': grpc.unary_unary_rpc_method_handler(
                     servicer.SetProfileVelocity,
                     request_deserializer=akari__proto_dot_joints__controller__pb2.SetProfileVelocityRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'GetProfileVelocity': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetProfileVelocity,
+                    request_deserializer=akari__proto_dot_joints__controller__pb2.JointSpecifier.FromString,
+                    response_serializer=akari__proto_dot_joints__controller__pb2.GetProfileVelocityResponse.SerializeToString,
             ),
             'SetGoalPosition': grpc.unary_unary_rpc_method_handler(
                     servicer.SetGoalPosition,
@@ -160,6 +208,23 @@ def add_JointsControllerServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class JointsControllerService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def GetPositionLimit(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetPositionLimit',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetPositionLimitResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def GetJointNames(request,
@@ -230,6 +295,23 @@ class JointsControllerService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def GetProfileAcceleration(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetProfileAcceleration',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetProfileAccelerationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def SetProfileVelocity(request,
             target,
             options=(),
@@ -243,6 +325,23 @@ class JointsControllerService(object):
         return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/SetProfileVelocity',
             akari__proto_dot_joints__controller__pb2.SetProfileVelocityRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetProfileVelocity(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/akari_proto.JointsControllerService/GetProfileVelocity',
+            akari__proto_dot_joints__controller__pb2.JointSpecifier.SerializeToString,
+            akari__proto_dot_joints__controller__pb2.GetProfileVelocityResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
