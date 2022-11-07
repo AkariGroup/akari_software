@@ -67,7 +67,7 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 	}
 	containerPort := fmt.Sprintf("%d/tcp", JupyterContainerListeningPort)
 	imageRef := fmt.Sprintf("%s:%s", p.image.ContainerOption.Image, p.image.Version)
-	return system.CreateContainerOption{
+	return withOakdAccess(system.CreateContainerOption{
 		Image: imageRef,
 		Env:   []string{fmt.Sprintf("AKARI_JUPYTER_TOKEN=%s", meta.token), "HOST_UID=1000", "HOST_GID=1000"},
 		Ports: map[string]int{
@@ -75,7 +75,7 @@ func (p *JupyterLab) createContainerConfig() (system.CreateContainerOption, inte
 		},
 		Mounts:          mountsConfig,
 		BindHostGateway: true,
-	}, meta, nil
+	}), meta, nil
 }
 
 func (p *JupyterLab) GetOpenAddress(hostName string) (string, error) {

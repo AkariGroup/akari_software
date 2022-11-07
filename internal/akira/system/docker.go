@@ -54,13 +54,14 @@ func NewDockerSystem(registryAuth *string) (*DockerSystem, error) {
 }
 
 type CreateContainerOption struct {
-	Image           string
-	Env             []string
-	Ports           map[string]int
-	Mounts          []mount.Mount
-	RequireRoot     bool
-	Privileged      bool
-	BindHostGateway bool
+	Image             string
+	Env               []string
+	Ports             map[string]int
+	Mounts            []mount.Mount
+	RequireRoot       bool
+	Privileged        bool
+	BindHostGateway   bool
+	DeviceCgroupRules []string
 }
 
 func (d *DockerSystem) RemoveAllContainers() error {
@@ -161,6 +162,9 @@ func (d *DockerSystem) CreateContainer(config CreateContainerOption) (ContainerI
 		Mounts:       config.Mounts,
 		Privileged:   config.Privileged,
 		ExtraHosts:   extraHosts,
+		Resources: container.Resources{
+			DeviceCgroupRules: config.DeviceCgroupRules,
+		},
 	}
 	container, err := d.cli.ContainerCreate(
 		context.Background(),

@@ -72,7 +72,7 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 	}
 	containerPort := fmt.Sprintf("%d/tcp", VSCodeContainerListeningPort)
 	imageRef := fmt.Sprintf("%s:%s", p.image.ContainerOption.Image, p.image.Version)
-	return system.CreateContainerOption{
+	return withOakdAccess(system.CreateContainerOption{
 		Image: imageRef,
 		Env:   []string{fmt.Sprintf("AKARI_VSCODE_TOKEN=%s", meta.token)},
 		Ports: map[string]int{
@@ -80,7 +80,7 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 		},
 		Mounts:          mountsConfig,
 		BindHostGateway: true,
-	}, meta, nil
+	}), meta, nil
 }
 
 func (p *VSCode) GetOpenAddress(hostName string) (string, error) {
