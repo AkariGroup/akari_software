@@ -2,6 +2,8 @@
 - name: Install poetry
   shell: |
     curl -sSL https://install.python-poetry.org | POETRY_HOME=$HOME/.poetry python3 -
+  args:
+    creates: "/home/{{ ansible_user }}/.poetry"
 
 - name: Update .profile
   lineinfile:
