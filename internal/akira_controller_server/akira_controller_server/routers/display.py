@@ -24,6 +24,7 @@ class SetRequest(BaseModel):
     text: str
     display_color: ColorType
     foreground_color: ColorType
+    font_size: int
 
 
 @router.post("/values")
@@ -43,4 +44,5 @@ def set_values(request: SetRequest) -> None:
     client.m5stack.set_display_text(
         text=request.text,
         text_color=foreground_color,
+        size=request.font_size,
     )
