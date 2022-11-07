@@ -24,6 +24,8 @@ const JOYSTICK_CONTROL_MS = 1000 / JOYSTICK_CONTROL_HZ;
 
 // max speed is 100 deg/s
 const JOYSTICK_GAIN = (100 / JOYSTICK_CONTROL_HZ) * DEG2RAD;
+const MAX_VEL = 1800;
+const MAX_ACC = 10;
 
 type JointControlProps = {
   current?: number;
@@ -104,6 +106,12 @@ export function MotorPanel({ controllerClient }: Props) {
   );
   const setBusy = useSetBackdropValue();
   const servoEnabled = servoStatus?.enabled ?? false;
+  const pan_min = servoStatus?.pan_min ?? -2.355;
+  const pan_max = servoStatus?.pan_max ?? 2.355;
+  const tilt_min = servoStatus?.tilt_min ?? -0.91;
+  const tilt_max = servoStatus?.tilt_max ?? 0.91;
+  const [vel, setVel] = useState<number>(servoStatus?.vel ?? 5);
+  const [acc, setAcc] = useState<number>(servoStatus?.acc ?? 15);
 
   const toggleServo = async (enabled: boolean) => {
     setBusy(true);
@@ -150,7 +158,14 @@ export function MotorPanel({ controllerClient }: Props) {
   return (
     <Box>
       <Typography variant="h6">Joint</Typography>
-      <Box mb={3}>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          marginBottom: 1,
+        }}
+      >
         <FormControlLabel
           control={
             <Switch
@@ -160,6 +175,80 @@ export function MotorPanel({ controllerClient }: Props) {
           }
           label="Servo"
           value={!servoEnabled}
+        />
+        <Typography>&nbsp;Vel&nbsp;</Typography>
+        <Slider
+          style={{ width: "15%" }}
+          sx={{ flexGrow: 1, marginRight: 2 }}
+          value={vel}
+          min={1}
+          max={MAX_VEL}
+          onChange={(_, v) => {
+            const nv = v as number;
+            setVel(nv);
+            controllerClient.motor.velocity.post({
+              query: { vel: vel * DEG2RAD },
+            });
+          }}
+        />
+        <TextField
+          style={{ width: "15%" }}
+          value={vel}
+          size="small"
+          variant="standard"
+          type="number"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">deg/s</InputAdornment>,
+            inputProps: {
+              style: { textAlign: "right" },
+            },
+          }}
+          onChange={(e) => {
+            if (e.target) {
+              setVel(+e.target.value);
+              controllerClient.motor.velocity.post({
+                query: { vel: +e.target.value * DEG2RAD },
+              });
+            }
+          }}
+        />
+        <Typography>&nbsp;&nbsp;Acc&nbsp;</Typography>
+        <Slider
+          style={{ width: "15%" }}
+          sx={{ flexGrow: 1, marginRight: 2 }}
+          value={acc}
+          min={1}
+          max={MAX_ACC}
+          onChange={(_, v) => {
+            const nv = v as number;
+            setAcc(nv);
+            controllerClient.motor.acceleration.post({
+              query: { acc: acc * DEG2RAD },
+            });
+          }}
+        />
+        <TextField
+          style={{ width: "15%" }}
+          value={acc}
+          size="small"
+          variant="standard"
+          type="number"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">deg/s2</InputAdornment>
+            ),
+            inputProps: {
+              style: { textAlign: "right" },
+            },
+          }}
+          onChange={(e) => {
+            if (e.target) {
+              setAcc(+e.target.value);
+              controllerClient.motor.acceleration.post({
+                query: { acc: +e.target.value * DEG2RAD },
+              });
+            }
+          }}
         />
       </Box>
       <Grid container spacing={3}>
@@ -182,8 +271,8 @@ export function MotorPanel({ controllerClient }: Props) {
               target={panTarget}
               onChangeTarget={setPanTarget}
               icon={<SwapHorizIcon />}
-              min={-2.355 * RAD2DEG}
-              max={2.355 * RAD2DEG}
+              min={pan_min * RAD2DEG}
+              max={pan_max * RAD2DEG}
               disabled={!servoEnabled}
             />
             <JointControl
@@ -192,8 +281,8 @@ export function MotorPanel({ controllerClient }: Props) {
               target={tiltTarget}
               onChangeTarget={setTiltTarget}
               icon={<SwapVertIcon />}
-              min={-0.91 * RAD2DEG}
-              max={0.91 * RAD2DEG}
+              min={tilt_min * RAD2DEG}
+              max={tilt_max * RAD2DEG}
               disabled={!servoEnabled}
             />
             <Stack direction="row" spacing={1}>

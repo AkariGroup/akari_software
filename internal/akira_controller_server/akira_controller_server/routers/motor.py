@@ -9,6 +9,12 @@ router = APIRouter()
 
 class GetServoStatusResponse(BaseModel):
     enabled: bool
+    pan_min: float
+    pan_max: float
+    tilt_min: float
+    tilt_max: float
+    vel: float
+    acc: float
 
 
 class SetPositionsRequest(BaseModel):
@@ -28,8 +34,18 @@ def get_servo_status() -> GetServoStatusResponse:
 
     pan_servo = client.joints.pan_joint.get_servo_enabled()
     tilt_servo = client.joints.tilt_joint.get_servo_enabled()
+    pan_min, pan_max = client.joints.pan_joint.get_position_limit()
+    tilt_min, tilt_max = client.joints.tilt_joint.get_position_limit()
+    vel = client.joints.pan_joint.get_profile_velocity()
+    acc = client.joints.pan_joint.get_profile_acceleration()
     return GetServoStatusResponse(
         enabled=pan_servo and tilt_servo,
+        pan_min=pan_min,
+        pan_max=pan_max,
+        tilt_min=tilt_min,
+        tilt_max=tilt_max,
+        vel=vel,
+        acc=acc,
     )
 
 
@@ -52,6 +68,28 @@ def set_positions(request: SetPositionsRequest) -> None:
     client.joints.move_joint_positions(
         pan=request.pan,
         tilt=request.tilt,
+    )
+
+
+@router.post("/velocity")
+def set_velocity(vel: float) -> None:
+    context = get_context()
+    client = context.akari_client
+
+    client.joints.set_joint_velocities(
+        pan=vel,
+        tilt=vel,
+    )
+
+
+@router.post("/acceleration")
+def set_acceleration(acc: float) -> None:
+    context = get_context()
+    client = context.akari_client
+
+    client.joints.set_joint_accelerations(
+        pan=acc,
+        tilt=acc,
     )
 
 
