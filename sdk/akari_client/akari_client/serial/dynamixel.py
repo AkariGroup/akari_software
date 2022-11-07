@@ -1,7 +1,7 @@
 import dataclasses
 import math
 
-from ..joint_controller import Limit, RevoluteJointController
+from ..joint_controller import PositionLimit, RevoluteJointController
 from .dynamixel_communicator import DynamixelCommunicator
 
 PULSE_OFFSET = 2047
@@ -98,7 +98,7 @@ class DynamixelController(RevoluteJointController):
             DynamixelControlTable.MAX_POSITION_LIMIT, rad_to_dynamixel_pulse(upper_rad)
         )
 
-    def get_position_limit(self) -> Limit:
+    def get_position_limit(self) -> PositionLimit:
         """Positionの上限値と下限値を取得する。
 
         Returns:
@@ -110,7 +110,7 @@ class DynamixelController(RevoluteJointController):
         max = dynamixel_pulse_to_rad(
             self._read(DynamixelControlTable.MAX_POSITION_LIMIT)
         )
-        return Limit(min, max)
+        return PositionLimit(min, max)
 
     @property
     def joint_name(self) -> str:

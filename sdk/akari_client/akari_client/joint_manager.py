@@ -4,7 +4,7 @@ import enum
 import time
 from typing import Dict, Iterator, List, Optional, Sequence, Tuple, TypeVar
 
-from .joint_controller import Limit, RevoluteJointController
+from .joint_controller import PositionLimit, RevoluteJointController
 
 TValue = TypeVar("TValue")
 
@@ -55,8 +55,8 @@ class JointManager:
             controller = self._joints[joint_name]
             yield controller, value
 
-    def get_joint_limit(self) -> Dict[str, Limit]:
-        ret: Dict[str, Limit] = {}
+    def get_joint_limits(self) -> Dict[str, PositionLimit]:
+        ret: Dict[str, PositionLimit] = {}
         for joint_name, controller in self._joints.items():
             ret[joint_name] = controller.get_position_limit()
         return ret

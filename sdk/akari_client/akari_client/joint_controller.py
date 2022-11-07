@@ -2,7 +2,7 @@ import abc
 from typing import NamedTuple
 
 
-class Limit(NamedTuple):
+class PositionLimit(NamedTuple):
     min: float
     max: float
 
@@ -29,7 +29,7 @@ class RevoluteJointController(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def get_position_limit(self) -> Limit:
+    def get_position_limit(self) -> PositionLimit:
         """Positionの上限値と下限値を取得する。
 
         Returns:

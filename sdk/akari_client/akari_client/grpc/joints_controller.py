@@ -6,7 +6,7 @@ from akari_proto.grpc.error import deserialize_error
 from akari_proto.joints_controller_pb2_grpc import JointsControllerServiceStub
 from google.protobuf.empty_pb2 import Empty
 
-from ..joint_controller import Limit, RevoluteJointController
+from ..joint_controller import PositionLimit, RevoluteJointController
 from ._error import serializer
 
 
@@ -32,11 +32,11 @@ class GrpcJointController(RevoluteJointController):
         self._client = client
 
     @deserialize_error(serializer)
-    def get_position_limit(self) -> Limit:
+    def get_position_limit(self) -> PositionLimit:
         res: joints_controller_pb2.GetPositionLimitResponse = (
             self._client.stub.GetPositionLimit(self.joint_specifier)
         )
-        limit = Limit(min=res.min, max=res.max)
+        limit = PositionLimit(min=res.min, max=res.max)
         return limit
 
     @property
