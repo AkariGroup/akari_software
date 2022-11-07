@@ -7,9 +7,9 @@
 - name: Setup docker config.json
   copy:
     dest: "/home/{{ ansible_user }}/.docker/config.json"
+    src: config.json.enc
     mode: "0600"
-    content: |
-      {{ akari_docker_config }}
+    decrypt: yes
 
 - name: Create .config/akira
   file:
