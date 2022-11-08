@@ -110,8 +110,8 @@ export function MotorPanel({ controllerClient }: Props) {
   const pan_max = servoStatus?.pan_max ?? 2.355;
   const tilt_min = servoStatus?.tilt_min ?? -0.91;
   const tilt_max = servoStatus?.tilt_max ?? 0.91;
-  const [vel, setVel] = useState<number>(servoStatus?.vel ?? 5);
-  const [acc, setAcc] = useState<number>(servoStatus?.acc ?? 15);
+  const [vel, setVel] = useState<number>(servoStatus?.vel ?? 1000);
+  const [acc, setAcc] = useState<number>(servoStatus?.acc ?? 5);
 
   const toggleServo = async (enabled: boolean) => {
     setBusy(true);
