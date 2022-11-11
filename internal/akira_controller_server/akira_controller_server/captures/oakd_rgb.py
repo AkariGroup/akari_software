@@ -14,6 +14,7 @@ class RGBCapture:
         rgb_camera = pipeline.create(dai.node.ColorCamera)
         rgb_camera.setBoardSocket(dai.CameraBoardSocket.RGB)
         rgb_camera.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
+        rgb_camera.setIspScale(4, 9)
         rgb_camera.setVideoSize(640, 480)
 
         # video setting
