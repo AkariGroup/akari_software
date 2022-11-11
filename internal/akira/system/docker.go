@@ -210,3 +210,12 @@ func (d *DockerSystem) RemoveContainer(id ContainerId) error {
 
 	return nil
 }
+
+func (d *DockerSystem) CheckContainerRunning(id ContainerId) bool {
+	inspect, err := d.cli.ContainerInspect(context.Background(), string(id))
+	if err != nil {
+		return false
+	}
+
+	return inspect.State != nil && inspect.State.Running
+}

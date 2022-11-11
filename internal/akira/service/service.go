@@ -75,6 +75,8 @@ type Service interface {
 
 	GetOpenAddress(hostName string) (string, error)
 	GetOpenProjectAddress(hostName string, projectDir string) (string, error)
+
+	CheckAlive() error
 }
 
 type UserService interface {
