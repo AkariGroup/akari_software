@@ -32,6 +32,16 @@ func grpcClientConfigMount(etcDir string) mount.Mount {
 	}
 }
 
+func withOakdAccess(option system.CreateContainerOption) system.CreateContainerOption {
+	option.Mounts = append(option.Mounts, mount.Mount{
+		Type:   mount.TypeBind,
+		Source: "/dev/bus/usb",
+		Target: "/dev/bus/usb",
+	})
+	option.DeviceCgroupRules = append(option.DeviceCgroupRules, "c 189:* rmw")
+	return option
+}
+
 func akariRpcServerSystemServiceConfig(etcDir string) (ServiceConfig, system.CreateContainerOption, error) {
 	etcPath := filepath.Join(etcDir, AkariClientConfigHostRpcServer)
 	if _, err := os.Stat(etcPath); err != nil {
@@ -80,11 +90,6 @@ func akiraControllerServerServiceConfig(etcDir string) (ServiceConfig, system.Cr
 
 	mountsConfig := []mount.Mount{
 		grpcClientConfigMount(etcDir),
-		{
-			Type:   mount.TypeBind,
-			Source: "/dev",
-			Target: "/dev",
-		},
 	}
 	containerPort := fmt.Sprintf("%d/tcp", AkiraControllerServerServicePort)
 	serviceConfig := ServiceConfig{
@@ -102,8 +107,8 @@ func akiraControllerServerServiceConfig(etcDir string) (ServiceConfig, system.Cr
 		Mounts:          mountsConfig,
 		RequireRoot:     true,
 		BindHostGateway: true,
-		Privileged:      true,
 	}
+	containerOpts = withOakdAccess(containerOpts)
 
 	return serviceConfig, containerOpts, nil
 }
