@@ -3,6 +3,7 @@ import {
   IconButton,
   Link,
   Paper,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -19,6 +20,7 @@ import {
 import LaunchIcon from "@mui/icons-material/Launch";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useCallback, useState } from "react";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -30,16 +32,19 @@ type Props = {
   onStop: (target: Akira_protoService, terminate: boolean) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
+  onEdit?: (target: Akira_protoService) => void;
+  onAutoStart: (target: Akira_protoService) => void;
 };
 
 function Header() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>DisplayName</TableCell>
-        <TableCell>Service</TableCell>
-        <TableCell sx={{ width: 200 }}>Status</TableCell>
-        <TableCell sx={{ width: 170 }}></TableCell>
+        <TableCell width="20%">DisplayName</TableCell>
+        <TableCell width="30%">Service</TableCell>
+        <TableCell width="20%">Status</TableCell>
+        <TableCell width="10%">AutoStart</TableCell>
+        <TableCell width="20%"></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -172,6 +177,8 @@ type ServiceRowProps = {
   onStop: (target: Akira_protoService, terminate: boolean) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
+  onEdit?: (target: Akira_protoService) => void;
+  onAutoStart?: (target: Akira_protoService) => void;
 };
 
 function ServiceImageLink({ image }: { image?: Akira_protoServiceImage }) {
@@ -198,18 +205,37 @@ function ServiceRow({
   onStop,
   onLaunch,
   onRemove,
+  onEdit,
+  onAutoStart,
 }: ServiceRowProps) {
   return (
     <>
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-        <TableCell component="th">{service.displayName}</TableCell>
+        <TableCell
+          style={{ textDecoration: "underline" }}
+          component="th"
+          onClick={() => onEdit?.(service)}
+        >
+          {service.displayName}
+        </TableCell>
         <TableCell>
           <ServiceImageLink image={service.image} />
         </TableCell>
         <TableCell>
           <Status status={service.status} />
         </TableCell>
+        <TableCell>
+          <Switch
+            checked={service.autoStart}
+            onChange={() => onAutoStart?.(service)}
+          />
+        </TableCell>
         <TableCell align="right">
+          {!!onEdit ? (
+            <IconButton onClick={() => onEdit(service)}>
+              <EditIcon />
+            </IconButton>
+          ) : null}
           {!!onLaunch && service.capabilities?.includes("open") ? (
             <IconButton
               onClick={() => onLaunch(service)}
@@ -262,6 +288,8 @@ export function ServiceList(props: Props) {
               onStop={props.onStop}
               onLaunch={props.onLaunch}
               onRemove={props.onRemove}
+              onEdit={props.onEdit}
+              onAutoStart={props.onAutoStart}
             />
           ))}
         </TableBody>

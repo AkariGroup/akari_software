@@ -9,6 +9,10 @@ import grpc
 
 class JointsControllerServiceStub:
     def __init__(self, channel: grpc.Channel) -> None: ...
+    GetPositionLimit: grpc.UnaryUnaryMultiCallable[
+        akari_proto.joints_controller_pb2.JointSpecifier,
+        akari_proto.joints_controller_pb2.GetPositionLimitResponse]
+
     GetJointNames: grpc.UnaryUnaryMultiCallable[
         google.protobuf.empty_pb2.Empty,
         akari_proto.joints_controller_pb2.GetJointNamesResponse]
@@ -25,9 +29,17 @@ class JointsControllerServiceStub:
         akari_proto.joints_controller_pb2.SetProfileAccelerationRequest,
         google.protobuf.empty_pb2.Empty]
 
+    GetProfileAcceleration: grpc.UnaryUnaryMultiCallable[
+        akari_proto.joints_controller_pb2.JointSpecifier,
+        akari_proto.joints_controller_pb2.GetProfileAccelerationResponse]
+
     SetProfileVelocity: grpc.UnaryUnaryMultiCallable[
         akari_proto.joints_controller_pb2.SetProfileVelocityRequest,
         google.protobuf.empty_pb2.Empty]
+
+    GetProfileVelocity: grpc.UnaryUnaryMultiCallable[
+        akari_proto.joints_controller_pb2.JointSpecifier,
+        akari_proto.joints_controller_pb2.GetProfileVelocityResponse]
 
     SetGoalPosition: grpc.UnaryUnaryMultiCallable[
         akari_proto.joints_controller_pb2.SetGoalPositionRequest,
@@ -37,8 +49,18 @@ class JointsControllerServiceStub:
         akari_proto.joints_controller_pb2.JointSpecifier,
         akari_proto.joints_controller_pb2.GetPresentPositionResponse]
 
+    GetMovingState: grpc.UnaryUnaryMultiCallable[
+        akari_proto.joints_controller_pb2.JointSpecifier,
+        akari_proto.joints_controller_pb2.GetMovingStateResponse]
+
 
 class JointsControllerServiceServicer(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def GetPositionLimit(self,
+        request: akari_proto.joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> akari_proto.joints_controller_pb2.GetPositionLimitResponse: ...
+
     @abc.abstractmethod
     def GetJointNames(self,
         request: google.protobuf.empty_pb2.Empty,
@@ -64,10 +86,22 @@ class JointsControllerServiceServicer(metaclass=abc.ABCMeta):
     ) -> google.protobuf.empty_pb2.Empty: ...
 
     @abc.abstractmethod
+    def GetProfileAcceleration(self,
+        request: akari_proto.joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> akari_proto.joints_controller_pb2.GetProfileAccelerationResponse: ...
+
+    @abc.abstractmethod
     def SetProfileVelocity(self,
         request: akari_proto.joints_controller_pb2.SetProfileVelocityRequest,
         context: grpc.ServicerContext,
     ) -> google.protobuf.empty_pb2.Empty: ...
+
+    @abc.abstractmethod
+    def GetProfileVelocity(self,
+        request: akari_proto.joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> akari_proto.joints_controller_pb2.GetProfileVelocityResponse: ...
 
     @abc.abstractmethod
     def SetGoalPosition(self,
@@ -80,6 +114,12 @@ class JointsControllerServiceServicer(metaclass=abc.ABCMeta):
         request: akari_proto.joints_controller_pb2.JointSpecifier,
         context: grpc.ServicerContext,
     ) -> akari_proto.joints_controller_pb2.GetPresentPositionResponse: ...
+
+    @abc.abstractmethod
+    def GetMovingState(self,
+        request: akari_proto.joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> akari_proto.joints_controller_pb2.GetMovingStateResponse: ...
 
 
 def add_JointsControllerServiceServicer_to_server(servicer: JointsControllerServiceServicer, server: grpc.Server) -> None: ...

@@ -17,6 +17,7 @@ import { Link, NavLink } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import WorkIcon from "@mui/icons-material/Work";
 import AppsIcon from "@mui/icons-material/Apps";
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import {
   useSidebarSetValue,
   useSidebarValue,
@@ -78,6 +79,12 @@ function SidebarItems() {
           <AppsIcon />
         </ListItemIcon>
         <ListItemText primary="Services" />
+      </ListItemButton>
+      <ListItemButton component={NavLink} to="/controller">
+        <ListItemIcon>
+          <SportsEsportsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Controller" />
       </ListItemButton>
     </List>
   );

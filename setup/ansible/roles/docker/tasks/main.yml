@@ -40,6 +40,7 @@
       - docker-ce-cli={{ docker_version }}
       - containerd.io
       - docker-compose-plugin
+    allow_downgrade: true
   become: true
   notify: Restart docker
 

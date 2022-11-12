@@ -6,6 +6,7 @@ import {
   Akira_protoService,
 } from "../../api/@types";
 import { ServiceList } from "../../components/ServiceList";
+import { ServiceEditDrawer } from "./edit";
 import { useApiClient } from "../../hooks/api";
 import { ServiceCreateDrawer } from "./create";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,6 +20,8 @@ export function Services() {
     refreshInterval: 5 * 1000, // in ms
   });
   const [createDrawerOpened, setCreateDrawerOpened] = useState(false);
+  const [targetEditService, setTargetEditService] =
+    useState<Akira_protoService | null>(null);
   const setBusy = useSetBackdropValue();
 
   const onServiceCreate: SubmitHandler<Akira_protoCreateServiceRequest> =
@@ -59,7 +62,6 @@ export function Services() {
   const onStopService = useCallback(
     async (target: Akira_protoService, terminate: boolean) => {
       if (!client || !target.id) return;
-
       setBusy(true);
       try {
         await client.services._id(target.id).stop.post({
@@ -108,6 +110,23 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
+  const onAutoStartService = useCallback(
+    async (target: Akira_protoService) => {
+      if (!client || !target.id) return;
+
+      setBusy(true);
+      try {
+        await client.services._id(target.id).auto_start.post({
+          body: { autoStart: !target.autoStart },
+        });
+        mutate?.();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy, mutate]
+  );
+
   if (!data?.services || error) {
     return <></>;
   }
@@ -126,7 +145,16 @@ export function Services() {
         ) : (
           <></>
         )}
-
+        {targetEditService && (
+          <ServiceEditDrawer
+            service={targetEditService}
+            client={client}
+            onClose={() => {
+              mutate();
+              setTargetEditService(null);
+            }}
+          />
+        )}
         <Typography variant="h4" mb={1}>
           サービス
         </Typography>
@@ -150,6 +178,8 @@ export function Services() {
             onStop={onStopService}
             onLaunch={onLaunchService}
             onRemove={onRemoveService}
+            onEdit={setTargetEditService}
+            onAutoStart={onAutoStartService}
           />
         </Box>
         <Box>
@@ -160,6 +190,7 @@ export function Services() {
             services={data.services.filter((x) => x.type === "SYSTEM")}
             onStart={onStartService}
             onStop={onStopService}
+            onAutoStart={onAutoStartService}
           />
         </Box>
       </Stack>

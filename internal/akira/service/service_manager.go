@@ -158,6 +158,14 @@ func (m *serviceManager) scanServices() error {
 		)
 	}
 
+	if config, containerOpts, err := akiraControllerServerServiceConfig(m.opts.EtcDir); err != nil {
+		log.Error().Msgf("error while initializing controller server: %#v", err)
+	} else {
+		registerService(
+			NewSystemService(config, containerOpts, m.opts),
+		)
+	}
+
 	for _, f := range files {
 		if f.IsDir() {
 			continue

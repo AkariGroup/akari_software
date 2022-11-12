@@ -3,11 +3,14 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional, TypedDict
 
-from .color import Color, Colors
+from .color import Color
 from .position import Positions
 
 
 class M5ComDict(TypedDict):
+    """
+    M5から取得する情報を格納するDict。
+    """
     din0: bool
     din1: bool
     ain0: int
@@ -143,8 +146,8 @@ class M5StackClient(ABC):
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
         size: int = 3,
-        text_color: Optional[Color] = Colors.BLACK,
-        back_color: Optional[Color] = Colors.WHITE,
+        text_color: Optional[Color] = None,
+        back_color: Optional[Color] = None,
         refresh: bool = True,
         sync: bool = True,
     ) -> None:
@@ -152,12 +155,12 @@ class M5StackClient(ABC):
 
         Args:
             text: 表示する文字列。文字列の最後に空白を挿入したい場合は空白の後ろに"\n"をつけること。
-            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。``position.Positions``を用いた位置指定も可能。
-            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。``position.Positions``を用いた位置指定も可能。
-            size: 文字サイズを1-7の7段階で指定。
-            text_color: 文字色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。
-            back_color: 背景色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。
-            refresh: trueの場合画面全体をback_colorで更新する。falseの場合は現在の表示を維持しつつ、文字を描画する範囲のみ更新する。
+            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。``position.Positions``を用いた位置指定も可能。デフォルト値は中央揃え。
+            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。``position.Positions``を用いた位置指定も可能。デフォルト値は中央揃え。
+            size: 文字サイズを1-7の7段階で指定。デフォルト値は3。
+            text_color: 文字色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。値を指定しない場合、前回値を引き継ぐ。
+            back_color: 背景色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。値を指定しない場合、画面全体の背景色に合わせる。
+            refresh: trueの場合画面全体をback_colorで更新する。falseの場合は現在の表示を維持しつつ、文字を描画する範囲のみ更新する。デフォルト値は背景更新あり。
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
         example:
@@ -192,9 +195,10 @@ class M5StackClient(ABC):
 
         Args:
             filepath: M5のSDカード内のファイルパス。(例;"image/hoge.jpg")
-            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。``position.Positions``を用いた位置指定も可能。
-            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。``position.Positions``を用いた位置指定も可能。
+            pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。``position.Positions``を用いた位置指定も可能。デフォルト値は中央揃え。
+            pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。``position.Positions``を用いた位置指定も可能。デフォルト値は中央揃え。
             scale: 画像の拡大縮小倍率を指定。1.0で等倍表示。マイナスの値を入れた場合、画面サイズに合わせて自動でサイズ調整される。
+                   デフォルト値は自動サイズ調整となっている。
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
         example:

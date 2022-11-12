@@ -31,12 +31,12 @@ def main() -> None:
         while True:
             # STEP1. M5のSDカード内の画像'/logo320_ex.jpg'を表示
             print("STEP1. display /logo320_ex.jpg in SD")
-            # _filepathでM5のSDカード内の画像パスを指定
-            _filepath = "/logo320_ex.jpg"
+            # filepathでM5のSDカード内の画像パスを指定
+            filepath = "/logo320_ex.jpg"
             # set_display_imageを実行
             # pos_x, pos_y, sizeはデフォルト引数を使用
             # pos_x, pos_yはPositions.CENTER、scaleは画面サイズに合わせた表示がデフォルトとなる
-            m5.set_display_image(_filepath)
+            m5.set_display_image(filepath)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
@@ -44,14 +44,14 @@ def main() -> None:
 
             # STEP2. M5のSDカード内の画像'/logo320.jpg'を2倍、中央揃えで表示
             print("STEP2. display /logo320.jpg in SD at x2 size at middle center")
-            # _filepathでM5のSDカード内の画像パスを指定
-            _filepath = "/logo320.jpg"
-            # _scaleでサイズ指定。
-            _scale = 2.0
+            # filepathでM5のSDカード内の画像パスを指定
+            filepath = "/logo320.jpg"
+            # scaleでサイズ指定。
+            scale = 2.0
             # set_display_imageを実行
             # pos_x, pos_yはデフォルト引数を使用
             # pos_x, pos_yはPositions.CENTERがデフォルトとなる
-            m5.set_display_image(_filepath, scale=_scale)
+            m5.set_display_image(filepath, scale=scale)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
@@ -145,11 +145,11 @@ def main() -> None:
             # STEP8. M5のSDカード内の画像'/logo320.jpg'を表示
             print("STEP8. display /logo320.jpg in SD")
             # filepathでM5のSDカード内の画像パスを指定
-            _filepath = "/logo320.jpg"
+            filepath = "/logo320.jpg"
             # set_display_imageを実行
             # pos_x, pos_y, sizeはデフォルト引数を使用
             # pos_x, pos_yはPositions.CENTER、scaleは画面サイズに合わせた表示がデフォルトとなる
-            m5.set_display_image(_filepath)
+            m5.set_display_image(filepath)
             print("-> Set")
             # 2秒停止
             time.sleep(2)

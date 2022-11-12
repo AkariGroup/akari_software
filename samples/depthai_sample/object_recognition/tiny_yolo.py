@@ -23,7 +23,7 @@ import numpy as np
 
 # Get argument first
 nnPathDefault = str(
-    (Path(__file__).parent / Path("models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob"))
+    (Path(__file__).parent / Path("models/yolo-v3-tiny-tf_openvino_2021.4_6shave.blob"))
     .resolve()
     .absolute()
 )

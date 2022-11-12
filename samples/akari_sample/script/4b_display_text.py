@@ -27,6 +27,9 @@ def main() -> None:
         time.sleep(2)
         # アプリが終了されるまでループする。
         while True:
+
+            color = Colors.RED
+            m5.set_display_color(color)
             # STEP1. '1.AKARI'を左上表示
             print("STEP1. display 1.AKARI at top left")
             # textは'1.AKARI'
@@ -53,11 +56,11 @@ def main() -> None:
             print()
 
             # STEP2. '2.あかり'を中央に表示。位置、サイズ、文字色はデフォルト
-            # デフォルト引数では文字色は黒、背景色は白、文字サイズは3、背景リセットはTrueとなる。
+            # 文字色、背景色はSTEP.1と同様、文字サイズは3、背景リセットはTrueとなる。
             print("STEP2. display 2.あかり at middle center")
-            _text = "2.あかり"
+            text = "2.あかり"
             # set_display_textを実行
-            m5.set_display_text(_text)
+            m5.set_display_text(text)
             print("-> Set")
             # 2秒停止
             time.sleep(2)
@@ -166,17 +169,17 @@ def main() -> None:
             # STEP7. '7.灯'を中央に表示
             print("STEP7. display 7.灯 at middle center")
             # textは'7.灯'
-            _text = "7.灯"
+            text = "7.灯"
             # 文字サイズは6
             _size = 6
             # 文字色は白
             _text_color = Colors.WHITE
             # 背景色は黒
-            _back_color = Colors.BLACK
+            back_color = Colors.BLACK
             # set_display_textを実行
             # pos_x,pos_yのみデフォルト引数を使用
             m5.set_display_text(
-                _text, size=_size, text_color=_text_color, back_color=_back_color)
+                text, size=size)
             print("-> Set")
             # 2秒停止
             time.sleep(2)

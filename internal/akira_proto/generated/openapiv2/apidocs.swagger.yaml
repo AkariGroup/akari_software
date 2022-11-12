@@ -247,6 +247,25 @@ paths:
                 type: string
       tags:
         - AkariServiceService
+  /services/{id}/logs:
+    get:
+      operationId: AkariServiceService_GetServiceLog
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/akira_protoGetServiceLogResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      tags:
+        - AkariServiceService
   /services/{id}/open:
     get:
       operationId: AkariServiceService_Open
@@ -449,6 +468,11 @@ definitions:
         type: string
       manifest:
         $ref: '#/definitions/akira_protoProjectManifest'
+  akira_protoGetServiceLogResponse:
+    type: object
+    properties:
+      logs:
+        type: string
   akira_protoListImagesResponse:
     type: object
     properties:

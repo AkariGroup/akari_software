@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import pathlib
+import threading
 from typing import Iterator
 
 from dynamixel_sdk import COMM_SUCCESS, PacketHandler, PortHandler
@@ -35,6 +36,7 @@ class DynamixelCommunicator:
         """
         self._port_handler = port_handler
         self._packet_handler = packet_handler
+        self._lock = threading.Lock()
 
     @classmethod
     @contextlib.contextmanager
@@ -82,20 +84,21 @@ class DynamixelCommunicator:
         result: int
         err: int
 
-        if length == 1:
-            value, result, err = self._packet_handler.read1ByteTxRx(
-                self._port_handler, device_id, address
-            )
-        elif length == 2:
-            value, result, err = self._packet_handler.read2ByteTxRx(
-                self._port_handler, device_id, address
-            )
-        elif length == 4:
-            value, result, err = self._packet_handler.read4ByteTxRx(
-                self._port_handler, device_id, address
-            )
-        else:
-            raise ValueError(f"invalid length: {length}")
+        with self._lock:
+            if length == 1:
+                value, result, err = self._packet_handler.read1ByteTxRx(
+                    self._port_handler, device_id, address
+                )
+            elif length == 2:
+                value, result, err = self._packet_handler.read2ByteTxRx(
+                    self._port_handler, device_id, address
+                )
+            elif length == 4:
+                value, result, err = self._packet_handler.read4ByteTxRx(
+                    self._port_handler, device_id, address
+                )
+            else:
+                raise ValueError(f"invalid length: {length}")
 
         if result != COMM_SUCCESS:
             raise RuntimeError(self._packet_handler.getTxRxResult(result))
@@ -117,20 +120,21 @@ class DynamixelCommunicator:
         result: int
         err: int
 
-        if length == 1:
-            result, err = self._packet_handler.write1ByteTxRx(
-                self._port_handler, device_id, address, value
-            )
-        elif length == 2:
-            result, err = self._packet_handler.write2ByteTxRx(
-                self._port_handler, device_id, address, value
-            )
-        elif length == 4:
-            result, err = self._packet_handler.write4ByteTxRx(
-                self._port_handler, device_id, address, value
-            )
-        else:
-            raise ValueError(f"invalid length: {length}")
+        with self._lock:
+            if length == 1:
+                result, err = self._packet_handler.write1ByteTxRx(
+                    self._port_handler, device_id, address, value
+                )
+            elif length == 2:
+                result, err = self._packet_handler.write2ByteTxRx(
+                    self._port_handler, device_id, address, value
+                )
+            elif length == 4:
+                result, err = self._packet_handler.write4ByteTxRx(
+                    self._port_handler, device_id, address, value
+                )
+            else:
+                raise ValueError(f"invalid length: {length}")
 
         if result != COMM_SUCCESS:
             raise RuntimeError(self._packet_handler.getTxRxResult(result))

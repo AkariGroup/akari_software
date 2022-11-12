@@ -96,6 +96,14 @@ message CleanServiceRequest {
   string id = 1;
 }
 
+message GetServiceLogRequest {
+  string id = 1;
+}
+
+message GetServiceLogResponse {
+  string logs = 1;
+}
+
 message OpenRequest {
   string id = 1;
   string api_hostname = 2;
@@ -183,6 +191,12 @@ service AkariServiceService {
   rpc TerminateService(TerminateServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/services/{id}/terminate"
+    };
+  }
+
+  rpc GetServiceLog(GetServiceLogRequest) returns (GetServiceLogResponse) {
+    option (google.api.http) = {
+      get: "/services/{id}/logs"
     };
   }
 

@@ -25,6 +25,18 @@ class DynamixelControllerServiceServicer(
         return joint
 
     @serialize_error(serializer)
+    def GetPositionLimit(
+        self,
+        request: joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> joints_controller_pb2.GetPositionLimitResponse:
+        joint = self._select_joint(request)
+        return joints_controller_pb2.GetPositionLimitResponse(
+            min=joint.get_position_limit().min,
+            max=joint.get_position_limit().max,
+        )
+
+    @serialize_error(serializer)
     def GetJointNames(
         self,
         request: Empty,
@@ -66,6 +78,17 @@ class DynamixelControllerServiceServicer(
         return Empty()
 
     @serialize_error(serializer)
+    def GetProfileAcceleration(
+        self,
+        request: joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> joints_controller_pb2.GetProfileAccelerationResponse:
+        joint = self._select_joint(request)
+        return joints_controller_pb2.GetProfileAccelerationResponse(
+            rad_per_sec2=joint.get_profile_acceleration(),
+        )
+
+    @serialize_error(serializer)
     def SetProfileVelocity(
         self,
         request: joints_controller_pb2.SetProfileVelocityRequest,
@@ -74,6 +97,17 @@ class DynamixelControllerServiceServicer(
         joint = self._select_joint(request.target_joint)
         joint.set_profile_velocity(request.rad_per_sec)
         return Empty()
+
+    @serialize_error(serializer)
+    def GetProfileVelocity(
+        self,
+        request: joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> joints_controller_pb2.GetProfileVelocityResponse:
+        joint = self._select_joint(request)
+        return joints_controller_pb2.GetProfileVelocityResponse(
+            rad_per_sec=joint.get_profile_velocity(),
+        )
 
     @serialize_error(serializer)
     def SetGoalPosition(
@@ -94,4 +128,15 @@ class DynamixelControllerServiceServicer(
         joint = self._select_joint(request)
         return joints_controller_pb2.GetPresentPositionResponse(
             rad=joint.get_present_position(),
+        )
+
+    @serialize_error(serializer)
+    def GetMovingState(
+        self,
+        request: joints_controller_pb2.JointSpecifier,
+        context: grpc.ServicerContext,
+    ) -> joints_controller_pb2.GetMovingStateResponse:
+        joint = self._select_joint(request)
+        return joints_controller_pb2.GetMovingStateResponse(
+            moving=joint.get_moving_state(),
         )
