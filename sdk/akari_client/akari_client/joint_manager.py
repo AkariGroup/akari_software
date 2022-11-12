@@ -13,6 +13,7 @@ class AkariJoint(str, enum.Enum):
     """
     AKARIの関節名の一覧
     """
+
     PAN = "pan"
     TILT = "tilt"
 

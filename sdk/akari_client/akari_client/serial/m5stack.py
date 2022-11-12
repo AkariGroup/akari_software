@@ -5,7 +5,7 @@ import enum
 import time
 from typing import Any, Dict, Optional
 
-from ..color import Color, Colors
+from ..color import Color
 from ..m5stack_client import M5ComDict, M5StackClient
 from ..position import Positions
 from .m5stack_communicator import M5SerialCommunicator

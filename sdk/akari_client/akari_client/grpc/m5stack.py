@@ -2,11 +2,7 @@ import json
 from typing import Dict, Iterator, Optional, cast
 
 import grpc
-<<<<<<< HEAD
-from akari_client.color import Color, Colors
-=======
 from akari_client.color import Color
->>>>>>> main
 from akari_client.position import Positions
 from akari_proto import m5stack_pb2
 from akari_proto.grpc.error import deserialize_error
@@ -104,13 +100,8 @@ class GrpcM5StackClient(M5StackClient):
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
         size: int = 3,
-<<<<<<< HEAD
-        text_color: Optional[Color] = Colors.BLACK,
-        back_color: Optional[Color] = Colors.WHITE,
-=======
         text_color: Optional[Color] = None,
         back_color: Optional[Color] = None,
->>>>>>> main
         refresh: bool = True,
         sync: bool = True,
     ) -> None:

@@ -11,6 +11,7 @@ class M5ComDict(TypedDict):
     """
     M5から取得する情報を格納するDict。
     """
+
     din0: bool
     din1: bool
     ain0: int
