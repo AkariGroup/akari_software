@@ -185,99 +185,18 @@ export function MotorPanel({ controllerClient }: Props) {
     <Box>
       <CheckInitialFetch />
       <Typography variant="h6">Joint</Typography>
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          alignItems: "center",
-          marginBottom: 1,
-        }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={12} lg>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={servoEnabled}
-                  onChange={(_, v) => toggleServo(v)}
-                />
-              }
-              label="Servo"
-              value={!servoEnabled}
-            />
-          </Grid>
-          <Grid item xs={6} lg>
-            <Typography>&nbsp;Vel&nbsp;</Typography>
-            <Slider
-              sx={{ flexGrow: 1, marginRight: 2 }}
-              value={vel}
-              min={MIN_VEL}
-              max={MAX_VEL}
-              onChange={(_, v) => {
-                const nv = v as number;
-                sendVel(nv);
-              }}
-            />
-            <TextField
-              value={vel}
-              disabled={!servoEnabled}
-              size="small"
-              variant="standard"
-              type="number"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">deg/s</InputAdornment>
-                ),
-                inputProps: {
-                  style: { textAlign: "right" },
-                  step: "1",
-                },
-              }}
-              onChange={(e) => {
-                if (e.target) {
-                  sendVel(+e.target.value);
-                }
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} lg>
-            <Typography>&nbsp;&nbsp;Acc&nbsp;</Typography>
-            <Slider
-              sx={{ flexGrow: 1, marginRight: 2 }}
-              value={acc}
-              min={MIN_ACC}
-              max={MAX_ACC}
-              onChange={(_, v) => {
-                const nv = v as number;
-                sendAcc(nv);
-              }}
-            />
-            <TextField
-              value={acc}
-              disabled={!servoEnabled}
-              size="small"
-              variant="standard"
-              type="number"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">deg/s2</InputAdornment>
-                ),
-                inputProps: {
-                  style: { textAlign: "right" },
-                  step: "1",
-                },
-              }}
-              onChange={(e) => {
-                if (e.target) {
-                  sendAcc(+e.target.value);
-                }
-              }}
-            />
-          </Grid>
-        </Grid>
-      </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} lg="auto">
+          <FormControlLabel
+            control={
+              <Switch
+                checked={servoEnabled}
+                onChange={(_, v) => toggleServo(v)}
+              />
+            }
+            label="Servo"
+            value={!servoEnabled}
+          />
           <Joystick
             size={250}
             disabled={!servoEnabled}
@@ -289,6 +208,78 @@ export function MotorPanel({ controllerClient }: Props) {
           />
         </Grid>
         <Grid item xs={12} lg>
+          <Grid container spacing={3}>
+            <Grid item xs={6} lg>
+              <Typography>&nbsp;Vel&nbsp;</Typography>
+              <Slider
+                sx={{ flexGrow: 1, marginRight: 2 }}
+                value={vel}
+                min={MIN_VEL}
+                max={MAX_VEL}
+                disabled={!servoEnabled}
+                onChange={(_, v) => {
+                  const nv = v as number;
+                  sendVel(nv);
+                }}
+              />
+              <TextField
+                value={vel}
+                disabled={!servoEnabled}
+                size="small"
+                variant="standard"
+                type="number"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">deg/s</InputAdornment>
+                  ),
+                  inputProps: {
+                    style: { textAlign: "right" },
+                    step: "1",
+                  },
+                }}
+                onChange={(e) => {
+                  if (e.target) {
+                    sendVel(+e.target.value);
+                  }
+                }}
+              />
+            </Grid>
+            <Grid item xs={6} lg>
+              <Typography>&nbsp;&nbsp;Acc&nbsp;</Typography>
+              <Slider
+                sx={{ flexGrow: 1, marginRight: 2 }}
+                value={acc}
+                min={MIN_ACC}
+                max={MAX_ACC}
+                disabled={!servoEnabled}
+                onChange={(_, v) => {
+                  const nv = v as number;
+                  sendAcc(nv);
+                }}
+              />
+              <TextField
+                value={acc}
+                disabled={!servoEnabled}
+                size="small"
+                variant="standard"
+                type="number"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">deg/s2</InputAdornment>
+                  ),
+                  inputProps: {
+                    style: { textAlign: "right" },
+                    step: "1",
+                  },
+                }}
+                onChange={(e) => {
+                  if (e.target) {
+                    sendAcc(+e.target.value);
+                  }
+                }}
+              />
+            </Grid>
+          </Grid>
           <Stack>
             <JointControl
               name="Pan"
