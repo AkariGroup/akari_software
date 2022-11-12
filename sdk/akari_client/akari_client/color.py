@@ -33,9 +33,7 @@ class Color:
 
 
 class Colors(Color, enum.Enum):
-    """
-    M5のディスプレイの表示色のenum
-    """
+    """M5のディスプレイの表示色のenum"""
 
     BLACK = (0, 0, 0)
     NAVY = (0, 0, 127)

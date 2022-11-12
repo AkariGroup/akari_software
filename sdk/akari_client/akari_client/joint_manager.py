@@ -11,7 +11,7 @@ TValue = TypeVar("TValue")
 
 class AkariJoint(str, enum.Enum):
     """
-    AKARIの関節名の一覧
+    AKARIの関節名の一覧。
     """
 
     PAN = "pan"
@@ -35,7 +35,6 @@ class JointManager:
 
         Returns:
             List[str]: AKARIの全関節名のlist
-
         """
         return list(self._joints.keys())
 
@@ -69,6 +68,7 @@ class JointManager:
 
         Returns:
             Dict[str, PositionLimit]: 関節名と位置リミット(min,max)[rad]のDict
+
         """
         ret: Dict[str, PositionLimit] = {}
         for joint_name, controller in self._joints.items():
@@ -97,6 +97,7 @@ class JointManager:
 
         Returns:
             Dict[str, float]: 関節名と目標加速度[rad/s^2]のDict
+
         """
         ret: Dict[str, float] = {}
         for joint_name, controller in self._joints.items():
@@ -115,6 +116,7 @@ class JointManager:
         Args:
             pan: pan軸の速度 [rad/s]
             tilt: tilt軸の速度 [rad/s]
+
         """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_profile_velocity(value)
@@ -124,6 +126,7 @@ class JointManager:
 
         Returns:
             Dict[str, float]: 関節名と目標速度[rad/s]のDict
+
         """
         ret: Dict[str, float] = {}
         for joint_name, controller in self._joints.items():
