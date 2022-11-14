@@ -298,6 +298,9 @@ class M5StackClient(ABC):
     def get(self) -> M5ComDict:
         """M5から環境センサ、ヘッドGPIOの入力値、M5のボタンの状態を取得する。
 
+        Returns:
+            M5ComDict: M5から取得した各データを格納。
+
         example:
         >>> from akari_client.position import Positions
         >>> with AkariClient() as akari:
