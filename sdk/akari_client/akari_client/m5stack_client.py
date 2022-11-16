@@ -22,7 +22,7 @@ class M5ComDict(TypedDict):
     button_b: M5の前面のボタンBの入力。ボタンを押すとTrue、押していないとFalse。
     button_c: M5の前面のボタンCの入力。ボタンを押すとTrue、押していないとFalse。
     temperature: AKARI側面の環境センサモジュールの温度計測値。単位は℃。
-    pressure: AKARI側面の環境センサモジュールの観測絶対圧力。単位はhPa。
+    pressure: AKARI側面の環境センサモジュールの観測絶対圧力。単位はPa。
     brightness: AKARI側面の光センサユニットの観測明るさを4096段階で出力。0が最も明るい。
     time: データ取得した時間。M5のソフト起動時からの経過秒数を用いている。
     is_responce: akari_client()の各コマンド実行完了時のレスポンス。実行完了するとTrueを返す。
