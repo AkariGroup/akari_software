@@ -15,7 +15,12 @@ class RevoluteJointController(abc.ABC):
 
     @abc.abstractmethod
     def get_servo_enabled(self) -> bool:
-        """サーボの有効無効状態を取得する。"""
+        """サーボの有効無効状態を取得する。
+
+        Returns:
+            サーボ有効なら``True``、無効なら``False``
+
+        """
         ...
 
     @abc.abstractmethod
@@ -23,7 +28,7 @@ class RevoluteJointController(abc.ABC):
         """サーボの有効無効状態を設定する。
 
         Args:
-            enabled: ``True`` であればサーボを有効にする
+            enabled : ``True`` であればサーボを有効にする
 
         """
         ...
@@ -39,10 +44,11 @@ class RevoluteJointController(abc.ABC):
 
     @abc.abstractmethod
     def set_profile_acceleration(self, rad_per_sec2: float) -> None:
-        """Profile Acceleration を設定する。
+        """サーボの目標加速度を設定する。
 
         Args:
             rad_per_sec2: 加速度 [rad/s^2]
+
         """
         ...
 
@@ -50,17 +56,18 @@ class RevoluteJointController(abc.ABC):
     def get_profile_acceleration(self) -> float:
         """Profile Acceleration を取得する。
 
-        Retursn:
+        Returns:
             加速度 [rad/s^2]
         """
         ...
 
     @abc.abstractmethod
     def set_profile_velocity(self, rad_per_sec: float) -> None:
-        """Profile Velocity を設定する
+        """サーボの目標速度を設定する。
 
         Args:
             rad_per_sec: 速度 [rad/s]
+
         """
         ...
 
@@ -75,19 +82,22 @@ class RevoluteJointController(abc.ABC):
 
     @abc.abstractmethod
     def set_goal_position(self, rad: float) -> None:
-        """目標角度を設定する。
+        """サーボの目標角度を設定する。
+        ここで設定した値まで移動する。
 
         Args:
             rad: 目標角度 [rad]
+
         """
         ...
 
     @abc.abstractmethod
     def get_present_position(self) -> float:
-        """現在角度を取得する
+        """サーボの現在角度を取得する。
 
         Returns:
             現在角度 [rad]
+
         """
         ...
 

@@ -10,6 +10,10 @@ TValue = TypeVar("TValue")
 
 
 class AkariJoint(str, enum.Enum):
+    """
+    AKARIの関節名の一覧。
+    """
+
     PAN = "pan"
     TILT = "tilt"
 
@@ -27,7 +31,11 @@ class JointManager:
         return list(self._joints.values())
 
     def get_joint_names(self) -> List[str]:
-        """関節名を取得する。"""
+        """関節名を取得する。
+
+        Returns:
+            AKARIの全関節名のlist
+        """
         return list(self._joints.keys())
 
     @property
@@ -56,6 +64,12 @@ class JointManager:
             yield controller, value
 
     def get_joint_limits(self) -> Dict[str, PositionLimit]:
+        """サーボの位置リミットを取得する。
+
+        Returns:
+            関節名と位置リミット(min,max)[rad]のDict
+
+        """
         ret: Dict[str, PositionLimit] = {}
         for joint_name, controller in self._joints.items():
             ret[joint_name] = controller.get_position_limit()
@@ -68,10 +82,23 @@ class JointManager:
         tilt: Optional[float] = None,
         **kwargs: float,
     ) -> None:
+        """サーボの目標加速度を設定する。
+
+        Args:
+            pan: pan軸の加速度 [rad/s^2]
+            tilt: tilt軸の加速度 [rad/s^2]
+
+        """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_profile_acceleration(value)
 
     def get_joint_accelerations(self) -> Dict[str, float]:
+        """サーボの目標加速度を取得する。
+
+        Returns:
+            関節名と目標加速度[rad/s^2]のDict
+
+        """
         ret: Dict[str, float] = {}
         for joint_name, controller in self._joints.items():
             ret[joint_name] = controller.get_profile_acceleration()
@@ -84,10 +111,23 @@ class JointManager:
         tilt: Optional[float] = None,
         **kwargs: float,
     ) -> None:
+        """サーボの目標速度を設定する。
+
+        Args:
+            pan: pan軸の速度 [rad/s]
+            tilt: tilt軸の速度 [rad/s]
+
+        """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_profile_velocity(value)
 
     def get_joint_velocities(self) -> Dict[str, float]:
+        """サーボの目標速度を取得する。
+
+        Returns:
+            関節名と目標速度[rad/s]のDict
+
+        """
         ret: Dict[str, float] = {}
         for joint_name, controller in self._joints.items():
             ret[joint_name] = controller.get_profile_velocity()
@@ -101,6 +141,15 @@ class JointManager:
         tilt: Optional[float] = None,
         **kwargs: float,
     ) -> None:
+        """サーボの目標角度を設定する。
+        ここで設定した値まで移動する。
+
+        Args:
+            sync: Trueにすると、サーボの移動が完了するまで関数の終了を待機する。デフォルト値はFalse。
+            pan: pan軸の目標角度 [rad]
+            tilt: tilt軸の目標角度 [rad]
+
+        """
         for joint, position in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_goal_position(position)
         if sync:
@@ -115,6 +164,12 @@ class JointManager:
                 time.sleep(0.01)
 
     def get_joint_positions(self) -> Dict[str, float]:
+        """サーボの現在角度を取得する。
+
+        Returns:
+            サーボ名と現在角度[rad]のdict
+
+        """
         ret: Dict[str, float] = {}
         for joint_name, controller in self._joints.items():
             ret[joint_name] = controller.get_present_position()
@@ -128,13 +183,22 @@ class JointManager:
         tilt: Optional[bool] = None,
         **kwargs: bool,
     ) -> None:
+        """サーボの有効無効状態を設定する。
+
+        Args:
+            pan: pan軸のサーボ有効無効の設定。``True`` であればサーボを有効にする。
+            tilt: tilt軸のサーボ有効無効の設定。``True`` であればサーボを有効にする。
+
+        """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_servo_enabled(value)
 
     def enable_all_servo(self) -> None:
+        """全サーボを有効状態に設定する。"""
         for joint in self._joints.values():
             joint.set_servo_enabled(True)
 
     def disable_all_servo(self) -> None:
+        """全サーボを無効状態に設定する。"""
         for joint in self._joints.values():
             joint.set_servo_enabled(False)

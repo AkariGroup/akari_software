@@ -66,10 +66,11 @@ class DynamixelController(RevoluteJointController):
         communicator: DynamixelCommunicator,
     ) -> None:
         """
-        dynamixelのコントローラ
+        dynamixelのコントローラ。
 
         Args:
             communicator: dynamixel通信用クラス
+
         """
         self._joint_name = joint_name
         self._dynamixel_id = dynamixel_id
@@ -90,6 +91,7 @@ class DynamixelController(RevoluteJointController):
         Args:
             lower_rad: 下限値 [rad]
             upper_rad: 上限値 [rad]
+
         """
         self._write(
             DynamixelControlTable.MIN_POSITION_LIMIT, rad_to_dynamixel_pulse(lower_rad)
@@ -103,6 +105,7 @@ class DynamixelController(RevoluteJointController):
 
         Returns:
             現在角度の下限値、上限値 [rad]
+
         """
         min = dynamixel_pulse_to_rad(
             self._read(DynamixelControlTable.MIN_POSITION_LIMIT)
@@ -114,7 +117,12 @@ class DynamixelController(RevoluteJointController):
 
     @property
     def joint_name(self) -> str:
-        """関節名を取得する。"""
+        """関節名を取得する。
+
+        Returns:
+           関節名
+
+        """
         return self._joint_name
 
     def get_servo_enabled(self) -> bool:
@@ -125,7 +133,7 @@ class DynamixelController(RevoluteJointController):
         """サーボの有効無効状態を設定する。
 
         Args:
-            enabled: ``True`` であればサーボを有効にする
+            enabled: Trueであればサーボを有効にする
 
         """
         self._write(DynamixelControlTable.TORQUE_ENABLE, int(enabled))
@@ -135,6 +143,7 @@ class DynamixelController(RevoluteJointController):
 
         Args:
             rad_per_sec2: 加速度 [rad/s^2]
+
         """
         self._write(
             DynamixelControlTable.PROFILE_ACCELERATION,
@@ -144,18 +153,20 @@ class DynamixelController(RevoluteJointController):
     def get_profile_acceleration(self) -> float:
         """Profile Acceleration を取得する。
 
-        Retursn:
+        Returns:
             加速度 [rad/s^2]
+
         """
         return rev_per_min2_to_rad_per_sec2(
             self._read(DynamixelControlTable.PROFILE_ACCELERATION)
         )
 
     def set_profile_velocity(self, rad_per_sec: float) -> None:
-        """Profile Velocity を設定する
+        """Profile Velocity を設定する。
 
         Args:
             rad_per_sec: 速度 [rad/s]
+
         """
         self._write(
             DynamixelControlTable.PROFILE_VELOCITY,
@@ -165,36 +176,40 @@ class DynamixelController(RevoluteJointController):
     def get_profile_velocity(self) -> float:
         """Profile Velocity を取得する。
 
-        Retursn:
+        Returns:
             加速度 [rad/s^2]
+
         """
         return rev_per_min_to_rad_per_sec(
             self._read(DynamixelControlTable.PROFILE_VELOCITY)
         )
 
     def set_goal_position(self, rad: float) -> None:
-        """目標角度を設定する。
+        """サーボの目標角度を設定する。
 
         Args:
             rad: 目標角度 [rad]
+
         """
         self._write(DynamixelControlTable.GOAL_POSITION, rad_to_dynamixel_pulse(rad))
 
     def get_present_position(self) -> float:
-        """現在角度を取得する
+        """サーボの現在角度を取得する。
 
         Returns:
             現在角度 [rad]
+
         """
         return dynamixel_pulse_to_rad(
             self._read(DynamixelControlTable.PRESENT_POSITION)
         )
 
     def get_moving_state(self) -> bool:
-        """モーターが動作中かどうか判定する。
+        """サーボが動作中かどうか判定する。
 
         Returns:
-            現在のモーター状態。
+            現在のサーボ状態
+
         """
         val = bin(self._read(DynamixelControlTable.MOVING_STATUS))
         if len(val) < 7:
