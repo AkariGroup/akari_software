@@ -34,7 +34,7 @@ class JointManager:
         """関節名を取得する。
 
         Returns:
-            List[str]: AKARIの全関節名のlist
+            AKARIの全関節名のlist
         """
         return list(self._joints.keys())
 
@@ -67,7 +67,7 @@ class JointManager:
         """サーボの位置リミットを取得する。
 
         Returns:
-            Dict[str, PositionLimit]: 関節名と位置リミット(min,max)[rad]のDict
+            関節名と位置リミット(min,max)[rad]のDict
 
         """
         ret: Dict[str, PositionLimit] = {}
@@ -96,7 +96,7 @@ class JointManager:
         """サーボの目標加速度を取得する。
 
         Returns:
-            Dict[str, float]: 関節名と目標加速度[rad/s^2]のDict
+            関節名と目標加速度[rad/s^2]のDict
 
         """
         ret: Dict[str, float] = {}
@@ -125,7 +125,7 @@ class JointManager:
         """サーボの目標速度を取得する。
 
         Returns:
-            Dict[str, float]: 関節名と目標速度[rad/s]のDict
+            関節名と目標速度[rad/s]のDict
 
         """
         ret: Dict[str, float] = {}
@@ -167,7 +167,7 @@ class JointManager:
         """サーボの現在角度を取得する。
 
         Returns:
-            Dict[str, float]: サーボ名と現在角度[rad]のdict
+            サーボ名と現在角度[rad]のdict
 
         """
         ret: Dict[str, float] = {}

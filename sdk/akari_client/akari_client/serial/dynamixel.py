@@ -153,7 +153,7 @@ class DynamixelController(RevoluteJointController):
     def get_profile_acceleration(self) -> float:
         """Profile Acceleration を取得する。
 
-        Retursn:
+        Returns:
             加速度 [rad/s^2]
 
         """
@@ -176,7 +176,7 @@ class DynamixelController(RevoluteJointController):
     def get_profile_velocity(self) -> float:
         """Profile Velocity を取得する。
 
-        Retursn:
+        Returns:
             加速度 [rad/s^2]
 
         """
