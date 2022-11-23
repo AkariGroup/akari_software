@@ -117,7 +117,12 @@ class DynamixelController(RevoluteJointController):
 
     @property
     def joint_name(self) -> str:
-        """関節名を取得する。"""
+        """関節名を取得する。
+
+        Returns:
+           str: 関節名
+
+        """
         return self._joint_name
 
     def get_servo_enabled(self) -> bool:
@@ -128,7 +133,7 @@ class DynamixelController(RevoluteJointController):
         """サーボの有効無効状態を設定する。
 
         Args:
-            enabled: ``True`` であればサーボを有効にする
+            enabled: Trueであればサーボを有効にする
 
         """
         self._write(DynamixelControlTable.TORQUE_ENABLE, int(enabled))
@@ -180,7 +185,7 @@ class DynamixelController(RevoluteJointController):
         )
 
     def set_goal_position(self, rad: float) -> None:
-        """目標角度を設定する。
+        """サーボの目標角度を設定する。
 
         Args:
             rad: 目標角度 [rad]
@@ -189,7 +194,7 @@ class DynamixelController(RevoluteJointController):
         self._write(DynamixelControlTable.GOAL_POSITION, rad_to_dynamixel_pulse(rad))
 
     def get_present_position(self) -> float:
-        """現在角度を取得する。
+        """サーボの現在角度を取得する。
 
         Returns:
             現在角度 [rad]
@@ -200,10 +205,10 @@ class DynamixelController(RevoluteJointController):
         )
 
     def get_moving_state(self) -> bool:
-        """モーターが動作中かどうか判定する。
+        """サーボが動作中かどうか判定する。
 
         Returns:
-            現在のモーター状態
+            現在のサーボ状態
 
         """
         val = bin(self._read(DynamixelControlTable.MOVING_STATUS))
