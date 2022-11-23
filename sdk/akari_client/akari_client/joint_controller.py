@@ -96,7 +96,7 @@ class RevoluteJointController(abc.ABC):
         """サーボの現在角度を取得する。
 
         Returns:
-            float: 現在角度 [rad]
+            現在角度 [rad]
 
         """
         ...
