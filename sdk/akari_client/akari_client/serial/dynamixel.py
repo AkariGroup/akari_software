@@ -120,7 +120,7 @@ class DynamixelController(RevoluteJointController):
         """関節名を取得する。
 
         Returns:
-           str: 関節名
+           関節名
 
         """
         return self._joint_name
