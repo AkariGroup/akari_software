@@ -57,11 +57,11 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>     m5 = akari.m5stack
-        >>>     m5.set_dout(0, True)
-        # dout0がTrueになる。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>     m5 = akari.m5stack
+            >>>     m5.set_dout(0, True)
+            # dout0がTrueになる。
 
         """
         ...
@@ -76,11 +76,11 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>     m5 = akari.m5stack
-        >>>     m5.set_pwmout(0, 200)
-        # pwmout0が200になる。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>     m5 = akari.m5stack
+            >>>     m5.set_pwmout(0, 200)
+            # pwmout0が200になる。
 
         """
         ...
@@ -103,11 +103,11 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>     m5 = akari.m5stack
-        >>>     m5.set_allout(dout0=False, dout1=True, pwmout0=100)
-        # dout0がFalse, dout1がTrue, pwmout0が100になる。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>     m5 = akari.m5stack
+            >>>     m5.set_allout(dout0=False, dout1=True, pwmout0=100)
+            # dout0がFalse, dout1がTrue, pwmout0が100になる。
 
         """
         ...
@@ -121,11 +121,11 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>     m5 = akari.m5stack
-        >>>     m5.reset_allout()
-        # dout0がFalse, dout1がFalse, pwmout0が0になる。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>     m5 = akari.m5stack
+            >>>     m5.reset_allout()
+            # dout0がFalse, dout1がFalse, pwmout0が0になる。
 
         """
         ...
@@ -143,15 +143,15 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>     m5 = akari.m5stack
-        >>>     color = Colors.WHITE
-        >>>     m5.set_display_color(color)
-        # 画面色が白になる。
-        >>>     color = Color(red=0, green=100, blue=200)
-        >>>     m5.set_display_color(color)
-        # 画面色が指定したRGB値になる。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>     m5 = akari.m5stack
+            >>>     color = Colors.WHITE
+            >>>     m5.set_display_color(color)
+            # 画面色が白になる。
+            >>>     color = Color(red=0, green=100, blue=200)
+            >>>     m5.set_display_color(color)
+            # 画面色が指定したRGB値になる。
 
         """
         ...
@@ -181,21 +181,21 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> from akari_client.color import Colors
-        >>> from akari_client.position import Positions
-        >>> with AkariClient() as akari:
-        >>>    text = "AKARI"
-        >>>    pos_x = Positions.LEFT
-        >>>    pos_y = Positions.TOP
-        >>>    size = 4
-        >>>    text_color = Colors.WHITE
-        >>>    back_color = Colors.BLACK
-        >>>    refresh = True
-        >>>    m5.set_display_text(
-        ...        text, pos_x, pos_y, size, text_color, back_color, refresh
-        ...    )
-        # 画面に「AKARI」と表示される。
+            >>> from akari_client import AkariClient
+            >>> from akari_client.color import Colors
+            >>> from akari_client.position import Positions
+            >>> with AkariClient() as akari:
+            >>>    text = "AKARI"
+            >>>    pos_x = Positions.LEFT
+            >>>    pos_y = Positions.TOP
+            >>>    size = 4
+            >>>    text_color = Colors.WHITE
+            >>>    back_color = Colors.BLACK
+            >>>    refresh = True
+            >>>    m5.set_display_text(
+            ...        text, pos_x, pos_y, size, text_color, back_color, refresh
+            ...    )
+            # 画面に「AKARI」と表示される。
 
         """
         ...
@@ -220,15 +220,15 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> from akari_client.position import Positions
-        >>> with AkariClient() as akari:
-        >>>    filepath = "/logo320.jpg"
-        >>>    pos_x = Positions.LEFT
-        >>>    pos_y = Positions.TOP
-        >>>    scale = 0.75
-        >>>    m5.set_display_image(filepath, pos_x, pos_y, scale)
-        # 画面に"/logo320.jpg"の画像が表示される。
+            >>> from akari_client import AkariClient
+            >>> from akari_client.position import Positions
+            >>> with AkariClient() as akari:
+            >>>    filepath = "/logo320.jpg"
+            >>>    pos_x = Positions.LEFT
+            >>>    pos_y = Positions.TOP
+            >>>    scale = 0.75
+            >>>    m5.set_display_image(filepath, pos_x, pos_y, scale)
+            # 画面に"/logo320.jpg"の画像が表示される。
 
         """
         ...
@@ -252,11 +252,11 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>    filepath = "/mp3/hello.mp3"
-        >>>    m5.play_mp3(filepath)
-        # "/mp3/hello.mp3"が再生される。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>    filepath = "/mp3/hello.mp3"
+            >>>    m5.play_mp3(filepath)
+            # "/mp3/hello.mp3"が再生される。
 
         """
         ...
@@ -272,13 +272,13 @@ class M5StackClient(ABC):
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>    filepath = "/mp3/hello.mp3"
-        >>>    m5.play_mp3(filepath)
-        >>>    time.sleep(1)
-        >>>    m5.stop_mp3()
-        # 1秒後に再生停止する。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>    filepath = "/mp3/hello.mp3"
+            >>>    m5.play_mp3(filepath)
+            >>>    time.sleep(1)
+            >>>    m5.stop_mp3()
+            # 1秒後に再生停止する。
 
         """
         ...
@@ -288,10 +288,10 @@ class M5StackClient(ABC):
         """M5をリセットして再起動する。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>    m5.reset_m5()
-        # M5が再起動する。
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>    m5.reset_m5()
+            # M5が再起動する。
 
         """
         ...
@@ -304,11 +304,11 @@ class M5StackClient(ABC):
             M5ComDict: M5から取得した各データを格納したDict。
 
         Example:
-        >>> from akari_client import AkariClient
-        >>> with AkariClient() as akari:
-        >>>    data = m5.get()
-        >>>    print(data["temperature"])
-        31.675
+            >>> from akari_client import AkariClient
+            >>> with AkariClient() as akari:
+            >>>    data = m5.get()
+            >>>    print(data["temperature"])
+            31.675
 
         """
         ...
