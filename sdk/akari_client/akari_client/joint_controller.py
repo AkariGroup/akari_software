@@ -18,7 +18,7 @@ class RevoluteJointController(abc.ABC):
         """サーボの有効無効状態を取得する。
 
         Returns:
-            bool: サーボ有効なら``True``、無効なら``False``
+            サーボ有効なら``True``、無効なら``False``
 
         """
         ...
