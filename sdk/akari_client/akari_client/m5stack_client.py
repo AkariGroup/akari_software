@@ -56,7 +56,7 @@ class M5StackClient(ABC):
             value: デジタル出力の値。``False``で0V,``True``で3.3V出力。
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>     m5 = akari.m5stack
@@ -75,7 +75,7 @@ class M5StackClient(ABC):
             value: PWM出力の値。 0-255で指定し、0で0V、255で3.3Vを出力する。
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>     m5 = akari.m5stack
@@ -102,7 +102,7 @@ class M5StackClient(ABC):
             pwmout0: pwmout0の出力値。0-255で指定し、0で0V、255で3.3Vを出力する。
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>     m5 = akari.m5stack
@@ -120,7 +120,7 @@ class M5StackClient(ABC):
         Args:
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>     m5 = akari.m5stack
@@ -142,7 +142,7 @@ class M5StackClient(ABC):
             color: 背景色を指定。色は``color.Colors``から色名を引用する、もしくはRGBの数値指定も可能。
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>     m5 = akari.m5stack
@@ -180,20 +180,20 @@ class M5StackClient(ABC):
             refresh: trueの場合画面全体をback_colorで更新する。falseの場合は現在の表示を維持しつつ、文字を描画する範囲のみ更新する。デフォルト値は背景更新あり。
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> from akari_client.color import Colors
         >>> from akari_client.position import Positions
         >>> with AkariClient() as akari:
-        >>>    _text = "AKARI"
-        >>>    _pos_x = Positions.LEFT
-        >>>    _pos_y = Positions.TOP
-        >>>    _size = 4
-        >>>    _text_color = Colors.WHITE
-        >>>    _back_color = Colors.BLACK
-        >>>    _refresh = True
+        >>>    text = "AKARI"
+        >>>    pos_x = Positions.LEFT
+        >>>    pos_y = Positions.TOP
+        >>>    size = 4
+        >>>    text_color = Colors.WHITE
+        >>>    back_color = Colors.BLACK
+        >>>    refresh = True
         >>>    m5.set_display_text(
-        ...        _text, _pos_x, _pos_y, _size, _text_color, _back_color, _refresh
+        ...        text, pos_x, pos_y, size, text_color, back_color, refresh
         ...    )
         # 画面に「AKARI」と表示される。
 
@@ -219,15 +219,15 @@ class M5StackClient(ABC):
                    デフォルト値は自動サイズ調整となっている。
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> from akari_client.position import Positions
         >>> with AkariClient() as akari:
-        >>>    _filepath = "/logo320.jpg"
-        >>>    _pos_x = Positions.LEFT
-        >>>    _pos_y = Positions.TOP
-        >>>    _scale = 0.75
-        >>>    m5.set_display_image(_filepath, _pos_x, _pos_y, _scale)
+        >>>    filepath = "/logo320.jpg"
+        >>>    pos_x = Positions.LEFT
+        >>>    pos_y = Positions.TOP
+        >>>    scale = 0.75
+        >>>    m5.set_display_image(filepath, pos_x, pos_y, scale)
         # 画面に"/logo320.jpg"の画像が表示される。
 
         """
@@ -251,10 +251,10 @@ class M5StackClient(ABC):
             filepath: M5のSDカード内のファイルパス。(例;"mp3/hoge.mp3")
             sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
-        >>>    _filepath = "/mp3/hello.mp3"
+        >>>    filepath = "/mp3/hello.mp3"
         >>>    m5.play_mp3(filepath)
         # "/mp3/hello.mp3"が再生される。
 
@@ -271,10 +271,10 @@ class M5StackClient(ABC):
         Args:
             sync: 同期実行の指定。``True``の場合M5側で実行完了するまで関数の終了待ちを行う。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
-        >>>    _filepath = "/mp3/hello.mp3"
+        >>>    filepath = "/mp3/hello.mp3"
         >>>    m5.play_mp3(filepath)
         >>>    time.sleep(1)
         >>>    m5.stop_mp3()
@@ -287,7 +287,7 @@ class M5StackClient(ABC):
     def reset_m5(self) -> None:
         """M5をリセットして再起動する。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>    m5.reset_m5()
@@ -303,7 +303,7 @@ class M5StackClient(ABC):
         Returns:
             M5ComDict: M5から取得した各データを格納したDict。
 
-        example:
+        Example:
         >>> from akari_client import AkariClient
         >>> with AkariClient() as akari:
         >>>    data = m5.get()
