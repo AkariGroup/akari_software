@@ -120,7 +120,10 @@ class M5SerialCommunicator:
             return self._latest_msg is not None and self._latest_msg["is_response"]
 
         with self._condition:
-            self._condition.wait_for(_predicate)
+            while True:
+                self._condition.wait()
+                if _predicate():
+                    break
 
     def get(self) -> M5ComDict:
         now = self.current_time
