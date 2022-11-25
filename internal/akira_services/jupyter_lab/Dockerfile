@@ -4,11 +4,10 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl \
         git \
-        locales \
-        wget \
         libgl1-mesa-dev \
-        libopencv-dev \
-        python3-pip \
+	libopencv-dev \
+	locales \
+	wget \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
@@ -17,8 +16,6 @@ ENV LANG="ja_JP.UTF-8" \
     LC_ALL="ja_JP.UTF-8" \
     TZ="Asia/Tokyo"
 
-RUN pip install depthai==2.19.1.0
-RUN pip install opencv-python==4.6.0.66
 RUN pip install wheel
 RUN mkdir -p /wheel \
     && pip wheel -w /wheel jupyterlab==3.4.3
