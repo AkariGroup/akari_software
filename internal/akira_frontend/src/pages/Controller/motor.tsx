@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Joystick } from "react-joystick-component";
 import { AkiraControllerClient } from "./client";
 import { DEG2RAD, RAD2DEG } from "../../libs/math";
@@ -107,8 +107,8 @@ export function MotorPanel({ controllerClient }: Props) {
     }
   );
   const setBusy = useSetBackdropValue();
-  const servoEnabled = servoStatus?.enabled ?? false;
   const [initialFetch, setInitialFetch] = useState<boolean>(false);
+  const servoEnabled = servoStatus?.enabled ?? false;
   const pan_min = servoStatus?.pan_min ?? -1.047;
   const pan_max = servoStatus?.pan_max ?? 1.047;
   const tilt_min = servoStatus?.tilt_min ?? -0.576;
@@ -172,18 +172,16 @@ export function MotorPanel({ controllerClient }: Props) {
     });
   };
 
-  function CheckInitialFetch() {
+  useEffect(() => {
     if (!initialFetch && servoStatus) {
       setVel(Math.floor(servoStatus.vel * RAD2DEG));
       setAcc(Math.floor(servoStatus.acc * RAD2DEG));
       setInitialFetch(true);
     }
-    return <></>;
-  }
+  }, [initialFetch, servoStatus]);
 
   return (
     <Box>
-      <CheckInitialFetch />
       <Typography variant="h6">Joint</Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} lg="auto">
@@ -210,7 +208,7 @@ export function MotorPanel({ controllerClient }: Props) {
         <Grid item xs={12} lg>
           <Grid container spacing={3}>
             <Grid item xs={6} lg>
-              <Typography>&nbsp;Vel&nbsp;</Typography>
+              <Typography>Vel</Typography>
               <Slider
                 sx={{ flexGrow: 1, marginRight: 2 }}
                 value={vel}
@@ -245,7 +243,7 @@ export function MotorPanel({ controllerClient }: Props) {
               />
             </Grid>
             <Grid item xs={6} lg>
-              <Typography>&nbsp;&nbsp;Acc&nbsp;</Typography>
+              <Typography>Acc</Typography>
               <Slider
                 sx={{ flexGrow: 1, marginRight: 2 }}
                 value={acc}
