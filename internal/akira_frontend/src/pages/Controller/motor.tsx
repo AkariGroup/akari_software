@@ -160,14 +160,14 @@ export function MotorPanel({ controllerClient }: Props) {
   const sendVel = async (val: number) => {
     val = Math.floor(val);
     setVel(val);
-    controllerClient.motor.velocity.post({
+    await controllerClient.motor.velocity.post({
       query: { vel: val * DEG2RAD },
     });
   };
   const sendAcc = async (val: number) => {
     val = Math.floor(val);
     setAcc(val);
-    controllerClient.motor.acceleration.post({
+    await controllerClient.motor.acceleration.post({
       query: { acc: acc * DEG2RAD },
     });
   };
