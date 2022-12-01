@@ -10,7 +10,7 @@ from .position import Positions
 class M5ComDict(TypedDict):
     """
     M5から取得する情報を格納するDict。
-    
+
     :param din0: ヘッドのdin0ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
     :param din1: ヘッドのdin1ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
     :param ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-255の256段階にする。
@@ -27,6 +27,7 @@ class M5ComDict(TypedDict):
     :param brightness: AKARI側面の光センサユニットの観測明るさを4096段階で出力。0が最も明るい。
     :param time: データ取得した時間。M5のソフト起動時からの経過秒数を用いている。
     :param is_responce: akari_client()の各コマンド実行完了時のレスポンス。実行完了するとTrueを返す。
+
     """
 
     din0: bool
