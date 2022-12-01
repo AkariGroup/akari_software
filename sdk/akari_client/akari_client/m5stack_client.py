@@ -10,22 +10,23 @@ from .position import Positions
 class M5ComDict(TypedDict):
     """
     M5から取得する情報を格納するDict。
-    din0: ヘッドのdin0ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
-    din1: ヘッドのdin1ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
-    ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-255の256段階にする。
-    dout0: ヘッドのdout0ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
-    dout1: ヘッドのdout1ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
-    pwmout0: ヘッドのpwmout0ピンのPWM出力。0-255の256段階で0-3.3Vを出力可能。
-    general0:任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
-    general1:任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
-    button_a: M5の前面のボタンAの入力。ボタンを押すとTrue、押していないとFalse。
-    button_b: M5の前面のボタンBの入力。ボタンを押すとTrue、押していないとFalse。
-    button_c: M5の前面のボタンCの入力。ボタンを押すとTrue、押していないとFalse。
-    temperature: AKARI側面の環境センサモジュールの温度計測値。単位は℃。
-    pressure: AKARI側面の環境センサモジュールの観測絶対圧力。単位はPa。
-    brightness: AKARI側面の光センサユニットの観測明るさを4096段階で出力。0が最も明るい。
-    time: データ取得した時間。M5のソフト起動時からの経過秒数を用いている。
-    is_responce: akari_client()の各コマンド実行完了時のレスポンス。実行完了するとTrueを返す。
+    
+    :param din0: ヘッドのdin0ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
+    :param din1: ヘッドのdin1ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
+    :param ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-255の256段階にする。
+    :param dout0: ヘッドのdout0ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
+    :param dout1: ヘッドのdout1ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
+    :param pwmout0: ヘッドのpwmout0ピンのPWM出力。0-255の256段階で0-3.3Vを出力可能。
+    :param general0:任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
+    :param general1:任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
+    :param button_a: M5の前面のボタンAの入力。ボタンを押すとTrue、押していないとFalse。
+    :param button_b: M5の前面のボタンBの入力。ボタンを押すとTrue、押していないとFalse。
+    :param button_c: M5の前面のボタンCの入力。ボタンを押すとTrue、押していないとFalse。
+    :param temperature: AKARI側面の環境センサモジュールの温度計測値。単位は℃。
+    :param pressure: AKARI側面の環境センサモジュールの観測絶対圧力。単位はPa。
+    :param brightness: AKARI側面の光センサユニットの観測明るさを4096段階で出力。0が最も明るい。
+    :param time: データ取得した時間。M5のソフト起動時からの経過秒数を用いている。
+    :param is_responce: akari_client()の各コマンド実行完了時のレスポンス。実行完了するとTrueを返す。
     """
 
     din0: bool
