@@ -1,12 +1,15 @@
-FROM python:3.8-buster
+FROM ubuntu:20.04
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl \
         git \
+        libgl1-mesa-dev \
+        libopencv-dev \
         gnome-keyring \
         locales \
         wget \
+        python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
