@@ -5,9 +5,10 @@ RUN apt-get update && \
         curl \
         git \
         libgl1-mesa-dev \
-	libopencv-dev \
-	locales \
-	wget \
+        libopencv-dev \
+        locales \
+        wget \
+        python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
