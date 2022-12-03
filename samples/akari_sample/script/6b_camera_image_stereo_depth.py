@@ -5,10 +5,12 @@ Camera image stereo depth sample
 Created on 2022/04/16
 @author: Kazuya Yamamoto
 """
+from typing import Optional
 import cv2
 import depthai as dai
-import numpy as np
+import numpy
 
+MAX_DEPTH = 1500.0  # unit: [mm]
 
 def main() -> None:
     """
@@ -18,18 +20,20 @@ def main() -> None:
     pipeline = dai.Pipeline()
 
     # ソースとアウトプットの設定
-    camLeft = pipeline.create(dai.node.MonoCamera)
-    camRight = pipeline.create(dai.node.MonoCamera)
+    cam_left = pipeline.create(dai.node.MonoCamera)
+    cam_left.setResolution(dai.MonoCameraProperties.SensorResolution.THE_480_P)
+    cam_right = pipeline.create(dai.node.MonoCamera)
+    cam_right.setResolution(dai.MonoCameraProperties.SensorResolution.THE_480_P)
     stereo = pipeline.create(dai.node.StereoDepth)
-    xoutDepth = pipeline.create(dai.node.XLinkOut)
+    xout_depth = pipeline.create(dai.node.XLinkOut)
 
     # ストリーミング名設定
-    xoutDepth.setStreamName("depth")
+    xout_depth.setStreamName("depth")
 
     # ソースとアウトプットを接続
-    camLeft.out.link(stereo.left)
-    camRight.out.link(stereo.right)
-    stereo.disparity.link(xoutDepth.input)
+    cam_left.out.link(stereo.left)
+    cam_right.out.link(stereo.right)
+    stereo.depth.link(xout_depth.input)
 
     # デバイスをパイプラインに接続
     with dai.Device(pipeline) as device:
@@ -37,13 +41,12 @@ def main() -> None:
 
         # 画像を取得しウィンドウに描画
         while True:
-            frame = video.get().getCvFrame()
+            depth = video.get().getCvFrame()
             # フレームをカラーマップに割り当て
-            frame = (frame * (255 / stereo.initialConfig.getMaxDisparity())).astype(
-                np.uint8
-            )
-            frame = cv2.applyColorMap(frame, cv2.COLORMAP_JET)
-            cv2.imshow("video", frame)
+            depth[numpy.where(depth > MAX_DEPTH)] = 0
+            norm_depth = (depth * (255 / MAX_DEPTH)).astype(numpy.uint8)
+            colored_depth: numpy.ndarray = cv2.applyColorMap(norm_depth, cv2.COLORMAP_JET)
+            cv2.imshow("video", colored_depth)
 
             # qを押されたら終了
             if cv2.waitKey(1) == ord("q"):
