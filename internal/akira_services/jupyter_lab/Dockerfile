@@ -24,7 +24,7 @@ COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
 
 COPY sdk/ /resources/sdk/
 RUN pip install \
-        /resources/sdk/akari_client/ \
+        /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/jupyter_lab/entrypoint.sh /entrypoint.sh
 

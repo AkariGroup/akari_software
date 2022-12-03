@@ -22,7 +22,7 @@ RUN wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
 
 COPY sdk/ /resources/sdk/
 RUN pip install \
-        /resources/sdk/akari_client/ \
+        /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/vscode/entrypoint.sh /entrypoint.sh
 
