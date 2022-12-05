@@ -20,7 +20,6 @@ class DynamixelControllerConfig(pydantic.BaseModel):
 
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     type: Literal["dynamixel_serial"]
-    # TODO: Remove default value from `controllers` field
     controllers: List[DynamixelControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/ttyUSB_dynamixel")
     baudrate: int = 1000000
