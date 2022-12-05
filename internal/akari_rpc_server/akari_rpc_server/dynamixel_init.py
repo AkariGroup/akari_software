@@ -10,13 +10,13 @@ from akari_client.serial.dynamixel import (
 )
 
 _logger = logging.getLogger(__name__)
-GUESS_BAUDRATES = [9600, 57600, 115200, 1000000, 2000000, 3000000, 4000000, 4500000]
+BAUDRATE_GUESSES = [9600, 57600, 115200, 1000000, 2000000, 3000000, 4000000, 4500000]
 
 
 def initialize_baudrate(config: JointManagerDynamixelSerialConfig) -> None:
     dynamixel_ids = [c.dynamixel_id for c in config.controllers]
 
-    for guess in GUESS_BAUDRATES:
+    for guess in BAUDRATE_GUESSES:
         try:
             with DynamixelCommunicator.open(baudrate=guess) as comm:
                 control = DynamixelControlTable.TORQUE_ENABLE
