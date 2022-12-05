@@ -5,7 +5,7 @@ from typing import List, Literal, Optional, Union
 
 import pydantic
 
-from .joint_manager import AkariJoint, JointManager
+from .joint_manager import JointManager
 from .m5stack_client import M5StackClient
 
 _logger = logging.getLogger(__name__)
