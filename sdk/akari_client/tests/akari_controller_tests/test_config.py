@@ -47,4 +47,3 @@ def test_default_serial_config() -> None:
     assert config.joint_manager is not None
     assert config.m5stack is not None
     assert isinstance(config.joint_manager, JointManagerDynamixelSerialConfig)
-    assert len(config.joint_manager.controllers) == 2
