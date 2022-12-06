@@ -81,14 +81,17 @@ class M5StackSerialClient(M5StackClient):
     def set_allout(
         self,
         *,
-        dout0: bool,
-        dout1: bool,
-        pwmout0: int,
+        dout0: Optional[bool] = None,
+        dout1: Optional[bool] = None,
+        pwmout0: Optional[int] = None,
         sync: bool = True,
     ) -> None:
-        self._pin_out.dout0 = dout0
-        self._pin_out.dout1 = dout1
-        self._pin_out.pwmout0 = pwmout0
+        if dout0 is not None:
+            self._pin_out.dout0 = dout0
+        if dout1 is not None:
+            self._pin_out.dout1 = dout1
+        if pwmout0 is not None:
+            self._pin_out.pwmout0 = pwmout0
 
         self._write_pin_out(sync=sync)
 

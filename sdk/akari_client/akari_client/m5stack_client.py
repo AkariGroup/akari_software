@@ -91,9 +91,9 @@ class M5StackClient(ABC):
     def set_allout(
         self,
         *,
-        dout0: bool,
-        dout1: bool,
-        pwmout0: int,
+        dout0: Optional[bool] = None,
+        dout1: Optional[bool] = None,
+        pwmout0: Optional[int] = None,
         sync: bool = True,
     ) -> None:
         """ヘッド部GPIOピンの出力をまとめて設定する。
