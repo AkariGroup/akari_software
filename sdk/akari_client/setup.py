@@ -19,5 +19,10 @@ setup(
             "grpcio==1.44.0",
             "protobuf==3.19.3",
         ],
+        "depthai": [
+            "matplotlib==3.6.2",
+            "depthai==2.19.1.0",
+            "opencv-python-headless==4.6.0.66",
+        ],
     },
 )
