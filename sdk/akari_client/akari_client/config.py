@@ -5,7 +5,7 @@ from typing import List, Literal, Optional, Union
 
 import pydantic
 
-from .joint_manager import AkariJoint, JointManager
+from .joint_manager import JointManager
 from .m5stack_client import M5StackClient
 
 _logger = logging.getLogger(__name__)
@@ -14,26 +14,13 @@ _logger = logging.getLogger(__name__)
 class DynamixelControllerConfig(pydantic.BaseModel):
     joint_name: str
     dynamixel_id: int
-
-
-_DEFAULT_DYNAMIXEL_CONTROLLER_CONFIG: List[DynamixelControllerConfig] = [
-    DynamixelControllerConfig(
-        joint_name=AkariJoint.PAN,
-        dynamixel_id=1,
-    ),
-    DynamixelControllerConfig(
-        joint_name=AkariJoint.TILT,
-        dynamixel_id=2,
-    ),
-]
+    min_position_limit: float
+    max_position_limit: float
 
 
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     type: Literal["dynamixel_serial"]
-    # TODO: Remove default value from `controllers` field
-    controllers: List[DynamixelControllerConfig] = pydantic.Field(
-        default=_DEFAULT_DYNAMIXEL_CONTROLLER_CONFIG
-    )
+    controllers: List[DynamixelControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/ttyUSB_dynamixel")
     baudrate: int = 1000000
     protocol_version: float = 2.0
