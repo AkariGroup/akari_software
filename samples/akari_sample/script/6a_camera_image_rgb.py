@@ -18,23 +18,22 @@ def main() -> None:
     pipeline = dai.Pipeline()
 
     # ソースとアウトプットの設定
-    camRgb = pipeline.create(dai.node.ColorCamera)
-    xoutVideo = pipeline.create(dai.node.XLinkOut)
-
-    # ストリーミング名設定
-    xoutVideo.setStreamName("video")
+    cam_rgb = pipeline.create(dai.node.ColorCamera)
+    xout_video = pipeline.create(dai.node.XLinkOut)
 
     # RGBのカメラ、1080P、解像度1920x1080を指定
-    camRgb.setBoardSocket(dai.CameraBoardSocket.RGB)
-    camRgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
-    camRgb.setVideoSize(1920, 1080)
+    cam_rgb.setBoardSocket(dai.CameraBoardSocket.RGB)
+    cam_rgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
+    cam_rgb.setVideoSize(1920, 1080)
+    # ソースとアウトプットを接続
+    cam_rgb.video.link(xout_video.input)
 
     # キューのブロッキングなし、キューサイズ１を指定
-    xoutVideo.input.setBlocking(False)
-    xoutVideo.input.setQueueSize(1)
+    xout_video.input.setBlocking(False)
+    xout_video.input.setQueueSize(1)
+    # ストリーミング名設定
+    xout_video.setStreamName("video")
 
-    # ソースとアウトプットを接続
-    camRgb.video.link(xoutVideo.input)
 
     # デバイスをパイプラインに接続
     with dai.Device(pipeline) as device:
