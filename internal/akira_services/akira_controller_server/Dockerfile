@@ -1,4 +1,9 @@
-FROM python:3.8-slim-buster
+FROM ubuntu:20.04
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        python3-pip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY sdk/akari_proto /resources/sdk/akari_proto
 COPY sdk/akari_client /resources/sdk/akari_client
