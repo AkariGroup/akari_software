@@ -1,0 +1,25 @@
+name: 'Build akira images'
+description: 'Build akira images'
+inputs:
+  compose-path:
+    description: 'A path to docker-compose file'
+    required: true
+  dryrun:
+    description: 'Do not push images if the value is set'
+    required: true
+env:
+  AKIRA_IMAGE_TAG: v1
+runs:
+  using: 'composite'
+  steps:
+    - name: Build images
+      run: |
+        source internal/docker/env.sh
+        docker compose -f ${{ inputs.compose-path }} build
+      shell: bash
+    - name: Push images
+      run: |
+        source internal/docker/env.sh
+        docker compose -f ${{ inputs.compose-path }} push
+      shell: bash
+      if: ${{ ! fromJson(inputs.dryrun) }}

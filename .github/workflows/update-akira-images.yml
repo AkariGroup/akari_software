@@ -1,0 +1,41 @@
+name: Update akira docker images
+on:
+  workflow_dispatch:
+    dryrun:
+      type: boolean
+      description: 'Do not push images if the value is set'
+      default: false
+      required: false
+
+jobs:
+  update-akira-image:
+    name: Update docker images
+    timeout-minutes: 30
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: false
+    - name: Locate fake files
+      run: |
+        echo "none" > internal/docker/.docker_credential
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build and push akira images
+      uses: ./.github/actions/build-akira-images
+      with:
+        compose-path: internal/docker/docker-compose.dev.yml
+        dryrun: ${{ github.event_name != 'workflow_dispatch' || github.events.inputs.dryrun }}
+    - name: Build and push akira-service images
+      uses: ./.github/actions/build-akira-images
+      with:
+        compose-path: internal/akira_services/docker-compose.image.yml
+        dryrun: ${{ github.event_name != 'workflow_dispatch' || github.events.inputs.dryrun }}
+    - name: Post a notification
+      run: |
+        curl -X POST \
+          --data-urlencode 'payload={"text": "<!channel> Published new akira images (commit hash: ${{ github.sha }})"}' \
+          ${{ secrets.AKIRA_PUSH_NOTIFICATION_ENDPOINT }}
