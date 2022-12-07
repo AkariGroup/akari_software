@@ -1,11 +1,12 @@
 name: Update akira docker images
 on:
   workflow_dispatch:
-    dryrun:
-      type: boolean
-      description: 'Do not push images if the value is set'
-      default: false
-      required: false
+    inputs:
+      dryrun:
+        type: boolean
+        description: 'Do not push images if the value is set'
+        default: false
+        required: false
 
 jobs:
   update-akira-image:
