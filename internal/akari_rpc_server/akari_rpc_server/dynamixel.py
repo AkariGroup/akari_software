@@ -1,24 +1,49 @@
-from typing import Sequence
+from functools import lru_cache
+from typing import List, Mapping, cast
 
 import grpc
+from akari_client.config import JointManagerDynamixelSerialConfig
+from akari_client.joint_manager import JointManager
 from akari_client.serial.dynamixel import DynamixelController
 from akari_proto import joints_controller_pb2, joints_controller_pb2_grpc
 from akari_proto.grpc.error import serialize_error
 from google.protobuf.empty_pb2 import Empty
 
+from . import dynamixel_init
 from ._error import serializer
 
 
 class DynamixelControllerServiceServicer(
     joints_controller_pb2_grpc.JointsControllerServiceServicer
 ):
-    def __init__(self, joints: Sequence[DynamixelController]) -> None:
-        self._joints = {j.joint_name: j for j in joints}
+    def __init__(
+        self, config: JointManagerDynamixelSerialConfig, joint_manager: JointManager
+    ) -> None:
+        self._config = config
+        self._joint_manager = joint_manager
+
+    @lru_cache(1)
+    def _initialize_joints(self) -> Mapping[str, DynamixelController]:
+        # NOTE: When an exception is thrown in functions, `lru_cache` doesn't memoize the value
+        # (i.e. the function is called again in that case)
+        dynamixel_init.initialize_baudrate(self._config)
+
+        jcs = self._joint_manager.joint_controllers
+        assert all(isinstance(j, DynamixelController) for j in jcs)
+        joint_controllers = cast(List[DynamixelController], jcs)
+
+        dynamixel_init.initialize_joint_limit(
+            joint_controllers,
+            self._config,
+        )
+        mapping = {j.joint_name: j for j in joint_controllers}
+        return mapping
 
     def _select_joint(
         self, specifier: joints_controller_pb2.JointSpecifier
     ) -> DynamixelController:
-        joint = self._joints.get(specifier.joint_name)
+        joints = self._initialize_joints()
+        joint = joints.get(specifier.joint_name)
         if joint is None:
             raise KeyError(f"Invalid joint name: {specifier.joint_name}")
 
@@ -42,8 +67,9 @@ class DynamixelControllerServiceServicer(
         request: Empty,
         context: grpc.ServicerContext,
     ) -> joints_controller_pb2.GetJointNamesResponse:
+        controllers = self._config.controllers
         return joints_controller_pb2.GetJointNamesResponse(
-            joint_names=list(self._joints.keys()),
+            joint_names=[c.joint_name for c in controllers],
         )
 
     @serialize_error(serializer)
