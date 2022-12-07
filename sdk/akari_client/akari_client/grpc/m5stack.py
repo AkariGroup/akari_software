@@ -62,18 +62,21 @@ class GrpcM5StackClient(M5StackClient):
     def set_allout(
         self,
         *,
-        dout0: bool,
-        dout1: bool,
-        pwmout0: int,
+        dout0: Optional[bool] = None,
+        dout1: Optional[bool] = None,
+        pwmout0: Optional[int] = None,
         sync: bool = True,
     ) -> None:
-        binary_pins: Dict[str, bool] = {
-            "dout0": dout0,
-            "dout1": dout1,
-        }
-        int_pins: Dict[str, int] = {
-            "pwmout0": pwmout0,
-        }
+        binary_pins: Dict[str, bool] = {}
+        int_pins: Dict[str, int] = {}
+
+        if dout0 is not None:
+            binary_pins["dout0"] = dout0
+        if dout1 is not None:
+            binary_pins["dout1"] = dout1
+        if pwmout0 is not None:
+            int_pins["pwmout0"] = pwmout0
+
         request = m5stack_pb2.SetPinOutRequest(
             binary_pins=binary_pins,
             int_pins=int_pins,
