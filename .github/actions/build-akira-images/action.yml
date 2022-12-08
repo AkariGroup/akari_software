@@ -7,8 +7,6 @@ inputs:
   dryrun:
     description: 'Do not push images if the value is set'
     required: true
-env:
-  AKIRA_IMAGE_TAG: v1
 runs:
   using: 'composite'
   steps:
@@ -17,9 +15,13 @@ runs:
         source internal/docker/env.sh
         docker compose -f ${{ inputs.compose-path }} build
       shell: bash
+      env:
+        AKIRA_IMAGE_TAG: v1
     - name: Push images
       run: |
         source internal/docker/env.sh
         docker compose -f ${{ inputs.compose-path }} push
       shell: bash
       if: ${{ ! fromJson(inputs.dryrun) }}
+      env:
+        AKIRA_IMAGE_TAG: v1
