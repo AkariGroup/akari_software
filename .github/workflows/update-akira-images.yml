@@ -1,12 +1,6 @@
 name: Update akira docker images
 on:
   workflow_dispatch:
-    inputs:
-      dryrun:
-        type: boolean
-        description: 'Do not push images if the value is set'
-        default: false
-        required: false
 
 jobs:
   update-akira-image:
@@ -29,12 +23,10 @@ jobs:
       uses: ./.github/actions/build-akira-images
       with:
         compose-path: internal/docker/docker-compose.dev.yml
-        dryrun: ${{ github.event_name != 'workflow_dispatch' || github.events.inputs.dryrun }}
     - name: Build and push akira-service images
       uses: ./.github/actions/build-akira-images
       with:
         compose-path: internal/akira_services/docker-compose.image.yml
-        dryrun: ${{ github.event_name != 'workflow_dispatch' || github.events.inputs.dryrun }}
     - name: Post a notification
       run: |
         curl -X POST \
