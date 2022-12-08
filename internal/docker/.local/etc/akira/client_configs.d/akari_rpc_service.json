@@ -8,14 +8,14 @@
             {
                 "joint_name": "pan",
                 "dynamixel_id": 1,
-                "min_position_limit": -2.355,
-                "max_position_limit": 2.355
+                "min_position_limit": -1.047,
+                "max_position_limit": 1.047
             },
             {
                 "joint_name": "tilt",
                 "dynamixel_id": 2,
-                "min_position_limit": -0.91,
-                "max_position_limit": 0.91
+                "min_position_limit": -0.576,
+                "max_position_limit": 0.576
             }
         ]
     },
