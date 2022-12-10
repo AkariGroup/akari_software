@@ -363,10 +363,6 @@ void subSerial(void *arg)
         case PLAYMP3:
           file = new AudioFileSourceSD(rec["mp3"]["pth"].as<char *>());
           id3 = new AudioFileSourceID3(file);
-          out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
-          out->SetGain(0.3);
-          out->SetOutputModeMono(true);
-          mp3 = new AudioGeneratorMP3();
           mp3->begin(id3, out);
           commandFlg = true;
           break;
@@ -474,7 +470,7 @@ void setup()
   lcd.begin();
   Wire.begin();
   lcd.setRotation(1);
-  lcd.setBrightness(255);
+  lcd.setBrightness(64);
   lcd.setColorDepth(24);
   lcd.drawJpgFile(SD, "/logo320_ex.jpg");
   qmp6988.init();
@@ -522,13 +518,10 @@ void setup()
   xMutex = xSemaphoreCreateMutex();
   lcd.drawJpgFile(SD, "/logo320.jpg");
   delay(1);
-  file = new AudioFileSourceSD("/booted.mp3");
-  id3 = new AudioFileSourceID3(file);
   out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
   out->SetGain(0.3);
   out->SetOutputModeMono(true);
   mp3 = new AudioGeneratorMP3();
-  mp3->begin(id3, out);
   loopStart = millis();
   //esp32の各コアにタスク割当
   xTaskCreatePinnedToCore(pubSerial, "pubSerial", 8192, NULL, 1, NULL, 0);
