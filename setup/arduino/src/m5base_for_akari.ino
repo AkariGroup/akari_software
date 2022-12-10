@@ -465,8 +465,6 @@ void setup()
   delay(500);
 
   M5.Lcd.setTextFont(2);
-  M5.Lcd.printf("Sample MP3 playback begins...\n");
-  Serial.printf("Sample MP3 playback begins...\n");
   lcd.begin();
   Wire.begin();
   lcd.setRotation(1);
