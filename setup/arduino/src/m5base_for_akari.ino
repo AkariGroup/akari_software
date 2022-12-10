@@ -470,7 +470,7 @@ void setup()
   lcd.begin();
   Wire.begin();
   lcd.setRotation(1);
-  lcd.setBrightness(64);
+  lcd.setBrightness(128);
   lcd.setColorDepth(24);
   lcd.drawJpgFile(SD, "/logo320_ex.jpg");
   qmp6988.init();
