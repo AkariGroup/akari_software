@@ -35,6 +35,7 @@ class JointManager:
 
         Returns:
             AKARIの全関節名のlist
+
         """
         return list(self._joints.keys())
 
@@ -69,6 +70,13 @@ class JointManager:
         Returns:
             関節名と位置リミット(min,max)[rad]のDict
 
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> print(joints.get_joint_positions())
+            # 各軸のリミット値が出力される
+
         """
         ret: Dict[str, PositionLimit] = {}
         for joint_name, controller in self._joints.items():
@@ -88,6 +96,13 @@ class JointManager:
             pan: pan軸の加速度 [rad/s^2]
             tilt: tilt軸の加速度 [rad/s^2]
 
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> joints.set_joint_accelerations(pan=10, tilt=8)
+            # pan軸の目標加速度が10rad/s^2, tilt軸の目標加速度が8rad/s^2
+
         """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_profile_acceleration(value)
@@ -97,6 +112,13 @@ class JointManager:
 
         Returns:
             関節名と目標加速度[rad/s^2]のDict
+
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> print(joints.get_joint_accelerations())
+            # 各軸の目標加速度値が出力される
 
         """
         ret: Dict[str, float] = {}
@@ -117,6 +139,13 @@ class JointManager:
             pan: pan軸の速度 [rad/s]
             tilt: tilt軸の速度 [rad/s]
 
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> joints.set_joint_velocities(pan=10, tilt=8)
+            # pan軸の目標加速度が10rad/s^2, tilt軸の目標加速度が8rad/s^2
+
         """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_profile_velocity(value)
@@ -126,6 +155,13 @@ class JointManager:
 
         Returns:
             関節名と目標速度[rad/s]のDict
+
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> print(joints.get_joint_velocities())
+            # 各軸の目標速度値が出力される
 
         """
         ret: Dict[str, float] = {}
@@ -149,6 +185,13 @@ class JointManager:
             pan: pan軸の目標角度 [rad]
             tilt: tilt軸の目標角度 [rad]
 
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> joints.move_joint_positions(pan=0.4,tilt=-0.2)
+            # pan軸が0.4rad, tilt軸の目標加速度が-0.2radの位置へ移動
+
         """
         for joint, position in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_goal_position(position)
@@ -168,6 +211,13 @@ class JointManager:
 
         Returns:
             サーボ名と現在角度[rad]のdict
+
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> print(joints.get_joint_positions())
+            # 各軸の現在角度[rad]が出力される
 
         """
         ret: Dict[str, float] = {}
@@ -189,16 +239,41 @@ class JointManager:
             pan: pan軸のサーボ有効無効の設定。``True`` であればサーボを有効にする。
             tilt: tilt軸のサーボ有効無効の設定。``True`` であればサーボを有効にする。
 
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> joints.set_servo_enabled(pan=True,tilt=False)
+            # panのサーボを有効、tiltのサーボを無効に設定
+
         """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
             joint.set_servo_enabled(value)
 
     def enable_all_servo(self) -> None:
-        """全サーボを有効状態に設定する。"""
+        """全サーボを有効状態に設定する。
+
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> joints.enable_all_servo()
+            # pan、tiltのサーボ両方を有効に設定
+
+        """
         for joint in self._joints.values():
             joint.set_servo_enabled(True)
 
     def disable_all_servo(self) -> None:
-        """全サーボを無効状態に設定する。"""
+        """全サーボを無効状態に設定する。
+
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> joints.disable_all_servo()
+            # pan、tiltのサーボ両方を無効に設定
+
+        """
         for joint in self._joints.values():
             joint.set_servo_enabled(False)
