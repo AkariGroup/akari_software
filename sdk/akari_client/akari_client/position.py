@@ -12,6 +12,7 @@ class Positions(int, enum.Enum):
     | TOP: 上揃え
     | RIGHT: 右揃え
     | BOTTOM: 下揃え
+
     """
 
     CENTER = -999

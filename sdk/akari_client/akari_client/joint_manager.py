@@ -144,7 +144,7 @@ class JointManager:
             >>> akari = AkariClient()
             >>> joints = akari.joints
             >>> joints.set_joint_velocities(pan=10, tilt=8)
-            # pan軸の目標加速度が10rad/s^2, tilt軸の目標加速度が8rad/s^2
+            # pan軸の目標加速度が10rad/s, tilt軸の目標加速度が8rad/s
 
         """
         for joint, value in self._iter_joint_value_pairs(pan, tilt, **kwargs):
