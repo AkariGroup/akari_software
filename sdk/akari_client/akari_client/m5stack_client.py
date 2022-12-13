@@ -17,8 +17,8 @@ class M5ComDict(TypedDict):
     :param dout0: ヘッドのdout0ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
     :param dout1: ヘッドのdout1ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
     :param pwmout0: ヘッドのpwmout0ピンのPWM出力。0-255の256段階で0-3.3Vを出力可能。
-    :param general0:任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
-    :param general1:任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
+    :param general0: 任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
+    :param general1: 任意値を入力可能なエリア。通常時は使用しない。M5のソフトを書き換えることで自由に使用可能。
     :param button_a: M5の前面のボタンAの入力。ボタンを押すとTrue、押していないとFalse。
     :param button_b: M5の前面のボタンBの入力。ボタンを押すとTrue、押していないとFalse。
     :param button_c: M5の前面のボタンCの入力。ボタンを押すとTrue、押していないとFalse。
