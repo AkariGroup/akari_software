@@ -28,8 +28,12 @@ AKARIに初期インストールするためのソフトウェア環境を管理
    ```sh
    $ cp hosts.example hosts
    ```
-2. `hosts` の `[mainpc]` 以下に lattepanda の IPアドレスを追加
-2. 構成を適用
+
+2. `hosts` の `[mainpc]` 以下に lattepanda の IPアドレスを記載  
+   lattepanda上で実行する場合はデフォルトで記載されている127.0.0.1のまま使用する  
+   別のPCから実行する場合は、この部分をlattepandaのIPアドレスに変更する  
+
+3. 構成を適用
    ```sh
    $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff
    (初回実行時だけ時間がかかります)
