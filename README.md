@@ -14,7 +14,7 @@ https://akari-docs.vbcpp.net/
 
 2. internal
 
-    * webサービスのディレクトリです。
+    * システムソフトウェア用のディレクトリです。
 
 3. samples
 
