@@ -7,6 +7,7 @@ import enum
 @dataclasses.dataclass(frozen=True)
 class Color:
     """M5のディスプレイの表示色を指定するクラス。
+
     :param red: RGBのR要素。0~255で指定。
     :param green: RGBのG要素。0~255で指定。
     :param blue: RGBのB要素。0~255で指定。
@@ -40,27 +41,28 @@ class Color:
 
 
 class Colors(Color, enum.Enum):
-    """M5のディスプレイの表示色のenum。
-    下記の色を指定可能。
-    BLACK
-    NAVY
-    DARKGREEN
-    DARKCYAN
-    MAROON
-    PURPLE
-    OLIVE
-    LIGHTGREY
-    DARKGREY
-    BLUE
-    GREEN
-    CYAN
-    RED
-    MAGENTA
-    YELLOW
-    WHITE
-    ORANGE
-    GREENYELLOW
-    PINK
+    """
+    | M5のディスプレイの表示色のenum。
+    | 下記の色を指定可能。
+    | BLACK
+    | NAVY
+    | DARKGREEN
+    | DARKCYAN
+    | MAROON
+    | PURPLE
+    | OLIVE
+    | LIGHTGREY
+    | DARKGREY
+    | BLUE
+    | GREEN
+    | CYAN
+    | RED
+    | MAGENTA
+    | YELLOW
+    | WHITE
+    | ORANGE
+    | GREENYELLOW
+    | PINK
 
     """
 
