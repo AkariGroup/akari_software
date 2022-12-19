@@ -22,9 +22,9 @@ AKARIに初期インストールするためのソフトウェア環境を管理
 
 ## 実行方法
 
-### ローカル環境で実行する場合
+### AKARIのローカル環境で実行する場合
 
-1. `hosts.example` を `hosts` という名前でコピー
+1. `hosts.example` を `hosts` という名前で同一ディレクトリ内にコピー
    ```sh
    $ cp hosts.example hosts
    ```
@@ -37,16 +37,18 @@ AKARIに初期インストールするためのソフトウェア環境を管理
    ssh password: <Akariユーザーのパスワードを入力する>
    Vault password: <シークレットファイル復号化用のパスワードを入力する>
    ```
-### 別PCからリモート実行する場合
+### AKARI外のPCからリモート実行する場合
 
-1. `hosts.example` を `hosts` という名前でコピー
+1. セットアップに使うPC側にakari_softwareをcloneし、AKARIとPCを同一ネットワークに接続する。
+
+2. `hosts.example` を `hosts` という名前で同一ディレクトリ内にコピー
    ```sh
    $ cp hosts.example hosts
    ```
 
-2. `hosts` の `[mainpc]` 以下の127.0.0.1を削除し、 AKARIの IPアドレスに書き換える
+3. `hosts` の `[mainpc]` 以下の127.0.0.1を削除し、 AKARIの IPアドレスに書き換える
 
-3. 構成を適用
+4. 構成を適用
    ```sh
    $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff
    (初回実行時だけ時間がかかります)
