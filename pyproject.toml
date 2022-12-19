@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "akari_main"
+name = "akari_software"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]

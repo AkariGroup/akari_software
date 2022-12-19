@@ -1,7 +1,7 @@
-# akari_main
+# akari_software
 ![alt用テキスト](setup/m5_sd/logo320.jpg)  
 
-AKARIを動かすためのソースファイル、セットアップ用ファイル、各種ツールをまとめたディレクトリです。  
+AKARIを動かすためのソースファイル、セットアップ用ファイル、各種ツールをまとめたレポジトリです。  
 詳細は下記リンクのAKARIマニュアルを参照ください。  
 (本ディレクトリ内のAKARI_MANUAL.desktopからも飛ぶことができます。)  
 https://akari-docs.vbcpp.net/  
@@ -10,16 +10,20 @@ https://akari-docs.vbcpp.net/
 
 1. sdk
 
-    * Akari開発用ライブラリ用のディレクトリです。
+    * AKARI開発ライブラリのディレクトリです。
 
-1. samples
+2. internal
 
-    * サンプルアプリケーション用のディレクトリです。
+    * システムソフトウェア用のディレクトリです。
 
-1. setup
+3. samples
+
+    * サンプルアプリケーションのディレクトリです。
+
+4. setup
 
     * 環境構築用のスクリプトや、m5,arduinoなどの設定用ファイルが置かれています。
 
-1. tool
+5. tool
 
     * その他ツールが保存されています。
