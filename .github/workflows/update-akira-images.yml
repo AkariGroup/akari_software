@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        lfs: false
+        lfs: true
     - name: Locate fake files
       run: |
         echo "none" > internal/docker/.docker_credential
