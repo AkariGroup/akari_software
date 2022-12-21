@@ -22,14 +22,33 @@ AKARIに初期インストールするためのソフトウェア環境を管理
 
 ## 実行方法
 
-### システム依存関係のインストール
+### AKARIのローカル環境で実行する場合
 
-1. `hosts.example` を `hosts` という名前でコピー
+1. `hosts.example` を `hosts` という名前で同一ディレクトリ内にコピー
    ```sh
    $ cp hosts.example hosts
    ```
-2. `hosts` の `[mainpc]` 以下に lattepanda の IPアドレスを追加
+
 2. 構成を適用
+   ```sh
+   $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff -c local
+   (初回実行時だけ時間がかかります)
+   BECOME password: <Akariユーザーのパスワードを入力する>
+   ssh password: <Akariユーザーのパスワードを入力する>
+   Vault password: <シークレットファイル復号化用のパスワードを入力する>
+   ```
+### AKARI外のPCからリモート実行する場合
+
+1. セットアップに使うPC側にakari_softwareをcloneし、AKARIとPCを同一ネットワークに接続する。
+
+2. `hosts.example` を `hosts` という名前で同一ディレクトリ内にコピー
+   ```sh
+   $ cp hosts.example hosts
+   ```
+
+3. `hosts` の `[mainpc]` 以下の127.0.0.1を削除し、 AKARIの IPアドレスに書き換える
+
+4. 構成を適用
    ```sh
    $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff
    (初回実行時だけ時間がかかります)
@@ -37,7 +56,6 @@ AKARIに初期インストールするためのソフトウェア環境を管理
    Vault password: <シークレットファイル復号化用のパスワードを入力する>
    ```
 
-**NOTE**: lattepanda上でスクリプトを実行するときには、IPアドレスとして `127.0.0.1` を指定し、オプションに`-c local`を追加してください
 
 **NOTE**: 実際に構成を適用せずに変更内容だけを確認するには `--check` オプションを指定してください
 
