@@ -86,16 +86,18 @@ int req_back_color;
 
 bool mp3_stop_flg = false;
 
+//起動待ち画面表示
 void drawWaitingImg()
 {
   lcd.drawJpgFile(SD, "/waiting.jpg");
   lcd.loadFont(f18, SD);
-  lcd.setTextColor(BLACK, WHITE);
+  lcd.setTextColor(DARKGREY, BLACK);
   lcd.setTextDatum(bottom_left);
-  lcd.drawString("ver." + m5_ver, 0, 0);
+  lcd.drawString("ver:" + m5_ver, 0, 0);
   lcd.loadFont(f54, SD);
 }
 
+//起動アニメーション再生
 void playBootAnime()
 {
   for(int i=1;i<boot_img_num;i++){
@@ -485,9 +487,8 @@ void setup()
   M5.begin();
   M5.Power.begin();
   M5.Power.setPowerVin(false); //電源供給断時の自動再起動をOFFに
-  WiFi.mode(WIFI_OFF); 
+  WiFi.mode(WIFI_OFF);
   delay(500);
-
   M5.Lcd.setTextFont(2);
   lcd.begin();
   Wire.begin();
