@@ -93,7 +93,7 @@ void drawWaitingImg()
   lcd.loadFont(f18, SD);
   lcd.setTextColor(DARKGREY, BLACK);
   lcd.setTextDatum(bottom_left);
-  lcd.drawString("ver:" + m5_ver, 0, 0);
+  lcd.drawString("ver:" + m5_ver, 0,  230);
   lcd.loadFont(f54, SD);
 }
 
