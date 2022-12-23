@@ -36,6 +36,14 @@ class DynamixelControllerServiceServicer(
             joint_controllers,
             self._config,
         )
+        dynamixel_init.initialize_target_vel(
+            joint_controllers,
+            self._config,
+        )
+        dynamixel_init.initialize_target_acc(
+            joint_controllers,
+            self._config,
+        )
         mapping = {j.joint_name: j for j in joint_controllers}
         return mapping
 

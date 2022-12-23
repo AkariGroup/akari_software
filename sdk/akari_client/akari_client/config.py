@@ -16,6 +16,8 @@ class DynamixelControllerConfig(pydantic.BaseModel):
     dynamixel_id: int
     min_position_limit: float
     max_position_limit: float
+    default_target_vel: float
+    default_target_acc: float
 
 
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
