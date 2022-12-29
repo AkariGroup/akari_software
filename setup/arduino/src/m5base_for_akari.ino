@@ -89,7 +89,7 @@ bool mp3_stop_flg = false;
 //起動待ち画面表示
 void drawWaitingImg()
 {
-  lcd.drawJpgFile(SD, "/waiting.jpg");
+  lcd.drawJpgFile(SD, "/jpg/waiting.jpg");
   lcd.loadFont(f18, SD);
   lcd.setTextColor(DARKGREY, BLACK);
   lcd.setTextDatum(bottom_left);
@@ -101,7 +101,7 @@ void drawWaitingImg()
 void playBootAnime()
 {
   for(int i=1;i<boot_img_num;i++){
-    String fileName = "/boot/"+ String(i) +".jpg";
+    String fileName = "/jpg/boot/"+ String(i) +".jpg";
     char jpegs[fileName.length()+1];
     fileName.toCharArray(jpegs, sizeof(jpegs));
     lcd.drawJpgFile(SD,jpegs);
