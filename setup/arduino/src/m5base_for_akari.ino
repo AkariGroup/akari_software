@@ -15,7 +15,7 @@
 #include "AudioGeneratorMP3.h"
 #include "AudioOutputI2S.h"
 
-const String m5_ver = "1.0.0";
+const String m5_ver = "1.0.1";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
