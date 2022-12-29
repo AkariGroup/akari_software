@@ -15,6 +15,9 @@
 #include "AudioGeneratorMP3.h"
 #include "AudioOutputI2S.h"
 
+const String m5_ver = "1.0.0";
+const int boot_img_num = 48;
+
 SemaphoreHandle_t xMutex = NULL;
 M5GFX lcd;
 
@@ -31,6 +34,7 @@ AudioGeneratorMP3* mp3;
 AudioFileSourceSD* file;
 AudioOutputI2S* out;
 AudioFileSourceID3* id3;
+
 
 bool isStart;
 int seq = 0;
@@ -81,6 +85,28 @@ int req_text_color;
 int req_back_color;
 
 bool mp3_stop_flg = false;
+
+//起動待ち画面表示
+void drawWaitingImg()
+{
+  lcd.drawJpgFile(SD, "/waiting.jpg");
+  lcd.loadFont(f18, SD);
+  lcd.setTextColor(DARKGREY, BLACK);
+  lcd.setTextDatum(bottom_left);
+  lcd.drawString("ver:" + m5_ver, 0,  230);
+  lcd.loadFont(f54, SD);
+}
+
+//起動アニメーション再生
+void playBootAnime()
+{
+  for(int i=1;i<boot_img_num;i++){
+    String fileName = "/boot/"+ String(i) +".jpg";
+    char jpegs[fileName.length()+1];
+    fileName.toCharArray(jpegs, sizeof(jpegs));
+    lcd.drawJpgFile(SD,jpegs);
+  }
+}
 
 //buttonの入力をMEASURETIME回の平均から決定(チャタリング対策)
 bool buttonResult(int measure)
@@ -461,16 +487,15 @@ void setup()
   M5.begin();
   M5.Power.begin();
   M5.Power.setPowerVin(false); //電源供給断時の自動再起動をOFFに
-  WiFi.mode(WIFI_OFF); 
+  WiFi.mode(WIFI_OFF);
   delay(500);
-
   M5.Lcd.setTextFont(2);
   lcd.begin();
   Wire.begin();
   lcd.setRotation(1);
   lcd.setBrightness(128);
   lcd.setColorDepth(24);
-  lcd.drawJpgFile(SD, "/logo320_ex.jpg");
+  drawWaitingImg();
   qmp6988.init();
   Serial.begin(500000);
   Serial.setTimeout(1);
@@ -514,12 +539,11 @@ void setup()
     delay(1);
   }
   xMutex = xSemaphoreCreateMutex();
-  lcd.drawJpgFile(SD, "/logo320.jpg");
-  delay(1);
   out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
   out->SetGain(0.3);
   out->SetOutputModeMono(true);
   mp3 = new AudioGeneratorMP3();
+  playBootAnime();
   loopStart = millis();
   //esp32の各コアにタスク割当
   xTaskCreatePinnedToCore(pubSerial, "pubSerial", 8192, NULL, 1, NULL, 0);
