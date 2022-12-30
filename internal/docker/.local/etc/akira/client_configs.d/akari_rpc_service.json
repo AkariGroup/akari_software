@@ -10,16 +10,16 @@
                 "dynamixel_id": 1,
                 "min_position_limit": -1.047,
                 "max_position_limit": 1.047,
-                "default_target_vel": 15,
-                "default_target_acc": 0.1
+                "default_target_vel": 15.0,
+                "default_target_acc": 1.0
             },
             {
                 "joint_name": "tilt",
                 "dynamixel_id": 2,
                 "min_position_limit": -0.576,
                 "max_position_limit": 0.576,
-                "default_target_vel": 15,
-                "default_target_acc": 0.1
+                "default_target_vel": 15.0,
+                "default_target_acc": 1.0
             }
         ]
     },
