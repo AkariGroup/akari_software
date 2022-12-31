@@ -225,12 +225,12 @@ class M5StackClient(ABC):
             >>> from akari_client import AkariClient
             >>> from akari_client.position import Positions
             >>> with AkariClient() as akari:
-            >>>    filepath = "/logo320.jpg"
+            >>>    filepath = "/jpg/logo320.jpg"
             >>>    pos_x = Positions.LEFT
             >>>    pos_y = Positions.TOP
             >>>    scale = 0.75
             >>>    m5.set_display_image(filepath, pos_x, pos_y, scale)
-            # 画面に"/logo320.jpg"の画像が表示される。
+            # 画面に"/jpg/logo320.jpg"の画像が表示される。
 
         """
         ...
