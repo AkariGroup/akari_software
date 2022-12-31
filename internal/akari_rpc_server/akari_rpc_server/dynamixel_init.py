@@ -53,7 +53,7 @@ def initialize_joint_limit(
         _logger.info(f"Successfuly set position limit of joint: '{config.joint_name}'")
 
 
-def initialize_target_vel(
+def initialize_default_velocity(
     controllers: Sequence[DynamixelController],
     dynamixel_config: JointManagerDynamixelSerialConfig,
 ) -> None:
@@ -64,13 +64,13 @@ def initialize_target_vel(
         if controller is None:
             _logger.warning(f"Joint: '{config.joint_name}' doesn't exist")
             continue
-        controller.set_profile_velocity(config.default_target_vel)
+        controller.set_profile_velocity(config.default_velocity)
         _logger.info(
             f"Successfuly set default target velocity of joint: '{config.joint_name}'"
         )
 
 
-def initialize_target_acc(
+def initialize_default_acceleration(
     controllers: Sequence[DynamixelController],
     dynamixel_config: JointManagerDynamixelSerialConfig,
 ) -> None:
@@ -81,7 +81,7 @@ def initialize_target_acc(
         if controller is None:
             _logger.warning(f"Joint: '{config.joint_name}' doesn't exist")
             continue
-        controller.set_profile_acceleration(config.default_target_acc)
+        controller.set_profile_acceleration(config.default_acceleration)
         _logger.info(
             f"Successfuly set default target acceleration of joint: '{config.joint_name}'"
         )

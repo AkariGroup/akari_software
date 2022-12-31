@@ -36,11 +36,11 @@ class DynamixelControllerServiceServicer(
             joint_controllers,
             self._config,
         )
-        dynamixel_init.initialize_target_vel(
+        dynamixel_init.initialize_default_velocity(
             joint_controllers,
             self._config,
         )
-        dynamixel_init.initialize_target_acc(
+        dynamixel_init.initialize_default_acceleration(
             joint_controllers,
             self._config,
         )
