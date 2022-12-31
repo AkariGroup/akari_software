@@ -28,9 +28,6 @@ disp_mode = DisplayMode.NONE
 
 def init_connection_disp() -> None:
     connect_interface = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    connect_interface.connect(("8.8.8.8", 80))
-    ip = connect_interface.getsockname()[0]
-    address = ip + ":8080"
     m5.set_display_color(Colors.WHITE)
     m5.set_display_text(
         text="Console Address",
@@ -40,13 +37,25 @@ def init_connection_disp() -> None:
         back_color=Colors.WHITE,
         refresh=True,
     )
-    m5.set_display_text(
-        text=address,
-        size=2,
-        text_color=Colors.BLACK,
-        back_color=Colors.WHITE,
-        refresh=False,
-    )
+    try:
+        connect_interface.connect(("8.8.8.8", 80))
+        ip = connect_interface.getsockname()[0]
+        address = ip + ":8080"
+        m5.set_display_text(
+            text=address,
+            size=2,
+            text_color=Colors.BLACK,
+            back_color=Colors.WHITE,
+            refresh=False,
+        )
+    except OSError:
+        m5.set_display_text(
+            text="Network not found",
+            size=2,
+            text_color=Colors.RED,
+            back_color=Colors.WHITE,
+            refresh=False,
+        )
 
 
 def init_clock_disp() -> None:
