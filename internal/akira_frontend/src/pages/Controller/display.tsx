@@ -22,7 +22,7 @@ const DEFAULT_DISPLAY_COLOR: RGBColor = {
   b: 255,
 };
 
-const DEFAULT_FONT_SIZE: number = 3;
+const DEFAULT_FONT_SIZE: number = 5;
 
 type ColorSectionProps = {
   heading: string;
@@ -114,7 +114,7 @@ export function DisplayPanel(props: Props) {
             step={1}
             marks
             min={1}
-            max={7}
+            max={13}
             valueLabelDisplay="auto"
             onChange={(_, v) => {
               const nv = v as number;

@@ -164,7 +164,7 @@ class M5StackClient(ABC):
         text: str,
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
-        size: int = 3,
+        size: int = 5,
         text_color: Optional[Color] = None,
         back_color: Optional[Color] = None,
         refresh: bool = True,
@@ -176,7 +176,7 @@ class M5StackClient(ABC):
             text: 表示する文字列。
             pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。 ``position.Positions`` を用いた位置指定も可能。デフォルト値は中央揃え。
             pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。 ``position.Positions`` を用いた位置指定も可能。デフォルト値は中央揃え。
-            size: 文字サイズを1-7の7段階で指定。デフォルト値は3。
+            size: 文字サイズを1-13の13段階で指定。デフォルト値は5。
             text_color: 文字色を指定。色は ``color.Colors`` から色名を引用する、もしくはRGBの数値指定も可能。値を指定しない場合、前回値を引き継ぐ。
             back_color: 背景色を指定。色は ``color.Colors`` から色名を引用する、もしくはRGBの数値指定も可能。値を指定しない場合、画面全体の背景色に合わせる。
             refresh: trueの場合画面全体を現在の背景色で更新する。falseの場合は現在の表示を維持しつつ、文字を描画する範囲のみ更新する。デフォルト値は背景更新あり。
@@ -190,7 +190,7 @@ class M5StackClient(ABC):
             >>>    text = "AKARI"
             >>>    pos_x = Positions.LEFT
             >>>    pos_y = Positions.TOP
-            >>>    size = 4
+            >>>    size = 7
             >>>    text_color = Colors.WHITE
             >>>    back_color = Colors.BLACK
             >>>    refresh = True

@@ -112,7 +112,7 @@ class M5StackSerialClient(M5StackClient):
         text: str,
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
-        size: int = 3,
+        size: int = 5,
         text_color: Optional[Color] = None,
         back_color: Optional[Color] = None,
         refresh: bool = True,
