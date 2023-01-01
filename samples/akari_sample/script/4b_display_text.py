@@ -28,7 +28,7 @@ def main() -> None:
         # アプリが終了されるまでループする。
         while True:
 
-            color = Colors.RED
+            color = Colors.WHITE
             m5.set_display_color(color)
             # STEP1. '1.AKARI'を左上表示
             print("STEP1. display 1.AKARI at top left")
