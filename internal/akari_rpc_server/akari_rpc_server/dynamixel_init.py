@@ -66,7 +66,7 @@ def initialize_default_velocity(
             continue
         controller.set_profile_velocity(config.default_velocity)
         _logger.info(
-            f"Successfuly set default target velocity of joint: '{config.joint_name}'"
+            f"Successfuly set velocity of joint: '{config.joint_name}'"
         )
 
 
