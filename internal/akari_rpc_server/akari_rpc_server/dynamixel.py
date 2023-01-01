@@ -36,6 +36,14 @@ class DynamixelControllerServiceServicer(
             joint_controllers,
             self._config,
         )
+        dynamixel_init.initialize_default_velocity(
+            joint_controllers,
+            self._config,
+        )
+        dynamixel_init.initialize_default_acceleration(
+            joint_controllers,
+            self._config,
+        )
         mapping = {j.joint_name: j for j in joint_controllers}
         return mapping
 
