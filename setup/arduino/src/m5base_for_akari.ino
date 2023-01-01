@@ -64,23 +64,20 @@ QMP6988 qmp6988;
 
 float general0Val = 0.0F;
 float general1Val = 0.0F;
-int fontNum = 13
-//SD内のフォントファイルパス。
-const char fontlist[fontNum]={
-"MotoyaLMaru_18",
-"MotoyaLMaru_27",
-"MotoyaLMaru_36",
-"MotoyaLMaru_45",
-"MotoyaLMaru_54",
-"MotoyaLMaru_63",
-"MotoyaLMaru_72",
-"MotoyaLMaru_81",
-"MotoyaLMaru_90",
-"MotoyaLMaru_99",
-"MotoyaLMaru_108",
-"MotoyaLMaru_117",
-"MotoyaLMaru_126"
-}
+#define FONTNUM  11
+// SD内のフォントファイルパス。
+const String fontList[FONTNUM] = {
+    "MotoyaLMaru_18.vlw",
+    "MotoyaLMaru_27.vlw",
+    "MotoyaLMaru_36.vlw",
+    "MotoyaLMaru_45.vlw",
+    "MotoyaLMaru_54.vlw",
+    "MotoyaLMaru_63.vlw",
+    "MotoyaLMaru_72.vlw",
+    "MotoyaLMaru_81.vlw",
+    "MotoyaLMaru_90.vlw",
+    "MotoyaLMaru_99.vlw",
+    "MotoyaLMaru_108.vlw"};
 
 int text_size = 0;
 int fill_color = WHITE;
@@ -135,8 +132,8 @@ void updateTextColor(int new_text_color, int new_back_color)
 //日本語フォントのサイズ指示が変わった場合、対応するフォントをロードする。
 void loadJapaneseFont(int size)
 {
-  char fontPath = "/Fonts/" + fontlist[size - 1];
-  lcd.loadFont(fontPath, SD);
+  String fontPath = "/Fonts/" + fontList[size - 1];
+  lcd.loadFont(fontPath.c_str(), SD);
 }
 
 //M5displayに表示するテキストのサイズを更新(1-7)
@@ -144,8 +141,8 @@ bool updateTextSize(int new_text_size)
 {
   if (new_text_size < 1)
     return false;
-  else if (new_text_size > fontNum)
-    new_text_size = fontNum;
+  else if (new_text_size > FONTNUM)
+    new_text_size = FONTNUM;
   if (new_text_size != text_size)
   {
     text_size = new_text_size;
@@ -450,11 +447,12 @@ void pubSerial(void *arg)
 void drawWaitingImg()
 {
   lcd.drawJpgFile(SD, "/jpg/waiting.jpg");
-  updateTextSize(1);
+  loadJapaneseFont(1);
   lcd.setTextColor(DARKGREY, BLACK);
   lcd.setTextDatum(bottom_left);
   lcd.drawString("ver:" + m5_ver, 0,  230);
-  updateTextSize(7)
+  loadJapaneseFont(7);
+  updateTextSize(7);
 }
 
 //起動アニメーション再生

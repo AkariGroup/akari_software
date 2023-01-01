@@ -114,7 +114,7 @@ export function DisplayPanel(props: Props) {
             step={1}
             marks
             min={1}
-            max={13}
+            max={11}
             valueLabelDisplay="auto"
             onChange={(_, v) => {
               const nv = v as number;
