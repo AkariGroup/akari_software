@@ -83,5 +83,5 @@ def initialize_default_acceleration(
             continue
         controller.set_profile_acceleration(config.default_acceleration)
         _logger.info(
-            f"Successfuly set default target acceleration of joint: '{config.joint_name}'"
+            f"Successfuly set acceleration of joint: '{config.joint_name}'"
         )
