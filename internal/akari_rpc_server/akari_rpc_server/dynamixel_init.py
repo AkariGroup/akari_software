@@ -50,7 +50,7 @@ def initialize_joint_limit(
         controller.set_position_limit(
             config.min_position_limit, config.max_position_limit
         )
-        _logger.info(f"Successfuly set position limit of joint: '{config.joint_name}'")
+        _logger.info(f"Successfully set position limit of joint: '{config.joint_name}'")
 
 
 def initialize_default_velocity(
@@ -65,9 +65,7 @@ def initialize_default_velocity(
             _logger.warning(f"Joint: '{config.joint_name}' doesn't exist")
             continue
         controller.set_profile_velocity(config.default_velocity)
-        _logger.info(
-            f"Successfuly set velocity of joint: '{config.joint_name}'"
-        )
+        _logger.info(f"Successfully set velocity of joint: '{config.joint_name}'")
 
 
 def initialize_default_acceleration(
@@ -82,6 +80,4 @@ def initialize_default_acceleration(
             _logger.warning(f"Joint: '{config.joint_name}' doesn't exist")
             continue
         controller.set_profile_acceleration(config.default_acceleration)
-        _logger.info(
-            f"Successfuly set acceleration of joint: '{config.joint_name}'"
-        )
+        _logger.info(f"Successfully set acceleration of joint: '{config.joint_name}'")
