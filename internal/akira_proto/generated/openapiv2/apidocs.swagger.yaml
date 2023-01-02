@@ -548,8 +548,8 @@ definitions:
         type: string
       image:
         $ref: '#/definitions/akira_protoServiceImage'
-      status:
-        $ref: '#/definitions/akira_protoServiceStatus'
+      state:
+        $ref: '#/definitions/akira_protoServiceState'
       type:
         $ref: '#/definitions/akira_protoServiceType'
   akira_protoServiceImage:
@@ -569,7 +569,7 @@ definitions:
         type: string
       version:
         type: string
-  akira_protoServiceStatus:
+  akira_protoServiceState:
     type: string
     enum:
       - TERMINATED
