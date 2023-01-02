@@ -15,7 +15,7 @@
 #include "AudioGeneratorMP3.h"
 #include "AudioOutputI2S.h"
 
-const String m5_ver = "1.0.1";
+const String m5_ver = "1.1.0";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
@@ -64,15 +64,20 @@ QMP6988 qmp6988;
 
 float general0Val = 0.0F;
 float general1Val = 0.0F;
-
-//SD内のフォントファイルパス。
-const char *f18 = "Fonts/MotoyaLMaru_18";
-const char *f36 = "Fonts/MotoyaLMaru_36";
-const char *f54 = "Fonts/MotoyaLMaru_54";
-const char *f72 = "Fonts/MotoyaLMaru_72";
-const char *f90 = "Fonts/MotoyaLMaru_90";
-const char *f108 = "Fonts/MotoyaLMaru_108";
-const char *f126 = "Fonts/MotoyaLMaru_126";
+#define FONTNUM  11
+// SD内のフォントファイルパス。
+const String fontList[FONTNUM] = {
+    "MotoyaLMaru_18.vlw",
+    "MotoyaLMaru_27.vlw",
+    "MotoyaLMaru_36.vlw",
+    "MotoyaLMaru_45.vlw",
+    "MotoyaLMaru_54.vlw",
+    "MotoyaLMaru_63.vlw",
+    "MotoyaLMaru_72.vlw",
+    "MotoyaLMaru_81.vlw",
+    "MotoyaLMaru_90.vlw",
+    "MotoyaLMaru_99.vlw",
+    "MotoyaLMaru_108.vlw"};
 
 int text_size = 0;
 int fill_color = WHITE;
@@ -85,28 +90,6 @@ int req_text_color;
 int req_back_color;
 
 bool mp3_stop_flg = false;
-
-//起動待ち画面表示
-void drawWaitingImg()
-{
-  lcd.drawJpgFile(SD, "/jpg/waiting.jpg");
-  lcd.loadFont(f18, SD);
-  lcd.setTextColor(DARKGREY, BLACK);
-  lcd.setTextDatum(bottom_left);
-  lcd.drawString("ver:" + m5_ver, 0,  230);
-  lcd.loadFont(f54, SD);
-}
-
-//起動アニメーション再生
-void playBootAnime()
-{
-  for(int i=1;i<boot_img_num;i++){
-    String fileName = "/jpg/boot/"+ String(i) +".jpg";
-    char jpegs[fileName.length()+1];
-    fileName.toCharArray(jpegs, sizeof(jpegs));
-    lcd.drawJpgFile(SD,jpegs);
-  }
-}
 
 //buttonの入力をMEASURETIME回の平均から決定(チャタリング対策)
 bool buttonResult(int measure)
@@ -146,13 +129,20 @@ void updateTextColor(int new_text_color, int new_back_color)
   lcd.setTextColor(text_color, back_color);
 }
 
+//日本語フォントのサイズ指示が変わった場合、対応するフォントをロードする。
+void loadJapaneseFont(int size)
+{
+  String fontPath = "/Fonts/" + fontList[size - 1];
+  lcd.loadFont(fontPath.c_str(), SD);
+}
+
 //M5displayに表示するテキストのサイズを更新(1-7)
 bool updateTextSize(int new_text_size)
 {
   if (new_text_size < 1)
     return false;
-  else if (new_text_size > 7)
-    new_text_size = 7;
+  else if (new_text_size > FONTNUM)
+    new_text_size = FONTNUM;
   if (new_text_size != text_size)
   {
     text_size = new_text_size;
@@ -160,35 +150,6 @@ bool updateTextSize(int new_text_size)
   }
   else
     return false;
-}
-
-//日本語フォントのサイズ指示が変わった場合、対応するフォントをロードする。
-void loadJapaneseFont(int size)
-{
-  switch (size)
-  {
-  case 1:
-    lcd.loadFont(f18, SD);
-    break;
-  case 2:
-    lcd.loadFont(f36, SD);
-    break;
-  case 3:
-    lcd.loadFont(f54, SD);
-    break;
-  case 4:
-    lcd.loadFont(f72, SD);
-    break;
-  case 5:
-    lcd.loadFont(f90, SD);
-    break;
-  case 6:
-    lcd.loadFont(f108, SD);
-    break;
-  case 7:
-    lcd.loadFont(f126, SD);
-    break;
-  }
 }
 
 //Serialでのコマンドを受信してJSONをパース、コマンドを実行する。
@@ -482,6 +443,29 @@ void pubSerial(void *arg)
   vTaskDelete(NULL);
 }
 
+//起動待ち画面表示
+void drawWaitingImg()
+{
+  lcd.drawJpgFile(SD, "/jpg/waiting.jpg");
+  loadJapaneseFont(1);
+  lcd.setTextColor(DARKGREY, BLACK);
+  lcd.setTextDatum(bottom_left);
+  lcd.drawString("ver:" + m5_ver, 0,  230);
+  loadJapaneseFont(7);
+  updateTextSize(7);
+}
+
+//起動アニメーション再生
+void playBootAnime()
+{
+  for(int i=1;i<boot_img_num;i++){
+    String fileName = "/jpg/boot/"+ String(i) +".jpg";
+    char jpegs[fileName.length()+1];
+    fileName.toCharArray(jpegs, sizeof(jpegs));
+    lcd.drawJpgFile(SD,jpegs);
+  }
+}
+
 void setup()
 {
   M5.begin();
@@ -512,7 +496,6 @@ void setup()
   digitalWrite(DOUT1PIN, 0);
   ledcWrite(PWMCH, 0);
   lcd.setTextColor(text_color, back_color);
-  lcd.loadFont(f18, SD);
   isStart = false;
   while (!isStart)
   {

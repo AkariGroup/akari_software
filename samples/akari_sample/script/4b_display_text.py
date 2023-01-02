@@ -28,7 +28,7 @@ def main() -> None:
         # アプリが終了されるまでループする。
         while True:
 
-            color = Colors.RED
+            color = Colors.WHITE
             m5.set_display_color(color)
             # STEP1. '1.AKARI'を左上表示
             print("STEP1. display 1.AKARI at top left")
@@ -38,8 +38,8 @@ def main() -> None:
             pos_x = Positions.LEFT
             # pos_yは0-240で座標指定。0もしくはPositions.TOPで上
             pos_y = Positions.TOP
-            # 文字サイズは3
-            size = 3
+            # 文字サイズは5
+            size = 5
             # 文字色は黒
             text_color = Colors.BLACK
             # 背景色は白
@@ -56,7 +56,7 @@ def main() -> None:
             print()
 
             # STEP2. '2.あかり'を中央に表示。位置、サイズ、文字色はデフォルト
-            # 文字色、背景色はSTEP.1と同様、文字サイズは3、背景リセットはTrueとなる。
+            # 文字色、背景色はSTEP.1と同様、文字サイズは5、背景リセットはTrueとなる。
             print("STEP2. display 2.あかり at middle center")
             text = "2.あかり"
             # set_display_textを実行
@@ -74,8 +74,8 @@ def main() -> None:
             pos_x = Positions.RIGHT
             # pos_yはPositions.BOTTOMで下揃え
             pos_y = Positions.BOTTOM
-            # 文字サイズは4
-            size = 4
+            # 文字サイズは7
+            size = 7
             # 文字色は白
             text_color = Colors.WHITE
             # 背景色は緑
@@ -99,8 +99,8 @@ def main() -> None:
             pos_x = 50
             # pos_yは40
             pos_y = 40
-            # 文字サイズは2
-            size = 2
+            # 文字サイズは3
+            size = 3
             # 文字色は青
             text_color = Colors.BLUE
             # 背景色は黄
@@ -124,8 +124,8 @@ def main() -> None:
             pos_x = 50
             # pos_yは40
             pos_y = 100
-            # 文字サイズは3
-            size = 3
+            # 文字サイズは5
+            size = 5
             # 文字色は黒
             text_color = Colors.BLACK
             # 背景色は紫
@@ -149,8 +149,8 @@ def main() -> None:
             pos_x = 50
             # pos_yは170
             pos_y = 170
-            # 文字サイズは2
-            size = 2
+            # 文字サイズは3
+            size = 3
             # 文字色はピンク
             text_color = Colors.PINK
             # 背景色は灰
@@ -170,8 +170,8 @@ def main() -> None:
             print("STEP7. display 7.灯 at middle center")
             # textは'7.灯'
             text = "7.灯"
-            # 文字サイズは6
-            size = 6
+            # 文字サイズは11
+            size = 11
             # 文字色は白
             text_color = Colors.WHITE
             # 背景色は黒
