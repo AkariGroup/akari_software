@@ -32,7 +32,7 @@ def init_connection_disp() -> None:
     m5.set_display_text(
         text="Console Address",
         pos_y=20,
-        size=2,
+        size=3,
         text_color=Colors.BLACK,
         back_color=Colors.WHITE,
         refresh=True,
@@ -65,7 +65,7 @@ def init_clock_disp() -> None:
     m5.set_display_text(
         text=dt_now.strftime("%Y/%m/%d %a"),
         pos_y=Positions.TOP,
-        size=2,
+        size=3,
         text_color=Colors.WHITE,
         back_color=Colors.BLACK,
         refresh=True,
@@ -76,7 +76,7 @@ def update_clock_disp() -> None:
     dt_now = datetime.datetime.now()
     m5.set_display_text(
         text=dt_now.strftime("%H:%M:%S "),
-        size=4,
+        size=7,
         text_color=Colors.WHITE,
         back_color=Colors.BLACK,
         refresh=False,
