@@ -47,12 +47,16 @@ export function Projects() {
     );
   } else {
     element = (
-      <Stack spacing={2} sx={{ margin: 1 }} direction="row">
-        <NewProjectButtonCard />
+      <Grid container spacing={2} sx={{ margin: 1 }}>
+        <Grid item xs="auto">
+          <NewProjectButtonCard />
+        </Grid>
         {data?.projects?.map((p) => (
-          <ProjectCard key={p.id} project={p} />
+          <Grid item xs="auto">
+            <ProjectCard key={p.id} project={p} />
+          </Grid>
         ))}
-      </Stack>
+      </Grid>
     );
   }
 
