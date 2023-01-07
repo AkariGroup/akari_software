@@ -1,4 +1,5 @@
 import useAspidaSWR from "@aspida/swr";
+import { NavLink } from "react-router-dom";
 import {
   Box,
   Card,
@@ -9,6 +10,7 @@ import {
   Stack,
   Typography,
   IconButton,
+  Button,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
@@ -100,6 +102,17 @@ export function ProjectsDetails() {
               <Box mt={1}>{project.manifest?.description}</Box>
             </CardContent>
           </Card>
+          <Grid margin={1}>
+            <Button
+              type="button"
+              variant="outlined"
+              color="error"
+              component={NavLink}
+              to="/projects"
+            >
+              戻る
+            </Button>
+          </Grid>
         </Grid>
         <Grid item sm={12} md={3} sx={{ overflowWrap: "anywhere" }}>
           <Stack spacing={3}>
