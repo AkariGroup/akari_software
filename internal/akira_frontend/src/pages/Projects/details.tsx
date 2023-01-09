@@ -10,8 +10,8 @@ import {
   Stack,
   Typography,
   IconButton,
-  Button,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -71,7 +71,12 @@ export function ProjectsDetails() {
 
   return (
     <Container maxWidth="xl">
-      <Grid container mt={2} spacing={3}>
+      <Grid margin={1}>
+        <IconButton type="button" component={NavLink} to="/projects">
+          <ArrowBackIcon />
+        </IconButton>
+      </Grid>
+      <Grid container>
         <Grid item sm={12} md={9}>
           <Card>
             <CardContent>
@@ -102,17 +107,6 @@ export function ProjectsDetails() {
               <Box mt={1}>{project.manifest?.description}</Box>
             </CardContent>
           </Card>
-          <Grid margin={1}>
-            <Button
-              type="button"
-              variant="outlined"
-              color="error"
-              component={NavLink}
-              to="/projects"
-            >
-              戻る
-            </Button>
-          </Grid>
         </Grid>
         <Grid item sm={12} md={3} sx={{ overflowWrap: "anywhere" }}>
           <Stack spacing={3}>
