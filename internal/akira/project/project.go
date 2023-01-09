@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-playground/validator/v10"
 	yaml "github.com/goccy/go-yaml"
 
@@ -146,4 +148,32 @@ func CreateLocalProject(path string, m ProjectManifest) (*localProject, error) {
 	} else {
 		return p, nil
 	}
+}
+
+func CloneProject(path string, url string, branch *string) (*localProject, error) {
+	if util.DirExists(path) {
+		return nil, fmt.Errorf("dir: %#v already exits", path)
+	}
+	if err := os.MkdirAll(path, os.ModePerm); err != nil {
+		return nil, err
+	}
+	cloneOpts := git.CloneOptions{
+		URL: url,
+	}
+	if branch != nil {
+		cloneOpts.ReferenceName = plumbing.NewBranchReferenceName(*branch)
+	}
+
+	if _, err := git.PlainClone(path, false, &cloneOpts); err != nil {
+		os.RemoveAll(path)
+		return nil, fmt.Errorf("failed to clone repository %#v: %w", url, err)
+	}
+
+	manifestPath := filepath.Join(path, ManifestFileName)
+	if !util.PathExists(manifestPath) {
+		os.RemoveAll(path)
+		return nil, fmt.Errorf("remote repository %#v doesn't contain a file %#v", url, ManifestFileName)
+	}
+
+	return OpenLocalProject(manifestPath)
 }
