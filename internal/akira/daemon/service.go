@@ -33,8 +33,8 @@ func capabilitiesToPb(caps []service.ServiceCapability) []string {
 	return ret
 }
 
-func serviceStatusToPb(s service.ServiceStatus) proto.ServiceStatus {
-	return proto.ServiceStatus(s)
+func serviceStateToPb(s service.ServiceState) proto.ServiceState {
+	return proto.ServiceState(s)
 }
 
 func serviceTypeToPb(s service.ServiceType) proto.ServiceType {
@@ -76,7 +76,7 @@ func serviceToPb(m service.ServiceManager, s service.Service) *proto.Service {
 		Image:        image,
 		DisplayName:  config.DisplayName,
 		Description:  config.Description,
-		Status:       serviceStatusToPb(s.Status()),
+		State:        serviceStateToPb(s.State()),
 		Type:         serviceTypeToPb(s.Type()),
 		Capabilities: capabilitiesToPb(s.Capabilities()),
 		AutoStart:    autoStart,

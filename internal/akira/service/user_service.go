@@ -46,17 +46,13 @@ func (p *UserServiceProvider) Capabilities() []ServiceCapability {
 }
 
 func (p *UserServiceProvider) Clean() error {
-	ret := p.ServiceContainer.onCriticalSection(func() interface{} {
-		if p.ServiceContainer.Status() != Terminated {
-			return errors.New("cannot remove directory of existing container")
-		}
+	p.ServiceContainer.mu.Lock()
+	defer p.ServiceContainer.mu.Unlock()
 
-		return os.RemoveAll(p.varDir())
-	})
-	if err, ok := ret.(error); ok {
-		return err
+	if p.ServiceContainer.state != Terminated {
+		return errors.New("cannot remove directory of existing container")
 	}
-	return nil
+	return os.RemoveAll(p.varDir())
 }
 
 func (p *UserServiceProvider) SetConfig(c ServiceConfig) error {
