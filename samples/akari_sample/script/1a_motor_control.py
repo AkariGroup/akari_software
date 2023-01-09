@@ -58,9 +58,9 @@ joints.set_joint_velocities(tilt=6)
 print("")
 time.sleep(3)
 
-# STEP8.tiltのモータ位置だけを0.7[rad]に移動。
-print("STEP8. Move tilt joint position to 0.7 rad")
-joints.move_joint_positions(tilt=0.7)
+# STEP8.tiltのモータ位置だけを0.5[rad]に移動。
+print("STEP8. Move tilt joint position to 0.5 rad")
+joints.move_joint_positions(tilt=0.5)
 print("")
 time.sleep(3)
 
