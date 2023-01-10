@@ -1,4 +1,5 @@
 import os
+
 import depthai as dai
 import pyvirtualcam
 
