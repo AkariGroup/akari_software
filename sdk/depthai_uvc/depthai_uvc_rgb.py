@@ -1,5 +1,10 @@
+import os
 import depthai as dai
 import pyvirtualcam
+
+# Reset v4l2loopback
+os.system("sudo modprobe -r v4l2loopback")
+os.system("sudo modprobe v4l2loopback")
 
 # Create pipeline
 pipeline = dai.Pipeline()
