@@ -14,7 +14,11 @@ import {
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
-import { ValidBranchNamePattern, ValidGitUrlPattern, ValidNamePattern } from "../validNamePattern";
+import {
+  ValidBranchNamePattern,
+  ValidGitUrlPattern,
+  ValidNamePattern,
+} from "../validNamePattern";
 import { CancelButton } from "../../../components/CancelButton";
 type CreateProjectFromGitInputs = {
   branch?: string;
