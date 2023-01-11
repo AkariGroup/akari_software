@@ -2,6 +2,7 @@ package project
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -109,6 +110,35 @@ func (m *ProjectManager) CreateProject(dirname string, manifest ProjectManifest,
 	if err := template.Setup(dir); err != nil {
 		log.Error().Msgf("error occurred while setting up template: %v", err)
 	}
+	return proj, nil
+}
+
+func (m *ProjectManager) CloneProject(gitUrl string, dirname *string, branch *string) (Project, error) {
+	var localDirname string
+	if dirname != nil {
+		localDirname = *dirname
+	} else {
+		parsed, err := url.Parse(gitUrl)
+		if err != nil {
+			return nil, fmt.Errorf("invalid url: %#v", gitUrl)
+		}
+		localDirname = util.SanitizeDirname(util.GetStem(filepath.Base(parsed.Path)))
+	}
+
+	if !isSafeDirName.MatchString(localDirname) {
+		return nil, fmt.Errorf("invalid path: %#v", dirname)
+	}
+
+	dir := filepath.Join(m.baseDir, localDirname)
+	proj, err := CloneProject(dir, gitUrl, branch)
+
+	if err != nil {
+		return nil, err
+	}
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.registerProject(proj)
 	return proj, nil
 }
 

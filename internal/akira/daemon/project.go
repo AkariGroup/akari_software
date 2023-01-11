@@ -70,6 +70,18 @@ func (s *ProjectServicer) CreateLocalProject(ctx context.Context, r *proto.Creat
 	}
 }
 
+func (s *ProjectServicer) CreateProjectFromGit(ctx context.Context, r *proto.CreateProjectFromGitRequest) (*proto.Project, error) {
+	var branch *string = nil
+	if r.Branch != nil && *r.Branch != "" {
+		branch = r.Branch
+	}
+	if p, err := s.da.projects.CloneProject(r.GitUrl, r.Dirname, branch); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error while creating a project: %#v", err))
+	} else {
+		return projectToPb(p), nil
+	}
+}
+
 func (s *ProjectServicer) EditProject(ctx context.Context, r *proto.EditProjectRequest) (*proto.Project, error) {
 	p, ok := s.da.projects.GetProject(r.Id)
 	if !ok {

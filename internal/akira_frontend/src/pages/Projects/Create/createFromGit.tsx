@@ -14,11 +14,15 @@ import {
 import useAspidaSWR from "@aspida/swr";
 import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
-import { ValidNamePattern } from "../validNamePattern";
+import {
+  ValidBranchNamePattern,
+  ValidGitUrlPattern,
+  ValidNamePattern,
+} from "../validNamePattern";
 import { CancelButton } from "../../../components/CancelButton";
 type CreateProjectFromGitInputs = {
-  branch: string;
-  dirname: string;
+  branch?: string;
+  dirname?: string;
   gitUrl: string;
 };
 
@@ -46,12 +50,12 @@ export function CreateProjectFromGit() {
       if (!client) return;
 
       const request: Akira_protoCreateProjectFromGitRequest = {
-        branch: data.branch,
+        branch: data.branch !== "" ? data.branch : undefined,
         dirname: customPath ? data.dirname : undefined,
         gitUrl: data.gitUrl,
       };
       // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.create.local.post({
+      const res = await client.projects.create.git.post({
         body: request,
       });
       const projectId = res.body.id;
@@ -108,7 +112,7 @@ export function CreateProjectFromGit() {
             rules={{
               required: ValidationMessages.Required,
               pattern: {
-                value: ValidNamePattern,
+                value: ValidGitUrlPattern,
                 message: ValidationMessages.InvalidCharacter,
               },
             }}
@@ -128,9 +132,8 @@ export function CreateProjectFromGit() {
             name="branch"
             control={control}
             rules={{
-              required: ValidationMessages.Required,
               pattern: {
-                value: ValidNamePattern,
+                value: ValidBranchNamePattern,
                 message: ValidationMessages.InvalidCharacter,
               },
             }}
@@ -138,7 +141,6 @@ export function CreateProjectFromGit() {
             render={({ field }) => (
               <TextField
                 {...field}
-                required
                 label="gitブランチ名"
                 variant="filled"
                 error={!!errors.branch}
