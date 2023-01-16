@@ -20,6 +20,9 @@ import {
   ValidNamePattern,
 } from "../validNamePattern";
 import { CancelButton } from "../../../components/CancelButton";
+import { AxiosError } from "axios";
+import { ApiError } from "../../../libs/types";
+import { ApiErrorAlert } from "../../../components/ApiErrorAlert";
 type CreateProjectFromGitInputs = {
   branch?: string;
   dirname?: string;
@@ -40,6 +43,7 @@ export function CreateProjectFromGit() {
     formState: { errors },
   } = useForm<CreateProjectFromGitInputs>();
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState<ApiError | null>(null);
 
   const client = useApiClient();
   const { data: templates } = useAspidaSWR(client.templates, {
@@ -54,15 +58,22 @@ export function CreateProjectFromGit() {
         dirname: customPath ? data.dirname : undefined,
         gitUrl: data.gitUrl,
       };
-      // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.create.git.post({
-        body: request,
-      });
-      const projectId = res.body.id;
-
-      navigate(`/projects/details?id=${projectId}`);
+      try {
+        const res = await client.projects.create.git.post({
+          body: request,
+        });
+        const projectId = res.body.id;
+        navigate(`/projects/details?id=${projectId}`);
+      } catch (e) {
+        if (e instanceof AxiosError) {
+          const err = e.response?.data as ApiError;
+          setApiError(err);
+          return;
+        }
+        throw e;
+      }
     },
-    [customPath, client, navigate]
+    [customPath, client, navigate, setApiError]
   );
 
   const customPathElement = customPath ? (
@@ -106,6 +117,7 @@ export function CreateProjectFromGit() {
     >
       <Grid item sm={12}>
         <Stack spacing={2}>
+          {apiError && <ApiErrorAlert error={apiError} />}
           <Controller
             name="gitUrl"
             control={control}
