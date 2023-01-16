@@ -71,11 +71,16 @@ export function ProjectsDetails() {
 
   return (
     <Container maxWidth="xl">
-      <Grid margin={1}>
-        <IconButton type="button" component={NavLink} to="/projects">
+      <Box margin={1}>
+        <IconButton
+          type="button"
+          component={NavLink}
+          to="/projects"
+          size="large"
+        >
           <ArrowBackIcon />
         </IconButton>
-      </Grid>
+      </Box>
       <Grid container>
         <Grid item sm={12} md={9}>
           <Card>
