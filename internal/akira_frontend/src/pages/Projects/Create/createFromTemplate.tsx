@@ -33,6 +33,9 @@ import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 import { CancelButton } from "../../../components/CancelButton";
 import { ValidNamePattern } from "../validNamePattern";
+import { AxiosError } from "axios";
+import { ApiError } from "../../../libs/types";
+import { ApiErrorAlert } from "../../../components/ApiErrorAlert";
 
 type TemplateSelectorProps = {
   fields: ControllerRenderProps<CreateProjectFromTemplateInputs, "templateId">;
@@ -109,6 +112,7 @@ export function CreateProjectFromTemplate() {
     formState: { errors },
   } = useForm<CreateProjectFromTemplateInputs>();
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState<ApiError | null>(null);
 
   const client = useApiClient();
   const { data: templates } = useAspidaSWR(client.templates, {
@@ -123,15 +127,22 @@ export function CreateProjectFromTemplate() {
         manifest: data.manifest,
         templateId: data.templateId,
       };
-      // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.create.local.post({
-        body: request,
-      });
-      const projectId = res.body.id;
-
-      navigate(`/projects/details?id=${projectId}`);
+      try {
+        const res = await client.projects.create.local.post({
+          body: request,
+        });
+        const projectId = res.body.id;
+        navigate(`/projects/details?id=${projectId}`);
+      } catch (e) {
+        if (e instanceof AxiosError) {
+          const err = e.response?.data as ApiError;
+          setApiError(err);
+          return;
+        }
+        throw e;
+      }
     },
-    [customPath, client, navigate]
+    [customPath, client, navigate, setApiError]
   );
 
   const customPathElement = customPath ? (
@@ -175,6 +186,7 @@ export function CreateProjectFromTemplate() {
     >
       <Grid item sm={12} md={6}>
         <Stack spacing={2}>
+          {apiError && <ApiErrorAlert error={apiError} />}
           <Controller
             name="manifest.name"
             control={control}
