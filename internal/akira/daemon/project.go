@@ -55,7 +55,7 @@ func (s *ProjectServicer) CreateLocalProject(ctx context.Context, r *proto.Creat
 	m := pbToProjectManifest(r.Manifest)
 	v := validator.New()
 	if err := v.Struct(m); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid manifest: %#v", err))
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid manifest: %#s", err))
 	}
 
 	t, ok := s.da.templates.LookupTemplate(r.TemplateId)
@@ -64,7 +64,19 @@ func (s *ProjectServicer) CreateLocalProject(ctx context.Context, r *proto.Creat
 	}
 
 	if p, err := s.da.projects.CreateProject(r.Dirname, m, t); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error while creating a project: %#v", err))
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error while creating a project: %#s", err))
+	} else {
+		return projectToPb(p), nil
+	}
+}
+
+func (s *ProjectServicer) CreateProjectFromGit(ctx context.Context, r *proto.CreateProjectFromGitRequest) (*proto.Project, error) {
+	var branch *string = nil
+	if r.Branch != nil && *r.Branch != "" {
+		branch = r.Branch
+	}
+	if p, err := s.da.projects.CloneProject(r.GitUrl, r.Dirname, branch); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("error while creating a project: %#s", err))
 	} else {
 		return projectToPb(p), nil
 	}
@@ -76,10 +88,10 @@ func (s *ProjectServicer) EditProject(ctx context.Context, r *proto.EditProjectR
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("project doesn't exist: %#v", r.Id))
 	}
 	if err := p.SetManifest(pbToProjectManifest(r.Manifest)); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid manifest: %#v", err))
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("invalid manifest: %#s", err))
 	}
 	if err := p.SaveManifest(); err != nil {
-		return nil, status.Errorf(codes.Internal, fmt.Sprintf("error occurred while saving manifest: %#v", err))
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("error occurred while saving manifest: %#s", err))
 	}
 	return projectToPb(p), nil
 }

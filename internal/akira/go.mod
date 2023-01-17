@@ -19,6 +19,7 @@ require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/docker/distribution v2.8.1+incompatible // indirect
 	github.com/docker/go-units v0.4.0 // indirect
+	github.com/go-git/go-git/v5 v5.5.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
@@ -28,6 +29,5 @@ require (
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/rs/zerolog v1.27.0
 	github.com/sirupsen/logrus v1.9.0 // indirect
-	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664 // indirect
 	gotest.tools/v3 v3.3.0 // indirect
 )

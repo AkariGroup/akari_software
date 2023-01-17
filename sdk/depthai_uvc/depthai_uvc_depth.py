@@ -1,12 +1,20 @@
+import os
+
 import cv2
 import depthai as dai
 import numpy as np
 import pyvirtualcam
 
+# Reset v4l2loopback
+os.system("sudo modprobe -r v4l2loopback")
+os.system("sudo modprobe v4l2loopback")
+
 # Create pipeline
 pipeline = dai.Pipeline()
 camLeft = pipeline.create(dai.node.MonoCamera)
+camLeft.setResolution(dai.MonoCameraProperties.SensorResolution.THE_480_P)
 camRight = pipeline.create(dai.node.MonoCamera)
+camRight.setResolution(dai.MonoCameraProperties.SensorResolution.THE_480_P)
 stereo = pipeline.create(dai.node.StereoDepth)
 xout = pipeline.create(dai.node.XLinkOut)
 xout.setStreamName("depth")

@@ -28,7 +28,7 @@ export function OpenProjectWithServiceButton(props: Props) {
 
   const runningServices = props.services?.filter(
     (s) =>
-      s.status === "RUNNING" && s.image?.capabilities?.includes("open_project")
+      s.state === "RUNNING" && s.image?.capabilities?.includes("open_project")
   );
   const hasActiveServices = (runningServices?.length ?? 0) > 0;
 
