@@ -169,7 +169,7 @@ class M5StackSerialClient(M5StackClient):
         data = {"com": CommandId.RESETM5}
         self._communicator.send_data(data, sync=False)
         self._pin_out.reset()
-        time.sleep(2)
+        time.sleep(4)
         self._start_m5()
 
     def get(self) -> M5ComDict:
