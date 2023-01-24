@@ -1,7 +1,7 @@
 # Akari sample py
 
 ## 概要
-AKARIのサンプルアプリ集(非ROS版)
+AKARIのサンプルアプリ集
 
 ## 必要要件
 AKARIを非ROS版に切り替えていること。  
