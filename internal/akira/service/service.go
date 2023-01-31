@@ -72,6 +72,7 @@ type Service interface {
 	Clean() error
 	State() ServiceState
 	Logs() string
+	Outputs() (string, string)
 
 	GetOpenAddress(hostName string) (string, error)
 	GetOpenProjectAddress(hostName string, projectDir string) (string, error)
