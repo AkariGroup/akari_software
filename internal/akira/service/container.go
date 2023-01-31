@@ -249,3 +249,22 @@ func (p *ServiceContainer) Logs() string {
 
 	return p.logBuffer.String()
 }
+
+func (p *ServiceContainer) CheckAlive() error {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	if p.state != Running {
+		return nil
+	}
+
+	cid := p.containerId
+	if cid == nil {
+		return nil
+	}
+
+	if !p.d.CheckContainerRunning(*cid) {
+		p.changeState(Error)
+	}
+	return nil
+}
