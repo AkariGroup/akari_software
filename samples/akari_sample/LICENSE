@@ -13,12 +13,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 NOTICE: THIS FILE HAS BEEN MODIFIED BY TOYOTA MOTOR CORPORATION UNDER COMPLIANCE WITH THE MIT LICENCE FROM THE ORIGINAL WORK 
-OF THE COMPANY M5Stack (https://github.com/m5stack/M5Unit-ENV). THE FOLLOWING IS THE COPYRIGHT OF THE ORIGINAL DOCUMENT:
+OF THE COMPANY Luxonis (https://github.com/luxonis/depthai-python). THE FOLLOWING IS THE COPYRIGHT OF THE ORIGINAL DOCUMENT:
 
 
 MIT License
 
-Copyright (c) 2021 M5Stack
+Copyright (c) 2020 Luxonis LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
