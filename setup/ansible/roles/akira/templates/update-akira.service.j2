@@ -1,0 +1,15 @@
+[Unit]
+Description=Update Akira daemon
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=/etc/akira/daemon.d/override.env
+Environment=AKIRA_COMPOSE_FILE=/etc/akira/daemon.d/docker-compose.v1.yml
+ExecStart=/etc/akira/daemon.d/env.sh /usr/bin/docker compose -f ${AKIRA_COMPOSE_FILE} pull
+
+Type=oneshot
+User={{ ansible_user }}
+
+[Install]
+WantedBy=multi-user.target
