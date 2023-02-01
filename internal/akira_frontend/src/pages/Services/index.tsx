@@ -20,7 +20,6 @@ export function Services() {
     enabled: !!client,
     refreshInterval: 5 * 1000, // in ms
   });
-  const navigate = useNavigate();
   const [createDrawerOpened, setCreateDrawerOpened] = useState(false);
   const [targetEditService, setTargetEditService] =
     useState<Akira_protoService | null>(null);
