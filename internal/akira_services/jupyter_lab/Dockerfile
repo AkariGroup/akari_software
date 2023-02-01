@@ -28,6 +28,7 @@ RUN pip install \
         /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/jupyter_lab/entrypoint.sh /entrypoint.sh
+ENV JUPYTER_PREFER_ENV_PATH=1
 
 RUN mkdir -p /host_var && chmod 777 /host_var
 WORKDIR /app
