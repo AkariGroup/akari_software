@@ -237,8 +237,11 @@ func (m *AkariServiceServicer) GetServiceLog(ctx context.Context, r *proto.GetSe
 
 	ctx = service.SetAsync(ctx, true)
 	logs := s.Logs()
+	stdout, stderr := s.Outputs()
 	return &proto.GetServiceLogResponse{
-		Logs: logs,
+		Logs:   logs,
+		Stdout: stdout,
+		Stderr: stderr,
 	}, nil
 }
 

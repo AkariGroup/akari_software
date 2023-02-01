@@ -102,6 +102,8 @@ message GetServiceLogRequest {
 
 message GetServiceLogResponse {
   string logs = 1;
+  string stdout = 2;
+  string stderr = 3;
 }
 
 message OpenRequest {

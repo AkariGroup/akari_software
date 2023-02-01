@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -33,6 +34,24 @@ type ServiceContainer struct {
 	mu sync.Mutex
 }
 
+func createLogWriter(buf *CircBuffer.Buffer) zerolog.ConsoleWriter {
+	output := zerolog.ConsoleWriter{Out: buf, TimeFormat: time.RFC3339, NoColor: true}
+	output.FormatLevel = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("|%6s|", i))
+	}
+	output.FormatMessage = func(i interface{}) string {
+		return fmt.Sprintf("%s", i)
+	}
+	output.FormatFieldName = func(i interface{}) string {
+		return fmt.Sprintf("%s:", i)
+	}
+	output.FormatFieldValue = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("%s", i))
+	}
+
+	return output
+}
+
 func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *ServiceContainer {
 	logBuffer, err := CircBuffer.NewBuffer(LogBufferSize)
 	var logger zerolog.Logger
@@ -40,7 +59,7 @@ func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *Ser
 		logBuffer = nil
 		logger = zerolog.Nop()
 	} else {
-		logger = zerolog.New(logBuffer).With().Timestamp().Logger()
+		logger = zerolog.New(createLogWriter(logBuffer)).With().Timestamp().Logger()
 	}
 
 	return &ServiceContainer{
@@ -97,10 +116,13 @@ func validateStateChange(old ServiceState, new ServiceState) error {
 }
 
 func (p *ServiceContainer) changeState(newState ServiceState) error {
+	p.logger.Info().Msgf("changing state from %v to %v", p.state, newState)
 	if err := validateStateChange(p.state, newState); err != nil {
+		p.logger.Err(err).Msgf("failed to change state")
 		return err
 	}
 	p.state = newState
+	p.logger.Info().Msgf("state has changed to %v", newState)
 	return nil
 }
 
@@ -147,6 +169,7 @@ func (p *ServiceContainer) Start(ctx context.Context) (ret ServiceTask, err erro
 	p.mu.Unlock()
 
 	if err != nil {
+		p.logger.Err(err).Msg("failed to start service")
 		return
 	}
 
@@ -159,6 +182,7 @@ func (p *ServiceContainer) Start(ctx context.Context) (ret ServiceTask, err erro
 		} else {
 			containerId, err = p.createContainer()
 			if err != nil {
+				p.logger.Err(err).Msg("failed to create container")
 				return
 			}
 
@@ -168,12 +192,9 @@ func (p *ServiceContainer) Start(ctx context.Context) (ret ServiceTask, err erro
 		}
 
 		err = p.d.StartContainer(containerId)
-		if err != nil {
-			return
-		}
-
 		p.mu.Lock()
 		if err != nil {
+			p.logger.Err(err).Msg("failed to start container")
 			p.changeState(Error)
 		} else {
 			p.changeState(Running)
@@ -193,6 +214,7 @@ func (p *ServiceContainer) Stop(ctx context.Context) (ret ServiceTask, err error
 	p.mu.Unlock()
 
 	if err != nil || cid == nil {
+		p.logger.Error().Msg("failed to stop service")
 		return
 	}
 
@@ -204,6 +226,7 @@ func (p *ServiceContainer) Stop(ctx context.Context) (ret ServiceTask, err error
 		p.mu.Lock()
 		defer p.mu.Unlock()
 		if err != nil {
+			p.logger.Err(err).Msg("failed to stop container")
 			p.changeState(Error)
 		} else {
 			p.changeState(Stopped)
@@ -225,12 +248,14 @@ func (p *ServiceContainer) Terminate(ctx context.Context) (ret ServiceTask, err 
 	p.mu.Unlock()
 
 	if err != nil || cid == nil {
+		p.logger.Warn().Msg("failed to terminate service")
 		return
 	}
 
 	async := GetAsync(ctx)
 	ret = goRunConditional(async, func() error {
 		if err := p.d.RemoveContainer(*cid); err != nil {
+			p.logger.Err(err).Msg("failed to remove container")
 			return fmt.Errorf("got an error while removing the container: %#v, %#v", p.containerId, err)
 		}
 		return nil
@@ -248,6 +273,24 @@ func (p *ServiceContainer) Logs() string {
 	}
 
 	return p.logBuffer.String()
+}
+
+func (p *ServiceContainer) Outputs() (string, string) {
+	p.mu.Lock()
+	cid := p.containerId
+	p.mu.Unlock()
+
+	if cid == nil {
+		return "", ""
+	}
+
+	stdout, stderr, err := p.d.GetContainerOutputs(*cid)
+	if err != nil {
+		p.logger.Err(err).Msg("failed to get container output")
+		return "", ""
+	}
+
+	return stdout, stderr
 }
 
 func (p *ServiceContainer) CheckAlive() error {

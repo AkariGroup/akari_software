@@ -1,6 +1,7 @@
 package system
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -16,6 +17,7 @@ import (
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/jsonmessage"
+	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/docker/docker/pkg/term"
 	"github.com/docker/go-connections/nat"
 	"github.com/rs/zerolog/log"
@@ -218,4 +220,21 @@ func (d *DockerSystem) CheckContainerRunning(id ContainerId) bool {
 	}
 
 	return inspect.State != nil && inspect.State.Running
+}
+
+func (d *DockerSystem) GetContainerOutputs(id ContainerId) (string, string, error) {
+	out, err := d.cli.ContainerLogs(context.Background(), string(id), types.ContainerLogsOptions{
+		ShowStdout: true,
+		ShowStderr: true,
+		// Returns at most 256 lines
+		Tail: "256",
+	})
+	if err != nil {
+		return "", "", err
+	}
+	stdout := new(bytes.Buffer)
+	stderr := new(bytes.Buffer)
+	stdcopy.StdCopy(stdout, stderr, out)
+
+	return stdout.String(), stderr.String(), nil
 }

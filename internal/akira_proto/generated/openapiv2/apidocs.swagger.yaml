@@ -473,6 +473,10 @@ definitions:
     properties:
       logs:
         type: string
+      stderr:
+        type: string
+      stdout:
+        type: string
   akira_protoListImagesResponse:
     type: object
     properties:
