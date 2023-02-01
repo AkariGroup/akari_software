@@ -12,6 +12,7 @@ import { ServiceCreateDrawer } from "./create";
 import AddIcon from "@mui/icons-material/Add";
 import { SubmitHandler } from "react-hook-form";
 import { useSetBackdropValue } from "../../contexts/BackdropContext";
+import { useNavigate } from "react-router-dom";
 
 export function Services() {
   const client = useApiClient();
@@ -19,6 +20,7 @@ export function Services() {
     enabled: !!client,
     refreshInterval: 5 * 1000, // in ms
   });
+  const navigate = useNavigate();
   const [createDrawerOpened, setCreateDrawerOpened] = useState(false);
   const [targetEditService, setTargetEditService] =
     useState<Akira_protoService | null>(null);

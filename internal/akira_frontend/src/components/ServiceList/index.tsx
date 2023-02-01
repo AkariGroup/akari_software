@@ -12,6 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { Link as MuiLink } from "react-router-dom";
 import {
   Akira_protoServiceState,
   Akira_protoService,
@@ -25,6 +26,7 @@ import { useCallback, useState } from "react";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
+import PreviewIcon from "@mui/icons-material/Preview";
 
 type Props = {
   services: Akira_protoService[];
@@ -248,6 +250,9 @@ function ServiceRow({
           {!!onRemove ? (
             <RemoveButton service={service} onRemove={onRemove} />
           ) : null}
+          <IconButton component={MuiLink} to={`/services/logs/${service.id}`}>
+            <PreviewIcon />
+          </IconButton>
         </TableCell>
       </TableRow>
     </>
