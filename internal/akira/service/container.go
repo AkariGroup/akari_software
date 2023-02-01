@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -33,6 +34,24 @@ type ServiceContainer struct {
 	mu sync.Mutex
 }
 
+func createLogWriter(buf *CircBuffer.Buffer) zerolog.ConsoleWriter {
+	output := zerolog.ConsoleWriter{Out: buf, TimeFormat: time.RFC3339, NoColor: true}
+	output.FormatLevel = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("|%6s|", i))
+	}
+	output.FormatMessage = func(i interface{}) string {
+		return fmt.Sprintf("%s", i)
+	}
+	output.FormatFieldName = func(i interface{}) string {
+		return fmt.Sprintf("%s:", i)
+	}
+	output.FormatFieldValue = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("%s", i))
+	}
+
+	return output
+}
+
 func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *ServiceContainer {
 	logBuffer, err := CircBuffer.NewBuffer(LogBufferSize)
 	var logger zerolog.Logger
@@ -40,7 +59,7 @@ func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *Ser
 		logBuffer = nil
 		logger = zerolog.Nop()
 	} else {
-		logger = zerolog.New(logBuffer).With().Timestamp().Logger()
+		logger = zerolog.New(createLogWriter(logBuffer)).With().Timestamp().Logger()
 	}
 
 	return &ServiceContainer{
