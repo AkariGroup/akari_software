@@ -107,29 +107,6 @@ class M5StackServiceServicer(m5stack_pb2_grpc.M5StackServiceServicer):
         return Empty()
 
     @serialize_error(serializer)
-    def PlayMp3(
-        self,
-        request: m5stack_pb2.PlayMp3Request,
-        context: grpc.ServicerContext,
-    ) -> Empty:
-        self._m5stack.play_mp3(
-            request.path,
-            sync=request.sync,
-        )
-        return Empty()
-
-    @serialize_error(serializer)
-    def StopMp3(
-        self,
-        request: m5stack_pb2.StopMp3Request,
-        context: grpc.ServicerContext,
-    ) -> Empty:
-        self._m5stack.stop_mp3(
-            sync=request.sync,
-        )
-        return Empty()
-
-    @serialize_error(serializer)
     def Reset(
         self,
         request: Empty,

@@ -236,56 +236,6 @@ class M5StackClient(ABC):
         ...
 
     @abstractmethod
-    def play_mp3(
-        self,
-        filepath: str,
-        sync: bool = True,
-    ) -> None:
-        """M5のSDカード内のmp3ファイルを再生する。
-
-        .. note::
-            M5Stackのハード特性上、再生時にスピーカーにホワイトノイズが乗る。
-            またmp3再生を行いながら、ディスプレイ等の表示を行うと音声にノイズが乗るので注意。
-            音声再生を本格的に行いたい場合は、スピーカーをメインPCのイヤホンジャックやUSBに接続して、
-            メインPCから直接再生することを推奨。
-
-        Args:
-            filepath: M5のSDカード内のファイルパス。(例;"mp3/hoge.mp3")
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
-
-        Example:
-            >>> from akari_client import AkariClient
-            >>> with AkariClient() as akari:
-            >>>    filepath = "/mp3/hello.mp3"
-            >>>    m5.play_mp3(filepath)
-            # "/mp3/hello.mp3"が再生される。
-
-        """
-        ...
-
-    @abstractmethod
-    def stop_mp3(
-        self,
-        sync: bool = True,
-    ) -> None:
-        """mp3ファイルの再生を停止する。
-
-        Args:
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
-
-        Example:
-            >>> from akari_client import AkariClient
-            >>> with AkariClient() as akari:
-            >>>    filepath = "/mp3/hello.mp3"
-            >>>    m5.play_mp3(filepath)
-            >>>    time.sleep(1)
-            >>>    m5.stop_mp3()
-            # 1秒後に再生停止する。
-
-        """
-        ...
-
-    @abstractmethod
     def reset_m5(self) -> None:
         """M5をリセットして再起動する。
 

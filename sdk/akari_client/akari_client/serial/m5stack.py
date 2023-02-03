@@ -17,8 +17,6 @@ class CommandId(enum.IntEnum):
     SETDISPLAYCOLOR = 10
     SETDISPLAYTEXT = 11
     SETDISPLAYIMG = 12
-    PLAYMP3 = 13
-    STOPMP3 = 14
     STARTM5 = 98
     RESETM5 = 99
 
@@ -152,17 +150,6 @@ class M5StackSerialClient(M5StackClient):
             "com": CommandId.SETDISPLAYIMG,
             "lcd": {"pth": filepath, "x": pos_x, "y": pos_y, "scl": round(scale, 2)},
         }
-        self._communicator.send_data(data, sync)
-
-    def play_mp3(self, filepath: str, sync: bool = True) -> None:
-        data = {
-            "com": CommandId.PLAYMP3,
-            "mp3": {"pth": filepath},
-        }
-        self._communicator.send_data(data, sync)
-
-    def stop_mp3(self, sync: bool = True) -> None:
-        data = {"com": CommandId.STOPMP3}
         self._communicator.send_data(data, sync)
 
     def reset_m5(self) -> None:
