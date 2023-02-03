@@ -75,6 +75,20 @@ export function Services() {
     [client, setBusy, mutate]
   );
 
+  const onTerminate = useCallback(
+    async (target: Akira_protoService) => {
+      if (!client || !target.id) return;
+      setBusy(true);
+      try {
+        await client.services._id(target.id).terminate.post();
+        mutate?.();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy, mutate]
+  );
+
   const onLaunchService = useCallback(
     async (target: Akira_protoService) => {
       if (!client || !target.id) return;
@@ -176,6 +190,7 @@ export function Services() {
             services={data.services.filter((x) => x.type === "USER")}
             onStart={onStartService}
             onStop={onStopService}
+            onTerminate={onTerminate}
             onLaunch={onLaunchService}
             onRemove={onRemoveService}
             onEdit={setTargetEditService}
@@ -190,6 +205,7 @@ export function Services() {
             services={data.services.filter((x) => x.type === "SYSTEM")}
             onStart={onStartService}
             onStop={onStopService}
+            onTerminate={onTerminate}
             onAutoStart={onAutoStartService}
           />
         </Box>
