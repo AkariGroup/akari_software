@@ -10,12 +10,8 @@
 #include <M5GFX.h>
 #include "UNIT_ENV.h"
 #include <WiFi.h>
-#include "AudioFileSourceSD.h"
-#include "AudioFileSourceID3.h"
-#include "AudioGeneratorMP3.h"
-#include "AudioOutputI2S.h"
 
-const String m5_ver = "1.1.0";
+const String m5_ver = "1.2.0";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
@@ -29,12 +25,6 @@ M5GFX lcd;
 #define DOUT1PIN 2
 #define PWMOUT0PIN 17
 #define LIGHTSENSORINPIN 36
-
-AudioGeneratorMP3* mp3;
-AudioFileSourceSD* file;
-AudioOutputI2S* out;
-AudioFileSourceID3* id3;
-
 
 bool isStart;
 int seq = 0;
@@ -57,8 +47,6 @@ QMP6988 qmp6988;
 #define FILLDISPLAY 10
 #define DISPLAYSTRING 11
 #define DISPLAYIMG 12
-#define PLAYMP3 13
-#define STOPMP3 14
 #define RESETM5 99
 #define STARTM5 98
 
@@ -88,8 +76,6 @@ int req_y;
 int req_fill_color;
 int req_text_color;
 int req_back_color;
-
-bool mp3_stop_flg = false;
 
 //buttonの入力をMEASURETIME回の平均から決定(チャタリング対策)
 bool buttonResult(int measure)
@@ -346,18 +332,6 @@ void subSerial(void *arg)
           commandFlg = true;
           break;
         }
-        
-        case PLAYMP3:
-          file = new AudioFileSourceSD(rec["mp3"]["pth"].as<char *>());
-          id3 = new AudioFileSourceID3(file);
-          mp3->begin(id3, out);
-          commandFlg = true;
-          break;
-
-        case STOPMP3:
-          mp3_stop_flg = true;
-          commandFlg = true;
-          break;
 
         case RESETM5:
           ESP.restart();
@@ -380,12 +354,6 @@ void pubSerial(void *arg)
   xSemaphoreGive(xMutex);
   while (1)
   {
-  if (mp3->isRunning()) {
-    if (!mp3->loop() || mp3_stop_flg){
-      mp3->stop();
-      mp3_stop_flg = false;
-    }
-  }
     StaticJsonDocument<500> doc;
     int buttonAMeasure = 0;
     int buttonBMeasure = 0;
@@ -522,10 +490,6 @@ void setup()
     delay(1);
   }
   xMutex = xSemaphoreCreateMutex();
-  out = new AudioOutputI2S(0, 1);  // Output to builtInDAC
-  out->SetGain(0.3);
-  out->SetOutputModeMono(true);
-  mp3 = new AudioGeneratorMP3();
   playBootAnime();
   loopStart = millis();
   //esp32の各コアにタスク割当

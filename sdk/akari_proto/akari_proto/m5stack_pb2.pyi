@@ -141,31 +141,6 @@ class SetDisplayImageRequest(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["path",b"path","pos_x",b"pos_x","pos_y",b"pos_y","scale",b"scale","sync",b"sync"]) -> None: ...
 global___SetDisplayImageRequest = SetDisplayImageRequest
 
-class PlayMp3Request(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    PATH_FIELD_NUMBER: builtins.int
-    SYNC_FIELD_NUMBER: builtins.int
-    path: typing.Text
-    sync: builtins.bool
-    def __init__(self,
-        *,
-        path: typing.Text = ...,
-        sync: builtins.bool = ...,
-        ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["path",b"path","sync",b"sync"]) -> None: ...
-global___PlayMp3Request = PlayMp3Request
-
-class StopMp3Request(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    SYNC_FIELD_NUMBER: builtins.int
-    sync: builtins.bool
-    def __init__(self,
-        *,
-        sync: builtins.bool = ...,
-        ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["sync",b"sync"]) -> None: ...
-global___StopMp3Request = StopMp3Request
-
 class Color(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     RED_FIELD_NUMBER: builtins.int
