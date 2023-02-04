@@ -1,7 +1,5 @@
 import { TableCell, TableRow, IconButton, Table } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import DeleteIcon from "@mui/icons-material/Delete";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { Link } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -38,14 +36,8 @@ export function ProjectListItem({ project }: Prop) {
           {project.manifest?.description}
         </TableCell>
         <TableCell sx={{ width: "20%" }}>
-          <IconButton disabled>
-            <FavoriteIcon />
-          </IconButton>
           <IconButton component={Link} to="/services">
             <LaunchIcon />
-          </IconButton>
-          <IconButton disabled>
-            <DeleteIcon />
           </IconButton>
           <IconButton>
             <MoreVertIcon />
