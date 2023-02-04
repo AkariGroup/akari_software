@@ -449,6 +449,7 @@ void setup()
   lcd.setColorDepth(24);
   drawWaitingImg();
   qmp6988.init();
+  dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
   Serial.setTimeout(1);
   pinMode(DIN0PIN, INPUT_PULLUP);
