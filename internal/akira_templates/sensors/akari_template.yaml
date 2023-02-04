@@ -1,0 +1,10 @@
+---
+name: "Sensors"
+version: "0.0.1"
+description: "Sensors data receive template with a single ipynb file"
+author: "Akari"
+url: "https://github.com/AkariGroup/"
+tags:
+  - Official
+  - Sensors
+  - Jupyter
