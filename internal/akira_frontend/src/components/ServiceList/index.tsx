@@ -32,6 +32,7 @@ type Props = {
   services: Akira_protoService[];
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onTerminate: (target: Akira_protoService) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
@@ -91,6 +92,7 @@ type PowerButtonProps = {
   service: Akira_protoService;
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onTerminate: (target: Akira_protoService) => void;
 };
 
 function PowerButton(props: PowerButtonProps) {
@@ -98,6 +100,8 @@ function PowerButton(props: PowerButtonProps) {
   const onPowerIconClicked = useCallback(() => {
     if (props.service.state === "RUNNING") {
       setPowerDialogOpened(true);
+    } else if (props.service.state === "ERROR") {
+      props.onTerminate(props.service);
     } else {
       props.onStart(props.service);
     }
@@ -118,6 +122,8 @@ function PowerButton(props: PowerButtonProps) {
   const powerIcon = (() => {
     if (powerButtonDisabled) {
       return <CircularProgress />;
+    } else if (props.service.state === "ERROR") {
+      return <PowerSettingsNewIcon color="secondary" />;
     } else if (props.service.state === "RUNNING") {
       return <PowerSettingsNewIcon color="error" />;
     } else {
@@ -177,6 +183,7 @@ type ServiceRowProps = {
   service: Akira_protoService;
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onTerminate: (target: Akira_protoService) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
@@ -209,6 +216,7 @@ function ServiceRow({
   onRemove,
   onEdit,
   onAutoStart,
+  onTerminate,
 }: ServiceRowProps) {
   return (
     <>
@@ -246,7 +254,12 @@ function ServiceRow({
               <LaunchIcon />
             </IconButton>
           ) : null}
-          <PowerButton service={service} onStart={onStart} onStop={onStop} />
+          <PowerButton
+            service={service}
+            onStart={onStart}
+            onStop={onStop}
+            onTerminate={onTerminate}
+          />
           {!!onRemove ? (
             <RemoveButton service={service} onRemove={onRemove} />
           ) : null}
@@ -295,6 +308,7 @@ export function ServiceList(props: Props) {
               onRemove={props.onRemove}
               onEdit={props.onEdit}
               onAutoStart={props.onAutoStart}
+              onTerminate={props.onTerminate}
             />
           ))}
         </TableBody>
