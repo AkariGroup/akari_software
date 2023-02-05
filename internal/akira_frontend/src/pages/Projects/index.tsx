@@ -3,7 +3,7 @@ import { Stack, Container, Button, Grid } from "@mui/material";
 import GridViewIcon from "@mui/icons-material/GridView";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   NewProjectButtonCard,
@@ -11,6 +11,7 @@ import {
 } from "../../components/ProjectCard";
 import { ProjectListItem, ProjectListHeader } from "./ProjectList";
 import { useApiClient } from "../../hooks/api";
+import { Akira_protoProject } from "../../api/@types";
 
 type DisplayMode = "card" | "table";
 
@@ -24,6 +25,16 @@ export function Projects() {
     localStorage.setItem(projectDisplayModeKey, mode);
   }, [mode]);
   const { data, error } = useAspidaSWR(client?.projects, { enabled: !!client });
+  const sortKey = useCallback(
+    (lhs: Akira_protoProject, rhs: Akira_protoProject) => {
+      const lhsState = lhs.manifest?.name ?? "";
+      const rhsState = rhs.manifest?.name ?? "";
+      return lhsState > rhsState ? 1 : -1;
+    },
+    []
+  );
+  let sortedProjects = data?.projects?.sort(sortKey);
+
   let element = null;
   if (mode === "table") {
     element = (
@@ -39,7 +50,7 @@ export function Projects() {
             新規プロジェクト
           </Button>
           <ProjectListHeader />
-          {data?.projects?.map((p) => (
+          {sortedProjects?.map((p) => (
             <ProjectListItem key={p.id} project={p} />
           ))}
         </Container>
@@ -51,7 +62,7 @@ export function Projects() {
         <Grid item xs="auto">
           <NewProjectButtonCard />
         </Grid>
-        {data?.projects?.map((p) => (
+        {sortedProjects?.map((p) => (
           <Grid item xs="auto">
             <ProjectCard key={p.id} project={p} />
           </Grid>

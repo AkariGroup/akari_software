@@ -70,6 +70,14 @@ function TemplateItem({ template }: { template: Akira_protoTemplate }) {
 
 function TemplateSelector(props: TemplateSelectorProps) {
   const error = !!props.error;
+  const sortKey = useCallback(
+    (lhs: Akira_protoTemplate, rhs: Akira_protoTemplate) => {
+      const lhsState = lhs.name ?? "";
+      const rhsState = rhs.name ?? "";
+      return lhsState > rhsState ? 1 : -1;
+    },
+    []
+  );
   return (
     <FormControl fullWidth variant="filled" error={error}>
       <InputLabel id="template-selector-label">テンプレート</InputLabel>
@@ -81,7 +89,7 @@ function TemplateSelector(props: TemplateSelectorProps) {
         renderValue={(e) => `${e}`}
         error={error}
       >
-        {props.templates?.map((t) => (
+        {props.templates?.sort(sortKey).map((t) => (
           <MenuItem key={t.id} value={t.id}>
             <TemplateItem template={t} />
           </MenuItem>
