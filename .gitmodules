@@ -7,9 +7,3 @@
 [submodule "setup/arduino/lib/ArduinoJson"]
 	path = setup/arduino/lib/ArduinoJson
 	url = https://github.com/bblanchon/ArduinoJson.git
-[submodule "setup/arduino/lib/ESP8266Audio"]
-	path = setup/arduino/lib/ESP8266Audio
-	url = https://github.com/earlephilhower/ESP8266Audio
-[submodule "setup/arduino/lib/ESP8266_Spiram"]
-	path = setup/arduino/lib/ESP8266_Spiram
-	url = https://github.com/Gianbacchio/ESP8266_Spiram.git

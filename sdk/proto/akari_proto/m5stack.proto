@@ -38,15 +38,6 @@ message SetDisplayImageRequest {
   bool sync = 5;
 }
 
-message PlayMp3Request {
-  string path = 1;
-  bool sync = 2;
-}
-
-message StopMp3Request {
-  bool sync = 1;
-}
-
 message Color {
   int32 red = 1;
   int32 green = 2;
@@ -67,10 +58,6 @@ service M5StackService {
     rpc SetDisplayText(SetDisplayTextRequest)
         returns (google.protobuf.Empty);
     rpc SetDisplayImage(SetDisplayImageRequest)
-        returns (google.protobuf.Empty);
-    rpc PlayMp3(PlayMp3Request)
-        returns (google.protobuf.Empty);
-    rpc StopMp3(StopMp3Request)
         returns (google.protobuf.Empty);
     rpc Reset(google.protobuf.Empty)
         returns (google.protobuf.Empty);
