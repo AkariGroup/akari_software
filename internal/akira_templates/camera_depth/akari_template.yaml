@@ -1,0 +1,11 @@
+---
+name: "Camera Depth"
+version: "0.0.1"
+description: "Depth camera streaming template with a single ipynb file"
+author: "Akari"
+url: "https://github.com/AkariGroup/"
+tags:
+  - Official
+  - camera
+  - depth
+  - Jupyter

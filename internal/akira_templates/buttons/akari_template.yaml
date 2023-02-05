@@ -1,0 +1,10 @@
+---
+name: "Buttons"
+version: "0.0.1"
+description: "Buttons input template with a single ipynb file"
+author: "Akari"
+url: "https://github.com/AkariGroup/"
+tags:
+  - Official
+  - Buttons
+  - Jupyter
