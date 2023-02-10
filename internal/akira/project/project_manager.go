@@ -47,9 +47,11 @@ func (m *ProjectManager) clearProjects() {
 	}
 }
 
-func (m *ProjectManager) UpdateProjects() {
+func (m *ProjectManager) RefreshProjects() {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+
+	m.clearProjects()
 
 	err := filepath.WalkDir(m.baseDir, func(p string, d os.DirEntry, err error) error {
 		if err != nil {

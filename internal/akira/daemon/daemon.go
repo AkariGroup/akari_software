@@ -108,7 +108,7 @@ func NewDaemon(config NewDaemonConfig) (*Daemon, error) {
 		return nil, err
 	}
 
-	pm.UpdateProjects()
+	pm.RefreshProjects()
 	tm := project.NewTemplateManager(templateDir)
 	tm.UpdateTemplates()
 	opts := service.ServiceManagerOptions{

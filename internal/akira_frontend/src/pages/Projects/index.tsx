@@ -13,6 +13,7 @@ import {
 import { ProjectListItem, ProjectListHeader } from "./ProjectList";
 import { useApiClient } from "../../hooks/api";
 import { Akira_protoProject } from "../../api/@types";
+import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
 type DisplayMode = "card" | "table";
 
@@ -21,11 +22,29 @@ export function Projects() {
   const [mode, setMode] = useState<DisplayMode>(
     () => localStorage.getItem(projectDisplayModeKey) as DisplayMode
   );
+
+  const setBusy = useSetBackdropValue();
   const client = useApiClient();
   useEffect(() => {
     localStorage.setItem(projectDisplayModeKey, mode);
   }, [mode]);
-  const { data, error } = useAspidaSWR(client?.projects, { enabled: !!client });
+  const { data, error, mutate } = useAspidaSWR(client?.projects, {
+    enabled: !!client,
+  });
+  const refreshProjects = useCallback(async () => {
+    if (!client) return;
+
+    setBusy(true);
+    try {
+      await client.projects.refresh.post({
+        body: {},
+      });
+      mutate();
+    } finally {
+      setBusy(false);
+    }
+  }, [client, mutate, setBusy]);
+
   const sortKey = useCallback(
     (lhs: Akira_protoProject, rhs: Akira_protoProject) => {
       const lhsState = lhs.manifest?.name ?? "";
@@ -80,7 +99,7 @@ export function Projects() {
     <Grid container>
       <Grid xs display="flex" justifyContent="flex-end">
         <Button>
-          <RefreshIcon fontSize="large" />
+          <RefreshIcon fontSize="large" onClick={refreshProjects} />
         </Button>
         <Stack sx={{ margin: 2 }}></Stack>
         <Stack sx={{ margin: 1 }} direction="row">
