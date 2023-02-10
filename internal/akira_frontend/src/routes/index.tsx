@@ -1,6 +1,5 @@
 import { Navigate, RouteObject } from "react-router-dom";
 import { MainLayout } from "../layouts/MainLayout";
-import { HomeDashboard } from "../pages/HomeDashboard";
 import { Projects } from "../pages/Projects";
 import { ProjectsCreate } from "../pages/Projects/Create";
 import { ProjectsEdit } from "../pages/Projects/Edit";
@@ -15,7 +14,7 @@ export const AppRoute: RouteObject = {
   children: [
     {
       path: "",
-      element: <HomeDashboard />,
+      element: <Navigate to="/projects" />,
     },
     {
       path: "/projects",

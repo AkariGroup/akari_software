@@ -14,7 +14,6 @@ import {
   Switch,
 } from "@mui/material";
 import { Link, NavLink } from "react-router-dom";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import WorkIcon from "@mui/icons-material/Work";
 import AppsIcon from "@mui/icons-material/Apps";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
@@ -27,7 +26,7 @@ import {
   useDarkmodeValue,
   useSetDarkmodeValue,
 } from "../../../contexts/DarkmodeContext";
-import { purple } from "@mui/material/colors";
+import { grey, purple } from "@mui/material/colors";
 
 type Props = {};
 
@@ -38,6 +37,11 @@ const Drawer = styled(MuiDrawer)(() => ({
     width: SidebarWidth,
   },
 }));
+const SidebarListItemButton = styled(ListItemButton)(({ theme }) => ({
+  "&.active": {
+    background: theme.palette.mode === "dark" ? grey[800] : grey[300],
+  },
+})) as typeof ListItemButton;
 
 function SidebarItems() {
   return (
@@ -61,31 +65,25 @@ function SidebarItems() {
           />
         </Button>
       </ListItem>
-      <ListItemButton component={NavLink} to="/">
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItemButton>
-      <ListItemButton component={NavLink} to="/projects">
+      <SidebarListItemButton component={NavLink} to="/projects">
         <ListItemIcon>
           {" "}
           <WorkIcon />
         </ListItemIcon>
         <ListItemText primary="Projects" />
-      </ListItemButton>
-      <ListItemButton component={NavLink} to="/services">
+      </SidebarListItemButton>
+      <SidebarListItemButton component={NavLink} to="/services">
         <ListItemIcon>
           <AppsIcon />
         </ListItemIcon>
         <ListItemText primary="Services" />
-      </ListItemButton>
-      <ListItemButton component={NavLink} to="/controller">
+      </SidebarListItemButton>
+      <SidebarListItemButton component={NavLink} to="/controller">
         <ListItemIcon>
           <SportsEsportsIcon />
         </ListItemIcon>
         <ListItemText primary="Controller" />
-      </ListItemButton>
+      </SidebarListItemButton>
     </List>
   );
 }
