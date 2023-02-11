@@ -2,6 +2,7 @@ import useAspidaSWR from "@aspida/swr";
 import { Stack, Container, Button, Grid } from "@mui/material";
 import GridViewIcon from "@mui/icons-material/GridView";
 import TableRowsIcon from "@mui/icons-material/TableRows";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -77,7 +78,14 @@ export function Projects() {
 
   return (
     <Grid container>
-      <Grid container justifyContent="flex-end">
+      <Grid xs display="flex" justifyContent="flex-start">
+        <Stack sx={{ margin: 1 }} direction="row">
+          <Button>
+            <RefreshIcon fontSize="large" />
+          </Button>
+        </Stack>
+      </Grid>
+      <Grid xs display="flex" justifyContent="flex-end">
         <Stack sx={{ margin: 1 }} direction="row">
           <Button
             variant={mode === "card" ? "contained" : undefined}
