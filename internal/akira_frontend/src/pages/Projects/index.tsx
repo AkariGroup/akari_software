@@ -78,14 +78,11 @@ export function Projects() {
 
   return (
     <Grid container>
-      <Grid xs display="flex" justifyContent="flex-start">
-        <Stack sx={{ margin: 1 }} direction="row">
-          <Button>
-            <RefreshIcon fontSize="large" />
-          </Button>
-        </Stack>
-      </Grid>
       <Grid xs display="flex" justifyContent="flex-end">
+        <Button>
+          <RefreshIcon fontSize="large" />
+        </Button>
+        <Stack sx={{ margin: 2 }}></Stack>
         <Stack sx={{ margin: 1 }} direction="row">
           <Button
             variant={mode === "card" ? "contained" : undefined}
