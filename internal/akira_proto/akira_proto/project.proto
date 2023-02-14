@@ -87,6 +87,13 @@ service ProjectService {
     };
   }
 
+  rpc RefreshProjects(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/projects/refresh"
+      body: "*"
+    };
+  }
+
   rpc ListProjects(google.protobuf.Empty) returns (ListProjectsResponse) {
     option (google.api.http) = {
       get: "/projects"

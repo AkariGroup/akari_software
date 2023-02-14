@@ -130,6 +130,11 @@ func templateToPb(t project.Template) *proto.Template {
 	}
 }
 
+func (s *ProjectServicer) RefreshProjects(ctx context.Context, r *emptypb.Empty) (*emptypb.Empty, error) {
+	s.da.projects.RefreshProjects()
+	return &emptypb.Empty{}, nil
+}
+
 func (s *ProjectServicer) ListTemplates(ctx context.Context, r *emptypb.Empty) (*proto.ListTemplatesResponse, error) {
 	ts := s.da.templates.ListTemplates()
 	var protos []*proto.Template
