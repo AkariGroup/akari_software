@@ -83,7 +83,7 @@ function State({ state }: { state?: Akira_protoServiceState }) {
 
   return (
     <Typography color={color} fontWeight={bold ? "bold" : undefined}>
-      {state}
+      {state === "STARTING" ? "STARTING / UPDATING" : state}
     </Typography>
   );
 }
