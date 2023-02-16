@@ -29,7 +29,6 @@ export function Services() {
       async (data) => {
         if (!client) return;
 
-        // TODO: Handle error (e.g. Directory name conflicts)
         setBusy(true);
         try {
           await client.services.post({
@@ -176,7 +175,7 @@ export function Services() {
           <Typography variant="h5" mb={1}>
             ユーザーサービス一覧
           </Typography>
-          <Box>
+          <Box mb={1}>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
