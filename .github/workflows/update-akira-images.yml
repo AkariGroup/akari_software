@@ -6,7 +6,7 @@ jobs:
   update-akira-image:
     name: Update docker images
     timeout-minutes: 30
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
       with:
