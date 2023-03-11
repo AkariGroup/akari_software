@@ -1,11 +1,10 @@
-import os
-import time
-import pathlib
-import cv2
 import contextlib
+import pathlib
+from typing import Any, Optional
+
+import cv2
 import depthai as dai
 import numpy as np
-from typing import Any, Optional
 
 from .utils.priorbox import PriorBox
 from .utils.utils import draw
@@ -56,13 +55,12 @@ def _render_frame(name: str, frame: np.ndarray, detections: Any) -> np.ndarray:
     if dets.shape[0] > 0:
         if dets.ndim == 1:
             dets = np.expand_dims(dets, 0)
-        img_res = draw(
+        frame = draw(  # type: ignore
             img=frame,
             bboxes=dets[:, :4],
             landmarks=np.reshape(dets[:, 4:14], (-1, 5, 2)),
             scores=dets[:, -1],
         )
-    color_black, color_white = (0, 0, 0), (255, 255, 255)
     resized_frame: np.ndarray = cv2.resize(frame, (640, 480))
     return resized_frame
 
