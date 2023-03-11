@@ -55,7 +55,7 @@ def _render_frame(name: str, frame: np.ndarray, detections: Any) -> np.ndarray:
     if dets.shape[0] > 0:
         if dets.ndim == 1:
             dets = np.expand_dims(dets, 0)
-        frame = draw(  # type: ignore
+        frame = draw(
             img=frame,
             bboxes=dets[:, :4],
             landmarks=np.reshape(dets[:, 4:14], (-1, 5, 2)),
