@@ -9,6 +9,8 @@ setup(
     author_email="akari.tmc@gmail.com",
     package_data={"akari_proto": ["py.typed"]},
     license="Apache License 2.0",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
