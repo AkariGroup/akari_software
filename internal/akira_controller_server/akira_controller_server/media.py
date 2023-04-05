@@ -11,6 +11,7 @@ import numpy
 
 from .captures.nop import NopCapture
 from .captures.oakd_depth import DepthCapture
+from .captures.oakd_face_detection import FaceDetectionCapture
 from .captures.oakd_object_detection import ObjectDetectionCapture
 from .captures.oakd_rgb import RGBCapture
 
@@ -49,6 +50,7 @@ class CaptureMode(str, enum.Enum):
     NONE = "None"
     RGB = "RGB"
     DEPTH = "Depth"
+    FACE_DETECTION = "FaceDetection"
     OBJECT_DETECTION = "ObjectDetection"
 
 
@@ -59,6 +61,8 @@ def capture_factory(mode: CaptureMode) -> CaptureProtocol:
         return RGBCapture()
     elif mode is CaptureMode.DEPTH:
         return DepthCapture()
+    elif mode is CaptureMode.FACE_DETECTION:
+        return FaceDetectionCapture()
     elif mode is CaptureMode.OBJECT_DETECTION:
         return ObjectDetectionCapture()
 

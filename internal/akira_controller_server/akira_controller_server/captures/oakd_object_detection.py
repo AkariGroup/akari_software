@@ -7,7 +7,9 @@ import depthai as dai
 import numpy
 
 PACKAGE_DIR = pathlib.Path(__file__).resolve().parents[2]
-WEIGHT_PATH = PACKAGE_DIR / "data/mobilenet-ssd_openvino_2021.4_6shave.blob"
+WEIGHT_PATH = (
+    PACKAGE_DIR / "data/object_detection/mobilenet-ssd_openvino_2021.4_6shave.blob"
+)
 
 WIDTH = 300
 HEIGHT = 300
