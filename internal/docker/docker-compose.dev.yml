@@ -24,8 +24,6 @@ services:
       AKIRA_PROJECT_DIR: ${AKIRA_DEV_LOCAL_DIR}/home/akari/projects
       AKIRA_ETC_DIR: ${AKIRA_DEV_LOCAL_DIR}/etc/akira
       AKIRA_VAR_DIR: ${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
-      # Required until the project gets open-sourced
-      AKIRA_DOCKER_CREDENTIAL: ${AKIRA_DOCKER_CREDENTIAL:?You need to run `source env.sh`}
   gateway:
     build:
       context: ../../

@@ -23,8 +23,6 @@ services:
       AKIRA_PROJECT_DIR: /home/akari/akari_projects
       AKIRA_ETC_DIR: /etc/akira
       AKIRA_VAR_DIR: /var/lib/akira
-      # Required until the project gets open-sourced
-      AKIRA_DOCKER_CREDENTIAL: ${AKIRA_DOCKER_CREDENTIAL:?You need to run `source env.sh`}
   gateway:
     image: akarirobot/akira-gateway:${AKIRA_IMAGE_TAG}
     environment:

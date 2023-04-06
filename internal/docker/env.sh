@@ -11,7 +11,6 @@ export DOCKER_GID=$(getent group docker | cut -d: -f3)
 
 export AKARI_REPOSITORY_DIR=${REPOSITORY_ROOT}
 export AKIRA_DEV_LOCAL_DIR=${SCRIPT_DIR}/.local
-export AKIRA_DOCKER_CREDENTIAL=$(cat ${SCRIPT_DIR}/.docker_credential)
 
 # for local development
 export AKIRA_TEMPLATE_DIR=${AKARI_REPOSITORY_DIR}/internal/akira_templates
