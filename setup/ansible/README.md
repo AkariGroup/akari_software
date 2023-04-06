@@ -31,11 +31,10 @@ AKARIに初期インストールするためのソフトウェア環境を管理
 
 2. 構成を適用
    ```sh
-   $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff -c local
+   $ ./run-ansible.py -i hosts ./system.yml -Kk --diff -c local
    (初回実行時だけ時間がかかります)
    BECOME password: <Akariユーザーのパスワードを入力する>
    ssh password: <Akariユーザーのパスワードを入力する>
-   Vault password: <シークレットファイル復号化用のパスワードを入力する>
    ```
 ### AKARI外のPCからリモート実行する場合
 
@@ -50,10 +49,10 @@ AKARIに初期インストールするためのソフトウェア環境を管理
 
 4. 構成を適用
    ```sh
-   $ ./run-ansible.py -i hosts ./system.yml --ask-vault-pass -Kk --diff
+   $ ./run-ansible.py -i hosts ./system.yml -Kk --diff
    (初回実行時だけ時間がかかります)
    BECOME password: <Akariユーザーのパスワードを入力する>
-   Vault password: <シークレットファイル復号化用のパスワードを入力する>
+   ssh password: <Akariユーザーのパスワードを入力する>
    ```
 
 
