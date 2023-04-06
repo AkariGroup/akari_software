@@ -6,6 +6,7 @@ setup(
     packages=find_packages(exclude=["tests"]),
     description="Akari Python package",
     long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     author="akari",
     author_email="akari.tmc@gmail.com",
     license="Apache License 2.0",
