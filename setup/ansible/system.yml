@@ -22,7 +22,6 @@
     - docker
   roles:
     - docker
-    - docker_credential
 
 - name: Setup akira
   hosts: mainpc
