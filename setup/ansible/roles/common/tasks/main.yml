@@ -13,7 +13,7 @@
 
 - name: Add user to dialout
   user:
-    name: '{{ ansible_user }}'
+    name: '{{ ansible_env.USER }}'
     groups: dialout
     append: yes
   become: true
