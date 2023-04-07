@@ -8,8 +8,8 @@ services:
         target: /etc/akira
         read_only: true
       - type: bind
-        source: ${HOME:?You need to run `source env.sh`}/projects
-        target: /projects
+        source: ${AKIRA_PROJECT_DIR:?You need to run `source env.sh`}
+        target: ${AKIRA_PROJECT_DIR:?You need to run `source env.sh`}
       - type: bind
         source: /var/lib/akira
         target: /var/lib/akira
@@ -20,7 +20,7 @@ services:
       HOST_UID: ${HOST_UID:?You need to run `source env.sh`}
       HOST_GID: ${HOST_GID:?You need to run `source env.sh`}
       DOCKER_GID: ${DOCKER_GID:?You need to run `source env.sh`}
-      AKIRA_PROJECT_DIR: /projects
+      AKIRA_PROJECT_DIR: ${AKIRA_PROJECT_DIR:?You need to run `source env.sh`}
       AKIRA_ETC_DIR: /etc/akira
       AKIRA_VAR_DIR: /var/lib/akira
   gateway:
