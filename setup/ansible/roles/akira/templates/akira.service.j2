@@ -11,7 +11,7 @@ ExecStart=/etc/akira/daemon.d/env.sh /usr/bin/docker compose -f ${AKIRA_COMPOSE_
 ExecStop=/etc/akira/daemon.d/env.sh /usr/bin/docker compose -f ${AKIRA_COMPOSE_FILE} down
 
 Type=simple
-User={{ ansible_user }}
+User={{ ansible_env.USER }}
 
 [Install]
 WantedBy=multi-user.target

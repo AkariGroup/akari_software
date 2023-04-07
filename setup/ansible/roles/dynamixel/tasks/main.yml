@@ -11,5 +11,5 @@
 - name: Add dynamixel authentification rules
   file:
     path: /dev/ttyUSB0
-    owner: '{{ ansible_user }}'
+    owner: '{{ ansible_env.USER }}'
   become: true
