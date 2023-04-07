@@ -11,7 +11,7 @@ setup(
         "": ["data/*.blob"],
     },
     install_requires=[
-        "akari-proto>=0.1.0,<0.2.0",
+        "akari-proto>=0.3.0,<0.4.0",
         "depthai==2.19.0.0",
         "fastapi==0.86.0",
         "grpcio==1.44.0",
