@@ -11,6 +11,4 @@ build/
 dist/
 .venv
 
-setup/ansible/hosts
-
 internal/docker/.docker_credential

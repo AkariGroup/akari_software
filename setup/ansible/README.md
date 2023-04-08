@@ -1,6 +1,6 @@
 # AKARI構成管理ツール
 
-AKARIに初期インストールするためのソフトウェア環境を管理・構築するためのツールです。
+AKARIの動作に必要なソフトウェアをインストールするためのツールです。
 
 
 ## 前準備
@@ -15,39 +15,29 @@ AKARIに初期インストールするためのソフトウェア環境を管理
    $ sudo apt install python3.8 python3.8-venv
    ```
 
-1. sshpassをインストール
-   ```sh
-   $ sudo apt install sshpass
-   ```
 
 ## 実行方法
 
 ### AKARIのローカル環境で実行する場合
 
-1. `hosts.example` を `hosts` という名前で同一ディレクトリ内にコピー
+1. Ansibleを実行する
    ```sh
-   $ cp hosts.example hosts
-   ```
-
-2. 構成を適用
-   ```sh
-   $ ./run-ansible.py -i hosts ./system.yml -Kk --diff -c local
+   $ ./run-ansible.py -i hosts ./system.yml -K --diff -c local
    (初回実行時だけ時間がかかります)
    BECOME password: <Akariユーザーのパスワードを入力する>
-   ssh password: <Akariユーザーのパスワードを入力する>
    ```
 ### AKARI外のPCからリモート実行する場合
 
 1. セットアップに使うPC側にakari_softwareをcloneし、AKARIとPCを同一ネットワークに接続する。
 
-2. `hosts.example` を `hosts` という名前で同一ディレクトリ内にコピー
+2. sshpassをインストール
    ```sh
-   $ cp hosts.example hosts
+   $ sudo apt install sshpass
    ```
 
-3. `hosts` の `[mainpc]` 以下の127.0.0.1を削除し、 AKARIの IPアドレスに書き換える
+3. `hosts` ファイルを開き、 `[mainpc]` 以下にある `127.0.0.1` をAKARIのIPアドレスに書き換える
 
-4. 構成を適用
+4. Ansibleを実行する
    ```sh
    $ ./run-ansible.py -i hosts ./system.yml -Kk --diff
    (初回実行時だけ時間がかかります)
