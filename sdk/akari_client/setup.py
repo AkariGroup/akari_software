@@ -34,10 +34,10 @@ setup(
             "protobuf==3.19.3",
         ],
         "depthai": [
-            "matplotlib==3.6.2",
-            "depthai==2.19.1.0",
+            "matplotlib",
+            "depthai",
             "opencv-python",
-            "blobconverter==1.3.0",
+            "blobconverter",
         ],
     },
 )
