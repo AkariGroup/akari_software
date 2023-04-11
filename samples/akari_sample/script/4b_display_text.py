@@ -13,6 +13,7 @@ from akari_client import AkariClient
 from akari_client.color import Colors
 from akari_client.position import Positions
 
+
 def main() -> None:
     """
     メイン関数
@@ -178,8 +179,7 @@ def main() -> None:
             back_color = Colors.BLACK
             # set_display_textを実行
             # pos_x,pos_yのみデフォルト引数を使用
-            m5.set_display_text(
-                text, size=size)
+            m5.set_display_text(text, size=size)
             print("-> Set")
             # 2秒停止
             time.sleep(2)

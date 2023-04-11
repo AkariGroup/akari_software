@@ -15,7 +15,7 @@ import argparse
 import json
 import time
 from pathlib import Path
-from typing import cast, Any, List, Tuple
+from typing import Any, List, Tuple, cast
 
 import cv2
 import depthai as dai
@@ -58,7 +58,9 @@ pipeline = dai.Pipeline()
 
 # Define sources and outputs
 camRgb = pipeline.create(dai.node.ColorCamera)
-detectionNetwork = cast(dai.node.YoloDetectionNetwork, pipeline.create(dai.node.YoloDetectionNetwork))
+detectionNetwork = cast(
+    dai.node.YoloDetectionNetwork, pipeline.create(dai.node.YoloDetectionNetwork)
+)
 xoutRgb = pipeline.create(dai.node.XLinkOut)
 nnOut = pipeline.create(dai.node.XLinkOut)
 
@@ -77,12 +79,8 @@ camRgb.setFps(40)
 detectionNetwork.setConfidenceThreshold(0.5)
 detectionNetwork.setNumClasses(80)
 detectionNetwork.setCoordinateSize(4)
-detectionNetwork.setAnchors(
-    [10, 14, 23, 27, 37, 58, 81, 82, 135, 169, 344, 319]
-)
-detectionNetwork.setAnchorMasks(
-    {"side26": [1, 2, 3], "side13": [3, 4, 5]}
-)
+detectionNetwork.setAnchors([10, 14, 23, 27, 37, 58, 81, 82, 135, 169, 344, 319])
+detectionNetwork.setAnchorMasks({"side26": [1, 2, 3], "side13": [3, 4, 5]})
 detectionNetwork.setIouThreshold(config["nn_config"]["confidence_threshold"])
 detectionNetwork.setBlobPath(args.nnPath)
 detectionNetwork.setNumInferenceThreads(2)

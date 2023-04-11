@@ -8,11 +8,11 @@ Created on 2021/06/11
 """
 
 
-import time
 import random
+import time
 
 from akari_client import AkariClient
-from akari_client.color import Colors, Color
+from akari_client.color import Color, Colors
 
 
 def main() -> None:
