@@ -16,7 +16,7 @@ setup(
         "fastapi==0.86.0",
         "grpcio==1.44.0",
         "numpy==1.23.4",
-        "opencv-python==4.7.0.72",
+        "opencv-python-headless==4.7.0.72",
         "protobuf==3.19.3",
         "uvicorn==0.19.0",
     ],
