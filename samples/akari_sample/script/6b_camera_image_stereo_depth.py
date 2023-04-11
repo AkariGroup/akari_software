@@ -5,7 +5,6 @@ Camera image stereo depth sample
 Created on 2022/04/16
 @author: Kazuya Yamamoto
 """
-from typing import Optional
 
 import cv2
 import depthai as dai
