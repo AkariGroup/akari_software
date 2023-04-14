@@ -34,7 +34,6 @@ def main() -> None:
     # ストリーミング名設定
     xout_video.setStreamName("video")
 
-
     # デバイスをパイプラインに接続
     with dai.Device(pipeline) as device:
         video = device.getOutputQueue(name="video", maxSize=1, blocking=False)  # type: ignore

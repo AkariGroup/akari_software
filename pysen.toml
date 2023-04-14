@@ -32,6 +32,7 @@ mypy_ignore_packages = ["akari_proto.*"]
     "internal/",
     "sdk/",
     "tools/",
+    "samples/",
   ]
   excludes = [
     "internal/akira_services/jupyter_lab/jupyter_lab_config.py",

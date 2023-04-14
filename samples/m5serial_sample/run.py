@@ -12,8 +12,8 @@ import locale
 import time
 
 from akari_client import AkariClient
-from akari_client.m5stack_client import M5StackClient
 from akari_client.color import Colors
+from akari_client.m5stack_client import M5StackClient
 from akari_client.position import Positions
 
 CLOCK_MODE = 1

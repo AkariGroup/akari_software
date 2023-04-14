@@ -48,7 +48,7 @@ time.sleep(3)
 
 # STEP6.panのモータ位置だけを0.5[rad]に移動。
 print("STEP6. Move pan joint position to 0.5 rad")
-joints.move_joint_positions(sync=True,pan=0.5)
+joints.move_joint_positions(sync=True, pan=0.5)
 print("")
 time.sleep(3)
 
@@ -85,8 +85,10 @@ print("")
 time.sleep(0.5)
 
 # STEP12.pan,tiltのモータ位置を(0.4, 0.4)[rad]に移動。syncをTrueにすることで、移動完了まで待つ
-print("STEP12. Move pan joint position to 0.4 rad and tilt joint position to 0.4 rad. Wait until finish.")
-joints.move_joint_positions(sync=True,pan=0.4,tilt=0.4)
+print(
+    "STEP12. Move pan joint position to 0.4 rad and tilt joint position to 0.4 rad. Wait until finish."
+)
+joints.move_joint_positions(sync=True, pan=0.4, tilt=0.4)
 print("")
 
 # STEP11.両方のモータ速度を10rad/sに変更。
