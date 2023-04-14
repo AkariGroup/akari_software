@@ -7,10 +7,12 @@ Based on depthai-experiments
 https://github.com/luxonis/depthai-experiments/tree/master/gen2-face-detection
 """
 
+from pathlib import Path
 import argparse
 import os
 import time
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
@@ -35,10 +37,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-nn",
     "--nn_model",
-    help="select model path for inference",
-    default=os.path.join(
-        os.path.dirname(__file__), "models/face_detection_yunet_120x160.blob"
-    ),
+    help="Provide model name or model path for inference",
+    default="face_detection_yunet_160x120",
     type=str,
 )
 parser.add_argument(
@@ -63,6 +63,9 @@ parser.add_argument(
 args = parser.parse_args()
 
 nn_path = args.nn_model
+if not Path(nn_path).exists():
+    print("No blob found at {}. Looking into DepthAI model zoo.".format(nn_path))
+    nn_path = str(blobconverter.from_zoo(args.nn_model, shaves = 6, zoo_type = "depthai", use_cache=True))
 
 # resize input to smaller size for faster inference
 NN_WIDTH, NN_HEIGHT = 160, 120

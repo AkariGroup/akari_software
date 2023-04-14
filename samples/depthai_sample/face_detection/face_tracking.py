@@ -7,6 +7,7 @@ Based on depthai-experiments
 https://github.com/luxonis/depthai-experiments/tree/master/gen2-face-detection
 """
 
+from pathlib import Path
 import argparse
 import os
 import threading
@@ -15,6 +16,7 @@ from queue import Queue
 from time import sleep
 from typing import Any
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
@@ -193,11 +195,8 @@ def FaceRecognition(q_detection: Any) -> None:
     parser.add_argument(
         "-nn",
         "--nn_model",
-        help="select model path for inference",
-        default=os.path.join(
-            os.path.dirname(__file__),
-            "models/face_detection_yunet_120x160.blob",
-        ),
+        help="Provide model name or model path for inference",
+        default="face_detection_yunet_160x120",
         type=str,
     )
     parser.add_argument(
@@ -225,6 +224,10 @@ def FaceRecognition(q_detection: Any) -> None:
     args = parser.parse_args()
 
     nn_path = args.nn_model
+    if not Path(nn_path).exists():
+        print("No blob found at {}. Looking into DepthAI model zoo.".format(nn_path))
+        nn_path = str(blobconverter.from_zoo(args.nn_model, shaves = 6, zoo_type = "depthai", use_cache=True))
+
 
     # --------------- Pipeline ---------------
     # Start defining a pipeline
