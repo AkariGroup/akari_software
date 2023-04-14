@@ -17,10 +17,10 @@ import time
 from pathlib import Path
 from typing import Any, List, Tuple, cast
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
-import blobconverter
 
 # Get argument first
 configPathDefault = str(
@@ -47,7 +47,7 @@ args = parser.parse_args()
 nnPath = args.nnPath
 if not Path(nnPath).exists():
     print("No blob found at {}. Looking into DepthAI model zoo.".format(nnPath))
-    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves = 6, use_cache=True))
+    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, use_cache=True))
 
 json_open = open(str(args.configPath), "r")
 config = json.load(json_open)

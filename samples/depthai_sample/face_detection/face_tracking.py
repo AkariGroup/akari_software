@@ -7,11 +7,10 @@ Based on depthai-experiments
 https://github.com/luxonis/depthai-experiments/tree/master/gen2-face-detection
 """
 
-from pathlib import Path
 import argparse
-import os
 import threading
 import time
+from pathlib import Path
 from queue import Queue
 from time import sleep
 from typing import Any
@@ -226,8 +225,11 @@ def FaceRecognition(q_detection: Any) -> None:
     nn_path = args.nn_model
     if not Path(nn_path).exists():
         print("No blob found at {}. Looking into DepthAI model zoo.".format(nn_path))
-        nn_path = str(blobconverter.from_zoo(args.nn_model, shaves = 6, zoo_type = "depthai", use_cache=True))
-
+        nn_path = str(
+            blobconverter.from_zoo(
+                args.nn_model, shaves=6, zoo_type="depthai", use_cache=True
+            )
+        )
 
     # --------------- Pipeline ---------------
     # Start defining a pipeline

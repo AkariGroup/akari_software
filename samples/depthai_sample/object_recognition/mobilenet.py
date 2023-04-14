@@ -13,11 +13,10 @@ import time
 from pathlib import Path
 from typing import Any, List, Tuple
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
-import blobconverter
-
 
 configPathDefault = str(
     (Path(__file__).parent / Path("configs/mobilenet-ssd.json")).resolve().absolute()
@@ -29,7 +28,7 @@ parser.add_argument(
     nargs="?",
     help="Provide model name or model path for mobilenet detection network",
     default="mobilenet-ssd",
-    type=str
+    type=str,
 )
 parser.add_argument(
     "-c",
@@ -37,7 +36,7 @@ parser.add_argument(
     nargs="?",
     help="Path to mobilenet detection label",
     default=configPathDefault,
-    type=str
+    type=str,
 )
 parser.add_argument(
     "-s",
@@ -52,7 +51,7 @@ args = parser.parse_args()
 nnPath = args.nnPath
 if not Path(nnPath).exists():
     print("No blob found at {}. Looking into DepthAI model zoo.".format(nnPath))
-    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves = 6, use_cache=True))
+    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, use_cache=True))
 
 json_open = open(str(args.configPath), "r")
 config = json.load(json_open)

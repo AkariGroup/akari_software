@@ -7,10 +7,9 @@ Based on depthai-experiments
 https://github.com/luxonis/depthai-experiments/tree/master/gen2-face-detection
 """
 
-from pathlib import Path
 import argparse
-import os
 import time
+from pathlib import Path
 
 import blobconverter
 import cv2
@@ -65,7 +64,11 @@ args = parser.parse_args()
 nn_path = args.nn_model
 if not Path(nn_path).exists():
     print("No blob found at {}. Looking into DepthAI model zoo.".format(nn_path))
-    nn_path = str(blobconverter.from_zoo(args.nn_model, shaves = 6, zoo_type = "depthai", use_cache=True))
+    nn_path = str(
+        blobconverter.from_zoo(
+            args.nn_model, shaves=6, zoo_type="depthai", use_cache=True
+        )
+    )
 
 # resize input to smaller size for faster inference
 NN_WIDTH, NN_HEIGHT = 160, 120
