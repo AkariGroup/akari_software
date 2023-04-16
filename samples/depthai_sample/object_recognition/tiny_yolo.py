@@ -17,16 +17,12 @@ import time
 from pathlib import Path
 from typing import Any, List, Tuple, cast
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
 
 # Get argument first
-nnPathDefault = str(
-    (Path(__file__).parent / Path("models/yolo-v3-tiny-tf_openvino_2021.4_6shave.blob"))
-    .resolve()
-    .absolute()
-)
 configPathDefault = str(
     (Path(__file__).parent / Path("configs/tiny-yolo.json")).resolve().absolute()
 )
@@ -36,7 +32,7 @@ parser.add_argument(
     "--nnPath",
     nargs="?",
     help="Path to YOLO detection network blob",
-    default=nnPathDefault,
+    default="yolo-v3-tiny-tf",
 )
 parser.add_argument(
     "-c",
@@ -46,6 +42,13 @@ parser.add_argument(
     default=configPathDefault,
 )
 args = parser.parse_args()
+
+# get model path
+nnPath = args.nnPath
+if not Path(nnPath).exists():
+    print("No blob found at {}. Looking into DepthAI model zoo.".format(nnPath))
+    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, use_cache=True))
+
 json_open = open(str(args.configPath), "r")
 config = json.load(json_open)
 # tiny yolo v4 label texts
@@ -82,7 +85,7 @@ detectionNetwork.setCoordinateSize(4)
 detectionNetwork.setAnchors([10, 14, 23, 27, 37, 58, 81, 82, 135, 169, 344, 319])
 detectionNetwork.setAnchorMasks({"side26": [1, 2, 3], "side13": [3, 4, 5]})
 detectionNetwork.setIouThreshold(config["nn_config"]["confidence_threshold"])
-detectionNetwork.setBlobPath(args.nnPath)
+detectionNetwork.setBlobPath(nnPath)
 detectionNetwork.setNumInferenceThreads(2)
 detectionNetwork.input.setBlocking(False)
 
