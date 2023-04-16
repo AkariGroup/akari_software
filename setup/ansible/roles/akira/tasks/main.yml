@@ -1,4 +1,11 @@
 ---
+- name: Create project directory to HOME
+  file:
+    path: {{ ansible_env.HOME }}/akari_projects
+    state: directory
+    mode: "0755"
+  become: true
+
 - name: Create /etc/akira
   file:
     path: /etc/akira
