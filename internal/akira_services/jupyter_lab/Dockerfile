@@ -3,11 +3,13 @@ FROM ubuntu:22.04
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl \
+        gcc \
         git \
         libgl1-mesa-dev \
         libopencv-dev \
         locales \
         wget \
+        python3-dev \
         python3-pip \
         python3-venv \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
