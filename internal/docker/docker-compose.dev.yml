@@ -6,6 +6,7 @@ services:
       dockerfile: internal/docker/Dockerfile
       target: daemon
     image: akarirobot/akira-daemon:${AKIRA_IMAGE_TAG}
+    platform: linux/aarch64
     volumes:
       - type: bind
         source: ${AKARI_REPOSITORY_DIR:?You need to run `source env.sh`}/internal/akira_templates
@@ -30,6 +31,7 @@ services:
       dockerfile: internal/docker/Dockerfile
       target: gateway
     image: akarirobot/akira-gateway:${AKIRA_IMAGE_TAG}
+    platform: linux/aarch64
     environment:
       AKIRA_DAEMON_ENDPOINT: daemon:30001
     ports:
