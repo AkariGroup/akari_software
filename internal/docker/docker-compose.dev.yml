@@ -25,6 +25,7 @@ services:
       AKIRA_PROJECT_DIR: ${AKIRA_DEV_LOCAL_DIR}/home/akari/projects
       AKIRA_ETC_DIR: ${AKIRA_DEV_LOCAL_DIR}/etc/akira
       AKIRA_VAR_DIR: ${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
+    platform: linux/aarch64
   gateway:
     build:
       context: ../../
@@ -34,5 +35,6 @@ services:
     platform: linux/aarch64
     environment:
       AKIRA_DAEMON_ENDPOINT: daemon:30001
+    platform: linux/aarch64
     ports:
       - 8080:8080
