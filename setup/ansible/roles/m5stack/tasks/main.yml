@@ -6,7 +6,9 @@
     mode: "644"
     line: 'KERNEL=="ttyUSB*",  ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{product}=="CP2104 USB to UART Bridge Controller" SYMLINK+="ttyUSB_M5Stack"'
   become: yes
-  notify: Reload udev rules
+  notify: 
+    - Reload udev rules
+    - Reset M5Stack Gray
 
 - name: Configure udev for M5Stack Basic v2.6
   lineinfile:
@@ -15,4 +17,6 @@
     mode: "644"
     line: 'KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", SYMLINK+="ttyUSB_M5Stack"'
   become: yes
-  notify: Reload udev rules
+  notify: 
+    - Reload udev rules
+    - Reset M5Stack Basic v2.6
