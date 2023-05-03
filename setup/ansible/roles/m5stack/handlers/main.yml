@@ -1,0 +1,10 @@
+---
+- name: Reset M5Stack Gray
+  shell: |
+    usb_modeswitch -v 0x10c4 -p 0xea60 --reset-usb
+  become: yes
+  
+- name: Reset M5Stack Basic v2.6
+  shell: |
+    usb_modeswitch -v 0x1a86 -p 0x55d4 --reset-usb
+  become: yes
