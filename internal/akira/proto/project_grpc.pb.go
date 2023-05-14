@@ -26,6 +26,7 @@ type ProjectServiceClient interface {
 	CreateLocalProject(ctx context.Context, in *CreateLocalProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	CreateProjectFromGit(ctx context.Context, in *CreateProjectFromGitRequest, opts ...grpc.CallOption) (*Project, error)
 	EditProject(ctx context.Context, in *EditProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	DeleteProject(ctx context.Context, in *DeleteProjectRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	RefreshProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListProjectsResponse, error)
@@ -61,6 +62,15 @@ func (c *projectServiceClient) CreateProjectFromGit(ctx context.Context, in *Cre
 func (c *projectServiceClient) EditProject(ctx context.Context, in *EditProjectRequest, opts ...grpc.CallOption) (*Project, error) {
 	out := new(Project)
 	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/EditProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) DeleteProject(ctx context.Context, in *DeleteProjectRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/DeleteProject", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -110,6 +120,7 @@ type ProjectServiceServer interface {
 	CreateLocalProject(context.Context, *CreateLocalProjectRequest) (*Project, error)
 	CreateProjectFromGit(context.Context, *CreateProjectFromGitRequest) (*Project, error)
 	EditProject(context.Context, *EditProjectRequest) (*Project, error)
+	DeleteProject(context.Context, *DeleteProjectRequest) (*emptypb.Empty, error)
 	GetProject(context.Context, *GetProjectRequest) (*Project, error)
 	RefreshProjects(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	ListProjects(context.Context, *emptypb.Empty) (*ListProjectsResponse, error)
@@ -129,6 +140,9 @@ func (UnimplementedProjectServiceServer) CreateProjectFromGit(context.Context, *
 }
 func (UnimplementedProjectServiceServer) EditProject(context.Context, *EditProjectRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EditProject not implemented")
+}
+func (UnimplementedProjectServiceServer) DeleteProject(context.Context, *DeleteProjectRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProject not implemented")
 }
 func (UnimplementedProjectServiceServer) GetProject(context.Context, *GetProjectRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
@@ -205,6 +219,24 @@ func _ProjectService_EditProject_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProjectServiceServer).EditProject(ctx, req.(*EditProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectService_DeleteProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).DeleteProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.ProjectService/DeleteProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).DeleteProject(ctx, req.(*DeleteProjectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -299,6 +331,10 @@ var ProjectService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EditProject",
 			Handler:    _ProjectService_EditProject_Handler,
+		},
+		{
+			MethodName: "DeleteProject",
+			Handler:    _ProjectService_DeleteProject_Handler,
 		},
 		{
 			MethodName: "GetProject",
