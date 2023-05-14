@@ -1,15 +1,12 @@
 import contextlib
-import pathlib
 from typing import Any, Optional, Tuple
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy
 
-PACKAGE_DIR = pathlib.Path(__file__).resolve().parents[2]
-WEIGHT_PATH = (
-    PACKAGE_DIR / "data/object_detection/mobilenet-ssd_openvino_2021.4_6shave.blob"
-)
+ZOO_NAME = "mobilenet-ssd"
 
 WIDTH = 300
 HEIGHT = 300
@@ -81,7 +78,19 @@ def _render_frame(name: str, frame: numpy.ndarray, detections: Any) -> numpy.nda
 
 class ObjectDetectionCapture:
     @staticmethod
+    def _get_model_path() -> str:
+        return str(
+            blobconverter.from_zoo(
+                ZOO_NAME,
+                shaves=6,
+                use_cache=True,
+            )
+        )
+
+    @staticmethod
     def _create_pipeline() -> dai.Pipeline:
+        nn_model_path = ObjectDetectionCapture._get_model_path()
+
         pipeline = dai.Pipeline()
 
         # Define sources and outputs
@@ -99,7 +108,7 @@ class ObjectDetectionCapture:
         camera_rgb.setFps(30)
 
         nn.setConfidenceThreshold(CONFIDENCE_THRESHOLD)
-        nn.setBlobPath(WEIGHT_PATH)
+        nn.setBlobPath(nn_model_path)
         nn.setNumInferenceThreads(2)
         nn.input.setBlocking(False)
 

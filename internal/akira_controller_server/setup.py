@@ -8,10 +8,10 @@ setup(
     author_email="akari.tmc@gmail.com",
     package_data={
         "akira_controller_server": ["py.typed"],
-        "": ["data/*.blob"],
     },
     install_requires=[
         "akari-proto>=0.3.0,<0.4.0",
+        "blobconverter==1.4.1",
         "depthai==2.19.0.0",
         "fastapi==0.86.0",
         "grpcio==1.44.0",
