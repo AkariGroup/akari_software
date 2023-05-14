@@ -121,7 +121,9 @@ class M5SerialCommunicator:
 
         def _predicate() -> bool:
             elapsed = self.current_time - called_time
-            return (self._latest_msg is not None and self._latest_msg["is_response"]) or (elapsed > RESPONSE_TIMEOUT)
+            return (
+                self._latest_msg is not None and self._latest_msg["is_response"]
+            ) or (elapsed > RESPONSE_TIMEOUT)
 
         with self._condition:
             while True:
