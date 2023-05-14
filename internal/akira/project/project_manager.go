@@ -169,7 +169,7 @@ func (m *ProjectManager) DeleteProject(id ProjectId) error {
 	p, ok := m.projects[id]
 	if !ok {
 		m.mu.RUnlock()
-		return fmt.Errorf("project %v not found", id)
+		return fmt.Errorf("project not found: %#v", id)
 	}
 	delete(m.projects, id)
 	m.mu.RUnlock()
