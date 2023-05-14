@@ -162,3 +162,17 @@ func (m *ProjectManager) GetProject(id ProjectId) (Project, bool) {
 	p, ok := m.projects[id]
 	return p, ok
 }
+
+func (m *ProjectManager) DeleteProject(id ProjectId) error {
+	m.mu.RLock()
+
+	p, ok := m.projects[id]
+	if !ok {
+		m.mu.RUnlock()
+		return fmt.Errorf("project %v not found", id)
+	}
+	delete(m.projects, id)
+	m.mu.RUnlock()
+
+	return p.Delete()
+}
