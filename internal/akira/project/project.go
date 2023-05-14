@@ -31,6 +31,7 @@ type Project interface {
 	SetManifest(m ProjectManifest) error
 	Path() string
 
+	Delete() error
 	LoadManifest() error
 	SaveManifest() error
 }
@@ -99,6 +100,17 @@ func (p *localProject) SaveManifest() error {
 
 	fs.Write(m)
 	fs.Close()
+	return nil
+}
+
+func (p *localProject) Delete() error {
+	path := p.Path()
+	if !util.DirExists(path) {
+		return fmt.Errorf("project dir: %#v does not exits", path)
+	}
+	if err := os.RemoveAll(path); err != nil {
+		return fmt.Errorf("failed to delete directory: %#v", err)
+	}
 	return nil
 }
 
