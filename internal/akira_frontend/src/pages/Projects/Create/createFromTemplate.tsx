@@ -36,6 +36,7 @@ import { ValidNamePattern } from "../validNamePattern";
 import { AxiosError } from "axios";
 import { ApiError } from "../../../libs/types";
 import { ApiErrorAlert } from "../../../components/ApiErrorAlert";
+import { useSetBackdropValue } from "../../../contexts/BackdropContext";
 
 type TemplateSelectorProps = {
   fields: ControllerRenderProps<CreateProjectFromTemplateInputs, "templateId">;
@@ -126,10 +127,12 @@ export function CreateProjectFromTemplate() {
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
+  const setBusy = useSetBackdropValue();
   const onSubmit: SubmitHandler<CreateProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;
 
+      setBusy(true);
       const request: Akira_protoCreateLocalProjectRequest = {
         dirname: customPath ? data.path : data.manifest.name,
         manifest: data.manifest,
@@ -148,9 +151,11 @@ export function CreateProjectFromTemplate() {
           return;
         }
         throw e;
+      } finally {
+        setBusy(false);
       }
     },
-    [customPath, client, navigate, setApiError]
+    [customPath, client, navigate, setApiError, setBusy]
   );
 
   const customPathElement = customPath ? (
