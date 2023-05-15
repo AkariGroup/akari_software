@@ -10,7 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { RemoveButton } from "../RemoveProjectButton"
+import { useCallback } from "react";
 import LaunchIcon from "@mui/icons-material/Launch";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { Link } from "react-router-dom";
@@ -31,9 +32,27 @@ const Card = styled(MuiCard)({
   height: ProjectCardHeight,
 });
 
-type Prop = {
+const onRemoveProject = useCallback(
+  async (target: Akira_protoProject) => {
+    if (!client || !target.id) return;
+
+    setBusy(true);
+    try {
+      await client.projects._id(target.id).remove.post();
+      mutate?.();
+    } finally {
+      setBusy(false);
+    }
+  },
+  [client, setBusy, mutate]
+);
+
+
+type Props = {
   project: Akira_protoProject;
+  onRemove?: (target: Akira_protoProject) => void;
 };
+
 
 export function NewProjectButtonCard() {
   return (
@@ -63,7 +82,7 @@ export function NewProjectButtonCard() {
   );
 }
 
-export function ProjectCard({ project }: Prop) {
+export function ProjectCard({ project }: Props) {
   return (
     <Card>
       <Box sx={{ display: "flex", height: "100%", flexDirection: "column" }}>
@@ -112,9 +131,7 @@ export function ProjectCard({ project }: Prop) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
+          <RemoveButton project={project} onRemove={onRemoveProject} />
           <IconButton sx={{ marginLeft: "auto" }}>
             <MoreVertIcon />
           </IconButton>
