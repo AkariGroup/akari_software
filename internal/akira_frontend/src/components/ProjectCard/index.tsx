@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
+import DeleteIcon from "@mui/icons-material/Delete";
 import LaunchIcon from "@mui/icons-material/Launch";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { Link } from "react-router-dom";
@@ -110,6 +111,9 @@ export function ProjectCard({ project }: Prop) {
         >
           <IconButton component={Link} to="/services">
             <LaunchIcon />
+          </IconButton>
+          <IconButton>
+            <DeleteIcon />
           </IconButton>
           <IconButton sx={{ marginLeft: "auto" }}>
             <MoreVertIcon />
