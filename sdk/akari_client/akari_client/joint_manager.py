@@ -74,7 +74,7 @@ class JointManager:
             >>> from akari_client import AkariClient
             >>> akari = AkariClient()
             >>> joints = akari.joints
-            >>> print(joints.get_joint_positions())
+            >>> print(joints.get_joint_limits())
             # 各軸のリミット値が出力される
 
         """
