@@ -2,10 +2,14 @@ import { TableCell, TableRow, IconButton, Table } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { Link } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { RemoveButton } from "../../components/RemoveProjectButton"
+import { useSetBackdropValue } from "../../contexts/BackdropContext";
+import { useCallback } from "react";
+import { ApiClient } from "../../hooks/api";
 
 type Prop = {
   project: Akira_protoProject;
+  client: ApiClient
 };
 export function ProjectListHeader() {
   return (
@@ -19,7 +23,21 @@ export function ProjectListHeader() {
     </Table>
   );
 }
-export function ProjectListItem({ project }: Prop) {
+export function ProjectListItem({ project,client }: Prop) {
+  const setBusy = useSetBackdropValue();
+  const onRemove = useCallback(
+    async (target: Akira_protoProject) => {
+      if (!client || !target.id) return;
+
+      setBusy(true);
+      try {
+        await client.projects.delete.post({ body: { id: target.id } });
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy]
+  );
   return (
     <Table width="100%">
       <TableRow
@@ -39,9 +57,7 @@ export function ProjectListItem({ project }: Prop) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
+          <RemoveButton project={project} client={client} onRemove={onRemove} />
         </TableCell>
       </TableRow>
     </Table>

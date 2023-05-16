@@ -71,7 +71,7 @@ export function Projects() {
           </Button>
           <ProjectListHeader />
           {sortedProjects?.map((p) => (
-            <ProjectListItem key={p.id} project={p} />
+            <ProjectListItem key={p.id} project={p} client={client} />
           ))}
         </Container>
       </Grid>
@@ -84,7 +84,7 @@ export function Projects() {
         </Grid>
         {sortedProjects?.map((p) => (
           <Grid item xs="auto">
-            <ProjectCard key={p.id} project={p} />
+            <ProjectCard key={p.id} project={p} client={client} />
           </Grid>
         ))}
       </Grid>

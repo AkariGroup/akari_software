@@ -10,12 +10,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
+import { useSetBackdropValue } from "../../contexts/BackdropContext";
 import { RemoveButton } from "../RemoveProjectButton"
 import { useCallback } from "react";
 import LaunchIcon from "@mui/icons-material/Launch";
+import { ApiClient } from "../../hooks/api";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { Link } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ProjectCardHeight = 200;
 const ProjectCardWidth = 250;
@@ -32,25 +33,12 @@ const Card = styled(MuiCard)({
   height: ProjectCardHeight,
 });
 
-const onRemoveProject = useCallback(
-  async (target: Akira_protoProject) => {
-    if (!client || !target.id) return;
 
-    setBusy(true);
-    try {
-      await client.projects._id(target.id).remove.post();
-      mutate?.();
-    } finally {
-      setBusy(false);
-    }
-  },
-  [client, setBusy, mutate]
-);
 
 
 type Props = {
   project: Akira_protoProject;
-  onRemove?: (target: Akira_protoProject) => void;
+  client: ApiClient;
 };
 
 
@@ -82,7 +70,21 @@ export function NewProjectButtonCard() {
   );
 }
 
-export function ProjectCard({ project }: Props) {
+export function ProjectCard({ project, client  }: Props) {
+  const setBusy = useSetBackdropValue();
+  const onRemove = useCallback(
+    async (target: Akira_protoProject) => {
+      if (!client || !target.id) return;
+
+      setBusy(true);
+      try {
+        await client.projects.delete.post({ body: { id: target.id } });
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy]
+  );
   return (
     <Card>
       <Box sx={{ display: "flex", height: "100%", flexDirection: "column" }}>
@@ -131,10 +133,7 @@ export function ProjectCard({ project }: Props) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <RemoveButton project={project} onRemove={onRemoveProject} />
-          <IconButton sx={{ marginLeft: "auto" }}>
-            <MoreVertIcon />
-          </IconButton>
+          <RemoveButton project={project} client={client} onRemove={onRemove} />
         </CardActions>
       </Box>
     </Card>
