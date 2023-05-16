@@ -31,7 +31,7 @@ const Card = styled(MuiCard)({
   height: ProjectCardHeight,
 });
 
-type Props = {
+type Prop = {
   project: Akira_protoProject;
   client: ApiClient;
   onRemove: (target: Akira_protoProject) => void;
@@ -65,7 +65,7 @@ export function NewProjectButtonCard() {
   );
 }
 
-export function ProjectCard({ project, client, onRemove }: Props) {
+export function ProjectCard({ project, client, onRemove }: Prop) {
   return (
     <Card>
       <Box sx={{ display: "flex", height: "100%", flexDirection: "column" }}>

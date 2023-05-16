@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { RemoveButton } from "../../components/RemoveProjectButton";
 import { ApiClient } from "../../hooks/api";
 
-type Props = {
+type Prop = {
   project: Akira_protoProject;
   client: ApiClient;
   onRemove: (target: Akira_protoProject) => void;
@@ -23,7 +23,7 @@ export function ProjectListHeader() {
     </Table>
   );
 }
-export function ProjectListItem({ project, client, onRemove }: Props) {
+export function ProjectListItem({ project, client, onRemove }: Prop) {
   return (
     <Table width="100%">
       <TableRow
