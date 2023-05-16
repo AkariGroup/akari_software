@@ -2,15 +2,15 @@ import { TableCell, TableRow, IconButton, Table } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { Link } from "react-router-dom";
-import { RemoveButton } from "../../components/RemoveProjectButton"
-import { useSetBackdropValue } from "../../contexts/BackdropContext";
-import { useCallback } from "react";
+import { RemoveButton } from "../../components/RemoveProjectButton";
 import { ApiClient } from "../../hooks/api";
 
-type Prop = {
+type Props = {
   project: Akira_protoProject;
-  client: ApiClient
+  client: ApiClient;
+  onRemove: (target: Akira_protoProject) => void;
 };
+
 export function ProjectListHeader() {
   return (
     <Table width="100%">
@@ -23,21 +23,7 @@ export function ProjectListHeader() {
     </Table>
   );
 }
-export function ProjectListItem({ project,client }: Prop) {
-  const setBusy = useSetBackdropValue();
-  const onRemove = useCallback(
-    async (target: Akira_protoProject) => {
-      if (!client || !target.id) return;
-
-      setBusy(true);
-      try {
-        await client.projects.delete.post({ body: { id: target.id } });
-      } finally {
-        setBusy(false);
-      }
-    },
-    [client, setBusy]
-  );
+export function ProjectListItem({ project, client, onRemove }: Props) {
   return (
     <Table width="100%">
       <TableRow

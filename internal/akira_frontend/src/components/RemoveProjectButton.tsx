@@ -12,25 +12,24 @@ type RemoveButtonProps = {
   onRemove: (target: Akira_protoProject) => void;
 };
 
-
 export function RemoveButton(props: RemoveButtonProps) {
   const [opened, setOpened] = useState(false);
   const { mutate } = useAspidaSWR(props.client?.projects, {
     enabled: !!props.client,
   });
-  const onConfirm = useCallback(async (d: RemoveDialogResult) => {
-    setOpened(false);
-    if (d === RemoveDialogResult.CANCEL) {
-      return;
-    } else {
-      await props.onRemove(props.project);
-      await props.client.projects.refresh.post({
-        body: {},
-      });
-      mutate();
-    }
-
-  },
+  const onConfirm = useCallback(
+    async (d: RemoveDialogResult) => {
+      setOpened(false);
+      if (d === RemoveDialogResult.CANCEL) {
+        return;
+      } else {
+        await props.onRemove(props.project);
+        await props.client.projects.refresh.post({
+          body: {},
+        });
+        mutate();
+      }
+    },
     [props, mutate, setOpened]
   );
   return (

@@ -10,9 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
-import { useSetBackdropValue } from "../../contexts/BackdropContext";
-import { RemoveButton } from "../RemoveProjectButton"
-import { useCallback } from "react";
+import { RemoveButton } from "../RemoveProjectButton";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { ApiClient } from "../../hooks/api";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
@@ -33,14 +31,11 @@ const Card = styled(MuiCard)({
   height: ProjectCardHeight,
 });
 
-
-
-
 type Props = {
   project: Akira_protoProject;
   client: ApiClient;
+  onRemove: (target: Akira_protoProject) => void;
 };
-
 
 export function NewProjectButtonCard() {
   return (
@@ -70,21 +65,7 @@ export function NewProjectButtonCard() {
   );
 }
 
-export function ProjectCard({ project, client  }: Props) {
-  const setBusy = useSetBackdropValue();
-  const onRemove = useCallback(
-    async (target: Akira_protoProject) => {
-      if (!client || !target.id) return;
-
-      setBusy(true);
-      try {
-        await client.projects.delete.post({ body: { id: target.id } });
-      } finally {
-        setBusy(false);
-      }
-    },
-    [client, setBusy]
-  );
+export function ProjectCard({ project, client, onRemove }: Props) {
   return (
     <Card>
       <Box sx={{ display: "flex", height: "100%", flexDirection: "column" }}>
