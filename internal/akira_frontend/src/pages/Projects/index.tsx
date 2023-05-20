@@ -52,11 +52,15 @@ export function Projects() {
       setBusy(true);
       try {
         await client.projects.delete.post({ body: { id: target.id } });
+        await client.projects.refresh.post({
+          body: {},
+        });
+        mutate();
       } finally {
         setBusy(false);
       }
     },
-    [client, setBusy]
+    [client, mutate, setBusy]
   );
 
   const sortKey = useCallback(
@@ -85,12 +89,7 @@ export function Projects() {
           </Button>
           <ProjectListHeader />
           {sortedProjects?.map((p) => (
-            <ProjectListItem
-              key={p.id}
-              project={p}
-              client={client}
-              onRemove={onRemove}
-            />
+            <ProjectListItem key={p.id} project={p} onRemove={onRemove} />
           ))}
         </Container>
       </Grid>
@@ -103,12 +102,7 @@ export function Projects() {
         </Grid>
         {sortedProjects?.map((p) => (
           <Grid item xs="auto">
-            <ProjectCard
-              key={p.id}
-              project={p}
-              client={client}
-              onRemove={onRemove}
-            />
+            <ProjectCard key={p.id} project={p} onRemove={onRemove} />
           </Grid>
         ))}
       </Grid>

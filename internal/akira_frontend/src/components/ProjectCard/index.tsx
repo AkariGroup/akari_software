@@ -12,7 +12,6 @@ import {
 import { Akira_protoProject } from "../../api/@types";
 import { RemoveButton } from "../RemoveProjectButton";
 import LaunchIcon from "@mui/icons-material/Launch";
-import { ApiClient } from "../../hooks/api";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { Link } from "react-router-dom";
 
@@ -33,7 +32,6 @@ const Card = styled(MuiCard)({
 
 type Prop = {
   project: Akira_protoProject;
-  client: ApiClient;
   onRemove: (target: Akira_protoProject) => void;
 };
 
@@ -65,7 +63,7 @@ export function NewProjectButtonCard() {
   );
 }
 
-export function ProjectCard({ project, client, onRemove }: Prop) {
+export function ProjectCard({ project, onRemove }: Prop) {
   return (
     <Card>
       <Box sx={{ display: "flex", height: "100%", flexDirection: "column" }}>
@@ -114,7 +112,7 @@ export function ProjectCard({ project, client, onRemove }: Prop) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <RemoveButton project={project} client={client} onRemove={onRemove} />
+          <RemoveButton project={project} onRemove={onRemove} />
         </CardActions>
       </Box>
     </Card>

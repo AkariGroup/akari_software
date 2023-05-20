@@ -3,11 +3,9 @@ import { Akira_protoProject } from "../../api/@types";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { Link } from "react-router-dom";
 import { RemoveButton } from "../../components/RemoveProjectButton";
-import { ApiClient } from "../../hooks/api";
 
 type Prop = {
   project: Akira_protoProject;
-  client: ApiClient;
   onRemove: (target: Akira_protoProject) => void;
 };
 
@@ -23,7 +21,7 @@ export function ProjectListHeader() {
     </Table>
   );
 }
-export function ProjectListItem({ project, client, onRemove }: Prop) {
+export function ProjectListItem({ project, onRemove }: Prop) {
   return (
     <Table width="100%">
       <TableRow
@@ -43,7 +41,7 @@ export function ProjectListItem({ project, client, onRemove }: Prop) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <RemoveButton project={project} client={client} onRemove={onRemove} />
+          <RemoveButton project={project} onRemove={onRemove} />
         </TableCell>
       </TableRow>
     </Table>
