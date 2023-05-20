@@ -2,11 +2,13 @@ import { TableCell, TableRow, IconButton, Table } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { Link } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { RemoveButton } from "../../components/RemoveProjectButton";
 
 type Prop = {
   project: Akira_protoProject;
+  onRemove: (target: Akira_protoProject) => void;
 };
+
 export function ProjectListHeader() {
   return (
     <Table width="100%">
@@ -19,7 +21,7 @@ export function ProjectListHeader() {
     </Table>
   );
 }
-export function ProjectListItem({ project }: Prop) {
+export function ProjectListItem({ project, onRemove }: Prop) {
   return (
     <Table width="100%">
       <TableRow
@@ -39,9 +41,7 @@ export function ProjectListItem({ project }: Prop) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
+          <RemoveButton project={project} onRemove={onRemove} />
         </TableCell>
       </TableRow>
     </Table>

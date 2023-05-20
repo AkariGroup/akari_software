@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Akira_protoProject } from "../../api/@types";
+import { RemoveButton } from "../RemoveProjectButton";
 import LaunchIcon from "@mui/icons-material/Launch";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { Link } from "react-router-dom";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ProjectCardHeight = 200;
 const ProjectCardWidth = 250;
@@ -32,6 +32,7 @@ const Card = styled(MuiCard)({
 
 type Prop = {
   project: Akira_protoProject;
+  onRemove: (target: Akira_protoProject) => void;
 };
 
 export function NewProjectButtonCard() {
@@ -62,7 +63,7 @@ export function NewProjectButtonCard() {
   );
 }
 
-export function ProjectCard({ project }: Prop) {
+export function ProjectCard({ project, onRemove }: Prop) {
   return (
     <Card>
       <Box sx={{ display: "flex", height: "100%", flexDirection: "column" }}>
@@ -111,9 +112,7 @@ export function ProjectCard({ project }: Prop) {
           <IconButton component={Link} to="/services">
             <LaunchIcon />
           </IconButton>
-          <IconButton sx={{ marginLeft: "auto" }}>
-            <MoreVertIcon />
-          </IconButton>
+          <RemoveButton project={project} onRemove={onRemove} />
         </CardActions>
       </Box>
     </Card>
