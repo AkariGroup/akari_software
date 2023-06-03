@@ -280,7 +280,7 @@ class JointManager:
 
     def get_moving_state(self) -> Dict[str, bool]:
         """サーボが現在移動中かを取得する。
-            移動中ならTrue、停止中ならFalseを返す。
+            停止中ならTrue、移動中ならFalseを返す。
 
         Returns:
             サーボ名と現在状態のdict
