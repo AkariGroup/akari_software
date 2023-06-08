@@ -293,7 +293,7 @@ class JointManager:
             # 各軸の現在状態が出力される
 
         """
-        ret: Dict[str, float] = {}
+        ret: Dict[str, bool] = {}
         for joint_name, controller in self._joints.items():
             ret[joint_name] = controller.get_moving_state()
 
