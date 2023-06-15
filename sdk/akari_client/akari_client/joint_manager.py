@@ -277,3 +277,24 @@ class JointManager:
         """
         for joint in self._joints.values():
             joint.set_servo_enabled(False)
+
+    def get_moving_state(self) -> Dict[str, bool]:
+        """サーボが現在移動中かを取得する。
+            停止中ならTrue、移動中ならFalseを返す。
+
+        Returns:
+            サーボ名と現在状態のdict
+
+        Example:
+            >>> from akari_client import AkariClient
+            >>> akari = AkariClient()
+            >>> joints = akari.joints
+            >>> print(joints.get_moving_state())
+            # 各軸の現在状態が出力される
+
+        """
+        ret: Dict[str, bool] = {}
+        for joint_name, controller in self._joints.items():
+            ret[joint_name] = controller.get_moving_state()
+
+        return ret
