@@ -45,6 +45,24 @@ export function Projects() {
     }
   }, [client, mutate, setBusy]);
 
+  const onRemove = useCallback(
+    async (target: Akira_protoProject) => {
+      if (!client || !target.id) return;
+
+      setBusy(true);
+      try {
+        await client.projects.delete.post({ body: { id: target.id } });
+        await client.projects.refresh.post({
+          body: {},
+        });
+        mutate();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, mutate, setBusy]
+  );
+
   const sortKey = useCallback(
     (lhs: Akira_protoProject, rhs: Akira_protoProject) => {
       const lhsState = lhs.manifest?.name ?? "";
@@ -71,7 +89,7 @@ export function Projects() {
           </Button>
           <ProjectListHeader />
           {sortedProjects?.map((p) => (
-            <ProjectListItem key={p.id} project={p} />
+            <ProjectListItem key={p.id} project={p} onRemove={onRemove} />
           ))}
         </Container>
       </Grid>
@@ -84,7 +102,7 @@ export function Projects() {
         </Grid>
         {sortedProjects?.map((p) => (
           <Grid item xs="auto">
-            <ProjectCard key={p.id} project={p} />
+            <ProjectCard key={p.id} project={p} onRemove={onRemove} />
           </Grid>
         ))}
       </Grid>
