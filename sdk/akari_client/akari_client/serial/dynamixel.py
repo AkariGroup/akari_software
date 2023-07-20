@@ -62,7 +62,7 @@ class DynamixelController(RevoluteJointController):
     def __init__(
         self,
         joint_name: str,
-        dynamixel_id: int,
+        servo_id: int,
         communicator: DynamixelCommunicator,
     ) -> None:
         """
@@ -73,17 +73,17 @@ class DynamixelController(RevoluteJointController):
 
         """
         self._joint_name = joint_name
-        self._dynamixel_id = dynamixel_id
+        self._servo_id = servo_id
         self._communicator = communicator
 
     def __str__(self) -> str:
         return self._joint_name
 
     def _read(self, item: DynamixelControlItem) -> int:
-        return self._communicator.read(self._dynamixel_id, item.address, item.length)
+        return self._communicator.read(self._servo_id, item.address, item.length)
 
     def _write(self, item: DynamixelControlItem, value: int) -> None:
-        self._communicator.write(self._dynamixel_id, item.address, item.length, value)
+        self._communicator.write(self._servo_id, item.address, item.length, value)
 
     def set_position_limit(self, lower_rad: float, upper_rad: float) -> None:
         """Positionの上限値と下限値を設定する。

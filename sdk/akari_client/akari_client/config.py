@@ -11,9 +11,9 @@ from .m5stack_client import M5StackClient
 _logger = logging.getLogger(__name__)
 
 
-class DynamixelControllerConfig(pydantic.BaseModel):
+class ControllerConfig(pydantic.BaseModel):
     joint_name: str
-    dynamixel_id: int
+    servo_id: int
     min_position_limit: float
     max_position_limit: float
     default_velocity: float
@@ -22,7 +22,7 @@ class DynamixelControllerConfig(pydantic.BaseModel):
 
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     type: Literal["dynamixel_serial"]
-    controllers: List[DynamixelControllerConfig] = pydantic.Field(default=[])
+    controllers: List[ControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/ttyUSB_dynamixel")
     baudrate: int = 1000000
     protocol_version: float = 2.0
@@ -33,6 +33,17 @@ class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
         _logger.debug("Initializing joint manager from 'dynamixel_serial' config")
         return create_joint_manager(self, stack)
 
+class JointManagerFeetechSerialConfig(pydantic.BaseModel):
+    type: Literal["feetech_serial"]
+    controllers: List[ControllerConfig] = pydantic.Field(default=[])
+    serial_port: pathlib.Path = pathlib.Path("/dev/serial0")
+    baudrate: int = 115200
+
+    def factory(self, stack: contextlib.ExitStack) -> JointManager:
+        from .serial.factory import create_joint_manager
+
+        _logger.debug("Initializing joint manager from 'feetech_serial' config")
+        return create_joint_manager(self, stack)
 
 class JointManagerGrpcConfig(pydantic.BaseModel):
     type: Literal["grpc"]
@@ -46,7 +57,7 @@ class JointManagerGrpcConfig(pydantic.BaseModel):
         return create_joint_manager(self, stack)
 
 
-JointManagerConfig = Union[JointManagerDynamixelSerialConfig, JointManagerGrpcConfig]
+JointManagerConfig = Union[JointManagerDynamixelSerialConfig, JointManagerFeetechSerialConfig, JointManagerGrpcConfig]
 
 
 class M5StackSerialConfig(pydantic.BaseModel):

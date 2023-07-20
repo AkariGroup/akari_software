@@ -1,33 +1,33 @@
 import logging
 from typing import Sequence
 
-from akari_client.config import JointManagerDynamixelSerialConfig
-from akari_client.serial import dynamixel_communicator
-from akari_client.serial.dynamixel import (
-    DynamixelCommunicator,
-    DynamixelController,
-    DynamixelControlTable,
+from akari_client.config import JointManagerFeetechSerialConfig
+from akari_client.serial import feetech_communicator
+from akari_client.serial.feetech import (
+    FeetechCommunicator,
+    FeetechController,
+    FeetechControlTable,
 )
 
 _logger = logging.getLogger(__name__)
 BAUDRATE_GUESSES = [9600, 57600, 115200, 1000000, 2000000, 3000000, 4000000, 4500000]
 
 
-def initialize_baudrate(config: JointManagerDynamixelSerialConfig) -> None:
+def initialize_baudrate(config: JointManagerFeetechSerialConfig) -> None:
     servo_ids = [c.servo_id for c in config.controllers]
-    baudrate_entry = dynamixel_communicator.get_baudrate_control_value(config.baudrate)
+    baudrate_entry = feetech_communicator.get_baudrate_control_value(config.baudrate)
 
     for guess in [config.baudrate] + BAUDRATE_GUESSES:
         try:
-            with DynamixelCommunicator.open(baudrate=guess) as comm:
-                control = DynamixelControlTable.TORQUE_ENABLE
+            with FeetechCommunicator.open(baudrate=guess) as comm:
+                control = FeetechControlTable.TORQUE_ENABLE
                 for id in servo_ids:
                     comm.write(id, control.address, control.length, False)
 
-                control = DynamixelControlTable.BAUD_RATE
+                control = FeetechControlTable.BAUD_RATE
                 comm.write(1, control.address, control.length, baudrate_entry)
                 _logger.info(
-                    f"Successfuly set baudrate to {dynamixel_communicator.DEFAULT_BAUDRATE}"
+                    f"Successfuly set baudrate to {feetech_communicator.DEFAULT_BAUDRATE}"
                 )
                 return
         except RuntimeError:
@@ -35,10 +35,10 @@ def initialize_baudrate(config: JointManagerDynamixelSerialConfig) -> None:
 
 
 def initialize_joint_limit(
-    controllers: Sequence[DynamixelController],
-    dynamixel_config: JointManagerDynamixelSerialConfig,
+    controllers: Sequence[FeetechController],
+    feetech_config: JointManagerFeetechSerialConfig,
 ) -> None:
-    for config in dynamixel_config.controllers:
+    for config in feetech_config.controllers:
         controller = next(
             (c for c in controllers if c.joint_name == config.joint_name), None
         )
@@ -54,10 +54,10 @@ def initialize_joint_limit(
 
 
 def initialize_default_velocity(
-    controllers: Sequence[DynamixelController],
-    dynamixel_config: JointManagerDynamixelSerialConfig,
+    controllers: Sequence[FeetechController],
+    feetech_config: JointManagerFeetechSerialConfig,
 ) -> None:
-    for config in dynamixel_config.controllers:
+    for config in feetech_config.controllers:
         controller = next(
             (c for c in controllers if c.joint_name == config.joint_name), None
         )
@@ -69,10 +69,10 @@ def initialize_default_velocity(
 
 
 def initialize_default_acceleration(
-    controllers: Sequence[DynamixelController],
-    dynamixel_config: JointManagerDynamixelSerialConfig,
+    controllers: Sequence[FeetechController],
+    feetech_config: JointManagerFeetechSerialConfig,
 ) -> None:
-    for config in dynamixel_config.controllers:
+    for config in feetech_config.controllers:
         controller = next(
             (c for c in controllers if c.joint_name == config.joint_name), None
         )

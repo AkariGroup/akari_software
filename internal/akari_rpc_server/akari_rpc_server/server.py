@@ -6,6 +6,7 @@ import grpc
 from akari_client.akari_client import AkariClient
 from akari_client.config import (
     JointManagerDynamixelSerialConfig,
+    JointManagerFeetechSerialConfig,
     M5StackSerialConfig,
     load_config,
 )
@@ -13,6 +14,7 @@ from akari_client.serial.m5stack import M5StackSerialClient
 from akari_proto import joints_controller_pb2_grpc, m5stack_pb2_grpc
 
 from .dynamixel import DynamixelControllerServiceServicer
+from .feetech import FeetechControllerServiceServicer
 from .m5stack import M5StackServiceServicer
 
 

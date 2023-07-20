@@ -25,7 +25,7 @@ def create_joint_manager(
         controllers.append(
             DynamixelController(
                 c.joint_name,
-                c.dynamixel_id,
+                c.servo_id,
                 communicator,
             )
         )
