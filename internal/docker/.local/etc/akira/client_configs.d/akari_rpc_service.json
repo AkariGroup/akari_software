@@ -7,7 +7,7 @@
         "controllers": [
             {
                 "joint_name": "pan",
-                "servo_id": 1,
+                "dynamixel_id": 1,
                 "min_position_limit": -1.047,
                 "max_position_limit": 1.047,
                 "default_velocity": 15.0,
@@ -15,7 +15,7 @@
             },
             {
                 "joint_name": "tilt",
-                "servo_id": 2,
+                "dynamixel_id": 2,
                 "min_position_limit": -0.576,
                 "max_position_limit": 0.576,
                 "default_velocity": 15.0,

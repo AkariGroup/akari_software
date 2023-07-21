@@ -11,18 +11,25 @@ from .m5stack_client import M5StackClient
 _logger = logging.getLogger(__name__)
 
 
-class ControllerConfig(pydantic.BaseModel):
+class DynamixelControllerConfig(pydantic.BaseModel):
     joint_name: str
-    servo_id: int
+    dynamixel_id: int
     min_position_limit: float
     max_position_limit: float
     default_velocity: float
     default_acceleration: float
 
+class FeetechControllerConfig(pydantic.BaseModel):
+    joint_name: str
+    feetech_id: int
+    min_position_limit: float
+    max_position_limit: float
+    default_velocity: float
+    default_acceleration: float
 
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     type: Literal["dynamixel_serial"]
-    controllers: List[ControllerConfig] = pydantic.Field(default=[])
+    controllers: List[DynamixelControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/ttyUSB_dynamixel")
     baudrate: int = 1000000
     protocol_version: float = 2.0
@@ -35,7 +42,7 @@ class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
 
 class JointManagerFeetechSerialConfig(pydantic.BaseModel):
     type: Literal["feetech_serial"]
-    controllers: List[ControllerConfig] = pydantic.Field(default=[])
+    controllers: List[FeetechControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/serial0")
     baudrate: int = 115200
 

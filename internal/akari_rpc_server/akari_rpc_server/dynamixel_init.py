@@ -14,14 +14,14 @@ BAUDRATE_GUESSES = [9600, 57600, 115200, 1000000, 2000000, 3000000, 4000000, 450
 
 
 def initialize_baudrate(config: JointManagerDynamixelSerialConfig) -> None:
-    servo_ids = [c.servo_id for c in config.controllers]
+    dynamixel_ids = [c.dynamixel_id for c in config.controllers]
     baudrate_entry = dynamixel_communicator.get_baudrate_control_value(config.baudrate)
 
     for guess in [config.baudrate] + BAUDRATE_GUESSES:
         try:
             with DynamixelCommunicator.open(baudrate=guess) as comm:
                 control = DynamixelControlTable.TORQUE_ENABLE
-                for id in servo_ids:
+                for id in dynamixel_ids:
                     comm.write(id, control.address, control.length, False)
 
                 control = DynamixelControlTable.BAUD_RATE
