@@ -62,7 +62,7 @@ class FeetechController(RevoluteJointController):
     def __init__(
         self,
         joint_name: str,
-        servo_id: int,
+        feetech_id: int,
         communicator: FeetechCommunicator,
     ) -> None:
         """
@@ -73,17 +73,17 @@ class FeetechController(RevoluteJointController):
 
         """
         self._joint_name = joint_name
-        self._servo_id = servo_id
+        self._feetech_id = feetech_id
         self._communicator = communicator
 
     def __str__(self) -> str:
         return self._joint_name
 
     def _read(self, item: FeetechControlItem) -> int:
-        return self._communicator.read(self._servo_id, item.address, item.length)
+        return self._communicator.read(self._feetech_id, item.address, item.length)
 
     def _write(self, item: FeetechControlItem, value: int) -> None:
-        self._communicator.write(self._servo_id, item.address, item.length, value)
+        self._communicator.write(self._feetech_id, item.address, item.length, value)
 
     def set_position_limit(self, lower_rad: float, upper_rad: float) -> None:
         """Positionの上限値と下限値を設定する。
