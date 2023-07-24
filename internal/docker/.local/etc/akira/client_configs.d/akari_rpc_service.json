@@ -1,13 +1,13 @@
 {
     "joint_manager": {
-        "type": "dynamixel_serial",
-        "serial_port": "/dev/ttyUSB_dynamixel",
-        "baudrate": 1000000,
+        "type": "feetech_serial",
+        "serial_port": "/dev/serial0",
+        "baudrate": 115200,
         "protocol_version": 2.0,
         "controllers": [
             {
                 "joint_name": "pan",
-                "dynamixel_id": 1,
+                "feetech_id": 1,
                 "min_position_limit": -1.047,
                 "max_position_limit": 1.047,
                 "default_velocity": 15.0,
@@ -15,7 +15,7 @@
             },
             {
                 "joint_name": "tilt",
-                "dynamixel_id": 2,
+                "feetech_id": 2,
                 "min_position_limit": -0.576,
                 "max_position_limit": 0.576,
                 "default_velocity": 15.0,

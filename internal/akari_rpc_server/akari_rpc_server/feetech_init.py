@@ -14,14 +14,14 @@ BAUDRATE_GUESSES = [9600, 57600, 115200, 1000000, 2000000, 3000000, 4000000, 450
 
 
 def initialize_baudrate(config: JointManagerFeetechSerialConfig) -> None:
-    servo_ids = [c.servo_id for c in config.controllers]
+    feetech_ids = [c.feetech_id for c in config.controllers]
     baudrate_entry = feetech_communicator.get_baudrate_control_value(config.baudrate)
 
     for guess in [config.baudrate] + BAUDRATE_GUESSES:
         try:
             with FeetechCommunicator.open(baudrate=guess) as comm:
                 control = FeetechControlTable.TORQUE_ENABLE
-                for id in servo_ids:
+                for id in feetech_ids:
                     comm.write(id, control.address, control.length, False)
 
                 control = FeetechControlTable.BAUD_RATE

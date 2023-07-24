@@ -23,6 +23,7 @@ setup(
     ],
     url="https://github.com/AkariGroup/akari_software",
     install_requires=[
+        "feetech-servo-sdk",
         "dynamixel_sdk",
         "pydantic>=1.5,<2.0",
     ],

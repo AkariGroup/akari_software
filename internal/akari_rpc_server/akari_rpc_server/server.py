@@ -21,7 +21,7 @@ from .m5stack import M5StackServiceServicer
 def serve(port: int) -> None:
     with contextlib.ExitStack() as stack:
         config = load_config()
-        assert isinstance(config.joint_manager, JointManagerDynamixelSerialConfig) or isinstance(config.joint_manager, JointManageFeetechSerialConfig)
+        assert isinstance(config.joint_manager, JointManagerDynamixelSerialConfig) or isinstance(config.joint_manager, JointManagerFeetechSerialConfig)
         assert isinstance(config.m5stack, M5StackSerialConfig)
 
         client: AkariClient = stack.enter_context(AkariClient(config))
