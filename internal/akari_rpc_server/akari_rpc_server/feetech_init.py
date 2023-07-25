@@ -10,7 +10,7 @@ from akari_client.serial.feetech import (
 )
 
 _logger = logging.getLogger(__name__)
-BAUDRATE_GUESSES = [9600, 57600, 115200, 1000000, 2000000, 3000000, 4000000, 4500000]
+BAUDRATE_GUESSES = [38400, 57600, 76800, 115200, 128000, 250000, 500000,1000000]
 
 
 def initialize_baudrate(config: JointManagerFeetechSerialConfig) -> None:
@@ -20,15 +20,18 @@ def initialize_baudrate(config: JointManagerFeetechSerialConfig) -> None:
     for guess in [config.baudrate] + BAUDRATE_GUESSES:
         try:
             with FeetechCommunicator.open(baudrate=guess) as comm:
-                control = FeetechControlTable.TORQUE_ENABLE
                 for id in feetech_ids:
+                    control = FeetechControlTable.TORQUE_ENABLE
                     comm.write(id, control.address, control.length, False)
-
-                control = FeetechControlTable.BAUD_RATE
-                comm.write(1, control.address, control.length, baudrate_entry)
-                _logger.info(
-                    f"Successfuly set baudrate to {feetech_communicator.DEFAULT_BAUDRATE}"
-                )
+                    control = FeetechControlTable.EEPROM_LOCK
+                    comm.write(id, control.address, control.length, 0)
+                    control = FeetechControlTable.BAUD_RATE
+                    comm.write(id, control.address, control.length, baudrate_entry)
+                    control = FeetechControlTable.EEPROM_LOCK
+                    comm.write(id, control.address, control.length, 1)
+                    _logger.info(
+                        f"Successfuly set baudrate to {feetech_communicator.DEFAULT_BAUDRATE}"
+                    )
                 return
         except RuntimeError:
             pass

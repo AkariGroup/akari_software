@@ -14,9 +14,9 @@ DEFAULT_PROTOCOL_END = 0
 def get_baudrate_control_value(baudrate: int) -> int:
     """Feetechのボーレート設定値を取得する"""
     if baudrate == 1000000:
-        return 3
+        return 0
     elif baudrate == 115200:
-        return 1
+        return 4
     else:
         raise ValueError("Either 115200 or 1000000 is supported")
 

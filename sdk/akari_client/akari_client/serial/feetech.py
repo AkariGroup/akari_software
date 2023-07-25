@@ -47,7 +47,7 @@ class FeetechControlItem:
 class FeetechControlTable:
     ID = FeetechControlItem("ID", 5, 1)
     BAUD_RATE = FeetechControlItem("Baud_Rate", 6, 1)
-    DRIVE_MODE = FeetechControlItem("Drive_Mode", 10, 1)
+    EEPROM_LOCK = FeetechControlItem("Eeprom_lock", 55, 1)
     MAX_POSITION_LIMIT = FeetechControlItem("Max_Position_Limit", 9, 2)
     MIN_POSITION_LIMIT = FeetechControlItem("Min_Position_Limit", 11, 2)
     TORQUE_ENABLE = FeetechControlItem("Torque_Enable", 40, 1)
