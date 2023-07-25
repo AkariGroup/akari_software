@@ -7,18 +7,18 @@ from typing import Iterator
 
 from scservo_sdk import *
 
-DEFAULT_BAUDRATE = 115200
+DEFAULT_BAUDRATE = 1000000
 DEFAULT_DEVICE_NAME = pathlib.Path("/dev/serial0")
 DEFAULT_PROTOCOL_END = 0
 
 def get_baudrate_control_value(baudrate: int) -> int:
     """Feetechのボーレート設定値を取得する"""
-    if baudrate == 115200:
+    if baudrate == 1000000:
         return 3
-    elif baudrate == 57600:
+    elif baudrate == 115200:
         return 1
     else:
-        raise ValueError("Either 57600 or 115200 is supported")
+        raise ValueError("Either 115200 or 1000000 is supported")
 
 
 class FeetechCommunicator:
