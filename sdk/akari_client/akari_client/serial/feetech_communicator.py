@@ -7,7 +7,7 @@ from typing import Iterator
 
 from scservo_sdk import *
 
-DEFAULT_BAUDRATE = 1000000
+DEFAULT_BAUDRATE = 115200
 DEFAULT_DEVICE_NAME = pathlib.Path("/dev/serial0")
 DEFAULT_PROTOCOL_END = 0
 
@@ -49,7 +49,7 @@ class FeetechCommunicator:
         port_handler = PortHandler(str(serial_port))
         try:
             if port_handler.setBaudRate(baudrate):
-                print("Succeeded to change the baudrate")
+                print("Succeeded to change the baudrate to " + str(baudrate))
             else:
                 raise RuntimeError("Failed to change the baudrate")
 

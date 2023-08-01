@@ -9,12 +9,12 @@ PULSE_OFFSET = 2047
 
 def feetech_pulse_to_rad(data: int) -> float:
     """feetechのpulse単位をラジアン単位に変換する。"""
-    return (data - PULSE_OFFSET) * (2 * math.pi) / 4095
+    return ( -1 * (data - PULSE_OFFSET)) * (2 * math.pi) / 4095
 
 
 def rad_to_feetech_pulse(data: float) -> int:
     """ラジアン単位をfeetechのpulse単位に変換する。"""
-    return int(data * 4095 / (2 * math.pi)) + PULSE_OFFSET
+    return int(-1 * data * 4095 / (2 * math.pi)) + PULSE_OFFSET
 
 
 def rad_per_sec2_to_rev_per_min2(data: float) -> int:
@@ -54,7 +54,7 @@ class FeetechControlTable:
     PROFILE_ACCELERATION = FeetechControlItem("Profile_Acceleration", 41, 1)
     PROFILE_VELOCITY = FeetechControlItem("Profile_Velocity", 46, 2)
     GOAL_POSITION = FeetechControlItem("Goal_Position", 42, 2)
-    PRESENT_POSITION = FeetechControlItem("Present_Position", 56, 4)
+    PRESENT_POSITION = FeetechControlItem("Present_Position", 56, 2)
     MOVING_STATUS = FeetechControlItem("Moving_Status",66, 1)
 
 
@@ -94,10 +94,16 @@ class FeetechController(RevoluteJointController):
 
         """
         self._write(
+            FeetechControlTable.EEPROM_LOCK, 0
+        )
+        self._write(
             FeetechControlTable.MIN_POSITION_LIMIT, rad_to_feetech_pulse(lower_rad)
         )
         self._write(
             FeetechControlTable.MAX_POSITION_LIMIT, rad_to_feetech_pulse(upper_rad)
+        )
+        self._write(
+            FeetechControlTable.EEPROM_LOCK, 1
         )
 
     def get_position_limit(self) -> PositionLimit:

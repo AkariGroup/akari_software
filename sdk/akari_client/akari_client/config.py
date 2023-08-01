@@ -44,7 +44,7 @@ class JointManagerFeetechSerialConfig(pydantic.BaseModel):
     type: Literal["feetech_serial"]
     controllers: List[FeetechControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/serial0")
-    baudrate: int = 1000000
+    baudrate: int = 115200
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
         from .serial.factory import create_joint_manager
