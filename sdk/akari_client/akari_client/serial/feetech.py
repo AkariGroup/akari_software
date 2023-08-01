@@ -9,7 +9,7 @@ PULSE_OFFSET = 2047
 
 def feetech_pulse_to_rad(data: int) -> float:
     """feetechのpulse単位をラジアン単位に変換する。"""
-    return ( -1 * (data - PULSE_OFFSET)) * (2 * math.pi) / 4095
+    return (-1 * (data - PULSE_OFFSET)) * (2 * math.pi) / 4095
 
 
 def rad_to_feetech_pulse(data: float) -> int:
@@ -17,24 +17,24 @@ def rad_to_feetech_pulse(data: float) -> int:
     return int(-1 * data * 4095 / (2 * math.pi)) + PULSE_OFFSET
 
 
-def rad_per_sec2_to_rev_per_min2(data: float) -> int:
-    """加速度を rad/s^2 単位 から rev/m^2 単位に変換する。"""
-    return int(data * 60 * 60 / (2 * math.pi))
+def rad_per_sec2_to_feetech_acc_pulse(data: float) -> int:
+    """加速度を rad/s^2 単位 から feetechのpulse単位に変換する。"""
+    return int(data * (180 / math.pi) / 8.789)
 
 
-def rev_per_min2_to_rad_per_sec2(data: int) -> float:
-    """加速度を rev/m^2 単位 から rad/s^2 単位に変換する。"""
-    return float(data * (2 * math.pi) / (60 * 60))
+def feetech_acc_pulse_to_rad_per_sec2(data: int) -> float:
+    """加速度を feetechのpulse単位 から rad/s^2 単位に変換する。"""
+    return float(data * 8.789 * (math.pi / 180))
 
 
-def rad_per_sec_to_rev_per_min(data: float) -> int:
-    """速度を rad/s 単位 から rpm 単位に変換する。"""
-    return int(data * 60 / (2 * math.pi))
+def rad_per_sec_to_feetech_vel_pulse(data: float) -> int:
+    """速度を rad/s 単位 から feetechのpulse単位に変換する。"""
+    return int(data * 60 / (2 * math.pi) / 0.732)
 
 
-def rev_per_min_to_rad_per_sec(data: int) -> float:
-    """速度を rpm 単位 から rad/s 単位に変換する。"""
-    return float(data * (2 * math.pi) / 60)
+def feetech_vel_pulse_to_rad_per_sec(data: int) -> float:
+    """速度を feetechのpulse単位 から rad/s 単位に変換する。"""
+    return float(data * 0.732 * (2 * math.pi) / 60)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -55,7 +55,7 @@ class FeetechControlTable:
     PROFILE_VELOCITY = FeetechControlItem("Profile_Velocity", 46, 2)
     GOAL_POSITION = FeetechControlItem("Goal_Position", 42, 2)
     PRESENT_POSITION = FeetechControlItem("Present_Position", 56, 2)
-    MOVING_STATUS = FeetechControlItem("Moving_Status",66, 1)
+    MOVING_STATUS = FeetechControlItem("Moving_Status", 66, 1)
 
 
 class FeetechController(RevoluteJointController):
@@ -93,18 +93,14 @@ class FeetechController(RevoluteJointController):
             upper_rad: 上限値 [rad]
 
         """
-        self._write(
-            FeetechControlTable.EEPROM_LOCK, 0
-        )
+        self._write(FeetechControlTable.EEPROM_LOCK, 0)
         self._write(
             FeetechControlTable.MIN_POSITION_LIMIT, rad_to_feetech_pulse(lower_rad)
         )
         self._write(
             FeetechControlTable.MAX_POSITION_LIMIT, rad_to_feetech_pulse(upper_rad)
         )
-        self._write(
-            FeetechControlTable.EEPROM_LOCK, 1
-        )
+        self._write(FeetechControlTable.EEPROM_LOCK, 1)
 
     def get_position_limit(self) -> PositionLimit:
         """Positionの上限値と下限値を取得する。
@@ -113,12 +109,8 @@ class FeetechController(RevoluteJointController):
             現在角度の下限値、上限値 [rad]
 
         """
-        min = feetech_pulse_to_rad(
-            self._read(FeetechControlTable.MIN_POSITION_LIMIT)
-        )
-        max = feetech_pulse_to_rad(
-            self._read(FeetechControlTable.MAX_POSITION_LIMIT)
-        )
+        min = feetech_pulse_to_rad(self._read(FeetechControlTable.MIN_POSITION_LIMIT))
+        max = feetech_pulse_to_rad(self._read(FeetechControlTable.MAX_POSITION_LIMIT))
         return PositionLimit(min, max)
 
     @property
@@ -153,7 +145,7 @@ class FeetechController(RevoluteJointController):
         """
         self._write(
             FeetechControlTable.PROFILE_ACCELERATION,
-            rad_per_sec2_to_rev_per_min2(rad_per_sec2),
+            rad_per_sec2_to_feetech_acc_pulse(rad_per_sec2),
         )
 
     def get_profile_acceleration(self) -> float:
@@ -163,7 +155,7 @@ class FeetechController(RevoluteJointController):
             加速度 [rad/s^2]
 
         """
-        return rev_per_min2_to_rad_per_sec2(
+        return feetech_acc_pulse_to_rad_per_sec2(
             self._read(FeetechControlTable.PROFILE_ACCELERATION)
         )
 
@@ -176,7 +168,7 @@ class FeetechController(RevoluteJointController):
         """
         self._write(
             FeetechControlTable.PROFILE_VELOCITY,
-            rad_per_sec_to_rev_per_min(rad_per_sec),
+            rad_per_sec_to_feetech_vel_pulse(rad_per_sec),
         )
 
     def get_profile_velocity(self) -> float:
@@ -186,7 +178,7 @@ class FeetechController(RevoluteJointController):
             加速度 [rad/s^2]
 
         """
-        return rev_per_min_to_rad_per_sec(
+        return feetech_vel_pulse_to_rad_per_sec(
             self._read(FeetechControlTable.PROFILE_VELOCITY)
         )
 
@@ -206,9 +198,7 @@ class FeetechController(RevoluteJointController):
             現在角度 [rad]
 
         """
-        return feetech_pulse_to_rad(
-            self._read(FeetechControlTable.PRESENT_POSITION)
-        )
+        return feetech_pulse_to_rad(self._read(FeetechControlTable.PRESENT_POSITION))
 
     def get_moving_state(self) -> bool:
         """サーボが動作中かどうか判定する。
@@ -217,4 +207,4 @@ class FeetechController(RevoluteJointController):
             現在のサーボ状態
 
         """
-        return not(self._read(FeetechControlTable.MOVING_STATUS))
+        return not (self._read(FeetechControlTable.MOVING_STATUS))
