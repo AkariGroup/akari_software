@@ -1,7 +1,11 @@
 import contextlib
 from typing import List
 
-from ..config import JointManagerDynamixelSerialConfig, JointManagerFeetechSerialConfig,M5StackSerialConfig
+from ..config import (
+    JointManagerDynamixelSerialConfig,
+    JointManagerFeetechSerialConfig,
+    M5StackSerialConfig,
+)
 from ..joint_manager import JointManager
 from ..m5stack_client import M5StackClient
 from .dynamixel import DynamixelController
@@ -33,6 +37,7 @@ def create_joint_manager(
         )
 
     return JointManager(controllers)
+
 
 def create_joint_manager(
     config: JointManagerFeetechSerialConfig, stack: contextlib.ExitStack

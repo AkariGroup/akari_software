@@ -21,7 +21,9 @@ from .m5stack import M5StackServiceServicer
 def serve(port: int) -> None:
     with contextlib.ExitStack() as stack:
         config = load_config()
-        assert isinstance(config.joint_manager, JointManagerDynamixelSerialConfig) or isinstance(config.joint_manager, JointManagerFeetechSerialConfig)
+        assert isinstance(
+            config.joint_manager, JointManagerDynamixelSerialConfig
+        ) or isinstance(config.joint_manager, JointManagerFeetechSerialConfig)
         assert isinstance(config.m5stack, M5StackSerialConfig)
 
         client: AkariClient = stack.enter_context(AkariClient(config))
@@ -30,12 +32,12 @@ def serve(port: int) -> None:
         assert isinstance(m5stack, M5StackSerialClient)
 
         server = grpc.server(ThreadPoolExecutor(max_workers=10))
-        if(isinstance(config.joint_manager, JointManagerDynamixelSerialConfig)):
+        if isinstance(config.joint_manager, JointManagerDynamixelSerialConfig):
             joints_controller_pb2_grpc.add_JointsControllerServiceServicer_to_server(
                 DynamixelControllerServiceServicer(config.joint_manager, joint_manager),
                 server,
             )
-        elif(isinstance(config.joint_manager, JointManagerFeetechSerialConfig)):
+        elif isinstance(config.joint_manager, JointManagerFeetechSerialConfig):
             joints_controller_pb2_grpc.add_JointsControllerServiceServicer_to_server(
                 FeetechControllerServiceServicer(config.joint_manager, joint_manager),
                 server,

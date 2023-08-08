@@ -19,6 +19,7 @@ class DynamixelControllerConfig(pydantic.BaseModel):
     default_velocity: float
     default_acceleration: float
 
+
 class FeetechControllerConfig(pydantic.BaseModel):
     joint_name: str
     feetech_id: int
@@ -26,6 +27,7 @@ class FeetechControllerConfig(pydantic.BaseModel):
     max_position_limit: float
     default_velocity: float
     default_acceleration: float
+
 
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     type: Literal["dynamixel_serial"]
@@ -40,17 +42,19 @@ class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
         _logger.debug("Initializing joint manager from 'dynamixel_serial' config")
         return create_joint_manager(self, stack)
 
+
 class JointManagerFeetechSerialConfig(pydantic.BaseModel):
     type: Literal["feetech_serial"]
     controllers: List[FeetechControllerConfig] = pydantic.Field(default=[])
     serial_port: pathlib.Path = pathlib.Path("/dev/serial0")
-    baudrate: int = 115200
+    baudrate: int = 500000
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
         from .serial.factory import create_joint_manager
 
         _logger.debug("Initializing joint manager from 'feetech_serial' config")
         return create_joint_manager(self, stack)
+
 
 class JointManagerGrpcConfig(pydantic.BaseModel):
     type: Literal["grpc"]
@@ -64,7 +68,11 @@ class JointManagerGrpcConfig(pydantic.BaseModel):
         return create_joint_manager(self, stack)
 
 
-JointManagerConfig = Union[JointManagerDynamixelSerialConfig, JointManagerFeetechSerialConfig, JointManagerGrpcConfig]
+JointManagerConfig = Union[
+    JointManagerDynamixelSerialConfig,
+    JointManagerFeetechSerialConfig,
+    JointManagerGrpcConfig,
+]
 
 
 class M5StackSerialConfig(pydantic.BaseModel):

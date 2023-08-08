@@ -29,12 +29,12 @@ def feetech_acc_pulse_to_rad_per_sec2(data: int) -> float:
 
 def rad_per_sec_to_feetech_vel_pulse(data: float) -> int:
     """速度を rad/s 単位 から feetechのpulse単位に変換する。"""
-    return int(data * 60 / (2 * math.pi) / 0.732)
+    return int(data * 60 / (2 * math.pi) / 0.01464)
 
 
 def feetech_vel_pulse_to_rad_per_sec(data: int) -> float:
     """速度を feetechのpulse単位 から rad/s 単位に変換する。"""
-    return float(data * 0.732 * (2 * math.pi) / 60)
+    return float(data * 0.01464 * (2 * math.pi) / 60)
 
 
 @dataclasses.dataclass(frozen=True)

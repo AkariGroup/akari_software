@@ -45,6 +45,7 @@ class DynamixelControllerServiceServicer(
             self._config,
         )
         mapping = {j.joint_name: j for j in joint_controllers}
+        _logger.error(f"Dynamixel initialize finished!")
         return mapping
 
     def _select_joint(

@@ -2,8 +2,7 @@
     "joint_manager": {
         "type": "feetech_serial",
         "serial_port": "/dev/serial0",
-        "baudrate": 1000000,
-        "protocol_version": 2.0,
+        "baudrate": 500000,
         "controllers": [
             {
                 "joint_name": "pan",

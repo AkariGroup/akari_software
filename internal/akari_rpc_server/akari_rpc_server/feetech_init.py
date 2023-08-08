@@ -10,7 +10,7 @@ from akari_client.serial.feetech import (
 )
 
 _logger = logging.getLogger(__name__)
-BAUDRATE_GUESSES = [38400, 57600, 76800, 115200, 128000, 250000, 500000,1000000]
+BAUDRATE_GUESSES = [1000000]
 
 
 def initialize_baudrate(config: JointManagerFeetechSerialConfig) -> None:
@@ -53,7 +53,9 @@ def initialize_joint_limit(
         controller.set_position_limit(
             config.min_position_limit, config.max_position_limit
         )
-        _logger.info(f"Successfully set position limit of joint: '{config.joint_name}'")
+        _logger.info(
+            f"Successfully set position limit of joint: '{config.joint_name}'"
+        )
 
 
 def initialize_default_velocity(

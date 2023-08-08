@@ -26,7 +26,7 @@ class FeetechControllerServiceServicer(
     def _initialize_joints(self) -> Mapping[str, FeetechController]:
         # NOTE: When an exception is thrown in functions, `lru_cache` doesn't memoize the value
         # (i.e. the function is called again in that case)
-        feetech_init.initialize_baudrate(self._config)
+        # feetech_init.initialize_baudrate(self._config)
 
         jcs = self._joint_manager.joint_controllers
         assert all(isinstance(j, FeetechController) for j in jcs)
@@ -54,7 +54,6 @@ class FeetechControllerServiceServicer(
         joint = joints.get(specifier.joint_name)
         if joint is None:
             raise KeyError(f"Invalid joint name: {specifier.joint_name}")
-
         return joint
 
     @serialize_error(serializer)

@@ -6,12 +6,12 @@ from akari_client.serial.feetech import (
     FeetechControlItem,
     FeetechController,
     FeetechControlTable,
+    feetech_acc_pulse_to_rad_per_sec2,
     feetech_pulse_to_rad,
+    feetech_vel_pulse_to_rad_per_sec,
     rad_per_sec2_to_feetech_acc_pulse,
     rad_per_sec_to_feetech_vel_pulse,
     rad_to_feetech_pulse,
-    feetech_acc_pulse_to_rad_per_sec2,
-    feetech_vel_pulse_to_rad_per_sec,
 )
 from akari_client.serial.feetech_communicator import FeetechCommunicator
 
