@@ -16,7 +16,7 @@ from .m5stack import M5StackSerialClient
 from .m5stack_communicator import M5SerialCommunicator
 
 
-def create_joint_manager(
+def create_dynamixel_joint_manager(
     config: JointManagerDynamixelSerialConfig, stack: contextlib.ExitStack
 ) -> JointManager:
     communicator = stack.enter_context(
@@ -39,7 +39,7 @@ def create_joint_manager(
     return JointManager(controllers)
 
 
-def create_joint_manager(
+def create_feetech_joint_manager(
     config: JointManagerFeetechSerialConfig, stack: contextlib.ExitStack
 ) -> JointManager:
     communicator = stack.enter_context(

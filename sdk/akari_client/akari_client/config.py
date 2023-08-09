@@ -37,10 +37,10 @@ class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     protocol_version: float = 2.0
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
-        from .serial.factory import create_joint_manager
+        from .serial.factory import create_dynamixel_joint_manager
 
         _logger.debug("Initializing joint manager from 'dynamixel_serial' config")
-        return create_joint_manager(self, stack)
+        return create_dynamixel_joint_manager(self, stack)
 
 
 class JointManagerFeetechSerialConfig(pydantic.BaseModel):
@@ -50,10 +50,10 @@ class JointManagerFeetechSerialConfig(pydantic.BaseModel):
     baudrate: int = 500000
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
-        from .serial.factory import create_joint_manager
+        from .serial.factory import create_feetech_joint_manager
 
         _logger.debug("Initializing joint manager from 'feetech_serial' config")
-        return create_joint_manager(self, stack)
+        return create_feetech_joint_manager(self, stack)
 
 
 class JointManagerGrpcConfig(pydantic.BaseModel):
