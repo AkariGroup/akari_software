@@ -1,7 +1,7 @@
 [[package]]
 name = "akari-client"
-version = "0.2.3"
-description = ""
+version = "0.3.2"
+description = "Akari Python package"
 category = "main"
 optional = false
 python-versions = "*"
@@ -9,7 +9,12 @@ develop = true
 
 [package.dependencies]
 dynamixel_sdk = "*"
+feetech-servo-sdk = "*"
 pydantic = ">=1.5,<2.0"
+
+[package.extras]
+depthai = ["matplotlib", "depthai", "opencv-python", "blobconverter"]
+grpc = ["akari-proto (>=0.3.0,<0.4.0)", "grpcio (==1.44.0)", "protobuf (==3.19.3)"]
 
 [package.source]
 type = "directory"
@@ -17,8 +22,8 @@ url = "sdk/akari_client"
 
 [[package]]
 name = "akari-proto"
-version = "0.1.0"
-description = ""
+version = "0.3.2"
+description = "Python package of akari protobuf definitions and utility functions"
 category = "main"
 optional = false
 python-versions = "*"
@@ -115,7 +120,7 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-dev = ["pylint", "mypy", "black", "coveralls", "pytest-cov", "pytest (>=5)"]
+dev = ["pytest (>=5)", "pytest-cov", "coveralls", "black", "mypy", "pylint"]
 
 [[package]]
 name = "depthai"
@@ -129,6 +134,17 @@ python-versions = ">=3.6"
 name = "dynamixel-sdk"
 version = "3.7.31"
 description = "Dynamixel SDK 3. python package"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pyserial = "*"
+
+[[package]]
+name = "feetech-servo-sdk"
+version = "1.0.0"
+description = "This is source code from official feetech repository"
 category = "main"
 optional = false
 python-versions = "*"
@@ -305,8 +321,8 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-testing = ["pytest-benchmark", "pytest"]
-dev = ["tox", "pre-commit"]
+dev = ["pre-commit", "tox"]
+testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "protobuf"
@@ -571,6 +587,9 @@ depthai = [
 ]
 dynamixel-sdk = [
     {file = "dynamixel_sdk-3.7.31-py3-none-any.whl", hash = "sha256:74e8c112ca6b0b869b196dd8c6a44ffd5dd5c1a3cb9fe2030e9933922406b466"},
+]
+feetech-servo-sdk = [
+    {file = "feetech-servo-sdk-1.0.0.tar.gz", hash = "sha256:d4d3832e4b1b22a8222133a414db9f868224c2fb639426a1b11d96ddfe84e69c"},
 ]
 flake8 = [
     {file = "flake8-5.0.4-py2.py3-none-any.whl", hash = "sha256:7a1cf6b73744f5806ab95e526f6f0d8c01c66d7bbe349562d22dfca20610b248"},

@@ -5,7 +5,7 @@ import pathlib
 import threading
 from typing import Iterator
 
-from scservo_sdk import *
+from scservo_sdk import COMM_SUCCESS, PacketHandler, PortHandler
 
 DEFAULT_BAUDRATE = 500000
 DEFAULT_DEVICE_NAME = pathlib.Path("/dev/serial0")

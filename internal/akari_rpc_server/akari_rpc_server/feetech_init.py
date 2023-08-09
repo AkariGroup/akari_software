@@ -53,9 +53,7 @@ def initialize_joint_limit(
         controller.set_position_limit(
             config.min_position_limit, config.max_position_limit
         )
-        _logger.info(
-            f"Successfully set position limit of joint: '{config.joint_name}'"
-        )
+        _logger.info(f"Successfully set position limit of joint: '{config.joint_name}'")
 
 
 def initialize_default_velocity(

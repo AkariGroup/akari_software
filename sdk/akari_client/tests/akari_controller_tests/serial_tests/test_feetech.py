@@ -109,7 +109,7 @@ def test_set_profile_velocity(
     controller.set_profile_velocity(123.4)
     assert controller._read(
         FeetechControlTable.PROFILE_VELOCITY
-    ) == rad_per_sec_tofeetech_vel_pulse(123.4)
+    ) == rad_per_sec_to_feetech_vel_pulse(123.4)
 
 
 def test_get_profile_velocity(
