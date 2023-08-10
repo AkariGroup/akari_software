@@ -1,7 +1,7 @@
 import contextlib
-import pathlib
 from typing import Any, Optional
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
@@ -9,8 +9,7 @@ import numpy as np
 from .utils.priorbox import PriorBox
 from .utils.utils import draw
 
-PACKAGE_DIR = pathlib.Path(__file__).resolve().parents[2]
-WEIGHT_PATH = PACKAGE_DIR / "data/face_detection/face_detection_yunet_120x160.blob"
+ZOO_NAME = "face_detection_yunet_160x120"
 
 
 NN_WIDTH, NN_HEIGHT = 160, 120
@@ -67,11 +66,24 @@ def _render_frame(name: str, frame: np.ndarray, detections: Any) -> np.ndarray:
 
 class FaceDetectionCapture:
     @staticmethod
+    def _get_model_path() -> str:
+        return str(
+            blobconverter.from_zoo(
+                ZOO_NAME,
+                shaves=6,
+                use_cache=True,
+                zoo_type="depthai",
+            )
+        )
+
+    @staticmethod
     def _create_pipeline() -> dai.Pipeline:
+        nn_model_path = FaceDetectionCapture._get_model_path()
+
         pipeline = dai.Pipeline()
         pipeline.setOpenVINOVersion(version=dai.OpenVINO.VERSION_2021_4)
         detection_nn = pipeline.create(dai.node.NeuralNetwork)
-        detection_nn.setBlobPath(WEIGHT_PATH)
+        detection_nn.setBlobPath(nn_model_path)
         detection_nn.setNumPoolFrames(4)
         detection_nn.input.setBlocking(False)
         detection_nn.setNumInferenceThreads(2)

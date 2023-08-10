@@ -86,7 +86,7 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	go func() {
 		for {
 			m.CheckAlive()
-			time.Sleep(CheckAlivePeriodSeconds)
+			time.Sleep(CheckAlivePeriodSeconds * time.Second)
 		}
 	}()
 

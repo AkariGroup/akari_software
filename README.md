@@ -1,5 +1,4 @@
 # akari_software
-![alt用テキスト](setup/m5_sd/jpg/logo320.jpg)  
 
 AKARIを動かすためのソースファイル、セットアップ用ファイル、各種ツールをまとめたレポジトリです。  
 詳細は下記リンクのAKARIマニュアルを参照ください。  

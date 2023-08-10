@@ -13,6 +13,7 @@ from ..m5stack_client import M5ComDict
 BAUDRATE = 500000
 DEVICE_NAME = pathlib.Path("/dev/ttyUSB_M5Stack")
 TIMEOUT = 0.2
+RESPONSE_TIMEOUT = 1.0
 
 
 class M5SerialCommunicator:
@@ -116,8 +117,13 @@ class M5SerialCommunicator:
             self._wait_response()
 
     def _wait_response(self) -> None:
+        called_time = self.current_time
+
         def _predicate() -> bool:
-            return self._latest_msg is not None and self._latest_msg["is_response"]
+            elapsed = self.current_time - called_time
+            return (
+                self._latest_msg is not None and self._latest_msg["is_response"]
+            ) or (elapsed > RESPONSE_TIMEOUT)
 
         with self._condition:
             while True:

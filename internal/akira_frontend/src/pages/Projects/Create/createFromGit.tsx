@@ -23,6 +23,7 @@ import { CancelButton } from "../../../components/CancelButton";
 import { AxiosError } from "axios";
 import { ApiError } from "../../../libs/types";
 import { ApiErrorAlert } from "../../../components/ApiErrorAlert";
+import { useSetBackdropValue } from "../../../contexts/BackdropContext";
 type CreateProjectFromGitInputs = {
   branch?: string;
   dirname?: string;
@@ -37,6 +38,7 @@ export function CreateProjectFromGit() {
     },
     [setCustomPath]
   );
+  const setBusy = useSetBackdropValue();
   const {
     control,
     handleSubmit,
@@ -53,6 +55,7 @@ export function CreateProjectFromGit() {
     async (data) => {
       if (!client) return;
 
+      setBusy(true);
       const request: Akira_protoCreateProjectFromGitRequest = {
         branch: data.branch !== "" ? data.branch : undefined,
         dirname: customPath ? data.dirname : undefined,
@@ -71,9 +74,11 @@ export function CreateProjectFromGit() {
           return;
         }
         throw e;
+      } finally {
+        setBusy(false);
       }
     },
-    [customPath, client, navigate, setApiError]
+    [customPath, client, navigate, setApiError, setBusy]
   );
 
   const customPathElement = customPath ? (

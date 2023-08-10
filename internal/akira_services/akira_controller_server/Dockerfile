@@ -12,8 +12,9 @@ RUN pip install \
         /resources/sdk/akari_proto/
 
 COPY internal/akira_controller_server /resources/sdk/akira_controller_server
-# NOTE: In order to avoid resource path issues, install package with editable option
-RUN pip install -e /resources/sdk/akira_controller_server/
+RUN pip install /resources/sdk/akira_controller_server/
+# NOTE: Pre-download models into the docker image in order to minimize starting time of the container
+RUN python3 -m akira_controller_server.cli.download_resources
 
 EXPOSE 52001
 CMD ["python3", "-m", "akira_controller_server.cli"]

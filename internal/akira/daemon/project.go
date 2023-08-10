@@ -96,6 +96,13 @@ func (s *ProjectServicer) EditProject(ctx context.Context, r *proto.EditProjectR
 	return projectToPb(p), nil
 }
 
+func (s *ProjectServicer) DeleteProject(ctx context.Context, r *proto.DeleteProjectRequest) (*emptypb.Empty, error) {
+	if err := s.da.projects.DeleteProject(r.Id); err != nil {
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("error occurred while deleting project: %#s", err))
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (s *ProjectServicer) GetProject(ctx context.Context, r *proto.GetProjectRequest) (*proto.Project, error) {
 	p, ok := s.da.projects.GetProject(r.Id)
 	if !ok {
