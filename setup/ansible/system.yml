@@ -6,9 +6,14 @@
 
 - name: Configure mainpc
   hosts: mainpc
+  vars:
+    lite: "{{ lite | default(false) | bool }}"
   roles:
     - oak-d
-    - dynamixel
+    - role: dynamixel
+      when: not lite
+    - role: feetech
+      when: lite
     - m5stack
 
 - name: Write M5
