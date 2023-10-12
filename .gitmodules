@@ -7,3 +7,18 @@
 [submodule "setup/arduino/lib/ArduinoJson"]
 	path = setup/arduino/lib/ArduinoJson
 	url = https://github.com/bblanchon/ArduinoJson.git
+[submodule "setup/arduino/lib/arduino-i2c-sht4x"]
+	path = setup/arduino/lib/arduino-i2c-sht4x
+	url = https://github.com/Sensirion/arduino-i2c-sht4x.git
+[submodule "setup/arduino/lib/arduino-core"]
+	path = setup/arduino/lib/arduino-core
+	url = https://github.com/Sensirion/arduino-core.git
+[submodule "setup/arduino/lib/Adafruit_BMP280_Library"]
+	path = setup/arduino/lib/Adafruit_BMP280_Library
+	url = https://github.com/adafruit/Adafruit_BMP280_Library.git
+[submodule "setup/arduino/lib/Adafruit_Sensor"]
+	path = setup/arduino/lib/Adafruit_Sensor
+	url = https://github.com/adafruit/Adafruit_Sensor.git
+[submodule "setup/arduino/lib/Adafruit_BusIO"]
+	path = setup/arduino/lib/Adafruit_BusIO
+	url = https://github.com/adafruit/Adafruit_BusIO.git
