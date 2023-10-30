@@ -14,7 +14,7 @@
 #include "Adafruit_Sensor.h"
 #include <WiFi.h>
 
-const String m5_ver = "1.2.0";
+const String m5_ver = "1.3.0";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
@@ -467,6 +467,11 @@ void setup()
   if(!bmp.begin(0x76)){
     connected_env_sensor = ENV_3;
     qmp6988.init();
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
+                    Adafruit_BMP280::SAMPLING_X2,
+                    Adafruit_BMP280::SAMPLING_X16,
+                    Adafruit_BMP280::FILTER_X16,
+                    Adafruit_BMP280::STANDBY_MS_500);
   }
   dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
