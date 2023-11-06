@@ -35,7 +35,7 @@ int PWMCH = 0;
 unsigned long loopStart;
 unsigned long loopEnd;
 unsigned long interval;
-#define LOOPPERIOD 20  //ループ周期をmsで定義
+#define LOOPPERIOD 40  //ループ周期をmsで定義
 #define MEASURETIME 10 //1ループのinput測定回数
 bool dout0Val;
 bool dout1Val;
@@ -383,12 +383,12 @@ void pubSerial(void *arg)
     float temperature = 0;
     float pressure = 0;
     float humidity = 0;
-    if (connected_env_sensor = ENV_3) {
+    if (connected_env_sensor == ENV_3) {
       temperature = (float)qmp6988.calcTemperature();
       pressure = (float)qmp6988.calcPressure();
-    } else if (connected_env_sensor = ENV_4) {
+    } else if (connected_env_sensor == ENV_4) {
       sht4x.measureHighPrecision(temperature, humidity);
-      pressure = bmp.readPressure();
+      pressure = (float)bmp.readPressure();
     }
     uint16_t brightness = analogRead(36);
 
@@ -467,11 +467,14 @@ void setup()
   if(!bmp.begin(0x76)){
     connected_env_sensor = ENV_3;
     qmp6988.init();
+  }
+  else{
     bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
                     Adafruit_BMP280::SAMPLING_X2,
                     Adafruit_BMP280::SAMPLING_X16,
                     Adafruit_BMP280::FILTER_X16,
                     Adafruit_BMP280::STANDBY_MS_500);
+    sht4x.begin(Wire);
   }
   dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
