@@ -12,3 +12,4 @@ dist/
 .venv
 
 internal/docker/.docker_credential
+internal/docker/.local/etc/akira/

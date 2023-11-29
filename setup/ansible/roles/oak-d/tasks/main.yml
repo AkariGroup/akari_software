@@ -1,5 +1,6 @@
 ---
 - name: Register v4l2loopback to modules-load.d
+  when: not lite
   copy:
     dest: "/etc/modules-load.d/v4l2loopback.conf"
     mode: "644"
@@ -9,6 +10,7 @@
   notify: Reload v4l2loopback
 
 - name: Configure OAK-D Video Source
+  when: not lite
   lineinfile:
     path: "/etc/modprobe.d/v4l2loopback.conf"
     create: true
