@@ -3,3 +3,9 @@
   shell: sudo raspi-config nonint do_serial 2
   become: yes
 
+- name: Change permissions of serial port
+  file:
+    path: /dev/serial0
+    mode: "0666"
+  become: yes
+
