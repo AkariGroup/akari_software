@@ -16,6 +16,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: POSIX",
@@ -30,7 +31,7 @@ setup(
     extras_require={
         "grpc": [
             "akari-proto>=0.3.0,<0.4.0",
-            "grpcio==1.44.0",
+            "grpcio==1.60.0",
             "protobuf==3.19.3",
         ],
         "depthai": [
