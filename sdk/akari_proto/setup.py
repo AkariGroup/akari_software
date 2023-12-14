@@ -4,7 +4,7 @@ setup(
     name="akari-proto",
     version="0.3.3",
     description="Python package of akari protobuf definitions and utility functions",
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packags(exclude=["tests"]),
     author="akari",
     author_email="akari.tmc@gmail.com",
     package_data={"akari_proto": ["py.typed"]},
@@ -24,7 +24,7 @@ setup(
     ],
     url="https://github.com/AkariGroup/akari_software",
     install_requires=[
-        "grpcio==1.44.0",
+        "grpcio==1.60.0",
         "protobuf==3.19.3",
     ],
 )
