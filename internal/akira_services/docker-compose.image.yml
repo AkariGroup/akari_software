@@ -4,23 +4,23 @@ services:
     build:
       context: ../../
       dockerfile: internal/akira_services/jupyter_lab/Dockerfile
-    image: akarirobot/akira-service-jupyter:v1
+    image: akarirobot/akira-service-jupyter:${AKIRA_IMAGE_TAG}
     command: exit 1
   akari_rpc_server:
     build:
       context: ../../
       dockerfile: internal/akira_services/akari_rpc_server/Dockerfile
-    image: akarirobot/akari-rpc-server:v1
+    image: akarirobot/akari-rpc-server:${AKIRA_IMAGE_TAG}
     command: exit 1
   akira_controller_server:
     build:
       context: ../../
       dockerfile: internal/akira_services/akira_controller_server/Dockerfile
-    image: akarirobot/akira-controller-server:v1
+    image: akarirobot/akira-controller-server:${AKIRA_IMAGE_TAG}
     command: exit 1
   vscode:
     build:
       context: ../../
       dockerfile: internal/akira_services/vscode/Dockerfile
-    image: akarirobot/akira-service-vscode:v1
+    image: akarirobot/akira-service-vscode:${AKIRA_IMAGE_TAG}
     command: exit 1
