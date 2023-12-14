@@ -7,11 +7,21 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Build and push images
+    - name: Build and push images for x64
       run: |
         source internal/docker/env.sh
         docker compose -f ${{ inputs.compose-path }} build
         docker compose -f ${{ inputs.compose-path }} push
       shell: bash
       env:
-        AKIRA_IMAGE_TAG: v1
+        AKIRA_IMAGE_TAG: v1-x64
+    - name: Build and push images for arm
+      run: |
+        source internal/docker/env.sh
+        docker compose -f ${{ inputs.compose-path }} build
+        docker compose -f ${{ inputs.compose-path }} push
+      shell: bash
+      env:
+        AKIRA_IMAGE_TAG: v1-arm
+      with:
+        platforms: linux/arm64
