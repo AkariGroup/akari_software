@@ -4,7 +4,7 @@ setup(
     name="akari-proto",
     version="0.3.3",
     description="Python package of akari protobuf definitions and utility functions",
-    packages=find_packags(exclude=["tests"]),
+    packages=find_packages(exclude=["tests"]),
     author="akari",
     author_email="akari.tmc@gmail.com",
     package_data={"akari_proto": ["py.typed"]},
