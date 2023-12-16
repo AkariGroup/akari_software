@@ -7,14 +7,18 @@ inputs:
   docker-tag:
     description: 'Docker tag name'
     required: true
+  platform:
+    description: 'Build platform'
+    required: false
+    default: 'linux/amd64'
 runs:
   using: 'composite'
   steps:
     - name: Build and push images
       run: |
         source internal/docker/env.sh
-        docker compose -f ${{ inputs.compose-path }} build
+        DOCKER_DEFAULT_PLATFORM=${{ inputs.platform }} docker compose -f ${{ inputs.compose-path }} build
         docker compose -f ${{ inputs.compose-path }} push
       shell: bash
       env:
-        AKIRA_IMAGE_TAG: docker-tag
+        AKIRA_IMAGE_TAG: ${{ inputs.docker-tag }}

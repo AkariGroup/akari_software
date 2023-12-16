@@ -36,13 +36,13 @@ jobs:
       with:
         compose-path: internal/docker/docker-compose.dev.yml
         docker-tag: v1-arm
-        platforms: linux/arm64
+        platform: linux/arm64
     - name: Build and push akira-service images for arm
       uses: ./.github/actions/build-akira-images
       with:
         compose-path: internal/akira_services/docker-compose.image.yml
         docker-tag: v1-arm
-        platforms: linux/arm64
+        platform: linux/arm64
     - name: Post a notification
       run: |
         curl -X POST \
