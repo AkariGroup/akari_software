@@ -4,24 +4,17 @@ inputs:
   compose-path:
     description: 'A path to docker-compose file'
     required: true
+  docker-tag:
+    description: 'Docker tag name'
+    required: true
 runs:
   using: 'composite'
   steps:
-    - name: Build and push images for x64
+    - name: Build and push images
       run: |
         source internal/docker/env.sh
         docker compose -f ${{ inputs.compose-path }} build
         docker compose -f ${{ inputs.compose-path }} push
       shell: bash
       env:
-        AKIRA_IMAGE_TAG: v1-x64
-    - name: Build and push images for arm
-      run: |
-        source internal/docker/env.sh
-        docker compose -f ${{ inputs.compose-path }} build
-        docker compose -f ${{ inputs.compose-path }} push
-      shell: bash
-      env:
-        AKIRA_IMAGE_TAG: v1-arm
-      with:
-        platforms: linux/arm64
+        AKIRA_IMAGE_TAG: docker-tag
