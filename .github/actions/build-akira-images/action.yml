@@ -17,8 +17,9 @@ runs:
     - name: Build and push images
       run: |
         source internal/docker/env.sh
-        DOCKER_DEFAULT_PLATFORM=${{ inputs.platform }} docker compose -f ${{ inputs.compose-path }} build
+        docker compose -f ${{ inputs.compose-path }} build
         docker compose -f ${{ inputs.compose-path }} push
       shell: bash
       env:
         AKIRA_IMAGE_TAG: ${{ inputs.docker-tag }}
+        DOCKER_DEFAULT_PLATFORM: ${{ inputs.platform }}
