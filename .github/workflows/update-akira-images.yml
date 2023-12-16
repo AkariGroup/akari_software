@@ -43,6 +43,12 @@ jobs:
         compose-path: internal/akira_services/docker-compose.image.yml
         docker-tag: v1-arm
         platform: linux/arm64
+    - name: Create and push docker manifest
+      uses: ./.github/actions/push-docker-manifest
+      with:
+        tag: v1
+        original-tag1: v1-x64
+        original-tag2: v1-arm
     - name: Post a notification
       run: |
         curl -X POST \
