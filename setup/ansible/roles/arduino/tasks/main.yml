@@ -6,10 +6,16 @@
   become: true
 
 
+- name: Copy pip conf
+  copy:
+    src: "{{ role_path }}/files/pip.conf"
+    dest: "{{ ansible_env.HOME }}/.pip/"
+  become: false
+  when: 
+    ansible_os_family == "Debian"
 
 - name: Install pip packages
   pip:
-    extra_args: "--break-system-packages"
     name: platformio
   become: true
 
