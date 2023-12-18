@@ -12,7 +12,7 @@
     dest: "{{ ansible_env.HOME }}/.pip/"
   become: false
   when: 
-    ansible_os_family == "Debian"
+    ansible_distribution == "Raspbian"
 
 - name: Install pip packages
   pip:
