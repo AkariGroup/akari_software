@@ -1,4 +1,4 @@
-FROM python:3.11-slim-buster
+FROM python:3.10-slim-buster
 
 COPY sdk/akari_proto /resources/sdk/akari_proto
 COPY sdk/akari_client /resources/sdk/akari_client
