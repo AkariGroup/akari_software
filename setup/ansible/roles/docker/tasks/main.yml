@@ -41,7 +41,7 @@
     state: present
   become: true
   when:
-    ansible_distribution == "Raspbian"
+    ansible_distribution == "Debian"
 
 - name: Set docker version for Ubuntu
   set_fact:
@@ -53,7 +53,7 @@
   set_fact:
      docker_version: "{{ docker_version_raspi }}"
   when:
-    ansible_distribution == "Raspbian"
+    ansible_distribution == "Debian"
 
 - name: Install docker
   apt:
@@ -81,4 +81,4 @@
     insertafter: EOF
   become: true
   when:
-    ansible_distribution == "Raspbian"
+    ansible_distribution == "Debian"

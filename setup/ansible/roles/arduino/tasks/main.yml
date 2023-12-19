@@ -5,19 +5,18 @@
       - arduino
   become: true
 
-
 - name: Copy pip conf
   copy:
     src: "{{ role_path }}/files/pip.conf"
-    dest: "{{ ansible_env.HOME }}/.pip/"
+    dest: "{{ ansible_env.HOME }}/.config/pip/"
   become: false
   when: 
-    ansible_distribution == "Raspbian"
+    ansible_distribution == "Debian"
 
 - name: Install pip packages
   pip:
     name: platformio
-  become: true
+  become: false
 
 # When the playbook is executed for the first time,
 # user might not belong to the dialout group in the session.
