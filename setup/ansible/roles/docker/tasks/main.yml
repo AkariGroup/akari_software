@@ -64,11 +64,11 @@
     append: yes
   become: true
 
-- name: Add nameserver to /etc/resolv.conf
-  lineinfile:
-    path: /etc/resolv.conf
-    line: "nameserver 8.8.8.8"
-    insertafter: EOF
+- name: Copy resolvconf.conf file
+  copy:
+    src: "{{ role_path }}/files/resolvconf.conf"
+    dest: /etc/
+    mode: "0755"
   become: true
   when:
     ansible_distribution == "Debian"
