@@ -19,14 +19,36 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Build and push akira images
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Build and push akira images for x64
       uses: ./.github/actions/build-akira-images
       with:
         compose-path: internal/docker/docker-compose.dev.yml
-    - name: Build and push akira-service images
+        docker-tag: v1-x64
+    - name: Build and push akira-service images for x64
       uses: ./.github/actions/build-akira-images
       with:
         compose-path: internal/akira_services/docker-compose.image.yml
+        docker-tag: v1-x64
+    - name: Build and push akira images for arm
+      uses: ./.github/actions/build-akira-images
+      with:
+        compose-path: internal/docker/docker-compose.dev.yml
+        docker-tag: v1-arm
+        platform: linux/arm64
+    - name: Build and push akira-service images for arm
+      uses: ./.github/actions/build-akira-images
+      with:
+        compose-path: internal/akira_services/docker-compose.image.yml
+        docker-tag: v1-arm
+        platform: linux/arm64
+    - name: Create and push docker manifest
+      uses: ./.github/actions/push-docker-manifest
+      with:
+        tag: v1
+        original-tag1: v1-x64
+        original-tag2: v1-arm
     - name: Post a notification
       run: |
         curl -X POST \
