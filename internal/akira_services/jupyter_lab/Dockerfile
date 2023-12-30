@@ -10,6 +10,8 @@ RUN apt-get update && \
         wget \
         python3-pip \
         python3-venv \
+        python3-dev\
+        gcc \
         python3-ipywidgets \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

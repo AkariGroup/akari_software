@@ -1,4 +1,5 @@
 ---
+
 - name: Install apt packages
   apt:
     pkg:
@@ -18,7 +19,7 @@
 - name: Install keyring
   changed_when: False
   shell:
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --batch --yes -o /etc/apt/keyrings/docker.gpg
+    curl -fsSL https://download.docker.com/linux/{{ ansible_os_family | lower }}/gpg | gpg --dearmor --batch --yes -o /etc/apt/keyrings/docker.gpg
   become: true
 
 - name: Get architecture
@@ -28,9 +29,21 @@
 
 - name: Add repository
   apt_repository:
-    repo: "deb [arch={{ host_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "deb [arch={{ host_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/{{ansible_distribution | lower}} {{ ansible_distribution_release }} stable"
     state: present
   become: true
+
+- name: Set docker version for Ubuntu
+  set_fact:
+     docker_version: "{{ docker_version_ubuntu }}"
+  when:
+    ansible_distribution == "Ubuntu"
+
+- name: Set docker version for Raspberry pi OS
+  set_fact:
+     docker_version: "{{ docker_version_raspi }}"
+  when:
+    ansible_distribution == "Debian"
 
 - name: Install docker
   apt:
@@ -50,3 +63,12 @@
     groups: docker
     append: yes
   become: true
+
+- name: Copy resolvconf.conf file
+  copy:
+    src: "{{ role_path }}/files/resolvconf.conf"
+    dest: /etc/
+    mode: "0755"
+  become: true
+  when:
+    ansible_distribution == "Debian"
