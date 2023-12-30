@@ -1,0 +1,45 @@
+name: 'Push docker manifest'
+description: 'Build akira images on arm'
+inputs:
+  tag:
+    description: 'Tag on docker hub'
+    required: true
+  original-tag1:
+    description: 'Original tag 1'
+    required: true
+  original-tag2:
+    description: 'Original tag 2'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Create and push manifest for akira-daemon
+      run: |
+        docker manifest create akarirobot/akira-daemon:${{ inputs.tag }} akarirobot/akira-daemon:${{ inputs.original-tag1 }} akarirobot/akira-daemon:${{ inputs.original-tag2 }}
+        docker manifest push akarirobot/akira-daemon:${{ inputs.tag }}
+      shell: bash
+    - name: Create and push manifest for akira-gateway
+      run: |
+        docker manifest create akarirobot/akira-gateway:${{ inputs.tag }} akarirobot/akira-gateway:${{ inputs.original-tag1 }} akarirobot/akira-gateway:${{ inputs.original-tag2 }}
+        docker manifest push akarirobot/akira-gateway:${{ inputs.tag }}
+      shell: bash
+    - name: Create and push manifest for akari-rpc-server
+      run: |
+        docker manifest create akarirobot/akari-rpc-server:${{ inputs.tag }} akarirobot/akari-rpc-server:${{ inputs.original-tag1 }} akarirobot/akari-rpc-server:${{ inputs.original-tag2 }}
+        docker manifest push akarirobot/akari-rpc-server:${{ inputs.tag }}
+      shell: bash
+    - name: Create and push manifest for akira-controller-server
+      run: |
+        docker manifest create akarirobot/akira-controller-server:${{ inputs.tag }} akarirobot/akira-controller-server:${{ inputs.original-tag1 }} akarirobot/akira-controller-server:${{ inputs.original-tag2 }}
+        docker manifest push akarirobot/akira-controller-server:${{ inputs.tag }}
+      shell: bash
+    - name: Create and push manifest for akira-service-jupyter
+      run: |
+        docker manifest create akarirobot/akira-service-jupyter:${{ inputs.tag }} akarirobot/akira-service-jupyter:${{ inputs.original-tag1 }} akarirobot/akira-service-jupyter:${{ inputs.original-tag2 }}
+        docker manifest push akarirobot/akira-service-jupyter:${{ inputs.tag }}
+      shell: bash
+    - name: Create and push manifest for akira-service-vscode
+      run: |
+        docker manifest create akarirobot/akira-service-vscode:${{ inputs.tag }} akarirobot/akira-service-vscode:${{ inputs.original-tag1 }} akarirobot/akira-service-vscode:${{ inputs.original-tag2 }}
+        docker manifest push akarirobot/akira-service-vscode:${{ inputs.tag }}
+      shell: bash
