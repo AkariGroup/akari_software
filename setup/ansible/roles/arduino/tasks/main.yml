@@ -5,6 +5,14 @@
       - arduino
   become: true
 
+- name: Copy pip conf
+  copy:
+    src: "{{ role_path }}/files/pip.conf"
+    dest: "/etc/"
+  become: true
+  when: 
+    ansible_distribution == "Debian"
+
 - name: Install pip packages
   pip:
     name: platformio
