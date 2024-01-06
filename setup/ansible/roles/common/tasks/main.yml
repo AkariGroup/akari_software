@@ -4,7 +4,9 @@
     pkg:
       - curl
       - git
+      - cmake
       - libudev-dev
+      - libusb-1.0-0-dev
       - python-is-python3
       - python3-pip
       - ssh
