@@ -1,4 +1,13 @@
 ---
+- name: Get AKARI type from command line
+  hosts: all
+  tasks:
+    - name: Get AKARI type
+      args: 
+        name: lite
+      set_fact:
+        lite: "{{ true if lite is defined else false}}"
+
 - name: Configure all hosts
   hosts: all
   roles:
@@ -6,14 +15,12 @@
 
 - name: Configure mainpc
   hosts: mainpc
-  vars:
-    lite: "{{ lite | default(false) | bool }}"
   roles:
     - oak-d
     - role: dynamixel
-      when: not lite
+      when: not lite | bool
     - role: feetech
-      when: lite
+      when: lite | bool
     - m5stack
 
 - name: Write M5
