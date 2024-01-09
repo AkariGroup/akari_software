@@ -1,6 +1,10 @@
 ---
-- name: Enable serial port on Raspberry Pi
-  shell: sudo raspi-config nonint do_serial 2
+- name: Enable serial port(hw) on Raspberry Pi
+  shell: raspi-config nonint do_serial_hw 2
+  become: yes
+
+- name: Enable hardware serial port(cons) on Raspberry Pi
+  shell: raspi-config nonint do_serial_cons 2
   become: yes
 
 - name: Change permissions of serial port
