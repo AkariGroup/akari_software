@@ -1,11 +1,15 @@
 ---
-- name: Enable serial port(hw) on Raspberry Pi
-  shell: raspi-config nonint do_serial_hw 2
+- name: Enable serial port for Raspberry Pi and Raspberry Pi OS
+  shell: raspi-config nonint do_serial_hw 0
   become: yes
+  when:
+    ansible_distribution == "Debian"
 
-- name: Enable hardware serial port(cons) on Raspberry Pi
-  shell: raspi-config nonint do_serial_cons 2
+- name: Enable serial port for Raspberry Pi and Ubuntu
+  shell: raspi-config nonint do_serial 2
   become: yes
+  when:
+    ansible_distribution == "Ubuntu"
 
 - name: Change permissions of serial port
   file:
