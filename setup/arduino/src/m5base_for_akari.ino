@@ -8,7 +8,7 @@
 #include "Wire.h"
 #include <M5Stack.h>
 #include <M5GFX.h>
-#include "UNIT_ENV.h"
+#include "M5_ENV.h"
 #include <SensirionI2CSht4x.h>
 #include <Adafruit_BMP280.h>
 #include "Adafruit_Sensor.h"
@@ -35,7 +35,7 @@ int PWMCH = 0;
 unsigned long loopStart;
 unsigned long loopEnd;
 unsigned long interval;
-#define LOOPPERIOD 40  //ループ周期をmsで定義
+#define LOOPPERIOD 50  //ループ周期をmsで定義
 #define MEASURETIME 10 //1ループのinput測定回数
 bool dout0Val;
 bool dout1Val;
@@ -45,6 +45,7 @@ bool commandFlg = false;
 QMP6988 qmp6988;
 Adafruit_BMP280 bmp;
 SensirionI2CSht4x sht4x;
+SHT3X sht30;
 
 //Command number list
 #define RESETPINVAL 0
@@ -384,7 +385,9 @@ void pubSerial(void *arg)
     float pressure = 0;
     float humidity = 0;
     if (connected_env_sensor == ENV_3) {
-      temperature = (float)qmp6988.calcTemperature();
+      if (sht30.get() == 0) {
+        temperature = sht30.cTemp;
+      }
       pressure = (float)qmp6988.calcPressure();
     } else if (connected_env_sensor == ENV_4) {
       sht4x.measureHighPrecision(temperature, humidity);
@@ -466,6 +469,7 @@ void setup()
   drawWaitingImg();
   if(!bmp.begin(0x76)){
     connected_env_sensor = ENV_3;
+    sht30.init();
     qmp6988.init();
   }
   else{
