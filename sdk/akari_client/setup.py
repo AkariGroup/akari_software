@@ -32,7 +32,7 @@ setup(
         "grpc": [
             "akari-proto>=0.3.0,<0.4.0",
             "grpcio==1.60.0",
-            "protobuf==3.19.3",
+            "protobuf==4.25.3",
         ],
         "depthai": [
             "matplotlib",
