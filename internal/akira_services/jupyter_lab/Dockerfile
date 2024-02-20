@@ -10,6 +10,9 @@ RUN apt-get update && \
         wget \
         python3-pip \
         python3-venv \
+        python3-dev\
+        gcc \
+        python3-ipywidgets \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
