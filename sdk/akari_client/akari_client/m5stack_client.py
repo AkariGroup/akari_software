@@ -13,7 +13,7 @@ class M5ComDict(TypedDict):
 
     :param din0: ヘッドのdin0ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
     :param din1: ヘッドのdin1ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
-    :param ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-4095の4096段階にする。
+    :param ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-255の256段階にする。
     :param dout0: ヘッドのdout0ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
     :param dout1: ヘッドのdout1ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
     :param pwmout0: ヘッドのpwmout0ピンのPWM出力。0-255の256段階で0-3.3Vを出力可能。
