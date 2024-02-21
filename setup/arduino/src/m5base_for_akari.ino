@@ -9,9 +9,12 @@
 #include <M5Stack.h>
 #include <M5GFX.h>
 #include "UNIT_ENV.h"
+#include <SensirionI2CSht4x.h>
+#include <Adafruit_BMP280.h>
+#include "Adafruit_Sensor.h"
 #include <WiFi.h>
 
-const String m5_ver = "1.2.0";
+const String m5_ver = "1.3.0";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
@@ -40,6 +43,8 @@ int pwmout0Val;
 bool commandFlg = false;
 
 QMP6988 qmp6988;
+Adafruit_BMP280 bmp;
+SensirionI2CSht4x sht4x;
 
 //Command number list
 #define RESETPINVAL 0
@@ -49,6 +54,10 @@ QMP6988 qmp6988;
 #define DISPLAYIMG 12
 #define RESETM5 99
 #define STARTM5 98
+
+#define ENV_3 20
+#define ENV_4 21
+int connected_env_sensor = ENV_4;
 
 float general0Val = 0.0F;
 float general1Val = 0.0F;
@@ -264,7 +273,7 @@ void subSerial(void *arg)
           commandFlg = true;
           break;
         }
-        
+
         case DISPLAYIMG:
         {
           float req_scale = rec["lcd"]["scl"];
@@ -273,7 +282,7 @@ void subSerial(void *arg)
           req_x = rec["lcd"]["x"].as<int>();
           req_y = rec["lcd"]["y"].as<int>();
           datum_t jpg_datum = top_left;
-          
+
           //y位置のアライン
           if (req_y == -999)
           {
@@ -371,11 +380,18 @@ void pubSerial(void *arg)
       din1Measure += digitalRead(DIN1PIN);
       ain0Measure += analogRead(AIN0PIN);
     }
-
-    float temperature = (float)qmp6988.calcTemperature();
-    float pressure = (float)qmp6988.calcPressure();
+    float temperature = 0;
+    float pressure = 0;
+    float humidity = 0;
+    if (connected_env_sensor == ENV_3) {
+      temperature = (float)qmp6988.calcTemperature();
+      pressure = (float)qmp6988.calcPressure();
+    } else if (connected_env_sensor == ENV_4) {
+      sht4x.measureHighPrecision(temperature, humidity);
+      pressure = (float)bmp.readPressure();
+    }
     uint16_t brightness = analogRead(36);
-    
+
     doc["seq"] = seq;
     doc["tmp"] = temperature;
     doc["pre"] = pressure;
@@ -448,7 +464,18 @@ void setup()
   lcd.setBrightness(128);
   lcd.setColorDepth(24);
   drawWaitingImg();
-  qmp6988.init();
+  if(!bmp.begin(0x76)){
+    connected_env_sensor = ENV_3;
+    qmp6988.init();
+  }
+  else{
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
+                    Adafruit_BMP280::SAMPLING_X2,
+                    Adafruit_BMP280::SAMPLING_X16,
+                    Adafruit_BMP280::FILTER_X16,
+                    Adafruit_BMP280::STANDBY_MS_500);
+    sht4x.begin(Wire);
+  }
   dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
   Serial.setTimeout(1);
