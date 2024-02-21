@@ -35,7 +35,7 @@ int PWMCH = 0;
 unsigned long loopStart;
 unsigned long loopEnd;
 unsigned long interval;
-#define LOOPPERIOD 40  //ループ周期をmsで定義
+#define LOOPPERIOD 20  //ループ周期をmsで定義
 #define MEASURETIME 10 //1ループのinput測定回数
 bool dout0Val;
 bool dout1Val;
