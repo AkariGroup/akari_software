@@ -22,6 +22,3 @@
 [submodule "setup/arduino/lib/Adafruit_BusIO"]
 	path = setup/arduino/lib/Adafruit_BusIO
 	url = https://github.com/adafruit/Adafruit_BusIO.git
-[submodule "setup/arduino/lib/M5Unit-ENV"]
-	path = setup/arduino/lib/M5Unit-ENV
-	url = https://github.com/m5stack/M5Unit-ENV.git
