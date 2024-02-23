@@ -11,7 +11,7 @@
 #include "M5UnitENV.h"
 #include <WiFi.h>
 
-const String m5_ver = "1.3.0";
+const String m5_ver = "1.3.1";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
