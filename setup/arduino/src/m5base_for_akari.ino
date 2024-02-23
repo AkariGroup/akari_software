@@ -8,10 +8,7 @@
 #include "Wire.h"
 #include <M5Stack.h>
 #include <M5GFX.h>
-#include "UNIT_ENV.h"
-#include <SensirionI2CSht4x.h>
-#include <Adafruit_BMP280.h>
-#include "Adafruit_Sensor.h"
+#include "M5UnitENV.h"
 #include <WiFi.h>
 
 const String m5_ver = "1.3.0";
@@ -43,8 +40,8 @@ int pwmout0Val;
 bool commandFlg = false;
 
 QMP6988 qmp6988;
-Adafruit_BMP280 bmp;
-SensirionI2CSht4x sht4x;
+SHT4X sht4;
+BMP280 bmp;
 
 //Command number list
 #define RESETPINVAL 0
@@ -57,7 +54,8 @@ SensirionI2CSht4x sht4x;
 
 #define ENV_3 20
 #define ENV_4 21
-int connected_env_sensor = ENV_4;
+#define ENV_NONE 22
+int connected_env_sensor = ENV_NONE;
 
 float general0Val = 0.0F;
 float general1Val = 0.0F;
@@ -384,11 +382,14 @@ void pubSerial(void *arg)
     float pressure = 0;
     float humidity = 0;
     if (connected_env_sensor == ENV_3) {
-      temperature = (float)qmp6988.calcTemperature();
-      pressure = (float)qmp6988.calcPressure();
+      qmp6988.update();
+      temperature = (float)qmp6988.cTemp;
+      pressure = (float)qmp6988.pressure;
     } else if (connected_env_sensor == ENV_4) {
-      sht4x.measureHighPrecision(temperature, humidity);
-      pressure = (float)bmp.readPressure();
+      sht4.update();
+      temperature = (float)sht4.cTemp;
+      bmp.update();
+      pressure = (float)bmp.pressure;
     }
     uint16_t brightness = analogRead(36);
 
@@ -464,17 +465,18 @@ void setup()
   lcd.setBrightness(128);
   lcd.setColorDepth(24);
   drawWaitingImg();
-  if(!bmp.begin(0x76)){
-    connected_env_sensor = ENV_3;
-    qmp6988.init();
+  //接続されているENV_SENSORを判別
+  if(bmp.begin(&Wire, BMP280_I2C_ADDR, 21, 22, 400000U) && (!sht4.begin(&Wire, SHT40_I2C_ADDR_44, 21, 22, 400000U))){
+    connected_env_sensor = ENV_4;
+    bmp.setSampling(BMP280::MODE_NORMAL,
+                    BMP280::SAMPLING_X2,
+                    BMP280::SAMPLING_X16,
+                    BMP280::FILTER_X16,
+                    BMP280::STANDBY_MS_500);
+
   }
-  else{
-    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
-                    Adafruit_BMP280::SAMPLING_X2,
-                    Adafruit_BMP280::SAMPLING_X16,
-                    Adafruit_BMP280::FILTER_X16,
-                    Adafruit_BMP280::STANDBY_MS_500);
-    sht4x.begin(Wire);
+  else if(qmp6988.begin(&Wire, QMP6988_SLAVE_ADDRESS_L, 21, 22, 400000U)) {
+      connected_env_sensor = ENV_3;
   }
   dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
