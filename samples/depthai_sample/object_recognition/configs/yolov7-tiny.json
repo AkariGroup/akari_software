@@ -1,12 +1,31 @@
 {
-    "nn_config": {
-        "output_format": "detection",
-        "NN_family": "mobilenet",
-        "confidence_threshold": 0.5,
-        "input_size": "416x416"
+    "model":
+    {
+        "model_name": "yolov7tiny_coco_416x416",
+        "zoo": "depthai"
     },
-    "mappings": {
-        "labels": [
+    "nn_config":
+    {
+        "output_format" : "detection",
+        "NN_family" : "YOLO",
+        "NN_specific_metadata" :
+        {
+            "classes" : 80,
+            "coordinates" : 4,
+            "anchors" : [12.0, 16.0, 19.0, 36.0, 40.0, 28.0, 36.0, 75.0, 76.0, 55.0, 72.0, 146.0, 142.0, 110.0, 192.0, 243.0, 459.0, 401.0],
+            "anchor_masks" : {
+                "side52": [0, 1, 2],
+                "side26": [3, 4, 5],
+                "side13": [6, 7, 8]
+            },
+            "iou_threshold" : 0.2,
+            "confidence_threshold" : 0.5
+        }
+    },
+    "mappings":
+    {
+        "labels":
+        [
             "person",
             "bicycle",
             "car",
@@ -86,7 +105,8 @@
             "scissors",
             "teddy bear",
             "hair drier",
-            "toothbrush"
+            "toothbrush"        
         ]
-    }
+    },
+    "version": 1
 }

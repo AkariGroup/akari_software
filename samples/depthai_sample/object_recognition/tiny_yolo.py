@@ -32,7 +32,7 @@ parser.add_argument(
     "--nnPath",
     nargs="?",
     help="Path to YOLO detection network blob",
-    default="yolo-v3-tiny-tf",
+    default="yolov4_tiny_coco_416x416",
 )
 parser.add_argument(
     "-c",
@@ -47,7 +47,7 @@ args = parser.parse_args()
 nnPath = args.nnPath
 if not Path(nnPath).exists():
     print("No blob found at {}. Looking into DepthAI model zoo.".format(nnPath))
-    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, use_cache=True))
+    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, zoo_type="depthai", use_cache=True))
 
 json_open = open(str(args.configPath), "r")
 config = json.load(json_open)
