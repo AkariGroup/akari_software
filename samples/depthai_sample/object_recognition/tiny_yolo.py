@@ -13,7 +13,7 @@ import numpy as np
 
 # Get argument first
 configPathDefault = str(
-    (Path(__file__).parent / Path("configs/yolov4_tiny_coco_416x416.json")).resolve().absolute()
+    (Path(__file__).parent / Path("configs/yolov4tiny_coco_416x416.json")).resolve().absolute()
 )
 parser = argparse.ArgumentParser()
 parser.add_argument(
