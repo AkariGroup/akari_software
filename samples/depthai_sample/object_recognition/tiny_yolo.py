@@ -1,16 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-object detection sample (tiny-YOLO v3 and v4)
-Created on 2022/04/16
-Based on depthai-experiments
-https://github.com/luxonis/depthai-python/tree/main/examples/Yolo
-
-The code is the same as for Tiny Yolo V3 and V4, the only difference is the blob file
-- Tiny YOLOv3: https://github.com/david8862/keras-YOLOv3-model-set
-- Tiny YOLOv4: https://github.com/TNTWEN/OpenVINO-YOLOV4
-"""
-
 import argparse
 import json
 import time
@@ -24,7 +13,9 @@ import numpy as np
 
 # Get argument first
 configPathDefault = str(
-    (Path(__file__).parent / Path("configs/tiny-yolo.json")).resolve().absolute()
+    (Path(__file__).parent / Path("configs/yolov4tiny_coco_416x416.json"))
+    .resolve()
+    .absolute()
 )
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -32,7 +23,7 @@ parser.add_argument(
     "--nnPath",
     nargs="?",
     help="Path to YOLO detection network blob",
-    default="yolo-v3-tiny-tf",
+    default="yolov4_tiny_coco_416x416",
 )
 parser.add_argument(
     "-c",
@@ -47,12 +38,24 @@ args = parser.parse_args()
 nnPath = args.nnPath
 if not Path(nnPath).exists():
     print("No blob found at {}. Looking into DepthAI model zoo.".format(nnPath))
-    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, use_cache=True))
-
-json_open = open(str(args.configPath), "r")
-config = json.load(json_open)
+    nnPath = str(
+        blobconverter.from_zoo(
+            args.nnPath, shaves=6, zoo_type="depthai", use_cache=True
+        )
+    )
+if not Path(args.configPath).exists():
+    raise ValueError("Path {} does not exist!".format(args.configPath))
+with Path(args.configPath).open() as f:
+    config = json.load(f)
+nnConfig = config.get("nn_config", {})
+width = 416
+height = 416
+# parse input shape
+if "input_size" in nnConfig:
+    width, height = tuple(map(int, nnConfig.get("input_size").split("x")))
 # tiny yolo v4 label texts
 labelMap = config["mappings"]["labels"]
+metadata = nnConfig.get("NN_specific_metadata", {})
 
 syncNN = True
 
@@ -70,21 +73,20 @@ nnOut = pipeline.create(dai.node.XLinkOut)
 xoutRgb.setStreamName("rgb")
 nnOut.setStreamName("nn")
 
-w, h = map(int, config["nn_config"]["input_size"].split("x"))
 # Properties
-camRgb.setPreviewSize(w, h)
+camRgb.setPreviewSize(width, height)
 camRgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
 camRgb.setInterleaved(False)
 camRgb.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
 camRgb.setFps(40)
 
 # Network specific settings
-detectionNetwork.setConfidenceThreshold(0.5)
-detectionNetwork.setNumClasses(80)
-detectionNetwork.setCoordinateSize(4)
-detectionNetwork.setAnchors([10, 14, 23, 27, 37, 58, 81, 82, 135, 169, 344, 319])
-detectionNetwork.setAnchorMasks({"side26": [1, 2, 3], "side13": [3, 4, 5]})
-detectionNetwork.setIouThreshold(config["nn_config"]["confidence_threshold"])
+detectionNetwork.setConfidenceThreshold(metadata.get("confidence_threshold", {}))
+detectionNetwork.setNumClasses(metadata.get("classes", {}))
+detectionNetwork.setCoordinateSize(metadata.get("coordinates", {}))
+detectionNetwork.setAnchors(metadata.get("anchors", {}))
+detectionNetwork.setAnchorMasks(metadata.get("anchor_masks", {}))
+detectionNetwork.setIouThreshold(metadata.get("iou_threshold", {}))
 detectionNetwork.setBlobPath(nnPath)
 detectionNetwork.setNumInferenceThreads(2)
 detectionNetwork.input.setBlocking(False)
