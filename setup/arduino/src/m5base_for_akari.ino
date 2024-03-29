@@ -126,7 +126,7 @@ void updateTextColor(int new_text_color, int new_back_color)
 void loadJapaneseFont(int size)
 {
   String fontPath = "/Fonts/" + fontList[size - 1];
-  lcd.loadFont(fontPath.c_str(), SD);
+  lcd.loadFont(SD, fontPath.c_str());
 }
 
 //M5displayに表示するテキストのサイズを更新(1-7)
@@ -466,7 +466,7 @@ void setup()
   lcd.setColorDepth(24);
   drawWaitingImg();
   //接続されているENV_SENSORを判別
-  if(bmp.begin(&Wire, BMP280_I2C_ADDR, 21, 22, 400000U) && (!sht4.begin(&Wire, SHT40_I2C_ADDR_44, 21, 22, 400000U))){
+  if(bmp.begin(&Wire, BMP280_I2C_ADDR, 21, 22, 400000U) && (sht4.begin(&Wire, SHT40_I2C_ADDR_44, 21, 22, 400000U))){
     connected_env_sensor = ENV_4;
     bmp.setSampling(BMP280::MODE_NORMAL,
                     BMP280::SAMPLING_X2,
