@@ -467,13 +467,15 @@ void setup()
   drawWaitingImg();
   //接続されているENV_SENSORを判別
   if(bmp.begin(&Wire, BMP280_I2C_ADDR, 21, 22, 400000U) && (sht4.begin(&Wire, SHT40_I2C_ADDR_44, 21, 22, 400000U))){
-    connected_env_sensor = ENV_4;
-    bmp.setSampling(BMP280::MODE_NORMAL,
-                    BMP280::SAMPLING_X2,
-                    BMP280::SAMPLING_X16,
-                    BMP280::FILTER_X16,
-                    BMP280::STANDBY_MS_500);
-
+      connected_env_sensor = ENV_4;
+      sht4.setPrecision(SHT4X_HIGH_PRECISION);
+      sht4.setHeater(SHT4X_NO_HEATER);
+      bmp.setSampling(BMP280::MODE_NORMAL,
+                      BMP280::SAMPLING_X2,
+                      BMP280::SAMPLING_X16,
+                      BMP280::FILTER_X16,
+                      BMP280::STANDBY_MS_500);
+    }
   }
   else if(qmp6988.begin(&Wire, QMP6988_SLAVE_ADDRESS_L, 21, 22, 400000U)) {
       connected_env_sensor = ENV_3;
