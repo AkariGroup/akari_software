@@ -8,19 +8,16 @@
 #include "Wire.h"
 #include <M5Stack.h>
 #include <M5GFX.h>
-#include "UNIT_ENV.h"
-#include <SensirionI2CSht4x.h>
-#include <Adafruit_BMP280.h>
-#include "Adafruit_Sensor.h"
+#include "M5UnitENV.h"
 #include <WiFi.h>
 
-const String m5_ver = "1.3.0";
+const String m5_ver = "1.3.1";
 const int boot_img_num = 48;
 
 SemaphoreHandle_t xMutex = NULL;
 M5GFX lcd;
 
-//ピンアサイン
+// ピンアサイン
 #define DIN0PIN 16
 #define DIN1PIN 26
 #define AIN0PIN 35
@@ -35,18 +32,18 @@ int PWMCH = 0;
 unsigned long loopStart;
 unsigned long loopEnd;
 unsigned long interval;
-#define LOOPPERIOD 20  //ループ周期をmsで定義
-#define MEASURETIME 10 //1ループのinput測定回数
+#define LOOPPERIOD 20  // ループ周期をmsで定義
+#define MEASURETIME 10 // 1ループのinput測定回数
 bool dout0Val;
 bool dout1Val;
 int pwmout0Val;
 bool commandFlg = false;
 
 QMP6988 qmp6988;
-Adafruit_BMP280 bmp;
-SensirionI2CSht4x sht4x;
+SHT4X sht4;
+BMP280 bmp;
 
-//Command number list
+// Command number list
 #define RESETPINVAL 0
 #define WRITEPINVAL 1
 #define FILLDISPLAY 10
@@ -57,11 +54,12 @@ SensirionI2CSht4x sht4x;
 
 #define ENV_3 20
 #define ENV_4 21
-int connected_env_sensor = ENV_4;
+#define ENV_NONE 22
+int connected_env_sensor = ENV_NONE;
 
 float general0Val = 0.0F;
 float general1Val = 0.0F;
-#define FONTNUM  11
+#define FONTNUM 11
 // SD内のフォントファイルパス。
 const String fontList[FONTNUM] = {
     "MotoyaLMaru_18.vlw",
@@ -86,7 +84,7 @@ int req_fill_color;
 int req_text_color;
 int req_back_color;
 
-//buttonの入力をMEASURETIME回の平均から決定(チャタリング対策)
+// buttonの入力をMEASURETIME回の平均から決定(チャタリング対策)
 bool buttonResult(int measure)
 {
   if (measure >= MEASURETIME / 2)
@@ -99,7 +97,7 @@ bool buttonResult(int measure)
   }
 }
 
-//dinの入力をMEASURETIME回の平均から決定(チャタリング対策)
+// dinの入力をMEASURETIME回の平均から決定(チャタリング対策)
 bool dinResult(int measure)
 {
   if (measure >= MEASURETIME / 2)
@@ -112,7 +110,7 @@ bool dinResult(int measure)
   }
 }
 
-//M5displayに表示するテキストの色、背景色を更新
+// M5displayに表示するテキストの色、背景色を更新
 void updateTextColor(int new_text_color, int new_back_color)
 {
   if (new_text_color != -1)
@@ -124,14 +122,14 @@ void updateTextColor(int new_text_color, int new_back_color)
   lcd.setTextColor(text_color, back_color);
 }
 
-//日本語フォントのサイズ指示が変わった場合、対応するフォントをロードする。
+// 日本語フォントのサイズ指示が変わった場合、対応するフォントをロードする。
 void loadJapaneseFont(int size)
 {
   String fontPath = "/Fonts/" + fontList[size - 1];
-  lcd.loadFont(fontPath.c_str(), SD);
+  lcd.loadFont(SD, fontPath.c_str());
 }
 
-//M5displayに表示するテキストのサイズを更新(1-7)
+// M5displayに表示するテキストのサイズを更新(1-7)
 bool updateTextSize(int new_text_size)
 {
   if (new_text_size < 1)
@@ -147,7 +145,7 @@ bool updateTextSize(int new_text_size)
     return false;
 }
 
-//Serialでのコマンドを受信してJSONをパース、コマンドを実行する。
+// Serialでのコマンドを受信してJSONをパース、コマンドを実行する。
 void subSerial(void *arg)
 {
   BaseType_t xStatus;
@@ -165,8 +163,8 @@ void subSerial(void *arg)
       xSemaphoreGive(xMutex);
       if (error)
       {
-        //Serial.print("deserializeJson() failed: ");
-        //Serial.println(error.c_str());
+        // Serial.print("deserializeJson() failed: ");
+        // Serial.println(error.c_str());
       }
       else
       {
@@ -215,7 +213,7 @@ void subSerial(void *arg)
           {
             lcd.fillScreen(fill_color);
           }
-          //y位置のアライン
+          // y位置のアライン
           if (req_y == -999)
           {
             req_y = lcd.height() / 2;
@@ -277,13 +275,13 @@ void subSerial(void *arg)
         case DISPLAYIMG:
         {
           float req_scale = rec["lcd"]["scl"];
-          if(req_scale < 0)
+          if (req_scale < 0)
             req_scale = -1.0f;
           req_x = rec["lcd"]["x"].as<int>();
           req_y = rec["lcd"]["y"].as<int>();
           datum_t jpg_datum = top_left;
 
-          //y位置のアライン
+          // y位置のアライン
           if (req_y == -999)
           {
             req_y = 0;
@@ -337,7 +335,7 @@ void subSerial(void *arg)
               jpg_datum = datum_t::top_left;
             }
           }
-          lcd.drawJpgFile(SD, rec["lcd"]["pth"].as<char *>(), req_x, req_y, lcd.width(), lcd.height(), 0, 0, req_scale, req_scale,jpg_datum);
+          lcd.drawJpgFile(SD, rec["lcd"]["pth"].as<char *>(), req_x, req_y, lcd.width(), lcd.height(), 0, 0, req_scale, req_scale, jpg_datum);
           commandFlg = true;
           break;
         }
@@ -355,7 +353,7 @@ void subSerial(void *arg)
   vTaskDelete(NULL);
 }
 
-//センサ、ioピンの値をJSON化して送信
+// センサ、ioピンの値をJSON化して送信
 void pubSerial(void *arg)
 {
   BaseType_t xStatus;
@@ -370,7 +368,7 @@ void pubSerial(void *arg)
     int din0Measure = 0;
     int din1Measure = 0;
     unsigned long ain0Measure = 0;
-    //複数回計測して平均を返す
+    // 複数回計測して平均を返す
     for (int i = 0; i < MEASURETIME; i++)
     {
       buttonAMeasure += M5.BtnA.read();
@@ -383,12 +381,18 @@ void pubSerial(void *arg)
     float temperature = 0;
     float pressure = 0;
     float humidity = 0;
-    if (connected_env_sensor == ENV_3) {
-      temperature = (float)qmp6988.calcTemperature();
-      pressure = (float)qmp6988.calcPressure();
-    } else if (connected_env_sensor == ENV_4) {
-      sht4x.measureHighPrecision(temperature, humidity);
-      pressure = (float)bmp.readPressure();
+    if (connected_env_sensor == ENV_3)
+    {
+      qmp6988.update();
+      temperature = (float)qmp6988.cTemp;
+      pressure = (float)qmp6988.pressure;
+    }
+    else if (connected_env_sensor == ENV_4)
+    {
+      sht4.update();
+      temperature = (float)sht4.cTemp;
+      bmp.update();
+      pressure = (float)bmp.pressure;
     }
     uint16_t brightness = analogRead(36);
 
@@ -408,7 +412,8 @@ void pubSerial(void *arg)
     doc["io"]["gn0"] = (float)general0Val;
     doc["io"]["gn1"] = (float)general1Val;
     doc["co"] = (int)commandFlg;
-    if(commandFlg){
+    if (commandFlg)
+    {
       commandFlg = false;
     }
     xStatus = xSemaphoreTake(xMutex, xTicksToWait);
@@ -427,26 +432,27 @@ void pubSerial(void *arg)
   vTaskDelete(NULL);
 }
 
-//起動待ち画面表示
+// 起動待ち画面表示
 void drawWaitingImg()
 {
   lcd.drawJpgFile(SD, "/jpg/waiting.jpg");
   loadJapaneseFont(1);
   lcd.setTextColor(DARKGREY, BLACK);
   lcd.setTextDatum(bottom_left);
-  lcd.drawString("ver:" + m5_ver, 0,  230);
+  lcd.drawString("ver:" + m5_ver, 0, 230);
   loadJapaneseFont(7);
   updateTextSize(7);
 }
 
-//起動アニメーション再生
+// 起動アニメーション再生
 void playBootAnime()
 {
-  for(int i=1;i<boot_img_num;i++){
-    String fileName = "/jpg/boot/"+ String(i) +".jpg";
-    char jpegs[fileName.length()+1];
+  for (int i = 1; i < boot_img_num; i++)
+  {
+    String fileName = "/jpg/boot/" + String(i) + ".jpg";
+    char jpegs[fileName.length() + 1];
     fileName.toCharArray(jpegs, sizeof(jpegs));
-    lcd.drawJpgFile(SD,jpegs);
+    lcd.drawJpgFile(SD, jpegs);
   }
 }
 
@@ -454,7 +460,7 @@ void setup()
 {
   M5.begin();
   M5.Power.begin();
-  M5.Power.setPowerVin(false); //電源供給断時の自動再起動をOFFに
+  M5.Power.setPowerVin(false); // 電源供給断時の自動再起動をOFFに
   WiFi.mode(WIFI_OFF);
   delay(500);
   M5.Lcd.setTextFont(2);
@@ -464,17 +470,21 @@ void setup()
   lcd.setBrightness(128);
   lcd.setColorDepth(24);
   drawWaitingImg();
-  if(!bmp.begin(0x76)){
-    connected_env_sensor = ENV_3;
-    qmp6988.init();
+  // 接続されているENV_SENSORを判別
+  if (bmp.begin(&Wire, BMP280_I2C_ADDR, 21, 22, 400000U) && (sht4.begin(&Wire, SHT40_I2C_ADDR_44, 21, 22, 400000U)))
+  {
+    connected_env_sensor = ENV_4;
+    sht4.setPrecision(SHT4X_HIGH_PRECISION);
+    sht4.setHeater(SHT4X_NO_HEATER);
+    bmp.setSampling(BMP280::MODE_NORMAL,
+                    BMP280::SAMPLING_X2,
+                    BMP280::SAMPLING_X16,
+                    BMP280::FILTER_X16,
+                    BMP280::STANDBY_MS_500);
   }
-  else{
-    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
-                    Adafruit_BMP280::SAMPLING_X2,
-                    Adafruit_BMP280::SAMPLING_X16,
-                    Adafruit_BMP280::FILTER_X16,
-                    Adafruit_BMP280::STANDBY_MS_500);
-    sht4x.begin(Wire);
+  else if (qmp6988.begin(&Wire, QMP6988_SLAVE_ADDRESS_L, 21, 22, 400000U))
+  {
+    connected_env_sensor = ENV_3;
   }
   dacWrite(25, 0); // Speaker OFF
   Serial.begin(500000);
@@ -486,7 +496,7 @@ void setup()
   pinMode(DOUT0PIN, OUTPUT);
   pinMode(DOUT1PIN, OUTPUT);
   pinMode(PWMOUT0PIN, OUTPUT);
-  ledcSetup(PWMCH, 7812.5, 8); //7812.5Hz, 8Bit(256段階)
+  ledcSetup(PWMCH, 7812.5, 8); // 7812.5Hz, 8Bit(256段階)
   ledcAttachPin(PWMOUT0PIN, PWMCH);
   digitalWrite(DOUT0PIN, 0);
   digitalWrite(DOUT1PIN, 0);
@@ -503,8 +513,8 @@ void setup()
       DeserializationError error = deserializeJson(rec, str);
       if (error)
       {
-        //Serial.print("deserializeJson() failed: ");
-        //Serial.println(error.c_str());
+        // Serial.print("deserializeJson() failed: ");
+        // Serial.println(error.c_str());
       }
       switch ((int)rec["com"])
       {
@@ -520,7 +530,7 @@ void setup()
   xMutex = xSemaphoreCreateMutex();
   playBootAnime();
   loopStart = millis();
-  //esp32の各コアにタスク割当
+  // esp32の各コアにタスク割当
   xTaskCreatePinnedToCore(pubSerial, "pubSerial", 8192, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(subSerial, "subSerial", 12288, NULL, 1, NULL, 1);
 }
