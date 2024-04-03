@@ -1,12 +1,3 @@
-[submodule "setup/arduino/lib/M5GFX"]
-	path = setup/arduino/lib/M5GFX
-	url = https://github.com/m5stack/M5GFX.git
-[submodule "setup/arduino/lib/M5Stack"]
-	path = setup/arduino/lib/M5Stack
-	url = https://github.com/m5stack/M5Stack.git
-[submodule "setup/arduino/lib/ArduinoJson"]
-	path = setup/arduino/lib/ArduinoJson
-	url = https://github.com/bblanchon/ArduinoJson.git
-[submodule "setup/arduino/lib/M5Unit-ENV"]
-	path = setup/arduino/lib/M5Unit-ENV
-	url = https://github.com/m5stack/M5Unit-ENV.git
+[submodule "setup/akari_m5_software"]
+	path = setup/akari_m5_software
+	url = https://github.com/AkariGroup/akari_m5_software.git
