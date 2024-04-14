@@ -5,12 +5,13 @@ Camera image stereo depth sample
 Created on 2022/04/16
 @author: Kazuya Yamamoto
 """
-from typing import Optional
+
 import cv2
 import depthai as dai
 import numpy
 
 MAX_DEPTH = 1500.0  # unit: [mm]
+
 
 def main() -> None:
     """
@@ -45,7 +46,9 @@ def main() -> None:
             # フレームをカラーマップに割り当て
             depth[numpy.where(depth > MAX_DEPTH)] = 0
             norm_depth = (depth * (255 / MAX_DEPTH)).astype(numpy.uint8)
-            colored_depth: numpy.ndarray = cv2.applyColorMap(norm_depth, cv2.COLORMAP_JET)
+            colored_depth: numpy.ndarray = cv2.applyColorMap(
+                norm_depth, cv2.COLORMAP_JET
+            )
             cv2.imshow("video", colored_depth)
 
             # qを押されたら終了

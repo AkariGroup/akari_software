@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -10,6 +10,9 @@ RUN apt-get update && \
         wget \
         python3-pip \
         python3-venv \
+        python3-dev\
+        gcc \
+        python3-ipywidgets \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
@@ -28,6 +31,7 @@ RUN pip install \
         /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/jupyter_lab/entrypoint.sh /entrypoint.sh
+ENV JUPYTER_PREFER_ENV_PATH=1
 
 RUN mkdir -p /host_var && chmod 777 /host_var
 WORKDIR /app

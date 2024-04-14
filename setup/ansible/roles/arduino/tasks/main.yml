@@ -5,21 +5,40 @@
       - arduino
   become: true
 
+- name: Copy pip conf
+  copy:
+    src: "{{ role_path }}/files/pip.conf"
+    dest: "/etc/"
+  become: true
+  when:
+    ansible_distribution == "Debian"
+
 - name: Install pip packages
   pip:
     name: platformio
   become: true
 
+# When the playbook is executed for the first time,
+# user might not belong to the dialout group in the session.
+# That would cause errors on `platformio run`, since it needs
+# to perform write actions on `/dev/ttyUSB`, which requires
+# dialout group to write.
+#
+# As such, set `become: true` for the platformio operations
+# to avoid the problem.
+
 - name: Copy platformio workspace
   synchronize:
-    src: "{{ role_path }}/files/arduino/"
-    dest: /home/{{ ansible_user }}/arduino/
+    src: "{{ role_path }}/files/akari_m5_software/"
+    dest: "{{ ansible_env.HOME }}/arduino/"
     checksum: true
     times: false
   register: upload_workspace
+  become: true
 
 - name: Upload app to M5Stack
   shell: platformio run --target=upload
   args:
-    chdir: /home/{{ ansible_user }}/arduino/
+    chdir: "{{ ansible_env.HOME }}/arduino/"
   when: upload_workspace.changed
+  become: true

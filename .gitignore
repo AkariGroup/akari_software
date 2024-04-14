@@ -8,8 +8,7 @@
 /__pycache__/
 /app/
 build/
+dist/
 .venv
-
-setup/ansible/hosts
 
 internal/docker/.docker_credential

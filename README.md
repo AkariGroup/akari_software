@@ -1,10 +1,9 @@
 # akari_software
-![alt用テキスト](setup/m5_sd/logo320.jpg)  
 
 AKARIを動かすためのソースファイル、セットアップ用ファイル、各種ツールをまとめたレポジトリです。  
 詳細は下記リンクのAKARIマニュアルを参照ください。  
 (本ディレクトリ内のAKARI_MANUAL.desktopからも飛ぶことができます。)  
-https://akari-docs.vbcpp.net/  
+https://akarigroup.github.io/docs/  
 
 ## パッケージ構成
 

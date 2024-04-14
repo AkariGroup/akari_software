@@ -26,7 +26,9 @@ type ProjectServiceClient interface {
 	CreateLocalProject(ctx context.Context, in *CreateLocalProjectRequest, opts ...grpc.CallOption) (*Project, error)
 	CreateProjectFromGit(ctx context.Context, in *CreateProjectFromGitRequest, opts ...grpc.CallOption) (*Project, error)
 	EditProject(ctx context.Context, in *EditProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	DeleteProject(ctx context.Context, in *DeleteProjectRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	RefreshProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListProjectsResponse, error)
 	ListTemplates(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListTemplatesResponse, error)
 }
@@ -66,9 +68,27 @@ func (c *projectServiceClient) EditProject(ctx context.Context, in *EditProjectR
 	return out, nil
 }
 
+func (c *projectServiceClient) DeleteProject(ctx context.Context, in *DeleteProjectRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/DeleteProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *projectServiceClient) GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error) {
 	out := new(Project)
 	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/GetProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) RefreshProjects(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/akira_proto.ProjectService/RefreshProjects", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +120,9 @@ type ProjectServiceServer interface {
 	CreateLocalProject(context.Context, *CreateLocalProjectRequest) (*Project, error)
 	CreateProjectFromGit(context.Context, *CreateProjectFromGitRequest) (*Project, error)
 	EditProject(context.Context, *EditProjectRequest) (*Project, error)
+	DeleteProject(context.Context, *DeleteProjectRequest) (*emptypb.Empty, error)
 	GetProject(context.Context, *GetProjectRequest) (*Project, error)
+	RefreshProjects(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	ListProjects(context.Context, *emptypb.Empty) (*ListProjectsResponse, error)
 	ListTemplates(context.Context, *emptypb.Empty) (*ListTemplatesResponse, error)
 	mustEmbedUnimplementedProjectServiceServer()
@@ -119,8 +141,14 @@ func (UnimplementedProjectServiceServer) CreateProjectFromGit(context.Context, *
 func (UnimplementedProjectServiceServer) EditProject(context.Context, *EditProjectRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EditProject not implemented")
 }
+func (UnimplementedProjectServiceServer) DeleteProject(context.Context, *DeleteProjectRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProject not implemented")
+}
 func (UnimplementedProjectServiceServer) GetProject(context.Context, *GetProjectRequest) (*Project, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
+}
+func (UnimplementedProjectServiceServer) RefreshProjects(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshProjects not implemented")
 }
 func (UnimplementedProjectServiceServer) ListProjects(context.Context, *emptypb.Empty) (*ListProjectsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListProjects not implemented")
@@ -195,6 +223,24 @@ func _ProjectService_EditProject_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProjectService_DeleteProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).DeleteProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.ProjectService/DeleteProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).DeleteProject(ctx, req.(*DeleteProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProjectService_GetProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetProjectRequest)
 	if err := dec(in); err != nil {
@@ -209,6 +255,24 @@ func _ProjectService_GetProject_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProjectServiceServer).GetProject(ctx, req.(*GetProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectService_RefreshProjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).RefreshProjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/akira_proto.ProjectService/RefreshProjects",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).RefreshProjects(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -269,8 +333,16 @@ var ProjectService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProjectService_EditProject_Handler,
 		},
 		{
+			MethodName: "DeleteProject",
+			Handler:    _ProjectService_DeleteProject_Handler,
+		},
+		{
 			MethodName: "GetProject",
 			Handler:    _ProjectService_GetProject_Handler,
+		},
+		{
+			MethodName: "RefreshProjects",
+			Handler:    _ProjectService_RefreshProjects_Handler,
 		},
 		{
 			MethodName: "ListProjects",

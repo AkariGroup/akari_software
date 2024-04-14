@@ -1,0 +1,10 @@
+---
+name: "Motor"
+version: "0.0.1"
+description: "Motor control template with a single ipynb file"
+author: "Akari"
+url: "https://github.com/AkariGroup/"
+tags:
+  - Official
+  - Motor
+  - Jupyter

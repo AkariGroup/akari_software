@@ -29,7 +29,6 @@ export function Services() {
       async (data) => {
         if (!client) return;
 
-        // TODO: Handle error (e.g. Directory name conflicts)
         setBusy(true);
         try {
           await client.services.post({
@@ -67,6 +66,20 @@ export function Services() {
         await client.services._id(target.id).stop.post({
           body: { terminate: terminate },
         });
+        mutate?.();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, setBusy, mutate]
+  );
+
+  const onTerminate = useCallback(
+    async (target: Akira_protoService) => {
+      if (!client || !target.id) return;
+      setBusy(true);
+      try {
+        await client.services._id(target.id).terminate.post();
         mutate?.();
       } finally {
         setBusy(false);
@@ -162,7 +175,7 @@ export function Services() {
           <Typography variant="h5" mb={1}>
             ユーザーサービス一覧
           </Typography>
-          <Box>
+          <Box mb={1}>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
@@ -176,6 +189,7 @@ export function Services() {
             services={data.services.filter((x) => x.type === "USER")}
             onStart={onStartService}
             onStop={onStopService}
+            onTerminate={onTerminate}
             onLaunch={onLaunchService}
             onRemove={onRemoveService}
             onEdit={setTargetEditService}
@@ -190,6 +204,7 @@ export function Services() {
             services={data.services.filter((x) => x.type === "SYSTEM")}
             onStart={onStartService}
             onStop={onStopService}
+            onTerminate={onTerminate}
             onAutoStart={onAutoStartService}
           />
         </Box>

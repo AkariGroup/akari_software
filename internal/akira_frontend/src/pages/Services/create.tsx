@@ -28,6 +28,10 @@ import {
 } from "../../api/@types";
 import { ApiClient } from "../../hooks/api";
 import { ValidationMessages } from "../../libs/messages";
+import { useCallback, useState } from "react";
+import { AxiosError } from "axios";
+import { ApiError } from "../../libs/types";
+import { ApiErrorAlert } from "../../components/ApiErrorAlert";
 
 type ServiceImageSelectorProps = {
   fields: ControllerRenderProps<Akira_protoCreateServiceRequest, "imageId">;
@@ -94,27 +98,45 @@ type Props = {
   onSubmit: SubmitHandler<Akira_protoCreateServiceRequest>;
 };
 
-export function ServiceCreateDrawer(props: Props) {
-  const { data: images } = useAspidaSWR(props.client?.service_images, {
-    enabled: !!props.client,
+export function ServiceCreateDrawer({ client, onClose, onSubmit }: Props) {
+  const { data: images } = useAspidaSWR(client?.service_images, {
+    enabled: !!client,
   });
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<Akira_protoCreateServiceRequest>();
+  const [apiError, setApiError] = useState<ApiError | null>(null);
+
+  const onServiceCreate: SubmitHandler<Akira_protoCreateServiceRequest> =
+    useCallback(
+      async (data) => {
+        try {
+          await onSubmit(data);
+        } catch (e) {
+          if (e instanceof AxiosError) {
+            const err = e.response?.data as ApiError;
+            setApiError(err);
+            return;
+          }
+          throw e;
+        }
+      },
+      [onSubmit, setApiError]
+    );
 
   return (
     <Drawer
       anchor="right"
       open={true}
-      onClose={props.onClose}
+      onClose={onClose}
       PaperProps={{ sx: { width: { sm: "100%", md: "40vw" } } }}
     >
       <Stack margin={2} spacing={2}>
         <Box>
           <Stack direction="row" alignItems="center">
-            <IconButton onClick={props.onClose}>
+            <IconButton onClick={onClose}>
               <CloseIcon />
             </IconButton>
             <Typography variant="h5" ml={1}>
@@ -123,6 +145,7 @@ export function ServiceCreateDrawer(props: Props) {
           </Stack>
           <Divider sx={{ mt: 1 }} />
         </Box>
+        {apiError && <ApiErrorAlert error={apiError} />}
         <Controller
           name="displayName"
           control={control}
@@ -177,7 +200,7 @@ export function ServiceCreateDrawer(props: Props) {
         <Button
           type="button"
           variant="contained"
-          onClick={handleSubmit(props.onSubmit)}
+          onClick={handleSubmit(onServiceCreate)}
         >
           作成
         </Button>

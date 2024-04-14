@@ -2,6 +2,7 @@ package project
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -46,9 +47,11 @@ func (m *ProjectManager) clearProjects() {
 	}
 }
 
-func (m *ProjectManager) UpdateProjects() {
+func (m *ProjectManager) RefreshProjects() {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+
+	m.clearProjects()
 
 	err := filepath.WalkDir(m.baseDir, func(p string, d os.DirEntry, err error) error {
 		if err != nil {
@@ -112,6 +115,35 @@ func (m *ProjectManager) CreateProject(dirname string, manifest ProjectManifest,
 	return proj, nil
 }
 
+func (m *ProjectManager) CloneProject(gitUrl string, dirname *string, branch *string) (Project, error) {
+	var localDirname string
+	if dirname != nil {
+		localDirname = *dirname
+	} else {
+		parsed, err := url.Parse(gitUrl)
+		if err != nil {
+			return nil, fmt.Errorf("invalid url: %#v", gitUrl)
+		}
+		localDirname = util.SanitizeDirname(util.GetStem(filepath.Base(parsed.Path)))
+	}
+
+	if !isSafeDirName.MatchString(localDirname) {
+		return nil, fmt.Errorf("invalid path: %#v", dirname)
+	}
+
+	dir := filepath.Join(m.baseDir, localDirname)
+	proj, err := CloneProject(dir, gitUrl, branch)
+
+	if err != nil {
+		return nil, err
+	}
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.registerProject(proj)
+	return proj, nil
+}
+
 func (m *ProjectManager) ListProjects() map[ProjectId]Project {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
@@ -129,4 +161,18 @@ func (m *ProjectManager) GetProject(id ProjectId) (Project, bool) {
 
 	p, ok := m.projects[id]
 	return p, ok
+}
+
+func (m *ProjectManager) DeleteProject(id ProjectId) error {
+	m.mu.RLock()
+
+	p, ok := m.projects[id]
+	if !ok {
+		m.mu.RUnlock()
+		return fmt.Errorf("project not found: %#v", id)
+	}
+	delete(m.projects, id)
+	m.mu.RUnlock()
+
+	return p.Delete()
 }

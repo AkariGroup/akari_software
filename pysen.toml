@@ -19,11 +19,11 @@ mypy_ignore_packages = ["akari_proto.*"]
     "samples/depthai_sample/face_detection",
     "samples/depthai_sample/object_recognition",
     "samples/m5serial_sample/",
+    "samples/depthai_uvc",
     "sdk/akari_client/akari_client",
     "sdk/akari_client/tests/",
     "sdk/akari_proto/akari_proto/",
     "sdk/akari_proto/tests/",
-    "sdk/depthai_uvc",
     "tools/python",
   ]
 
@@ -32,6 +32,7 @@ mypy_ignore_packages = ["akari_proto.*"]
     "internal/",
     "sdk/",
     "tools/",
+    "samples/",
   ]
   excludes = [
     "internal/akira_services/jupyter_lab/jupyter_lab_config.py",

@@ -1,0 +1,11 @@
+---
+name: "Face detection yunet"
+version: "0.0.1"
+description: "Face detection template by yunet"
+author: "Akari"
+url: "https://github.com/AkariGroup/"
+tags:
+  - Official
+  - camera
+  - face detection
+  - Jupyter

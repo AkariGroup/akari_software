@@ -33,6 +33,10 @@ import { useNavigate } from "react-router-dom";
 import { ValidationMessages } from "../../../libs/messages";
 import { CancelButton } from "../../../components/CancelButton";
 import { ValidNamePattern } from "../validNamePattern";
+import { AxiosError } from "axios";
+import { ApiError } from "../../../libs/types";
+import { ApiErrorAlert } from "../../../components/ApiErrorAlert";
+import { useSetBackdropValue } from "../../../contexts/BackdropContext";
 
 type TemplateSelectorProps = {
   fields: ControllerRenderProps<CreateProjectFromTemplateInputs, "templateId">;
@@ -67,6 +71,14 @@ function TemplateItem({ template }: { template: Akira_protoTemplate }) {
 
 function TemplateSelector(props: TemplateSelectorProps) {
   const error = !!props.error;
+  const sortKey = useCallback(
+    (lhs: Akira_protoTemplate, rhs: Akira_protoTemplate) => {
+      const lhsState = lhs.name ?? "";
+      const rhsState = rhs.name ?? "";
+      return lhsState > rhsState ? 1 : -1;
+    },
+    []
+  );
   return (
     <FormControl fullWidth variant="filled" error={error}>
       <InputLabel id="template-selector-label">テンプレート</InputLabel>
@@ -78,7 +90,7 @@ function TemplateSelector(props: TemplateSelectorProps) {
         renderValue={(e) => `${e}`}
         error={error}
       >
-        {props.templates?.map((t) => (
+        {props.templates?.sort(sortKey).map((t) => (
           <MenuItem key={t.id} value={t.id}>
             <TemplateItem template={t} />
           </MenuItem>
@@ -109,29 +121,41 @@ export function CreateProjectFromTemplate() {
     formState: { errors },
   } = useForm<CreateProjectFromTemplateInputs>();
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState<ApiError | null>(null);
 
   const client = useApiClient();
   const { data: templates } = useAspidaSWR(client.templates, {
     enabled: !!client,
   });
+  const setBusy = useSetBackdropValue();
   const onSubmit: SubmitHandler<CreateProjectFromTemplateInputs> = useCallback(
     async (data) => {
       if (!client) return;
 
+      setBusy(true);
       const request: Akira_protoCreateLocalProjectRequest = {
         dirname: customPath ? data.path : data.manifest.name,
         manifest: data.manifest,
         templateId: data.templateId,
       };
-      // TODO: Handle error (e.g. Directory name conflicts)
-      const res = await client.projects.create.local.post({
-        body: request,
-      });
-      const projectId = res.body.id;
-
-      navigate(`/projects/details?id=${projectId}`);
+      try {
+        const res = await client.projects.create.local.post({
+          body: request,
+        });
+        const projectId = res.body.id;
+        navigate(`/projects/details?id=${projectId}`);
+      } catch (e) {
+        if (e instanceof AxiosError) {
+          const err = e.response?.data as ApiError;
+          setApiError(err);
+          return;
+        }
+        throw e;
+      } finally {
+        setBusy(false);
+      }
     },
-    [customPath, client, navigate]
+    [customPath, client, navigate, setApiError, setBusy]
   );
 
   const customPathElement = customPath ? (
@@ -175,6 +199,7 @@ export function CreateProjectFromTemplate() {
     >
       <Grid item sm={12} md={6}>
         <Stack spacing={2}>
+          {apiError && <ApiErrorAlert error={apiError} />}
           <Controller
             name="manifest.name"
             control={control}

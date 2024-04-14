@@ -2,8 +2,9 @@ import useAspidaSWR from "@aspida/swr";
 import { Stack, Container, Button, Grid } from "@mui/material";
 import GridViewIcon from "@mui/icons-material/GridView";
 import TableRowsIcon from "@mui/icons-material/TableRows";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   NewProjectButtonCard,
@@ -11,6 +12,8 @@ import {
 } from "../../components/ProjectCard";
 import { ProjectListItem, ProjectListHeader } from "./ProjectList";
 import { useApiClient } from "../../hooks/api";
+import { Akira_protoProject } from "../../api/@types";
+import { useSetBackdropValue } from "../../contexts/BackdropContext";
 
 type DisplayMode = "card" | "table";
 
@@ -19,11 +22,57 @@ export function Projects() {
   const [mode, setMode] = useState<DisplayMode>(
     () => localStorage.getItem(projectDisplayModeKey) as DisplayMode
   );
+
+  const setBusy = useSetBackdropValue();
   const client = useApiClient();
   useEffect(() => {
     localStorage.setItem(projectDisplayModeKey, mode);
   }, [mode]);
-  const { data, error } = useAspidaSWR(client?.projects, { enabled: !!client });
+  const { data, error, mutate } = useAspidaSWR(client?.projects, {
+    enabled: !!client,
+  });
+  const refreshProjects = useCallback(async () => {
+    if (!client) return;
+
+    setBusy(true);
+    try {
+      await client.projects.refresh.post({
+        body: {},
+      });
+      mutate();
+    } finally {
+      setBusy(false);
+    }
+  }, [client, mutate, setBusy]);
+
+  const onRemove = useCallback(
+    async (target: Akira_protoProject) => {
+      if (!client || !target.id) return;
+
+      setBusy(true);
+      try {
+        await client.projects.delete.post({ body: { id: target.id } });
+        await client.projects.refresh.post({
+          body: {},
+        });
+        mutate();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [client, mutate, setBusy]
+  );
+
+  const sortKey = useCallback(
+    (lhs: Akira_protoProject, rhs: Akira_protoProject) => {
+      const lhsState = lhs.manifest?.name ?? "";
+      const rhsState = rhs.manifest?.name ?? "";
+      return lhsState > rhsState ? 1 : -1;
+    },
+    []
+  );
+  let sortedProjects = data?.projects?.sort(sortKey);
+
   let element = null;
   if (mode === "table") {
     element = (
@@ -39,20 +88,24 @@ export function Projects() {
             新規プロジェクト
           </Button>
           <ProjectListHeader />
-          {data?.projects?.map((p) => (
-            <ProjectListItem key={p.id} project={p} />
+          {sortedProjects?.map((p) => (
+            <ProjectListItem key={p.id} project={p} onRemove={onRemove} />
           ))}
         </Container>
       </Grid>
     );
   } else {
     element = (
-      <Stack spacing={2} sx={{ margin: 1 }} direction="row">
-        <NewProjectButtonCard />
-        {data?.projects?.map((p) => (
-          <ProjectCard key={p.id} project={p} />
+      <Grid container spacing={2} sx={{ margin: 1 }}>
+        <Grid item xs="auto">
+          <NewProjectButtonCard />
+        </Grid>
+        {sortedProjects?.map((p) => (
+          <Grid item xs="auto">
+            <ProjectCard key={p.id} project={p} onRemove={onRemove} />
+          </Grid>
         ))}
-      </Stack>
+      </Grid>
     );
   }
 
@@ -62,7 +115,11 @@ export function Projects() {
 
   return (
     <Grid container>
-      <Grid container justifyContent="flex-end">
+      <Grid xs display="flex" justifyContent="flex-end">
+        <Button>
+          <RefreshIcon fontSize="large" onClick={refreshProjects} />
+        </Button>
+        <Stack sx={{ margin: 2 }}></Stack>
         <Stack sx={{ margin: 1 }} direction="row">
           <Button
             variant={mode === "card" ? "contained" : undefined}

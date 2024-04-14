@@ -7,7 +7,6 @@
 - name: Configure mainpc
   hosts: mainpc
   roles:
-    - poetry
     - oak-d
     - dynamixel
     - m5stack
@@ -23,7 +22,6 @@
     - docker
   roles:
     - docker
-    - docker_credential
 
 - name: Setup akira
   hosts: mainpc

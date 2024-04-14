@@ -65,6 +65,27 @@ paths:
             $ref: '#/definitions/akira_protoCreateLocalProjectRequest'
       tags:
         - ProjectService
+  /projects/delete:
+    post:
+      operationId: ProjectService_DeleteProject
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/akira_protoDeleteProjectRequest'
+      tags:
+        - ProjectService
   /projects/detail:
     get:
       operationId: ProjectService_GetProject
@@ -102,6 +123,28 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/akira_protoEditProjectRequest'
+      tags:
+        - ProjectService
+  /projects/refresh:
+    post:
+      operationId: ProjectService_RefreshProjects
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties: {}
       tags:
         - ProjectService
   /service-images:
@@ -461,6 +504,11 @@ definitions:
         type: string
       imageId:
         type: string
+  akira_protoDeleteProjectRequest:
+    type: object
+    properties:
+      id:
+        type: string
   akira_protoEditProjectRequest:
     type: object
     properties:
@@ -472,6 +520,10 @@ definitions:
     type: object
     properties:
       logs:
+        type: string
+      stderr:
+        type: string
+      stdout:
         type: string
   akira_protoListImagesResponse:
     type: object
@@ -548,8 +600,8 @@ definitions:
         type: string
       image:
         $ref: '#/definitions/akira_protoServiceImage'
-      status:
-        $ref: '#/definitions/akira_protoServiceStatus'
+      state:
+        $ref: '#/definitions/akira_protoServiceState'
       type:
         $ref: '#/definitions/akira_protoServiceType'
   akira_protoServiceImage:
@@ -569,7 +621,7 @@ definitions:
         type: string
       version:
         type: string
-  akira_protoServiceStatus:
+  akira_protoServiceState:
     type: string
     enum:
       - TERMINATED

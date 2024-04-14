@@ -1,0 +1,3 @@
+akari-client[depthai]
+akari-proto
+pyvirtualcam

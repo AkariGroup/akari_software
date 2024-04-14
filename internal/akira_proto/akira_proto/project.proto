@@ -31,6 +31,10 @@ message EditProjectRequest {
   ProjectManifest manifest = 2;
 }
 
+message DeleteProjectRequest {
+  string id = 1;
+}
+
 message Project {
   string id = 1;
   ProjectManifest manifest = 2;
@@ -81,9 +85,23 @@ service ProjectService {
     };
   }
 
+  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/projects/delete"
+      body: "*"
+    };
+  }
+
   rpc GetProject(GetProjectRequest) returns (Project) {
     option (google.api.http) = {
       get: "/projects/detail"
+    };
+  }
+
+  rpc RefreshProjects(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/projects/refresh"
+      body: "*"
     };
   }
 

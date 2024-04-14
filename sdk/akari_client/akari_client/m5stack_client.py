@@ -13,7 +13,7 @@ class M5ComDict(TypedDict):
 
     :param din0: ヘッドのdin0ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
     :param din1: ヘッドのdin1ピンのデジタル入力。HiがTrue、LoがFalse。デフォルトHi。
-    :param ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-255の256段階にする。
+    :param ain0: ヘッドのain0ピンのアナログ入力。0-3.3Vを0-4095の4096段階にする。
     :param dout0: ヘッドのdout0ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
     :param dout1: ヘッドのdout1ピンのデジタル出力。TrueでHi(3.3V)、FalseでLo(0V)。
     :param pwmout0: ヘッドのpwmout0ピンのPWM出力。0-255の256段階で0-3.3Vを出力可能。
@@ -164,7 +164,7 @@ class M5StackClient(ABC):
         text: str,
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
-        size: int = 3,
+        size: int = 5,
         text_color: Optional[Color] = None,
         back_color: Optional[Color] = None,
         refresh: bool = True,
@@ -176,7 +176,7 @@ class M5StackClient(ABC):
             text: 表示する文字列。
             pos_x: x方向の描画位置ピクセルを0-320で指定。左端が0。 ``position.Positions`` を用いた位置指定も可能。デフォルト値は中央揃え。
             pos_y: y方向の描画位置ピクセルを0-240で指定。上端が0。 ``position.Positions`` を用いた位置指定も可能。デフォルト値は中央揃え。
-            size: 文字サイズを1-7の7段階で指定。デフォルト値は3。
+            size: 文字サイズを1-11の11段階で指定。デフォルト値は5。
             text_color: 文字色を指定。色は ``color.Colors`` から色名を引用する、もしくはRGBの数値指定も可能。値を指定しない場合、前回値を引き継ぐ。
             back_color: 背景色を指定。色は ``color.Colors`` から色名を引用する、もしくはRGBの数値指定も可能。値を指定しない場合、画面全体の背景色に合わせる。
             refresh: trueの場合画面全体を現在の背景色で更新する。falseの場合は現在の表示を維持しつつ、文字を描画する範囲のみ更新する。デフォルト値は背景更新あり。
@@ -190,7 +190,7 @@ class M5StackClient(ABC):
             >>>    text = "AKARI"
             >>>    pos_x = Positions.LEFT
             >>>    pos_y = Positions.TOP
-            >>>    size = 4
+            >>>    size = 7
             >>>    text_color = Colors.WHITE
             >>>    back_color = Colors.BLACK
             >>>    refresh = True
@@ -225,62 +225,12 @@ class M5StackClient(ABC):
             >>> from akari_client import AkariClient
             >>> from akari_client.position import Positions
             >>> with AkariClient() as akari:
-            >>>    filepath = "/logo320.jpg"
+            >>>    filepath = "/jpg/logo320.jpg"
             >>>    pos_x = Positions.LEFT
             >>>    pos_y = Positions.TOP
             >>>    scale = 0.75
             >>>    m5.set_display_image(filepath, pos_x, pos_y, scale)
-            # 画面に"/logo320.jpg"の画像が表示される。
-
-        """
-        ...
-
-    @abstractmethod
-    def play_mp3(
-        self,
-        filepath: str,
-        sync: bool = True,
-    ) -> None:
-        """M5のSDカード内のmp3ファイルを再生する。
-
-        .. note::
-            M5Stackのハード特性上、再生時にスピーカーにホワイトノイズが乗る。
-            またmp3再生を行いながら、ディスプレイ等の表示を行うと音声にノイズが乗るので注意。
-            音声再生を本格的に行いたい場合は、スピーカーをメインPCのイヤホンジャックやUSBに接続して、
-            メインPCから直接再生することを推奨。
-
-        Args:
-            filepath: M5のSDカード内のファイルパス。(例;"mp3/hoge.mp3")
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
-
-        Example:
-            >>> from akari_client import AkariClient
-            >>> with AkariClient() as akari:
-            >>>    filepath = "/mp3/hello.mp3"
-            >>>    m5.play_mp3(filepath)
-            # "/mp3/hello.mp3"が再生される。
-
-        """
-        ...
-
-    @abstractmethod
-    def stop_mp3(
-        self,
-        sync: bool = True,
-    ) -> None:
-        """mp3ファイルの再生を停止する。
-
-        Args:
-            sync: 同期実行の指定。Trueの場合M5側で実行完了するまで関数の終了待ちを行う。
-
-        Example:
-            >>> from akari_client import AkariClient
-            >>> with AkariClient() as akari:
-            >>>    filepath = "/mp3/hello.mp3"
-            >>>    m5.play_mp3(filepath)
-            >>>    time.sleep(1)
-            >>>    m5.stop_mp3()
-            # 1秒後に再生停止する。
+            # 画面に"/jpg/logo320.jpg"の画像が表示される。
 
         """
         ...

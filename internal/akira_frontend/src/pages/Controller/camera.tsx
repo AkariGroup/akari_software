@@ -51,6 +51,7 @@ export function CameraPanel(props: Props) {
             <ToggleButton value="None">None</ToggleButton>
             <ToggleButton value="RGB">RGB</ToggleButton>
             <ToggleButton value="Depth">Depth</ToggleButton>
+            <ToggleButton value="FaceDetection">FaceDetection</ToggleButton>
             <ToggleButton value="ObjectDetection">ObjectDetection</ToggleButton>
           </ToggleButtonGroup>
         </Box>

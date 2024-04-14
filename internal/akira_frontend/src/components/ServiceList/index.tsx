@@ -12,8 +12,9 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { Link as MuiLink } from "react-router-dom";
 import {
-  Akira_protoServiceStatus,
+  Akira_protoServiceState,
   Akira_protoService,
   Akira_protoServiceImage,
 } from "../../api/@types";
@@ -25,11 +26,13 @@ import { useCallback, useState } from "react";
 import { PowerDialog, PowerDialogResult } from "./powerDialog";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { RemoveDialog, RemoveDialogResult } from "./removeDialog";
+import PreviewIcon from "@mui/icons-material/Preview";
 
 type Props = {
   services: Akira_protoService[];
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onTerminate: (target: Akira_protoService) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
@@ -42,7 +45,7 @@ function Header() {
       <TableRow>
         <TableCell width="20%">DisplayName</TableCell>
         <TableCell width="30%">Service</TableCell>
-        <TableCell width="20%">Status</TableCell>
+        <TableCell width="20%">State</TableCell>
         <TableCell width="10%">AutoStart</TableCell>
         <TableCell width="20%"></TableCell>
       </TableRow>
@@ -50,10 +53,10 @@ function Header() {
   );
 }
 
-function Status({ status }: { status?: Akira_protoServiceStatus }) {
+function State({ state }: { state?: Akira_protoServiceState }) {
   let color = "primary";
   let bold = false;
-  switch (status) {
+  switch (state) {
     case "ERROR":
       color = "error.main";
       bold = true;
@@ -80,7 +83,7 @@ function Status({ status }: { status?: Akira_protoServiceStatus }) {
 
   return (
     <Typography color={color} fontWeight={bold ? "bold" : undefined}>
-      {status}
+      {state === "STARTING" ? "STARTING / UPDATING" : state}
     </Typography>
   );
 }
@@ -89,13 +92,16 @@ type PowerButtonProps = {
   service: Akira_protoService;
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onTerminate: (target: Akira_protoService) => void;
 };
 
 function PowerButton(props: PowerButtonProps) {
   const [powerDialogOpened, setPowerDialogOpened] = useState(false);
   const onPowerIconClicked = useCallback(() => {
-    if (props.service.status === "RUNNING") {
+    if (props.service.state === "RUNNING") {
       setPowerDialogOpened(true);
+    } else if (props.service.state === "ERROR") {
+      props.onTerminate(props.service);
     } else {
       props.onStart(props.service);
     }
@@ -112,11 +118,13 @@ function PowerButton(props: PowerButtonProps) {
     [props, setPowerDialogOpened]
   );
   const powerButtonDisabled =
-    props.service.status === "STARTING" || props.service.status === "STOPPING";
+    props.service.state === "STARTING" || props.service.state === "STOPPING";
   const powerIcon = (() => {
     if (powerButtonDisabled) {
       return <CircularProgress />;
-    } else if (props.service.status === "RUNNING") {
+    } else if (props.service.state === "ERROR") {
+      return <PowerSettingsNewIcon color="secondary" />;
+    } else if (props.service.state === "RUNNING") {
       return <PowerSettingsNewIcon color="error" />;
     } else {
       return <PlayArrowIcon color="success" />;
@@ -175,6 +183,7 @@ type ServiceRowProps = {
   service: Akira_protoService;
   onStart: (target: Akira_protoService) => void;
   onStop: (target: Akira_protoService, terminate: boolean) => void;
+  onTerminate: (target: Akira_protoService) => void;
   onLaunch?: (target: Akira_protoService) => void;
   onRemove?: (target: Akira_protoService) => void;
   onEdit?: (target: Akira_protoService) => void;
@@ -207,6 +216,7 @@ function ServiceRow({
   onRemove,
   onEdit,
   onAutoStart,
+  onTerminate,
 }: ServiceRowProps) {
   return (
     <>
@@ -222,7 +232,7 @@ function ServiceRow({
           <ServiceImageLink image={service.image} />
         </TableCell>
         <TableCell>
-          <Status status={service.status} />
+          <State state={service.state} />
         </TableCell>
         <TableCell>
           <Switch
@@ -239,15 +249,23 @@ function ServiceRow({
           {!!onLaunch && service.capabilities?.includes("open") ? (
             <IconButton
               onClick={() => onLaunch(service)}
-              disabled={service.status !== "RUNNING"}
+              disabled={service.state !== "RUNNING"}
             >
               <LaunchIcon />
             </IconButton>
           ) : null}
-          <PowerButton service={service} onStart={onStart} onStop={onStop} />
+          <PowerButton
+            service={service}
+            onStart={onStart}
+            onStop={onStop}
+            onTerminate={onTerminate}
+          />
           {!!onRemove ? (
             <RemoveButton service={service} onRemove={onRemove} />
           ) : null}
+          <IconButton component={MuiLink} to={`/services/logs/${service.id}`}>
+            <PreviewIcon />
+          </IconButton>
         </TableCell>
       </TableRow>
     </>
@@ -257,9 +275,9 @@ function ServiceRow({
 export function ServiceList(props: Props) {
   const sortKey = useCallback(
     (lhs: Akira_protoService, rhs: Akira_protoService) => {
-      const lhsStatus = lhs.status?.toString() ?? "";
-      const rhsStatus = rhs.status?.toString() ?? "";
-      if (lhsStatus === rhsStatus) {
+      const lhsState = lhs.state?.toString() ?? "";
+      const rhsState = rhs.state?.toString() ?? "";
+      if (lhsState === rhsState) {
         const lhsDisplayName = lhs.displayName ?? "";
         const rhsDisplayName = rhs.displayName ?? "";
         if (lhsDisplayName === rhsDisplayName) {
@@ -271,7 +289,7 @@ export function ServiceList(props: Props) {
         }
       }
 
-      return lhsStatus > rhsStatus ? 1 : -1;
+      return lhsState > rhsState ? 1 : -1;
     },
     []
   );
@@ -290,6 +308,7 @@ export function ServiceList(props: Props) {
               onRemove={props.onRemove}
               onEdit={props.onEdit}
               onAutoStart={props.onAutoStart}
+              onTerminate={props.onTerminate}
             />
           ))}
         </TableBody>

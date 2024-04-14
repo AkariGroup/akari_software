@@ -8,9 +8,14 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/AkariGroup/akari_software/internal/akira/system"
 	"github.com/rs/zerolog/log"
+)
+
+const (
+	CheckAlivePeriodSeconds = 10
 )
 
 type ServiceManager interface {
@@ -76,6 +81,15 @@ func NewServiceManager(opts ServiceManagerOptions) (ServiceManager, error) {
 	if err := m.initializeAutoStartServices(); err != nil {
 		return nil, err
 	}
+
+	// Run CheckAlive() periodically
+	go func() {
+		for {
+			m.CheckAlive()
+			time.Sleep(CheckAlivePeriodSeconds * time.Second)
+		}
+	}()
+
 	return m, nil
 }
 
@@ -185,6 +199,15 @@ func (m *serviceManager) scanServices() error {
 	}
 
 	return nil
+}
+
+func (m *serviceManager) CheckAlive() {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	for _, s := range m.services {
+		s.CheckAlive()
+	}
 }
 
 func (m *serviceManager) Images() []ImageConfig {

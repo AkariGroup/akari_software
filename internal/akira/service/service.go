@@ -8,7 +8,7 @@ import (
 )
 
 type ServiceId string
-type ServiceStatus int8
+type ServiceState int8
 type ServiceType int8
 type ServiceCapability string
 
@@ -18,7 +18,7 @@ const (
 )
 
 const (
-	Terminated ServiceStatus = iota
+	Terminated ServiceState = iota
 	Starting
 	Running
 	Stopping
@@ -70,11 +70,14 @@ type Service interface {
 	Stop(context.Context) (ServiceTask, error)
 	Terminate(context.Context) (ServiceTask, error)
 	Clean() error
-	Status() ServiceStatus
+	State() ServiceState
 	Logs() string
+	Outputs() (string, string)
 
 	GetOpenAddress(hostName string) (string, error)
 	GetOpenProjectAddress(hostName string, projectDir string) (string, error)
+
+	CheckAlive() error
 }
 
 type UserService interface {

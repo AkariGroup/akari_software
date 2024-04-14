@@ -8,7 +8,7 @@ import "google/protobuf/empty.proto";
 option go_package = "github.com/AkariGroup/akari_software/internal/akira/proto";
 
 
-enum ServiceStatus {
+enum ServiceState {
     TERMINATED = 0;
     STARTING = 1;
     RUNNING = 2;
@@ -36,7 +36,7 @@ message Service {
   optional ServiceImage image = 2;
   string display_name = 3;
   string description = 4;
-  ServiceStatus status = 5;
+  ServiceState state = 5;
   ServiceType type = 6;
   repeated string capabilities = 7;
   bool auto_start = 8;
@@ -102,6 +102,8 @@ message GetServiceLogRequest {
 
 message GetServiceLogResponse {
   string logs = 1;
+  string stdout = 2;
+  string stderr = 3;
 }
 
 message OpenRequest {

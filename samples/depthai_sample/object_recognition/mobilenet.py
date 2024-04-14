@@ -13,15 +13,11 @@ import time
 from pathlib import Path
 from typing import Any, List, Tuple
 
+import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
 
-nnPathDefault = str(
-    (Path(__file__).parent / Path("models/mobilenet-ssd_openvino_2021.4_6shave.blob"))
-    .resolve()
-    .absolute()
-)
 configPathDefault = str(
     (Path(__file__).parent / Path("configs/mobilenet-ssd.json")).resolve().absolute()
 )
@@ -30,8 +26,9 @@ parser.add_argument(
     "-n",
     "--nnPath",
     nargs="?",
-    help="Path to mobilenet detection network blob",
-    default=nnPathDefault,
+    help="Provide model name or model path for mobilenet detection network",
+    default="mobilenet-ssd",
+    type=str,
 )
 parser.add_argument(
     "-c",
@@ -39,6 +36,7 @@ parser.add_argument(
     nargs="?",
     help="Path to mobilenet detection label",
     default=configPathDefault,
+    type=str,
 )
 parser.add_argument(
     "-s",
@@ -48,6 +46,13 @@ parser.add_argument(
     default=False,
 )
 args = parser.parse_args()
+
+# get model path
+nnPath = args.nnPath
+if not Path(nnPath).exists():
+    print("No blob found at {}. Looking into DepthAI model zoo.".format(nnPath))
+    nnPath = str(blobconverter.from_zoo(args.nnPath, shaves=6, use_cache=True))
+
 json_open = open(str(args.configPath), "r")
 config = json.load(json_open)
 # MobilenetSSD label texts
@@ -71,7 +76,7 @@ camRgb.setInterleaved(False)
 camRgb.setFps(40)
 # Define a neural network that will make predictions based on the source frames
 nn.setConfidenceThreshold(config["nn_config"]["confidence_threshold"])
-nn.setBlobPath(args.nnPath)
+nn.setBlobPath(nnPath)
 nn.setNumInferenceThreads(2)
 nn.input.setBlocking(False)
 

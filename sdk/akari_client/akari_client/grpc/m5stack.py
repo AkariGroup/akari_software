@@ -102,7 +102,7 @@ class GrpcM5StackClient(M5StackClient):
         text: str,
         pos_x: int = Positions.CENTER,
         pos_y: int = Positions.CENTER,
-        size: int = 3,
+        size: int = 5,
         text_color: Optional[Color] = None,
         back_color: Optional[Color] = None,
         refresh: bool = True,
@@ -137,21 +137,6 @@ class GrpcM5StackClient(M5StackClient):
             sync=sync,
         )
         self._stub.SetDisplayImage(request)
-
-    @deserialize_error(serializer)
-    def play_mp3(self, filepath: str, sync: bool = True) -> None:
-        request = m5stack_pb2.PlayMp3Request(
-            path=filepath,
-            sync=sync,
-        )
-        self._stub.PlayMp3(request)
-
-    @deserialize_error(serializer)
-    def stop_mp3(self, sync: bool = True) -> None:
-        request = m5stack_pb2.StopMp3Request(
-            sync=sync,
-        )
-        self._stub.StopMp3(request)
 
     @deserialize_error(serializer)
     def reset_m5(self) -> None:

@@ -1,4 +1,10 @@
 ---
+- name: Create project directory to HOME
+  file:
+    path: "{{ ansible_env.HOME }}/akari_projects"
+    state: directory
+    mode: "0755"
+
 - name: Create /etc/akira
   file:
     path: /etc/akira
@@ -31,8 +37,8 @@
   file:
     path: /var/lib/akira
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
   become: true
 
 - name: Create /etc/akari
@@ -53,6 +59,14 @@
   template:
     src: "{{ role_path }}/templates/akira.service.j2"
     dest: /etc/systemd/system/akira.service
+    mode: "0644"
+  become: true
+  notify:
+    - Restart akira.service
+- name: Install update-akira.service
+  template:
+    src: "{{ role_path }}/templates/update-akira.service.j2"
+    dest: /etc/systemd/system/update-akira.service
     mode: "0644"
   become: true
   notify:

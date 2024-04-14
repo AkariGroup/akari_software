@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -19,9 +20,9 @@ type containerConfigFactory interface {
 }
 
 type ServiceContainer struct {
-	fa     containerConfigFactory
-	d      *system.DockerSystem
-	status ServiceStatus
+	fa    containerConfigFactory
+	d     *system.DockerSystem
+	state ServiceState
 
 	containerId     *system.ContainerId
 	containerConfig system.CreateContainerOption
@@ -33,6 +34,24 @@ type ServiceContainer struct {
 	mu sync.Mutex
 }
 
+func createLogWriter(buf *CircBuffer.Buffer) zerolog.ConsoleWriter {
+	output := zerolog.ConsoleWriter{Out: buf, TimeFormat: time.RFC3339, NoColor: true}
+	output.FormatLevel = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("|%6s|", i))
+	}
+	output.FormatMessage = func(i interface{}) string {
+		return fmt.Sprintf("%s", i)
+	}
+	output.FormatFieldName = func(i interface{}) string {
+		return fmt.Sprintf("%s:", i)
+	}
+	output.FormatFieldValue = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("%s", i))
+	}
+
+	return output
+}
+
 func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *ServiceContainer {
 	logBuffer, err := CircBuffer.NewBuffer(LogBufferSize)
 	var logger zerolog.Logger
@@ -40,16 +59,71 @@ func NewServiceContainer(fa containerConfigFactory, d *system.DockerSystem) *Ser
 		logBuffer = nil
 		logger = zerolog.Nop()
 	} else {
-		logger = zerolog.New(logBuffer).With().Timestamp().Logger()
+		logger = zerolog.New(createLogWriter(logBuffer)).With().Timestamp().Logger()
 	}
 
 	return &ServiceContainer{
 		fa:        fa,
 		d:         d,
-		status:    Terminated,
+		state:     Terminated,
 		logBuffer: logBuffer,
 		logger:    logger,
 	}
+}
+
+func validateStateChange(old ServiceState, new ServiceState) error {
+	// State transition
+	// Initial State := Terminated
+	//
+	// Terminated -> Starting | Error
+	// Starting -> Running | Error
+	// Running -> Stopping | Error
+	// Stopping -> Stopped | Error
+	// Stopped -> Terminated | Starting
+	// Error -> Terminated
+
+	switch new {
+	case Terminated:
+		if old != Stopped && old != Error {
+			return errors.New("invalid transition")
+		}
+		return nil
+	case Starting:
+		if old != Terminated && old != Stopped {
+			return errors.New("service already started")
+		}
+		return nil
+	case Running:
+		if old != Starting {
+			return errors.New("invalid transition")
+		}
+		return nil
+	case Stopping:
+		if old != Running {
+			return errors.New("invalid transition")
+		}
+		return nil
+	case Stopped:
+		if old != Stopping {
+			return errors.New("invalid transition")
+		}
+		return nil
+	case Error:
+		return nil
+	default:
+		panic("invalid state")
+	}
+}
+
+func (p *ServiceContainer) changeState(newState ServiceState) error {
+	p.logger.Info().Msgf("changing state from %v to %v", p.state, newState)
+	if err := validateStateChange(p.state, newState); err != nil {
+		p.logger.Err(err).Msgf("failed to change state")
+		return err
+	}
+	p.state = newState
+	p.logger.Info().Msgf("state has changed to %v", newState)
+	return nil
 }
 
 func goRunConditional(async bool, f func() error) ServiceTask {
@@ -63,17 +137,7 @@ func goRunConditional(async bool, f func() error) ServiceTask {
 	}
 }
 
-func (p *ServiceContainer) changeStatus(s ServiceStatus) {
-	p.mu.Lock()
-	p.status = s
-	p.mu.Unlock()
-}
-
 func (p *ServiceContainer) createContainer() (system.ContainerId, error) {
-	if p.containerId != nil {
-		return *p.containerId, nil
-	}
-
 	var err error
 
 	p.containerConfig, p.containerMeta, err = p.fa.createContainerConfig()
@@ -83,15 +147,11 @@ func (p *ServiceContainer) createContainer() (system.ContainerId, error) {
 	err = p.d.PullImage(p.containerConfig.Image)
 	if err != nil {
 		// NOTE: Try launching service container if it fails to pull the latest docker image (e.g. no network connection)
-		p.logger.Warn().Msgf("failed to pull image (ref: %#v): %#v)", p.containerConfig.Image, err)
+		p.logger.Warn().Msgf("failed to pull image (ref: %#s): %#s", p.containerConfig.Image, err)
 	}
 
 	containerId, err := p.d.CreateContainer(p.containerConfig)
 	return containerId, err
-}
-
-func (p *ServiceContainer) isRunningState() bool {
-	return p.status != Terminated && p.status != Stopped && p.status != Error
 }
 
 func (p *ServiceContainer) ContainerInfo() (system.CreateContainerOption, interface{}, bool) {
@@ -100,119 +160,114 @@ func (p *ServiceContainer) ContainerInfo() (system.CreateContainerOption, interf
 	return p.containerConfig, p.containerMeta, p.containerId != nil
 }
 
-func (p *ServiceContainer) Start(ctx context.Context) (ServiceTask, error) {
-	err := func() error {
-		p.mu.Lock()
-		defer p.mu.Unlock()
+func (p *ServiceContainer) Start(ctx context.Context) (ret ServiceTask, err error) {
+	ret = &serviceTask{}
 
-		if p.isRunningState() {
-			return errors.New("already started")
-		}
-		p.status = Starting
-		return nil
-	}()
+	p.mu.Lock()
+	err = p.changeState(Starting)
+	cid := p.containerId
+	p.mu.Unlock()
+
 	if err != nil {
-		return &serviceTask{}, err
+		p.logger.Err(err).Msg("failed to start service")
+		return
 	}
 
 	async := GetAsync(ctx)
-	return goRunConditional(async, func() error {
-		err := func() error {
-			cid, err := p.createContainer()
+	ret = goRunConditional(async, func() (err error) {
+		var containerId system.ContainerId
+
+		if cid != nil {
+			containerId = *cid
+		} else {
+			containerId, err = p.createContainer()
 			if err != nil {
-				return err
+				p.logger.Err(err).Msg("failed to create container")
+				return
 			}
 
-			p.containerId = &cid
-			return p.d.StartContainer(cid)
-		}()
-		if err != nil {
-			p.changeStatus(Error)
-		} else {
-			p.changeStatus(Running)
+			p.mu.Lock()
+			p.containerId = &containerId
+			p.mu.Unlock()
 		}
-		return err
-	}), nil
-}
 
-func (p *ServiceContainer) getContainerId() (system.ContainerId, bool) {
-	if p.containerId == nil {
-		return "", false
-	} else {
-		return *p.containerId, true
-	}
-}
-
-func (p *ServiceContainer) Stop(ctx context.Context) (ServiceTask, error) {
-	cid, err := func() (system.ContainerId, error) {
+		err = p.d.StartContainer(containerId)
 		p.mu.Lock()
-		defer p.mu.Unlock()
-
-		if p.status != Running {
-			return "", errors.New("already stopped")
-		}
-		if cid, ok := p.getContainerId(); !ok {
-			return "", errors.New("containerId is null")
+		if err != nil {
+			p.logger.Err(err).Msg("failed to start container")
+			p.changeState(Error)
 		} else {
-			p.status = Stopping
-			return cid, nil
+			p.changeState(Running)
 		}
-	}()
-	if err != nil {
-		return &serviceTask{}, err
+		p.mu.Unlock()
+		return
+	})
+	return
+}
+
+func (p *ServiceContainer) Stop(ctx context.Context) (ret ServiceTask, err error) {
+	ret = &serviceTask{}
+
+	p.mu.Lock()
+	err = p.changeState(Stopping)
+	cid := p.containerId
+	p.mu.Unlock()
+
+	if err != nil || cid == nil {
+		p.logger.Error().Msg("failed to stop service")
+		return
 	}
 
 	async := GetAsync(ctx)
-	return goRunConditional(async, func() error {
+	ret = goRunConditional(async, func() error {
 		timeout := 10 * time.Second
-		err := p.d.StopContainer(cid, timeout)
-		if err != nil {
-			p.changeStatus(Error)
-		} else {
-			p.changeStatus(Stopped)
-		}
-		return err
-	}), nil
-}
+		err := p.d.StopContainer(*cid, timeout)
 
-func (p *ServiceContainer) Terminate(ctx context.Context) (ServiceTask, error) {
-	cid, err := func() (system.ContainerId, error) {
 		p.mu.Lock()
 		defer p.mu.Unlock()
-
-		if p.status != Terminated && p.status != Stopped {
-			return "", errors.New("cannot clean running container")
+		if err != nil {
+			p.logger.Err(err).Msg("failed to stop container")
+			p.changeState(Error)
+		} else {
+			p.changeState(Stopped)
 		}
+		return err
+	})
+	return
+}
 
-		cid, ok := p.getContainerId()
-		if !ok {
-			return "", errors.New("container already removed")
-		}
-		p.status = Terminated
+func (p *ServiceContainer) Terminate(ctx context.Context) (ret ServiceTask, err error) {
+	ret = &serviceTask{}
+
+	p.mu.Lock()
+	cid := p.containerId
+	err = p.changeState(Terminated)
+	if err == nil {
 		p.containerId = nil
-		return cid, nil
-	}()
-	if err != nil {
-		return &serviceTask{}, err
+	}
+	p.mu.Unlock()
+
+	if err != nil || cid == nil {
+		p.logger.Warn().Msg("failed to terminate service")
+		return
 	}
 
 	async := GetAsync(ctx)
-	return goRunConditional(async, func() error {
-		if err := p.d.RemoveContainer(cid); err != nil {
+	ret = goRunConditional(async, func() error {
+		if err := p.d.RemoveContainer(*cid); err != nil {
+			p.logger.Err(err).Msg("failed to remove container")
 			return fmt.Errorf("got an error while removing the container: %#v, %#v", p.containerId, err)
 		}
 		return nil
-	}), nil
+	})
+	return
 }
 
-func (p *ServiceContainer) Status() ServiceStatus {
-	return p.status
+func (p *ServiceContainer) State() ServiceState {
+	return p.state
 }
 
 func (p *ServiceContainer) Logs() string {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-
 	if p.logBuffer == nil {
 		return ""
 	}
@@ -220,9 +275,39 @@ func (p *ServiceContainer) Logs() string {
 	return p.logBuffer.String()
 }
 
-func (p *ServiceContainer) onCriticalSection(f func() interface{}) interface{} {
+func (p *ServiceContainer) Outputs() (string, string) {
+	p.mu.Lock()
+	cid := p.containerId
+	p.mu.Unlock()
+
+	if cid == nil {
+		return "", ""
+	}
+
+	stdout, stderr, err := p.d.GetContainerOutputs(*cid)
+	if err != nil {
+		p.logger.Err(err).Msg("failed to get container output")
+		return "", ""
+	}
+
+	return stdout, stderr
+}
+
+func (p *ServiceContainer) CheckAlive() error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	return f()
+	if p.state != Running {
+		return nil
+	}
+
+	cid := p.containerId
+	if cid == nil {
+		return nil
+	}
+
+	if !p.d.CheckContainerRunning(*cid) {
+		p.changeState(Error)
+	}
+	return nil
 }
