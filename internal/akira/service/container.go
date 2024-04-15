@@ -144,11 +144,11 @@ func (p *ServiceContainer) createContainer() (system.ContainerId, error) {
 	if err != nil {
 		return "", fmt.Errorf("error while creating a container config: %#v)", err)
 	}
-	err = p.d.PullImage(p.containerConfig.Image)
-	if err != nil {
+	//err = p.d.PullImage(p.containerConfig.Image)
+	//if err != nil {
 		// NOTE: Try launching service container if it fails to pull the latest docker image (e.g. no network connection)
-		p.logger.Warn().Msgf("failed to pull image (ref: %#s): %#s", p.containerConfig.Image, err)
-	}
+	//	p.logger.Warn().Msgf("failed to pull image (ref: %#s): %#s", p.containerConfig.Image, err)
+	//}
 
 	containerId, err := p.d.CreateContainer(p.containerConfig)
 	return containerId, err
