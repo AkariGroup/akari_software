@@ -7,9 +7,12 @@ import locale
 import socket
 import time
 
-from serial.m5stack import M5StackSerialClient
 from akari_client.color import Colors
 from akari_client.position import Positions
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from akari_client.serial.m5stack import M5StackSerialClient
 
 
 class DisplayMode(int, enum.Enum):
@@ -20,7 +23,8 @@ class DisplayMode(int, enum.Enum):
 
 
 class DefaultApp(object):
-    def __init__(self, client: M5StackSerialClient):
+    # def __init__(self, client: M5StackSerialClient):
+    def __init__(self, client):
         self.client = client
         self.disp_mode = DisplayMode.NONE
         self.is_running = True
@@ -59,7 +63,6 @@ class DefaultApp(object):
 
     def init_clock_disp(self) -> None:
         self.client.set_display_color(Colors.BLACK)
-        locale.setlocale(locale.LC_TIME, "ja_JP.UTF-8")
         dt_now = datetime.datetime.now()
         self.client.set_display_text(
             text=dt_now.strftime("%Y/%m/%d %a"),
