@@ -26,6 +26,7 @@ setup(
     install_requires=[
         "dynamixel_sdk",
         "pydantic>=1.5,<2.0",
+        "numpy==1.26.4",
     ],
     package_data={"akari_client": ["py.typed"]},
     extras_require={
