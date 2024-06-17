@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="akari-client",
-    version="0.3.5",
+    version="0.3.6",
     packages=find_packages(exclude=["tests"]),
     description="Akari Python package",
     long_description=open("README.md").read(),
@@ -26,6 +26,7 @@ setup(
     install_requires=[
         "dynamixel_sdk",
         "pydantic>=1.5,<2.0",
+        "numpy==1.26.4",
     ],
     package_data={"akari_client": ["py.typed"]},
     extras_require={
