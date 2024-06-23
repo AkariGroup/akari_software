@@ -9,7 +9,7 @@ from ..color import Color
 from ..m5stack_client import M5ComDict, M5StackClient
 from ..position import Positions
 from .m5stack_communicator import M5SerialCommunicator
-
+from..m5_default_app import DefaultApp
 
 class CommandId(enum.IntEnum):
     RESETALLOUT = 0
@@ -43,6 +43,7 @@ class M5StackSerialClient(M5StackClient):
         self._pin_out = _PinOut()
         self.reset_m5()
         self._communicator.start()
+        self.default_app = DefaultApp(self)
         time.sleep(0.1)
 
     def _write_pin_out(self, sync: bool) -> None:
@@ -161,3 +162,6 @@ class M5StackSerialClient(M5StackClient):
 
     def get(self) -> M5ComDict:
         return self._communicator.get()
+
+    def stop_default_app(self) -> None:
+        self.default_app.stop()
