@@ -12,7 +12,6 @@ RUN apt-get update && \
         python3-venv \
         python3-dev\
         gcc \
-        python3-ipywidgets \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
@@ -23,8 +22,9 @@ ENV LANG="ja_JP.UTF-8" \
 
 RUN pip install wheel
 RUN mkdir -p /wheel \
-    && pip wheel -w /wheel jupyterlab==3.4.3
+    && pip wheel -w /wheel jupyterlab==4.0.1
 COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
+RUN pip install ipywidgets==8.0.3
 
 COPY sdk/ /resources/sdk/
 RUN pip install \
