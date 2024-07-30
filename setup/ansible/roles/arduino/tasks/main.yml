@@ -10,7 +10,7 @@
     src: "{{ role_path }}/files/pip.conf"
     dest: "/etc/"
   become: true
-  when: 
+  when:
     ansible_distribution == "Debian"
 
 - name: Install pip packages
@@ -29,7 +29,7 @@
 
 - name: Copy platformio workspace
   synchronize:
-    src: "{{ role_path }}/files/arduino/"
+    src: "{{ role_path }}/files/akari_m5_software/"
     dest: "{{ ansible_env.HOME }}/arduino/"
     checksum: true
     times: false

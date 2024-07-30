@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="akari-client",
-    version="0.3.4",
+    version="0.3.6",
     packages=find_packages(exclude=["tests"]),
     description="Akari Python package",
     long_description=open("README.md").read(),
@@ -27,13 +27,14 @@ setup(
         "feetech-servo-sdk",
         "dynamixel_sdk",
         "pydantic>=1.5,<2.0",
+        "numpy==1.26.4",
     ],
     package_data={"akari_client": ["py.typed"]},
     extras_require={
         "grpc": [
             "akari-proto>=0.3.0,<0.4.0",
             "grpcio==1.60.0",
-            "protobuf==3.19.3",
+            "protobuf==4.25.3",
         ],
         "depthai": [
             "matplotlib",
