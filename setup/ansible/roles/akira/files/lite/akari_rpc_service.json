@@ -1,7 +1,7 @@
 {
     "joint_manager": {
         "type": "feetech_serial",
-        "serial_port": "/dev/serial0",
+        "serial_port": "/dev/ttyAMA0",
         "baudrate": 500000,
         "controllers": [
             {
