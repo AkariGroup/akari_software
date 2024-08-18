@@ -20,6 +20,13 @@ def main() -> None:
         type=str,
     )
     parser.add_argument(
+        "-s",
+        "--search_id",
+        help="最大で探索するサーボID",
+        default=10,
+        type=int,
+    )
+    parser.add_argument(
         "-c",
         "--changed_id",
         help="変更後のfeetechサーボのidを指定します",
@@ -27,7 +34,6 @@ def main() -> None:
         type=int,
     )
     args = parser.parse_args()
-
     if os.name == "nt":
         import msvcrt
 
@@ -49,11 +55,7 @@ def main() -> None:
 
     for baudrate in badurate_list:
         # Set port baudrate
-        if portHandler.setBaudRate(baudrate):
-            print(f"シリアルポートをbaudrate: {baudrate} にセットしました。feetechサーボを探索します。")
-        else:
-            print(f"シリアルポートがbaudrate: {baudrate}に対応していません。スキップします。")
-
+        portHandler.setBaudRate(baudrate):
         for id in range(0, args.search_id):
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
                 portHandler, id
@@ -132,7 +134,7 @@ def main() -> None:
                             print(f"[ERROR] EPROMロックに失敗しました。")
                             return
                         print("------------------------")
-                        print("idの変更OK!")
+                        print("idの仮変更OK!")
                         print("------------------------")
                 # Close port
                 portHandler.closePort()

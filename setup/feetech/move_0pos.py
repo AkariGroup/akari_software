@@ -66,6 +66,7 @@ def main() -> None:
         print("[ERROR] シリアルポートのbaudrateの変更に失敗しました。")
         quit()
 
+    for id in range(1, 3):
         cur_position, scs_comm_result, scs_error = packetHandler.read2ByteTxRx(
             portHandler, id, 56
         )
@@ -79,7 +80,7 @@ def main() -> None:
     print("ENTERキーを入力すると、全軸サーボONします。")
     input()
 
-    for id in range(1, 5):
+    for id in range(1, 3):
         # サーボON
         scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
             portHandler, id, ADDR_SCS_TORQUE_ENABLE, 1
@@ -97,7 +98,7 @@ def main() -> None:
     print(f"ENTERキーを入力すると、サーボが{args.move_pos}に動きます。")
     input()
 
-    for id in range(1, 5):
+    for id in range(1, 3):
         # 速度を落とす
         scs_comm_result, scs_error = packetHandler.write2ByteTxRx(
             portHandler, id, ADDR_SCS_GOAL_SPEED, motor_velocity
@@ -116,7 +117,7 @@ def main() -> None:
     print("ENTERキーを入力するとサーボOFFします。")
     input()
 
-    for id in range(1, 5):
+    for id in range(1, 3):
         # サーボOFF
         scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
             portHandler, id, ADDR_SCS_TORQUE_ENABLE, 0
