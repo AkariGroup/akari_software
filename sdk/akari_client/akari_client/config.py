@@ -46,7 +46,7 @@ class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
 class JointManagerFeetechSerialConfig(pydantic.BaseModel):
     type: Literal["feetech_serial"]
     controllers: List[FeetechControllerConfig] = pydantic.Field(default=[])
-    serial_port: pathlib.Path = pathlib.Path("/dev/serial0")
+    serial_port: pathlib.Path = pathlib.Path("/dev/ttyAMA0")
     baudrate: int = 500000
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
