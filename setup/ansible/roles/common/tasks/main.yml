@@ -10,7 +10,20 @@
       - python-is-python3
       - python3-pip
       - ssh
-      - v4l2loopback-dkms
+  become: true
+
+- name: Clone v4l2loopback repository
+  git:
+    repo: 'https://github.com/umlaeute/v4l2loopback.git'
+    dest: ~/v4l2loopback
+
+- name: Compile and install v4l2loopback
+  make:
+    chdir: ~/v4l2loopback
+    target: install
+
+- name: Run depmod
+  command: depmod -a
   become: true
 
 - name: Add user to dialout
