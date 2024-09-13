@@ -21,7 +21,7 @@ def main() -> None:
         "-p",
         "--port",
         help="シリアルポートを指定します",
-        default="/dev/ttyACA0",
+        default="/dev/ttyAMA0",
         type=str,
     )
     parser.add_argument(

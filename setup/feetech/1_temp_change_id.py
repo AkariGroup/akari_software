@@ -7,7 +7,7 @@ from scservo_sdk import *  # Uses SCServo SDK library
 
 protocol_end = 0  # SCServo bit end(STS/SMS=0, SCS=1)
 badurate_list = [1000000, 500000, 250000, 128000, 115200, 76800, 57600, 38400]
-
+MAX_TRY_TIME = 3
 
 def main() -> None:
     # parse arguments
@@ -16,7 +16,7 @@ def main() -> None:
         "-p",
         "--port",
         help="シリアルポートを指定します",
-        default="/dev/ttyACA0",
+        default="/dev/ttyAMA0",
         type=str,
     )
     parser.add_argument(
@@ -55,8 +55,8 @@ def main() -> None:
 
     for baudrate in badurate_list:
         # Set port baudrate
-        portHandler.setBaudRate(baudrate):
-        for id in range(0, args.search_id):
+        portHandler.setBaudRate(baudrate)
+        for id in range(0, args.search_id + 1):
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
                 portHandler, id
             )
@@ -78,7 +78,7 @@ def main() -> None:
                     return
 
                 # IDの変更
-                for i in range(0, 3):
+                for i in range(0, MAX_TRY_TIME):
                     time.sleep(0.5)
                     scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
                         portHandler, id, 5, args.changed_id
@@ -93,18 +93,19 @@ def main() -> None:
                             )
                             return
 
+
                 time.sleep(0.5)
                 print()
                 print("変更したidでpingを試します。")
 
                 # Try to ping the SCServo
                 # Get SCServo model number
-                for i in range(0, 3):
+                for i in range(0, MAX_TRY_TIME):
                     scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
                         portHandler, args.changed_id
                     )
                     if scs_comm_result != COMM_SUCCESS:
-                        if i == 2:
+                        if i == MAX_TRY_TIME - 1:
                             print("[ERROR] %s" % packetHandler.getTxRxResult(scs_comm_result))
                             print("------------------------")
                             print("pingに失敗しました")
@@ -112,7 +113,7 @@ def main() -> None:
                             break
                         continue
                     elif scs_error != 0:
-                        if i == 2:
+                        if i == MAX_TRY_TIME - 1:
                             print("[ERROR] %s" % packetHandler.getRxPacketError(scs_error))
                             print("------------------------")
                             print("pingに失敗しました")
@@ -136,9 +137,14 @@ def main() -> None:
                         print("------------------------")
                         print("idの仮変更OK!")
                         print("------------------------")
+                        break
                 # Close port
                 portHandler.closePort()
                 return
+
+    print("[ERROR] Feetechサーボが見つかりませんでした。")
+    print("Tilt(ヘッド)のFeetechのコネクタを接続している場合は、外してもう一度試してください。")
+    return
 
 
 if __name__ == "__main__":

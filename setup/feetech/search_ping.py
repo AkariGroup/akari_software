@@ -17,7 +17,7 @@ def main() -> None:
         "-p",
         "--port",
         help="シリアルポートを指定します",
-        default="/dev/ttyACA0",
+        default="/dev/ttyAMA0",
         type=str,
     )
     parser.add_argument(
@@ -55,7 +55,7 @@ def main() -> None:
         else:
             print(f"シリアルポートがbaudrate: {baudrate}に対応していません。スキップします。")
 
-        for id in range(0, args.search_id):
+        for id in range(0, args.search_id + 1):
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
                 portHandler, id
             )
