@@ -54,6 +54,7 @@ def create_feetech_joint_manager(
             FeetechController(
                 c.joint_name,
                 c.feetech_id,
+                c.reverse,
                 communicator,
             )
         )
