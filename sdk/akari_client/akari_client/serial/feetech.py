@@ -9,12 +9,12 @@ PULSE_OFFSET = 2047
 
 def feetech_pulse_to_rad(data: int) -> float:
     """feetechのpulse単位をラジアン単位に変換する。"""
-    return (-1 * (data - PULSE_OFFSET)) * (2 * math.pi) / 4095
+    return (data - PULSE_OFFSET) * (2 * math.pi) / 4095
 
 
 def rad_to_feetech_pulse(data: float) -> int:
     """ラジアン単位をfeetechのpulse単位に変換する。"""
-    return int(-1 * data * 4095 / (2 * math.pi)) + PULSE_OFFSET
+    return int(data * 4095 / (2 * math.pi)) + PULSE_OFFSET
 
 
 def rad_per_sec2_to_feetech_acc_pulse(data: float) -> int:
@@ -48,8 +48,8 @@ class FeetechControlTable:
     ID = FeetechControlItem("ID", 5, 1)
     BAUD_RATE = FeetechControlItem("Baud_Rate", 6, 1)
     EEPROM_LOCK = FeetechControlItem("Eeprom_lock", 55, 1)
-    MAX_POSITION_LIMIT = FeetechControlItem("Max_Position_Limit", 9, 2)
-    MIN_POSITION_LIMIT = FeetechControlItem("Min_Position_Limit", 11, 2)
+    MAX_POSITION_LIMIT = FeetechControlItem("Max_Position_Limit", 11, 2)
+    MIN_POSITION_LIMIT = FeetechControlItem("Min_Position_Limit", 9, 2)
     TORQUE_ENABLE = FeetechControlItem("Torque_Enable", 40, 1)
     PROFILE_ACCELERATION = FeetechControlItem("Profile_Acceleration", 41, 1)
     PROFILE_VELOCITY = FeetechControlItem("Profile_Velocity", 46, 2)
@@ -93,13 +93,14 @@ class FeetechController(RevoluteJointController):
             upper_rad: 上限値 [rad]
 
         """
+        lower_pulse = rad_to_feetech_pulse(lower_rad)
+        upper_pulse = rad_to_feetech_pulse(upper_rad)
+        # パルス変換後の値が逆転している場合は入れ替える
+        if rad_to_feetech_pulse(lower_rad) > rad_to_feetech_pulse(upper_rad):
+            lower_pulse, upper_pulse = upper_pulse, lower_pulse
         self._write(FeetechControlTable.EEPROM_LOCK, 0)
-        self._write(
-            FeetechControlTable.MIN_POSITION_LIMIT, rad_to_feetech_pulse(lower_rad)
-        )
-        self._write(
-            FeetechControlTable.MAX_POSITION_LIMIT, rad_to_feetech_pulse(upper_rad)
-        )
+        self._write(FeetechControlTable.MIN_POSITION_LIMIT, lower_pulse)
+        self._write(FeetechControlTable.MAX_POSITION_LIMIT, upper_pulse)
         self._write(FeetechControlTable.EEPROM_LOCK, 1)
 
     def get_position_limit(self) -> PositionLimit:
@@ -111,6 +112,8 @@ class FeetechController(RevoluteJointController):
         """
         min = feetech_pulse_to_rad(self._read(FeetechControlTable.MIN_POSITION_LIMIT))
         max = feetech_pulse_to_rad(self._read(FeetechControlTable.MAX_POSITION_LIMIT))
+        if min > max:
+            min, max = max, min
         return PositionLimit(min, max)
 
     @property

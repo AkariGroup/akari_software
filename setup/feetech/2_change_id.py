@@ -7,7 +7,7 @@ from scservo_sdk import *  # Uses SCServo SDK library
 
 protocol_end = 0  # SCServo bit end(STS/SMS=0, SCS=1)
 badurate_list = [1000000, 500000, 250000, 128000, 115200, 76800, 57600, 38400]
-
+MAX_TRY_TIME = 3
 
 def main() -> None:
     # parse arguments
@@ -16,7 +16,7 @@ def main() -> None:
         "-p",
         "--port",
         help="シリアルポートを指定します",
-        default="/dev/ttyACA0",
+        default="/dev/ttyAMA0",
         type=str,
     )
     parser.add_argument(
@@ -58,11 +58,16 @@ def main() -> None:
         print("[ERROR] シリアルポートのOpenに失敗しました。")
         quit()
 
+    baudrate_pan = None
+    baudrate_tilt = None
     print(f"STEP1: Tiltのサーボを探索し、IDを{args.changed_id_tilt}に変更します。")
+    is_changed = False
     for baudrate in badurate_list:
         # Set port baudrate
-        is_changed = False
-        for id in range(0, 99):
+        portHandler.setBaudRate(baudrate)
+        for id in range(0,100):
+            if is_changed:
+                break
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
                 portHandler, id
             )
@@ -84,17 +89,19 @@ def main() -> None:
                     return
 
                 # IDの変更
-                for i in range(0, 3):
+                while not is_changed:
+                    try_time = 0
                     time.sleep(0.5)
                     scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
                         portHandler, id, 5, args.changed_id_tilt
                     )
                     if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
                         is_changed = True
+                        baudrate_tilt = baudrate
                         print(f"サーボのidを {id} から {args.changed_id_tilt} に変更しました。")
-                        break
                     else:
-                        if i == 2:
+                        try_time += 1
+                        if try_time >= MAX_TRY_TIME:
                             print(
                                 "[ERROR] サーボのidの変更に失敗しました。current_idの間違い、モータの接続間違いがないか確認してください。"
                             )
@@ -109,6 +116,8 @@ def main() -> None:
     print("STEP2: Panのサーボを探索し、IDを1に変更します。")
     is_changed = False
     for baudrate in badurate_list:
+        if is_changed:
+            break
         # Set port baudrate
         portHandler.setBaudRate(baudrate)
         scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
@@ -132,16 +141,20 @@ def main() -> None:
                 return
 
             # IDの変更
-            for i in range(0, 3):
+            while not is_changed:
+                try_time = 0
                 time.sleep(0.5)
                 scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
-                    portHandler, id, 5, args.changed_id_pan
+                    portHandler, args.cur_id_pan, 5, args.changed_id_pan
                 )
                 if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
-                    print(f"サーボのidを {id} から {args.changed_id_pan} に変更しました。")
+                    print(f"サーボのidを {args.cur_id_pan} から {args.changed_id_pan} に変更しました。")
+                    baudrate_pan = baudrate
+                    is_changed = True
                     break
                 else:
-                    if i == 2:
+                    try_time += 1
+                    if try_time >= MAX_TRY_TIME:
                         print(
                             "[ERROR] サーボのidの変更に失敗しました。current_idの間違い、モータの接続間違いがないか確認してください。"
                         )
@@ -158,7 +171,8 @@ def main() -> None:
     tilt_status = False
     # Try to ping the Pan SCServo
     # Get SCServo model number
-    for i in range(0, 3):
+    portHandler.setBaudRate(baudrate_pan)
+    for i in range(0, MAX_TRY_TIME):
         scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
             portHandler, args.changed_id_pan
         )
@@ -190,12 +204,14 @@ def main() -> None:
             if scs_comm_result == COMM_SUCCESS:
                 print(f"PanのサーボのEEPROMロックしました。")
                 pan_status = True
+                break
             else:
                 print(f"[ERROR] PanのサーボのEEPROMロックに失敗しました。")
                 return
     # Try to ping the Tilt SCServo
-    # Get SCServo model number
-    for i in range(0, 3):
+    # Get SCServo model
+    portHandler.setBaudRate(baudrate_tilt)
+    for i in range(0, MAX_TRY_TIME):
         scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
             portHandler, args.changed_id_tilt
         )
@@ -217,7 +233,7 @@ def main() -> None:
             continue
         else:
             print(
-                "TiltのモータのPingに成功しました。 [ID:%03d]. モータモデル : %d"
+                "TiltのサーボのPingに成功しました。 [ID:%03d]. モータモデル : %d"
                 % (args.changed_id_tilt, scs_model_number)
             )
             # EEPROM ROCK
@@ -225,10 +241,11 @@ def main() -> None:
                 portHandler, args.changed_id_tilt, 55, 1
             )
             if scs_comm_result == COMM_SUCCESS:
-                print(f"EEPROMロックしました。")
+                print(f"TiltのサーボのEEPROMロックしました。")
                 tilt_status = True
+                break
             else:
-                print(f"[ERROR] EPROMロックに失敗しました。")
+                print(f"[ERROR] TiltのサーボのEPROMロックに失敗しました。")
                 return
     if pan_status and tilt_status:
         print("------------------------")

@@ -8,7 +8,7 @@ from typing import Iterator
 from scservo_sdk import COMM_SUCCESS, PacketHandler, PortHandler
 
 DEFAULT_BAUDRATE = 500000
-DEFAULT_DEVICE_NAME = pathlib.Path("/dev/serial0")
+DEFAULT_DEVICE_NAME = pathlib.Path("/dev/ttyAMA0")
 DEFAULT_PROTOCOL_END = 0
 
 
