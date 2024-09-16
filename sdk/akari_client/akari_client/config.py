@@ -23,6 +23,7 @@ class DynamixelControllerConfig(pydantic.BaseModel):
 class FeetechControllerConfig(pydantic.BaseModel):
     joint_name: str
     feetech_id: int
+    reverse: bool
     min_position_limit: float
     max_position_limit: float
     default_velocity: float

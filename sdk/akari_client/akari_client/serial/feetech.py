@@ -7,13 +7,18 @@ from .feetech_communicator import FeetechCommunicator
 PULSE_OFFSET = 2047
 
 
-def feetech_pulse_to_rad(data: int) -> float:
+def feetech_pulse_to_rad(data: int, reverse: bool = False) -> float:
     """feetechのpulse単位をラジアン単位に変換する。"""
-    return (data - PULSE_OFFSET) * (2 * math.pi) / 4095
+    rad = (data - PULSE_OFFSET) * (2 * math.pi) / 4095
+    if reverse:
+        rad = -rad
+    return rad
 
 
-def rad_to_feetech_pulse(data: float) -> int:
+def rad_to_feetech_pulse(data: float, reverse: bool = False) -> int:
     """ラジアン単位をfeetechのpulse単位に変換する。"""
+    if reverse:
+        data = -data
     return int(data * 4095 / (2 * math.pi)) + PULSE_OFFSET
 
 
@@ -63,6 +68,7 @@ class FeetechController(RevoluteJointController):
         self,
         joint_name: str,
         feetech_id: int,
+        reverse: bool,
         communicator: FeetechCommunicator,
     ) -> None:
         """
@@ -74,6 +80,7 @@ class FeetechController(RevoluteJointController):
         """
         self._joint_name = joint_name
         self._feetech_id = feetech_id
+        self._reverse = reverse
         self._communicator = communicator
 
     def __str__(self) -> str:
@@ -93,10 +100,10 @@ class FeetechController(RevoluteJointController):
             upper_rad: 上限値 [rad]
 
         """
-        lower_pulse = rad_to_feetech_pulse(lower_rad)
-        upper_pulse = rad_to_feetech_pulse(upper_rad)
+        lower_pulse = rad_to_feetech_pulse(lower_rad, self._reverse)
+        upper_pulse = rad_to_feetech_pulse(upper_rad, self._reverse)
         # パルス変換後の値が逆転している場合は入れ替える
-        if rad_to_feetech_pulse(lower_rad) > rad_to_feetech_pulse(upper_rad):
+        if lower_pulse > upper_pulse:
             lower_pulse, upper_pulse = upper_pulse, lower_pulse
         self._write(FeetechControlTable.EEPROM_LOCK, 0)
         self._write(FeetechControlTable.MIN_POSITION_LIMIT, lower_pulse)
@@ -110,8 +117,12 @@ class FeetechController(RevoluteJointController):
             現在角度の下限値、上限値 [rad]
 
         """
-        min = feetech_pulse_to_rad(self._read(FeetechControlTable.MIN_POSITION_LIMIT))
-        max = feetech_pulse_to_rad(self._read(FeetechControlTable.MAX_POSITION_LIMIT))
+        min = feetech_pulse_to_rad(
+            self._read(FeetechControlTable.MIN_POSITION_LIMIT), self._reverse
+        )
+        max = feetech_pulse_to_rad(
+            self._read(FeetechControlTable.MAX_POSITION_LIMIT), self._reverse
+        )
         if min > max:
             min, max = max, min
         return PositionLimit(min, max)
@@ -159,7 +170,7 @@ class FeetechController(RevoluteJointController):
 
         """
         return feetech_acc_pulse_to_rad_per_sec2(
-            self._read(FeetechControlTable.PROFILE_ACCELERATION)
+            self._read(FeetechControlTable.PROFILE_ACCELERATION), self._reverse
         )
 
     def set_profile_velocity(self, rad_per_sec: float) -> None:
@@ -192,7 +203,9 @@ class FeetechController(RevoluteJointController):
             rad: 目標角度 [rad]
 
         """
-        self._write(FeetechControlTable.GOAL_POSITION, rad_to_feetech_pulse(rad))
+        self._write(
+            FeetechControlTable.GOAL_POSITION, rad_to_feetech_pulse(rad, self._reverse)
+        )
 
     def get_present_position(self) -> float:
         """サーボの現在角度を取得する。
@@ -201,7 +214,9 @@ class FeetechController(RevoluteJointController):
             現在角度 [rad]
 
         """
-        return feetech_pulse_to_rad(self._read(FeetechControlTable.PRESENT_POSITION))
+        return feetech_pulse_to_rad(
+            self._read(FeetechControlTable.PRESENT_POSITION), self._reverse
+        )
 
     def get_moving_state(self) -> bool:
         """サーボが動作中かどうか判定する。
