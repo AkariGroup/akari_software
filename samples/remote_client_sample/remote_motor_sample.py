@@ -24,15 +24,21 @@ def main() -> None:
     joint_config: JointManagerGrpcConfig = JointManagerGrpcConfig(
         type="grpc", endpoint=akari_endpoint
     )
-    m5_config: M5StackGrpcConfig = M5StackGrpcConfig(type="grpc", endpoint=akari_endpoint)
-    akari_client_config = AkariClientConfig(joint_manager=joint_config, m5stack=m5_config)
+    m5_config: M5StackGrpcConfig = M5StackGrpcConfig(
+        type="grpc", endpoint=akari_endpoint
+    )
+    akari_client_config = AkariClientConfig(
+        joint_manager=joint_config, m5stack=m5_config
+    )
     # akari_client_configを引数にしてAkariClientを作成する。
     try:
         akari = AkariClient(akari_client_config)
     except Exception as e:
         print(e)
         print("")
-        print("接続エラーです。AKARI本体が同一ネットワークに接続されていること、AkariRpcServerが起動していること、コード内のakari_ipをAKARI本体のIPアドレスに変更してください。")
+        print(
+            "接続エラーです。AKARI本体が同一ネットワークに接続されていること、AkariRpcServerが起動していること、コード内のakari_ipをAKARI本体のIPアドレスに変更してください。"
+        )
         return
 
     # 処理を記載。下記は例
@@ -124,7 +130,9 @@ def main() -> None:
     time.sleep(3)
 
     # STEP13.パンのモータ位置を-0.7,チルトのモータ位置を-0.3に移動。
-    print("STEP13. Move pan joint position to -0.7 rad and tilt joint position to -0.3 rad")
+    print(
+        "STEP13. Move pan joint position to -0.7 rad and tilt joint position to -0.3 rad"
+    )
     joints.move_joint_positions(pan=-0.7, tilt=-0.3)
     print("")
     time.sleep(3)

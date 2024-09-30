@@ -10,13 +10,12 @@ Created on 2024/09/30
 import time
 
 from akari_client import AkariClient
+from akari_client.color import Colors
 from akari_client.config import (
     AkariClientConfig,
     JointManagerGrpcConfig,
     M5StackGrpcConfig,
 )
-
-from akari_client.color import Colors
 from akari_client.position import Positions
 
 
@@ -46,7 +45,9 @@ def main() -> None:
     except Exception as e:
         print(e)
         print("")
-        print("接続エラーです。AKARI本体が同一ネットワークに接続されていること、AkariRpcServerが起動していること、コード内のakari_ipをAKARI本体のIPアドレスに変更してください。")
+        print(
+            "接続エラーです。AKARI本体が同一ネットワークに接続されていること、AkariRpcServerが起動していること、コード内のakari_ipをAKARI本体のIPアドレスに変更してください。"
+        )
         return
 
     # m5と通信するクラスを呼び出す
@@ -78,9 +79,7 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        m5.set_display_text(
-            text, pos_x, pos_y, size, text_color, back_color, refresh
-        )
+        m5.set_display_text(text, pos_x, pos_y, size, text_color, back_color, refresh)
         print("-> Set")
         # 2秒停止
         time.sleep(2)
@@ -114,9 +113,7 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        m5.set_display_text(
-            text, pos_x, pos_y, size, text_color, back_color, refresh
-        )
+        m5.set_display_text(text, pos_x, pos_y, size, text_color, back_color, refresh)
         print("-> Set")
         # 2秒停止
         time.sleep(2)
@@ -139,9 +136,7 @@ def main() -> None:
         # 背景全体をリセット
         refresh = True
         # set_display_textを実行
-        m5.set_display_text(
-            text, pos_x, pos_y, size, text_color, back_color, refresh
-        )
+        m5.set_display_text(text, pos_x, pos_y, size, text_color, back_color, refresh)
         print("-> Set")
         # 2秒停止
         time.sleep(2)
@@ -164,9 +159,7 @@ def main() -> None:
         # refreshをFalseにすることで前の背景表示を消さずに追記できる。
         refresh = False
         # set_display_textを実行
-        m5.set_display_text(
-            text, pos_x, pos_y, size, text_color, back_color, refresh
-        )
+        m5.set_display_text(text, pos_x, pos_y, size, text_color, back_color, refresh)
         print("-> Set")
         # 2秒停止
         time.sleep(2)
@@ -189,9 +182,7 @@ def main() -> None:
         # refreshをFalseにすることで前の表示を消さずに追記できる。
         refresh = False
         # set_display_textを実行
-        m5.set_display_text(
-            text, pos_x, pos_y, size, text_color, back_color, refresh
-        )
+        m5.set_display_text(text, pos_x, pos_y, size, text_color, back_color, refresh)
         print("-> Set")
         # 2秒停止
         time.sleep(2)
