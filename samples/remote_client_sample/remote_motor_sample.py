@@ -32,7 +32,7 @@ def main() -> None:
     except Exception as e:
         print(e)
         print("")
-        print("接続エラーです。AKARI本体が同一ネットワークに接続されていること、コード内のakari_ipをAKARI本体のIPアドレスに変更してください。")
+        print("接続エラーです。AKARI本体が同一ネットワークに接続されていること、AkariRpcServerが起動していること、コード内のakari_ipをAKARI本体のIPアドレスに変更してください。")
         return
 
     # 処理を記載。下記は例
