@@ -1,22 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-"""
-Motor control sample
-Created on 2021/02/14
-@author: Kazuya Yamamoto
-"""
-
 import time
 
-# モータ制御の際はakari_clientのライブラリをインポートする
 from akari_client import AkariClient
+from akari_client.config import (
+    AkariClientConfig,
+    JointManagerGrpcConfig,
+    M5StackGrpcConfig,
+)
 
-# AkariClientのインスタンスを作成する。
-akari = AkariClient()
-# 関節制御用のインスタンスを取得する。
+
+# AKARI本体のIPアドレスを指定する。
+akari_ip = "192.168.100.58"
+akari_port = "51001"
+akari_endpoint = f"{akari_ip}:{akari_port}"
+
+joint_config: JointManagerGrpcConfig = JointManagerGrpcConfig(
+    type="grpc", endpoint=akari_endpoint
+)
+m5_config: M5StackGrpcConfig = M5StackGrpcConfig(type="grpc", endpoint=akari_endpoint)
+akari_client_config = AkariClientConfig(joint_manager=joint_config, m5stack=m5_config)
+# akari_client_configを引数にしてAkariClientを作成する。
+akari = AkariClient(akari_client_config)
+
+# 処理を記載。下記は例
 joints = akari.joints
-
 # STEP1.各軸の名前を取得し、表示する。
 print("STEP1. Get joint names")
 print(joints.get_joint_names())
@@ -79,7 +87,7 @@ time.sleep(0.5)
 
 # STEP11.panのモータ位置だけを-0.3[rad]に移動。
 # syncをTrueにしていないため、移動完了前に次のコマンドが実行される。
-print("STEP11. Move pan joint position to -0.3 rad")
+print("STEP10. Move pan joint position to -0.3 rad")
 joints.move_joint_positions(pan=-0.3)
 print("")
 time.sleep(0.5)
@@ -91,36 +99,37 @@ print(
 joints.move_joint_positions(sync=True, pan=0.4, tilt=0.4)
 print("")
 
-# STEP13.両方のモータ速度を10rad/sに変更。
-print("STEP13. Set both joints velocity at 10 rad/s")
+# STEP11.両方のモータ速度を10rad/sに変更。
+print("STEP11. Set both joints velocity at 10 rad/s")
 joints.set_joint_velocities(pan=10, tilt=10)
 print("")
 time.sleep(3)
 
-# STEP14.両方のモータ加速度を10rad/sに変更する。
-print("STEP14. Set both joints accerelation at 10 rad/s")
+# STEP12.両方のモータ加速度を10rad/sに変更する。
+print("STEP12. Set both joints accerelation at 10 rad/s")
 joints.set_joint_accelerations(pan=10, tilt=10)
 print("")
 time.sleep(3)
 
-# STEP15.パンのモータ位置を-0.7,チルトのモータ位置を-0.3に移動。
-print("STEP15. Move pan joint position to -0.7 rad and tilt joint position to -0.3 rad")
+# STEP13.パンのモータ位置を-0.7,チルトのモータ位置を-0.3に移動。
+print("STEP13. Move pan joint position to -0.7 rad and tilt joint position to -0.3 rad")
 joints.move_joint_positions(pan=-0.7, tilt=-0.3)
 print("")
 time.sleep(3)
 
-# STEP16.現在の軸の位置を表示。コマンドラインに表示される。
+# STEP14.現在の軸の位置を表示。コマンドラインに表示される。
 # [-0.7, 0.3]とほぼ一致していれば成功
-print("STEP16. Get current joint position [rad]")
+print("STEP14. Get current joint position [rad]")
 print(joints.get_joint_positions())
 print("")
 time.sleep(3)
 
-# STEP17.初期位置に戻る。
-print("STEP17. Return to initial position")
+# STEP15.初期位置に戻る。
+print("STEP15. Return to initial position")
 joints.move_joint_positions(pan=0, tilt=0)
 print("")
 time.sleep(3)
 
-print("Finish!")
-akari.close()
+
+if __name__ == "__main__":
+    main()
