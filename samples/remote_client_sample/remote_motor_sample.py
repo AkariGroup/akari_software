@@ -105,7 +105,7 @@ def main() -> None:
 
     # STEP11.panのモータ位置だけを-0.3[rad]に移動。
     # syncをTrueにしていないため、移動完了前に次のコマンドが実行される。
-    print("STEP10. Move pan joint position to -0.3 rad")
+    print("STEP11. Move pan joint position to -0.3 rad")
     joints.move_joint_positions(pan=-0.3)
     print("")
     time.sleep(0.5)
@@ -118,20 +118,20 @@ def main() -> None:
     print("")
 
     # STEP11.両方のモータ速度を10rad/sに変更。
-    print("STEP11. Set both joints velocity at 10 rad/s")
+    print("STEP13. Set both joints velocity at 10 rad/s")
     joints.set_joint_velocities(pan=10, tilt=10)
     print("")
     time.sleep(3)
 
     # STEP12.両方のモータ加速度を10rad/sに変更する。
-    print("STEP12. Set both joints accerelation at 10 rad/s")
+    print("STEP14. Set both joints accerelation at 10 rad/s")
     joints.set_joint_accelerations(pan=10, tilt=10)
     print("")
     time.sleep(3)
 
     # STEP13.パンのモータ位置を-0.7,チルトのモータ位置を-0.3に移動。
     print(
-        "STEP13. Move pan joint position to -0.7 rad and tilt joint position to -0.3 rad"
+        "STEP15. Move pan joint position to -0.7 rad and tilt joint position to -0.3 rad"
     )
     joints.move_joint_positions(pan=-0.7, tilt=-0.3)
     print("")
@@ -139,13 +139,13 @@ def main() -> None:
 
     # STEP14.現在の軸の位置を表示。コマンドラインに表示される。
     # [-0.7, 0.3]とほぼ一致していれば成功
-    print("STEP14. Get current joint position [rad]")
+    print("STEP16. Get current joint position [rad]")
     print(joints.get_joint_positions())
     print("")
     time.sleep(3)
 
     # STEP15.初期位置に戻る。
-    print("STEP15. Return to initial position")
+    print("STEP17. Return to initial position")
     joints.move_joint_positions(pan=0, tilt=0)
     print("")
     time.sleep(3)
