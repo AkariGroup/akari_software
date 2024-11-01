@@ -25,7 +25,7 @@ setup(
     ],
     url="https://github.com/AkariGroup/akari_software",
     install_requires=[
-        "grpcio==1.60.0",
-        "protobuf==4.25.3",
+        "grpcio",
+        "protobuf",
     ],
 )

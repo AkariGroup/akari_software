@@ -25,15 +25,16 @@ setup(
     url="https://github.com/AkariGroup/akari_software",
     install_requires=[
         "dynamixel_sdk",
-        "pydantic>=1.5,<2.0",
+        "pydantic",
+        "pydantic-settings",
         "numpy==1.26.4",
     ],
     package_data={"akari_client": ["py.typed"]},
     extras_require={
         "grpc": [
             "akari-proto>=0.3.0,<0.4.0",
-            "grpcio==1.60.0",
-            "protobuf==4.25.3",
+            "grpcio",
+            "protobuf",
         ],
         "depthai": [
             "matplotlib",
