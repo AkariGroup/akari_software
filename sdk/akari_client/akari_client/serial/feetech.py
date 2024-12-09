@@ -170,7 +170,7 @@ class FeetechController(RevoluteJointController):
 
         """
         return feetech_acc_pulse_to_rad_per_sec2(
-            self._read(FeetechControlTable.PROFILE_ACCELERATION), self._reverse
+            self._read(FeetechControlTable.PROFILE_ACCELERATION)
         )
 
     def set_profile_velocity(self, rad_per_sec: float) -> None:
