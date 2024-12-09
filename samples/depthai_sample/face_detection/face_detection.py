@@ -161,7 +161,7 @@ with dai.Device(pipeline) as device:
                 top_k=args.keep_top_k,
             )  # returns [box_num, class_num]
 
-            keep_idx = np.squeeze(keep_idx)  # [box_num, class_num] -> [box_num]
+            keep_idx = np.squeeze(keep_idx)  # type: ignore
             dets = dets[keep_idx]
 
         # Draw
