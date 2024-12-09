@@ -69,7 +69,7 @@ func akariRpcServerSystemServiceConfig(etcDir string) (ServiceConfig, system.Cre
 		Description: "gRPC server for host devices",
 	}
 	containerOpts := system.CreateContainerOption{
-		Image: "akarirobot/akari-rpc-server:develop",
+		Image: "akarirobot/akari-rpc-server:v1",
 		Env:   []string{},
 		Ports: map[string]int{
 			containerPort: AkariRpcServerServicePort,
@@ -99,7 +99,7 @@ func akiraControllerServerServiceConfig(etcDir string) (ServiceConfig, system.Cr
 		Description: "API server for controller page",
 	}
 	containerOpts := system.CreateContainerOption{
-		Image: "akarirobot/akira-controller-server:develop",
+		Image: "akarirobot/akira-controller-server:v1",
 		Env:   []string{},
 		Ports: map[string]int{
 			containerPort: AkiraControllerServerServicePort,
@@ -118,7 +118,7 @@ func jupyterLabImageConfig() ImageConfig {
 	return ImageConfig{
 		Id:          id,
 		Name:        JupyterLabServiceName,
-		Version:     "develop",
+		Version:     "v1",
 		DisplayName: "JupyterLab",
 		Description: "Launch a jupyter lab",
 		Capabilities: []ServiceCapability{
@@ -136,7 +136,7 @@ func vscodeImageConfig() ImageConfig {
 	return ImageConfig{
 		Id:          id,
 		Name:        VSCodeServiceName,
-		Version:     "develop",
+		Version:     "v1",
 		DisplayName: "Visual Studio Code",
 		Description: "Launch a Visual Studio Code instance",
 		Capabilities: []ServiceCapability{
