@@ -1,4 +1,5 @@
 import contextlib
+from pathlib import Path
 from typing import Any, Optional
 
 import blobconverter
@@ -47,7 +48,7 @@ def _render_frame(name: str, frame: np.ndarray, detections: Any) -> np.ndarray:
             top_k=TOP_K,
         )  # returns [box_num, class_num]
 
-        keep_idx = np.squeeze(keep_idx)  # [box_num, class_num] -> [box_num]
+        keep_idx = np.squeeze(keep_idx)  # type: ignore
         dets = dets[keep_idx]
 
     # Draw
@@ -83,7 +84,7 @@ class FaceDetectionCapture:
         pipeline = dai.Pipeline()
         pipeline.setOpenVINOVersion(version=dai.OpenVINO.VERSION_2021_4)
         detection_nn = pipeline.create(dai.node.NeuralNetwork)
-        detection_nn.setBlobPath(nn_model_path)
+        detection_nn.setBlobPath(Path(nn_model_path))
         detection_nn.setNumPoolFrames(4)
         detection_nn.input.setBlocking(False)
         detection_nn.setNumInferenceThreads(2)
