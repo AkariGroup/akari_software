@@ -167,12 +167,12 @@ def test_feetech_acc_pulse_to_rad_per_sec2() -> None:
 def test_rad_per_sec_to_feetech_vel_pulse() -> None:
     expected = 12.34
     feetech_vel_pulse = rad_per_sec_to_feetech_vel_pulse(expected)
-    actual = feetech_vel_pulse * 0.732 * (2 * math.pi) / 60
+    actual = feetech_vel_pulse * 0.01464 * (2 * math.pi) / 60
     assert expected == pytest.approx(actual, rel=1e-2)
 
 
 def test_feetech_vel_pulse_to_rad_per_sec() -> None:
     expected = 12
     rad_per_sec = feetech_vel_pulse_to_rad_per_sec(expected)
-    actual = rad_per_sec * 60 / (2 * math.pi) / 0.732
+    actual = rad_per_sec * 60 / (2 * math.pi) / 0.01464
     assert expected == pytest.approx(actual, rel=1e-2)
