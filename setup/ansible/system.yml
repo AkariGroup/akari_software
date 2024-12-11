@@ -3,10 +3,10 @@
   hosts: all
   tasks:
     - name: Get AKARI type
-      args: 
-        name: lite
+      args:
+        name: light
       set_fact:
-        lite: "{{ true if lite is defined else false}}"
+        light: "{{ true if light is defined else false}}"
 
 - name: Configure all hosts
   hosts: all
@@ -18,9 +18,9 @@
   roles:
     - oak-d
     - role: dynamixel
-      when: not lite | bool
+      when: not light | bool
     - role: feetech
-      when: lite | bool
+      when: light | bool
     - m5stack
 
 - name: Write M5
