@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="akari-client",
-    version="0.3.6",
+    version="0.4.0",
     packages=find_packages(exclude=["tests"]),
     description="Akari Python package",
     long_description=open("README.md").read(),
@@ -31,7 +31,7 @@ setup(
     package_data={"akari_client": ["py.typed"]},
     extras_require={
         "grpc": [
-            "akari-proto>=0.3.0,<0.4.0",
+            "akari-proto>=0.4.0,<0.5.0",
             "grpcio==1.60.0",
             "protobuf==4.25.3",
         ],
