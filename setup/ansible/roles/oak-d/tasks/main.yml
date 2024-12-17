@@ -1,5 +1,6 @@
 ---
 - name: Register v4l2loopback to modules-load.d
+  when: not light
   copy:
     dest: "/etc/modules-load.d/v4l2loopback.conf"
     mode: "644"
@@ -9,6 +10,7 @@
   notify: Reload v4l2loopback
 
 - name: Configure OAK-D Video Source
+  when: not light
   lineinfile:
     path: "/etc/modprobe.d/v4l2loopback.conf"
     create: true
@@ -25,3 +27,9 @@
     line: 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"'
   become: yes
   notify: Reload udev rules
+
+- name: Disable usb output power limit for Raspberry Pi and Raspberry Pi OS
+  shell: raspi-config nonint do_usb_current 0
+  become: yes
+  when:
+    ansible_distribution == "Debian"

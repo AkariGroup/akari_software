@@ -4,7 +4,7 @@ import enum
 import logging
 import threading
 import time
-from typing import AsyncIterator, Optional, Protocol, Tuple, cast
+from typing import AsyncIterator, Optional, Protocol, Tuple
 
 import cv2
 import numpy
@@ -30,7 +30,7 @@ def _create_frame(text: str) -> bytes:
         5,
     )
     _, buffer = cv2.imencode(".bmp", frame)
-    return cast(bytes, buffer.tobytes())
+    return buffer.tobytes()
 
 
 _NOW_LOADING_FRAME = _create_frame("Now Loading...")
