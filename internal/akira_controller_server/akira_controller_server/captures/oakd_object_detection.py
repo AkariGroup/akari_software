@@ -1,4 +1,5 @@
 import contextlib
+from pathlib import Path
 from typing import Any, Optional, Tuple
 
 import blobconverter
@@ -108,7 +109,7 @@ class ObjectDetectionCapture:
         camera_rgb.setFps(30)
 
         nn.setConfidenceThreshold(CONFIDENCE_THRESHOLD)
-        nn.setBlobPath(nn_model_path)
+        nn.setBlobPath(Path(nn_model_path))
         nn.setNumInferenceThreads(2)
         nn.input.setBlocking(False)
 

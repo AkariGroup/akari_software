@@ -1,4 +1,13 @@
 ---
+- name: Get AKARI type from command line
+  hosts: all
+  tasks:
+    - name: Get AKARI type
+      args:
+        name: light
+      set_fact:
+        light: "{{ true if light is defined else false}}"
+
 - name: Configure all hosts
   hosts: all
   roles:
@@ -8,7 +17,10 @@
   hosts: mainpc
   roles:
     - oak-d
-    - dynamixel
+    - role: dynamixel
+      when: not light | bool
+    - role: feetech
+      when: light | bool
     - m5stack
 
 - name: Write M5

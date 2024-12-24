@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="akari-proto",
-    version="0.3.6",
+    version="0.4.0",
     description="Python package of akari protobuf definitions and utility functions",
     packages=find_packages(exclude=["tests"]),
     author="akari",
@@ -25,7 +25,7 @@ setup(
     ],
     url="https://github.com/AkariGroup/akari_software",
     install_requires=[
-        "grpcio",
-        "protobuf",
+            "grpcio==1.68.1",
+            "protobuf==5.29.2",
     ],
 )

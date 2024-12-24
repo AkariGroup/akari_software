@@ -11,10 +11,31 @@
     state: directory
     mode: "0755"
   become: true
+- name: Copy client_config.d files to internal
+  copy:
+    src: "{{ role_path }}/files/client_configs.d/"
+    dest: "{{ role_path }}/../../../../internal/docker/.local/etc/akira/client_configs.d/"
+    mode: "0755"
 - name: Copy client_config.d files
   copy:
     src: "{{ role_path }}/files/client_configs.d/"
     dest: /etc/akira/client_configs.d/
+    mode: "0755"
+  become: true
+  notify:
+    - Restart akira.service
+- name: Copy client_config.d files to internal
+  when: light
+  copy:
+    src: "{{ role_path }}/files/light/akari_rpc_service.json"
+    dest: "{{ role_path }}/../../../../internal/docker/.local/etc/akira/client_configs.d/akari_rpc_service.json"
+    mode: "0755"
+  become: true
+- name: Copy client_config.d files
+  when: light
+  copy:
+    src: "{{ role_path }}/files/light/akari_rpc_service.json"
+    dest: /etc/akira/client_configs.d/akari_rpc_service.json
     mode: "0755"
   become: true
   notify:
