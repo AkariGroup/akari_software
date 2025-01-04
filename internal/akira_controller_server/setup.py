@@ -13,7 +13,7 @@ setup(
         "akari-proto>=0.4.0,<0.5.0",
         "blobconverter==1.4.1",
         "depthai==2.19.0.0",
-        "fastapi==0.86.0",
+        "fastapi==0.115.6",
         "grpcio==1.68.1",
         "numpy==1.23.4",
         "opencv-python-headless==4.7.0.72",
