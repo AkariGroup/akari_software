@@ -26,8 +26,8 @@ setup(
     install_requires=[
         "feetech-servo-sdk",
         "dynamixel_sdk",
-        "pydantic",
-        "pydantic-settings",
+        "pydantic>=2.0,<3.0",
+        "pydantic-settings>=2.0,<3.0",
         "numpy==1.26.4",
     ],
     package_data={"akari_client": ["py.typed"]},
