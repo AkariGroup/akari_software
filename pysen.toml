@@ -8,7 +8,7 @@ enable_isort = true
 enable_mypy = true
 mypy_preset = "strict"
 line_length = 88
-py_version = "py38"
+py_version = "py310"
 mypy_ignore_packages = ["akari_proto.*"]
 
 [[tool.pysen.lint.mypy_targets]]

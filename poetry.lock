@@ -1,6 +1,6 @@
 [[package]]
 name = "akari-client"
-version = "0.3.3"
+version = "0.4.0"
 description = "Akari Python package"
 category = "main"
 optional = false
@@ -10,11 +10,12 @@ develop = true
 [package.dependencies]
 dynamixel_sdk = "*"
 feetech-servo-sdk = "*"
-pydantic = ">=1.5,<2.0"
+pydantic = ">=2.0,<3.0"
+pydantic-settings = ">=2.0,<3.0"
 
 [package.extras]
 depthai = ["matplotlib", "depthai", "opencv-python", "blobconverter"]
-grpc = ["akari-proto (>=0.3.0,<0.4.0)", "grpcio (==1.44.0)", "protobuf (==3.19.3)"]
+grpc = ["akari-proto (>=0.4.0,<0.5.0)", "grpcio (==1.68.1)", "protobuf (==5.29.2)"]
 
 [package.source]
 type = "directory"
@@ -22,7 +23,7 @@ url = "sdk/akari_client"
 
 [[package]]
 name = "akari-proto"
-version = "0.3.3"
+version = "0.4.0"
 description = "Python package of akari protobuf definitions and utility functions"
 category = "main"
 optional = false
@@ -30,8 +31,8 @@ python-versions = "*"
 develop = true
 
 [package.dependencies]
-grpcio = "1.44.0"
-protobuf = "3.19.3"
+grpcio = "1.68.1"
+protobuf = "5.29.2"
 
 [package.source]
 type = "directory"
