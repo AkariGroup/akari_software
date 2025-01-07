@@ -26,15 +26,16 @@ setup(
     install_requires=[
         "feetech-servo-sdk",
         "dynamixel_sdk",
-        "pydantic>=1.5,<2.0",
+        "pydantic>=2.0,<3.0",
+        "pydantic-settings>=2.0,<3.0",
         "numpy==1.26.4",
     ],
     package_data={"akari_client": ["py.typed"]},
     extras_require={
         "grpc": [
             "akari-proto>=0.4.0,<0.5.0",
-            "grpcio==1.60.0",
-            "protobuf==4.25.3",
+            "grpcio==1.68.1",
+            "protobuf==5.29.2",
         ],
         "depthai": [
             "matplotlib",
