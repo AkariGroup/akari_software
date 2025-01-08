@@ -6,7 +6,6 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-numpy = "^1.26.4"
 dynamixel-sdk = "^3.7.31"
 depthai = "^2.15.2"
 akari-client = {path = "sdk/akari_client", develop = true}
@@ -17,12 +16,15 @@ pyvirtualcam = "^0.9.1"
 
 [tool.poetry.dev-dependencies]
 black = "22.6.0"
-flake8 = "^5.0.4"
-isort = "^5.10"
-mypy = "^0.950"
-pysen = "^0.10.2"
+flake8 = "^4.0.1"
+isort = "^5.1.4"
+mypy = "^0.790"
+pysen = "^0.10.6"
 pytest = "^7.1.2"
 types-protobuf = "^5.29.1.20241207"
+
+[tool.mypy]
+ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -9,7 +9,7 @@ enable_mypy = true
 mypy_preset = "strict"
 line_length = 88
 py_version = "py310"
-mypy_ignore_packages = ["akari_proto.*"]
+mypy_ignore_packages = ["akari_proto.*", "setup"]
 
 [[tool.pysen.lint.mypy_targets]]
   paths = [
@@ -36,6 +36,7 @@ mypy_ignore_packages = ["akari_proto.*"]
   ]
   excludes = [
     "internal/akira_services/jupyter_lab/jupyter_lab_config.py",
+    "venv/"
   ]
   exclude_globs = [
     "sdk/akari_proto/akari_proto/*pb2*",
