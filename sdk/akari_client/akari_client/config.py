@@ -109,7 +109,7 @@ class AkariClientConfig(pydantic.BaseModel):
     m5stack: M5StackConfig = pydantic.Field(..., discriminator="type")
 
 
-class AkariClientEnv(pydantic_settings.BaseSettings): # type: ignore
+class AkariClientEnv(pydantic_settings.BaseSettings):  # type: ignore
     config_path: Optional[pydantic.FilePath] = None
 
     class Config:
