@@ -12,7 +12,6 @@ develop = true
 [package.dependencies]
 dynamixel_sdk = "*"
 feetech-servo-sdk = "*"
-numpy = "1.26.4"
 pydantic = ">=2.0,<3.0"
 pydantic-settings = ">=2.0,<3.0"
 
