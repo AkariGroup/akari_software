@@ -61,7 +61,7 @@ class JointManagerFeetechSerialConfig(pydantic.BaseModel):
 class JointManagerGrpcConfig(pydantic.BaseModel):
     type: Literal["grpc"]
     endpoint: str
-    joints: List[str] | None = None
+    joints: List[str] | None = None  # type: ignore
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
         from .grpc.factory import create_joint_manager
@@ -109,7 +109,7 @@ class AkariClientConfig(pydantic.BaseModel):
     m5stack: M5StackConfig = pydantic.Field(..., discriminator="type")
 
 
-class AkariClientEnv(pydantic_settings.BaseSettings):
+class AkariClientEnv(pydantic_settings.BaseSettings): # type: ignore
     config_path: Optional[pydantic.FilePath] = None
 
     class Config:
