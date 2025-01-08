@@ -5,7 +5,7 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10.6"
+python = "^3.8"
 numpy = "^1.22.3"
 dynamixel-sdk = "^3.7.31"
 depthai = "^2.15.2"
