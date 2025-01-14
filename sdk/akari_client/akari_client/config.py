@@ -129,7 +129,7 @@ def load_env() -> AkariClientEnv:
 
 def _load_config(path: pathlib.Path) -> AkariClientConfig:
     _logger.debug(f"Load config: {path}")
-    return AkariClientConfig.parse_file(path)
+    return AkariClientConfig.parse_file(path)  # type: ignore
 
 
 def default_serial_config() -> AkariClientConfig:
