@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="akari-client",
-    version="0.4.0",
+    version="0.4.1",
     packages=find_packages(exclude=["tests"]),
     description="Akari Python package",
     long_description=open("README.md").read(),
