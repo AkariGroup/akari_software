@@ -4,6 +4,7 @@ import pathlib
 from typing import List, Literal, Optional, Union
 
 import pydantic
+import pydantic_settings
 
 from .joint_manager import JointManager
 from .m5stack_client import M5StackClient
@@ -60,7 +61,7 @@ class JointManagerFeetechSerialConfig(pydantic.BaseModel):
 class JointManagerGrpcConfig(pydantic.BaseModel):
     type: Literal["grpc"]
     endpoint: str
-    joints: Optional[List[str]]
+    joints: List[str] | None = None
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
         from .grpc.factory import create_joint_manager
@@ -108,7 +109,7 @@ class AkariClientConfig(pydantic.BaseModel):
     m5stack: M5StackConfig = pydantic.Field(..., discriminator="type")
 
 
-class AkariClientEnv(pydantic.BaseSettings):
+class AkariClientEnv(pydantic_settings.BaseSettings):
     config_path: Optional[pydantic.FilePath] = None
 
     class Config:
@@ -128,7 +129,7 @@ def load_env() -> AkariClientEnv:
 
 def _load_config(path: pathlib.Path) -> AkariClientConfig:
     _logger.debug(f"Load config: {path}")
-    return AkariClientConfig.parse_file(path)
+    return AkariClientConfig.parse_file(path)  # type: ignore
 
 
 def default_serial_config() -> AkariClientConfig:
