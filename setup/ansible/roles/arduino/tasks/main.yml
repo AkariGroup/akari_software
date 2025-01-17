@@ -10,9 +10,12 @@
     src: "{{ role_path }}/files/pip.conf"
     dest: "/etc/"
   become: true
-  when:
-    ansible_distribution == "Debian"
 
+- name: Install setuptools
+  pip:
+    name: setuptools
+  become: true
+  
 - name: Install pip packages
   pip:
     name: platformio

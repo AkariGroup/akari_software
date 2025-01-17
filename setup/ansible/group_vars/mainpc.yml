@@ -1,3 +1,3 @@
 ---
-docker_version_ubuntu: "5:24.0.7-1~ubuntu.22.04~jammy"
+docker_version_ubuntu: "5:27.5.0-1~ubuntu.24.10~oracular"
 docker_version_raspi: "5:24.0.7-1~debian.12~bookworm"
