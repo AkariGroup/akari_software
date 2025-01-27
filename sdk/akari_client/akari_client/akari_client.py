@@ -31,4 +31,5 @@ class AkariClient:
 
     @property
     def m5stack(self) -> M5StackClient:
+        self._m5stack.stop_default_app()
         return self._m5stack

@@ -264,3 +264,10 @@ class M5StackClient(ABC):
 
         """
         ...
+
+    @abstractmethod
+    def stop_default_app(self) -> None:
+        """M5のデフォルトアプリの実行を終了する。
+
+        """
+        ...
