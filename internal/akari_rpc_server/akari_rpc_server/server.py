@@ -24,9 +24,9 @@ def serve(port: int) -> None:
         config = load_config()
         
         if not isinstance(config.joint_manager, JointManagerDynamixelSerialConfig) and not isinstance(config.joint_manager, JointManagerFeetechSerialConfig):
-            logging.warning("JointManagerの設定が不正です")
+            logging.warning("Invalid JointManager configuration")
         if not isinstance(config.m5stack, M5StackSerialConfig):
-            logging.warning("M5Stackの設定が不正です")
+            logging.warning("Invalid M5Stack configuration")
 
         client: AkariClient = stack.enter_context(AkariClient(config))
         joint_manager = None
@@ -35,15 +35,15 @@ def serve(port: int) -> None:
         try:
             joint_manager = client.joints
         except RuntimeError as e:
-            logging.warning(f"サーボモータの初期化エラー: {e}")
+            logging.warning(f"Servo motor initialization error: {e}")
             
         try:
             m5stack = client.m5stack
             if not isinstance(m5stack, M5StackSerialClient):
-                logging.warning("M5Stackが予期せぬタイプです")
+                logging.warning("M5Stack is of unexpected type")
                 m5stack = None
         except RuntimeError as e:
-            logging.warning(f"M5Stackの初期化エラー: {e}")
+            logging.warning(f"M5Stack initialization error: {e}")
 
         server = grpc.server(ThreadPoolExecutor(max_workers=10))
         

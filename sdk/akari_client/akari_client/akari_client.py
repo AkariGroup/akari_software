@@ -18,13 +18,13 @@ class AkariClient:
         try:
             self._joints = self._config.joint_manager.factory(self._stack)
         except Exception as e:
-            logging.warning(f"JointManagerの接続中にエラーが発生しました: {e}")
+            logging.warning(f"Error occurred while connecting to JointManager: {e}")
             self._joints = None
             
         try:
             self._m5stack = self._config.m5stack.factory(self._stack)
         except Exception as e:
-            logging.warning(f"M5Stackの接続中にエラーが発生しました: {e}")
+            logging.warning(f"Error occurred while connecting to M5Stack: {e}")
             self._m5stack = None
 
     def __enter__(self) -> AkariClient:
@@ -39,11 +39,11 @@ class AkariClient:
     @property
     def joints(self) -> JointManager:
         if self._joints is None:
-            raise RuntimeError("JointManagerが接続されていません")
+            raise RuntimeError("JointManager is not connected")
         return self._joints
 
     @property
     def m5stack(self) -> M5StackClient:
         if self._m5stack is None:
-            raise RuntimeError("M5Stackが接続されていません")
+            raise RuntimeError("M5Stack is not connected")
         return self._m5stack
