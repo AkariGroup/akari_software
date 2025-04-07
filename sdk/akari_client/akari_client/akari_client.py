@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import logging
 from typing import Any, Optional
 
 from .config import AkariClientConfig, load_config
@@ -13,8 +14,18 @@ class AkariClient:
         self._stack = contextlib.ExitStack()
 
         self._config = config or load_config()
-        self._joints = self._config.joint_manager.factory(self._stack)
-        self._m5stack = self._config.m5stack.factory(self._stack)
+        
+        try:
+            self._joints = self._config.joint_manager.factory(self._stack)
+        except Exception as e:
+            logging.warning(f"JointManagerの接続中にエラーが発生しました: {e}")
+            self._joints = None
+            
+        try:
+            self._m5stack = self._config.m5stack.factory(self._stack)
+        except Exception as e:
+            logging.warning(f"M5Stackの接続中にエラーが発生しました: {e}")
+            self._m5stack = None
 
     def __enter__(self) -> AkariClient:
         return self
@@ -27,8 +38,12 @@ class AkariClient:
 
     @property
     def joints(self) -> JointManager:
+        if self._joints is None:
+            raise RuntimeError("JointManagerが接続されていません")
         return self._joints
 
     @property
     def m5stack(self) -> M5StackClient:
+        if self._m5stack is None:
+            raise RuntimeError("M5Stackが接続されていません")
         return self._m5stack
