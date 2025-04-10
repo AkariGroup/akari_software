@@ -1,4 +1,5 @@
 import contextlib
+from pathlib import Path
 from typing import Any, Optional, Tuple
 
 import blobconverter
@@ -108,7 +109,7 @@ class ObjectDetectionCapture:
         camera_rgb.setFps(30)
 
         nn.setConfidenceThreshold(CONFIDENCE_THRESHOLD)
-        nn.setBlobPath(nn_model_path)
+        nn.setBlobPath(Path(nn_model_path))
         nn.setNumInferenceThreads(2)
         nn.input.setBlocking(False)
 
@@ -124,12 +125,12 @@ class ObjectDetectionCapture:
         self._device = self._stack.enter_context(
             dai.Device(self._pipeline, usb2Mode=True)
         )
-        self._rgb_queue = self._device.getOutputQueue(  # type: ignore
+        self._rgb_queue: Optional[dai.DataOutputQueue] = self._device.getOutputQueue(
             name="rgb", maxSize=4, blocking=False
         )
-        self._detection_queue = self._device.getOutputQueue(  # type: ignore
-            name="nn", maxSize=4, blocking=False
-        )
+        self._detection_queue: Optional[
+            dai.DataOutputQueue
+        ] = self._device.getOutputQueue(name="nn", maxSize=4, blocking=False)
 
     def get_frame(self) -> Optional[numpy.ndarray]:
         rgb_queue = self._rgb_queue
@@ -139,7 +140,7 @@ class ObjectDetectionCapture:
             return None
 
         frame: Optional[numpy.ndarray] = rgb_queue.get().getCvFrame()  # type: ignore
-        detection: Optional[Any] = detection_queue.get().detections
+        detection: Optional[Any] = detection_queue.get().detections  # type: ignore
         if frame is None or detection is None:
             return None
         return _render_frame("rgb", frame, detection)

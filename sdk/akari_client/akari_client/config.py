@@ -4,6 +4,7 @@ import pathlib
 from typing import List, Literal, Optional, Union
 
 import pydantic
+import pydantic_settings
 
 from .joint_manager import JointManager
 from .m5stack_client import M5StackClient
@@ -20,6 +21,16 @@ class DynamixelControllerConfig(pydantic.BaseModel):
     default_acceleration: float
 
 
+class FeetechControllerConfig(pydantic.BaseModel):
+    joint_name: str
+    feetech_id: int
+    reverse: bool
+    min_position_limit: float
+    max_position_limit: float
+    default_velocity: float
+    default_acceleration: float
+
+
 class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     type: Literal["dynamixel_serial"]
     controllers: List[DynamixelControllerConfig] = pydantic.Field(default=[])
@@ -28,16 +39,29 @@ class JointManagerDynamixelSerialConfig(pydantic.BaseModel):
     protocol_version: float = 2.0
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
-        from .serial.factory import create_joint_manager
+        from .serial.factory import create_dynamixel_joint_manager
 
         _logger.debug("Initializing joint manager from 'dynamixel_serial' config")
-        return create_joint_manager(self, stack)
+        return create_dynamixel_joint_manager(self, stack)
+
+
+class JointManagerFeetechSerialConfig(pydantic.BaseModel):
+    type: Literal["feetech_serial"]
+    controllers: List[FeetechControllerConfig] = pydantic.Field(default=[])
+    serial_port: pathlib.Path = pathlib.Path("/dev/ttyAMA0")
+    baudrate: int = 500000
+
+    def factory(self, stack: contextlib.ExitStack) -> JointManager:
+        from .serial.factory import create_feetech_joint_manager
+
+        _logger.debug("Initializing joint manager from 'feetech_serial' config")
+        return create_feetech_joint_manager(self, stack)
 
 
 class JointManagerGrpcConfig(pydantic.BaseModel):
     type: Literal["grpc"]
     endpoint: str
-    joints: Optional[List[str]]
+    joints: List[str] | None = None
 
     def factory(self, stack: contextlib.ExitStack) -> JointManager:
         from .grpc.factory import create_joint_manager
@@ -46,7 +70,11 @@ class JointManagerGrpcConfig(pydantic.BaseModel):
         return create_joint_manager(self, stack)
 
 
-JointManagerConfig = Union[JointManagerDynamixelSerialConfig, JointManagerGrpcConfig]
+JointManagerConfig = Union[
+    JointManagerDynamixelSerialConfig,
+    JointManagerFeetechSerialConfig,
+    JointManagerGrpcConfig,
+]
 
 
 class M5StackSerialConfig(pydantic.BaseModel):
@@ -81,7 +109,7 @@ class AkariClientConfig(pydantic.BaseModel):
     m5stack: M5StackConfig = pydantic.Field(..., discriminator="type")
 
 
-class AkariClientEnv(pydantic.BaseSettings):
+class AkariClientEnv(pydantic_settings.BaseSettings):
     config_path: Optional[pydantic.FilePath] = None
 
     class Config:
@@ -101,7 +129,7 @@ def load_env() -> AkariClientEnv:
 
 def _load_config(path: pathlib.Path) -> AkariClientConfig:
     _logger.debug(f"Load config: {path}")
-    return AkariClientConfig.parse_file(path)
+    return AkariClientConfig.parse_file(path)  # type: ignore
 
 
 def default_serial_config() -> AkariClientConfig:

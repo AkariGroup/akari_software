@@ -4,7 +4,7 @@ import numpy
 
 
 class NopCapture:
-    FRAME = numpy.zeros((480, 640, 3), dtype=numpy.uint8)
+    FRAME: Optional[numpy.ndarray] = numpy.zeros((480, 640, 3), dtype=numpy.uint8)
 
     def get_frame(self) -> Optional[numpy.ndarray]:
         return NopCapture.FRAME

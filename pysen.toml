@@ -1,5 +1,5 @@
 [tool.pysen]
-version = "0.10"
+version = "0.11"
 
 [tool.pysen.lint]
 enable_black = true
@@ -8,18 +8,13 @@ enable_isort = true
 enable_mypy = true
 mypy_preset = "strict"
 line_length = 88
-py_version = "py38"
+py_version = "py310"
 mypy_ignore_packages = ["akari_proto.*"]
 
 [[tool.pysen.lint.mypy_targets]]
   paths = [
     "internal/akari_rpc_server/akari_rpc_server/",
     "internal/akira_controller_server/akira_controller_server/",
-    "samples/akari_sample/script",
-    "samples/depthai_sample/face_detection",
-    "samples/depthai_sample/object_recognition",
-    "samples/m5serial_sample/",
-    "samples/depthai_uvc",
     "sdk/akari_client/akari_client",
     "sdk/akari_client/tests/",
     "sdk/akari_proto/akari_proto/",

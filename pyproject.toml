@@ -5,8 +5,8 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-numpy = "^1.22.3"
+python = "^3.10"
+numpy = "^1.26.4"
 dynamixel-sdk = "^3.7.31"
 depthai = "^2.15.2"
 akari-client = {path = "sdk/akari_client", develop = true}
@@ -19,8 +19,8 @@ pyvirtualcam = "^0.9.1"
 black = "22.6.0"
 flake8 = "^5.0.4"
 isort = "^5.10"
-mypy = "^0.950"
-pysen = "^0.10.2"
+mypy = "^0.990"
+pysen = "^0.11.0"
 pytest = "^7.1.2"
 types-protobuf = "^3.19.22"
 
