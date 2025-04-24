@@ -21,7 +21,7 @@ class AkariClient:
             logging.warning(
                 "Failed to boot joint manager. You can ignore this if you are not using joint control."
             )
-            self._joints = None
+            self._joints = None  # type: ignore
 
         try:
             self._m5stack = self._config.m5stack.factory(self._stack)
@@ -29,7 +29,7 @@ class AkariClient:
             logging.warning(
                 "Failed to boot m5stack. You can ignore this if you are not using m5stack."
             )
-            self._m5stack = None
+            self._m5stack = None  # type: ignore
 
     def __enter__(self) -> AkariClient:
         return self
