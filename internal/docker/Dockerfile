@@ -18,7 +18,7 @@ RUN go build -ldflags="-s -w -extldflags \"-static\"" -o /build/gateway cmd/gate
 FROM docker:20.10.17-alpine3.16 as daemon
 
 RUN apk add --no-cache shadow
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing gosu
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community gosu
 
 WORKDIR /app
 COPY internal/docker/daemon-entrypoint.sh /entrypoint.sh
