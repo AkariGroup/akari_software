@@ -39,7 +39,7 @@ setup(
         ],
         "depthai": [
             "matplotlib",
-            "depthai",
+            "depthai==2.30.0",
             "opencv-python",
             "blobconverter",
         ],
