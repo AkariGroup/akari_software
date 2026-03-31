@@ -2,6 +2,7 @@ import math
 from typing import cast
 
 import pytest
+
 from akari_client.serial.dynamixel import (
     DynamixelControlItem,
     DynamixelController,

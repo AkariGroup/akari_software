@@ -28,7 +28,6 @@ def main() -> None:
         time.sleep(2)
         # アプリが終了されるまでループする。
         while True:
-
             color = Colors.WHITE
             m5.set_display_color(color)
             # STEP1. '1.AKARI'を左上表示

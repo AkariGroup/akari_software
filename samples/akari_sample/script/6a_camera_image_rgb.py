@@ -6,6 +6,7 @@ Camera image rgb sample
 Created on 2022/04/16
 @author: Kazuya Yamamoto
 """
+
 import cv2
 import depthai as dai
 

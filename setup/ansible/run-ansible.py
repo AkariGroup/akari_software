@@ -10,38 +10,66 @@ from typing import List
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 VENV_DIR = BASE_DIR / ".venv"
-ACTIVATE_BIN = VENV_DIR / "bin/activate"
 
 
-def command_on_venv(command: str) -> List[str]:
-    return ["bash", "-c", f"source {str(ACTIVATE_BIN)}; {command}"]
+def ensure_uv() -> str:
+    """uvがインストールされていなければ自動インストールし、パスを返す。"""
+    uv_path = shutil.which("uv")
+    if uv_path:
+        return uv_path
+
+    # ~/.local/bin/uv もチェック
+    local_uv = pathlib.Path.home() / ".local" / "bin" / "uv"
+    if local_uv.exists():
+        return str(local_uv)
+
+    print("uv が見つかりません。インストール中...")
+    subprocess.check_call(
+        ["bash", "-c", "curl -LsSf https://astral.sh/uv/install.sh | sh"]
+    )
+
+    if local_uv.exists():
+        return str(local_uv)
+
+    # インストール後に再度検索
+    uv_path = shutil.which("uv")
+    if uv_path:
+        return uv_path
+
+    print("uv のインストールに失敗しました。手動でインストールしてください。")
+    print("  curl -LsSf https://astral.sh/uv/install.sh | sh")
+    sys.exit(1)
 
 
-def setup_venv() -> None:
-    if ACTIVATE_BIN.exists():
+def setup_venv(uv: str) -> None:
+    if (VENV_DIR / "bin" / "activate").exists():
         return
 
-    try:
-        import venv  # NOQA
-    except ImportError:
-        print(
-            """venvがインストールされていません。以下のコマンドを実行して venv をインストールしてください。
-
-sudo apt install python3-venv
-"""
-        )
-        sys.exit(1)
-
     print("venv を作成中...")
-    subprocess.check_call([sys.executable, "-m", "venv", str(VENV_DIR)])
+    subprocess.check_call([uv, "venv", str(VENV_DIR)])
 
 
-def install_dependencies() -> None:
+def install_dependencies(uv: str) -> None:
     requirements_path = BASE_DIR / "requirements.txt"
     assert requirements_path.exists()
 
     print("依存パッケージのインストール中...")
-    subprocess.check_call(command_on_venv(f"pip install -r {requirements_path}"))
+    subprocess.check_call(
+        [
+            uv,
+            "pip",
+            "install",
+            "-r",
+            str(requirements_path),
+            "--python",
+            str(VENV_DIR / "bin" / "python"),
+        ]
+    )
+
+
+def command_on_venv(command: str) -> List[str]:
+    activate_bin = VENV_DIR / "bin" / "activate"
+    return ["bash", "-c", f"source {activate_bin}; {command}"]
 
 
 def main() -> None:
@@ -52,8 +80,9 @@ def main() -> None:
     if args.clean:
         shutil.rmtree(VENV_DIR, ignore_errors=True)
 
-    setup_venv()
-    install_dependencies()
+    uv = ensure_uv()
+    setup_venv(uv)
+    install_dependencies(uv)
 
     opts = " ".join(remainder)
     cmd = command_on_venv(f"ansible-playbook {opts}")

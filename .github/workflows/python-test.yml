@@ -4,31 +4,31 @@ on:
     branches:
       - main
   pull_request:
-env:
-  POETRY_HOME: /opt/poetry
-  POETRY_VERSION: 1.4.2
 jobs:
   python-test:
     name: Python Test
     runs-on: ubuntu-22.04
     timeout-minutes: 15
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         lfs: false
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-    - name: Install poetry
+    - uses: astral-sh/setup-uv@v5
+    - name: Install dependencies
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$POETRY_HOME/bin" >> $GITHUB_PATH
-    - name: Install Python dependencies
+        uv sync
+    - name: Ruff check
       run: |
-        poetry install
-    - name: Lint
+        uv run ruff check .
+    - name: Ruff format check
       run: |
-        poetry run pysen run lint
+        uv run ruff format --check .
+    - name: Mypy
+      run: |
+        uv run mypy internal/akari_rpc_server/akari_rpc_server/ internal/akira_controller_server/akira_controller_server/ sdk/akari_client/akari_client sdk/akari_client/tests/ sdk/akari_proto/akari_proto/ sdk/akari_proto/tests/ tools/python
     - name: Run pytest
       run: |
-        poetry run pytest -v sdk/akari_client/tests
+        uv run pytest -v sdk/akari_client/tests

@@ -2,12 +2,13 @@ from functools import lru_cache
 from typing import List, Mapping, cast
 
 import grpc
+from google.protobuf.empty_pb2 import Empty
+
 from akari_client.config import JointManagerFeetechSerialConfig
 from akari_client.joint_manager import JointManager
 from akari_client.serial.feetech import FeetechController
 from akari_proto import joints_controller_pb2, joints_controller_pb2_grpc
 from akari_proto.grpc.error import serialize_error
-from google.protobuf.empty_pb2 import Empty
 
 from . import feetech_init
 from ._error import serializer

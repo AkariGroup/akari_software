@@ -39,11 +39,9 @@ _STATIC_FRAME_STAMP = -1
 
 
 class CaptureProtocol(Protocol):
-    def get_frame(self) -> Optional[numpy.ndarray]:
-        ...
+    def get_frame(self) -> Optional[numpy.ndarray]: ...
 
-    def close(self) -> None:
-        ...
+    def close(self) -> None: ...
 
 
 class CaptureMode(str, enum.Enum):

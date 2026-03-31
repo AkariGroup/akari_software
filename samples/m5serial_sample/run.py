@@ -78,7 +78,9 @@ class M5serialSample(object):
             )
         if self.disp_mode == SENSOR_MODE:
             self.m5.set_display_text(
-                "気圧: " + str(round(self.pressure / 100, 2)).rjust(7, " ") + " hPa  \n",
+                "気圧: "
+                + str(round(self.pressure / 100, 2)).rjust(7, " ")
+                + " hPa  \n",
                 0,
                 100,
                 2,

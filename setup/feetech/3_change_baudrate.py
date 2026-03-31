@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
+import os
 import time
+
 from scservo_sdk import *  # Uses SCServo SDK library
 
 protocol_end = 0  # SCServo bit end(STS/SMS=0, SCS=1)
@@ -43,13 +44,14 @@ def main() -> None:
     args = parser.parse_args()
 
     if os.name == "nt":
-        import msvcrt
+        pass
 
     else:
-        import sys, tty, termios
+        import sys
+        import termios
 
         fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
+        termios.tcgetattr(fd)
 
     try:
         baudrate_index = badurate_list.index(args.baudrate)
@@ -68,7 +70,9 @@ def main() -> None:
         quit()
 
     cur_baudrate = None
-    print(f"STEP1: Panのサーボを探索し、Baudrateを {badurate_list[baudrate_index]} に変更します。")
+    print(
+        f"STEP1: Panのサーボを探索し、Baudrateを {badurate_list[baudrate_index]} に変更します。"
+    )
     for baudrate in badurate_list:
         # Set port baudrate
         portHandler.setBaudRate(baudrate)
@@ -90,9 +94,9 @@ def main() -> None:
         portHandler, args.pan_id, 55, 0
     )
     if scs_comm_result == COMM_SUCCESS:
-        print(f"EEPROMロック解除しました。")
+        print("EEPROMロック解除しました。")
     else:
-        print(f"[ERROR] EPROMロック解除に失敗しました。")
+        print("[ERROR] EPROMロック解除に失敗しました。")
         return
 
     # Baudrateの変更
@@ -114,7 +118,9 @@ def main() -> None:
                 return
 
     cur_baudrate = None
-    print(f"STEP2: Tiltのサーボを探索し、Baudrateを {badurate_list[baudrate_index]} に変更します。")
+    print(
+        f"STEP2: Tiltのサーボを探索し、Baudrateを {badurate_list[baudrate_index]} に変更します。"
+    )
     for baudrate in badurate_list:
         # Set port baudrate
         portHandler.setBaudRate(baudrate)
@@ -136,9 +142,9 @@ def main() -> None:
         portHandler, args.tilt_id, 55, 0
     )
     if scs_comm_result == COMM_SUCCESS:
-        print(f"EEPROMロック解除しました。")
+        print("EEPROMロック解除しました。")
     else:
-        print(f"[ERROR] EPROMロック解除に失敗しました。")
+        print("[ERROR] EPROMロック解除に失敗しました。")
         return
 
     # Baudrateの変更
@@ -204,11 +210,11 @@ def main() -> None:
                 portHandler, args.pan_id, 55, 1
             )
             if scs_comm_result == COMM_SUCCESS:
-                print(f"PanのサーボのEEPROMロックしました。")
+                print("PanのサーボのEEPROMロックしました。")
                 pan_status = True
                 break
             else:
-                print(f"[ERROR] PanのサーボのEEPROMロックに失敗しました。")
+                print("[ERROR] PanのサーボのEEPROMロックに失敗しました。")
                 return
     # Try to ping the Tilt SCServo
     # Get SCServo model number
@@ -242,11 +248,11 @@ def main() -> None:
                 portHandler, args.tilt_id, 55, 1
             )
             if scs_comm_result == COMM_SUCCESS:
-                print(f"TiltのサーボのEEPROMロックしました。")
+                print("TiltのサーボのEEPROMロックしました。")
                 tilt_status = True
                 break
             else:
-                print(f"[ERROR] TiltのサーボのEPROMロックに失敗しました。")
+                print("[ERROR] TiltのサーボのEPROMロックに失敗しました。")
                 return
 
     if pan_status and tilt_status:

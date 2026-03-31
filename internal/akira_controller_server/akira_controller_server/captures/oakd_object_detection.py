@@ -40,7 +40,7 @@ COLOR_MAP = numpy.random.randint(0, 255, (len(LABEL_MAP), 3))
 
 
 def _get_norm_bbox(
-    bbox: Tuple[float, float, float, float]
+    bbox: Tuple[float, float, float, float],
 ) -> Tuple[int, int, int, int]:
     norm_box: Tuple[int, int, int, int] = (
         numpy.clip(numpy.array(bbox), 0, 1)
@@ -128,9 +128,9 @@ class ObjectDetectionCapture:
         self._rgb_queue: Optional[dai.DataOutputQueue] = self._device.getOutputQueue(
             name="rgb", maxSize=4, blocking=False
         )
-        self._detection_queue: Optional[
-            dai.DataOutputQueue
-        ] = self._device.getOutputQueue(name="nn", maxSize=4, blocking=False)
+        self._detection_queue: Optional[dai.DataOutputQueue] = (
+            self._device.getOutputQueue(name="nn", maxSize=4, blocking=False)
+        )
 
     def get_frame(self) -> Optional[numpy.ndarray]:
         rgb_queue = self._rgb_queue

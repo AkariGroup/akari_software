@@ -91,7 +91,6 @@ nn.out.link(nnOut.input)
 
 # Connect to device and start pipeline
 with dai.Device(pipeline) as device:
-
     # Output queues will be used to get the rgb frames and nn data
     # from the outputs defined above
     qRgb = device.getOutputQueue(name="rgb", maxSize=4, blocking=False)  # type: ignore

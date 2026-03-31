@@ -32,12 +32,10 @@ TCallable = TypeVar("TCallable", bound=Callable[..., Any])
 class SerializableException(Protocol):
     __name__: str
 
-    def to_dict(self) -> Dict[str, Any]:
-        ...
+    def to_dict(self) -> Dict[str, Any]: ...
 
     @classmethod
-    def from_dict(cls: Type[TException], data: Dict[str, Any]) -> TException:
-        ...
+    def from_dict(cls: Type[TException], data: Dict[str, Any]) -> TException: ...
 
 
 class RPCErrorSerializer:

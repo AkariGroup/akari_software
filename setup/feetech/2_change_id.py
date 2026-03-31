@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import time
-import argparse
+
 from scservo_sdk import *  # Uses SCServo SDK library
 
 protocol_end = 0  # SCServo bit end(STS/SMS=0, SCS=1)
 badurate_list = [1000000, 500000, 250000, 128000, 115200, 76800, 57600, 38400]
 MAX_TRY_TIME = 3
+
 
 def main() -> None:
     # parse arguments
@@ -40,13 +42,14 @@ def main() -> None:
     args = parser.parse_args()
 
     if os.name == "nt":
-        import msvcrt
+        pass
 
     else:
-        import sys, tty, termios
+        import sys
+        import termios
 
         fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
+        termios.tcgetattr(fd)
 
     portHandler = PortHandler(args.port)
     packetHandler = PacketHandler(protocol_end)
@@ -65,7 +68,7 @@ def main() -> None:
     for baudrate in badurate_list:
         # Set port baudrate
         portHandler.setBaudRate(baudrate)
-        for id in range(0,100):
+        for id in range(0, 100):
             if is_changed:
                 break
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
@@ -83,9 +86,9 @@ def main() -> None:
                     portHandler, id, 55, 0
                 )
                 if scs_comm_result == COMM_SUCCESS:
-                    print(f"EEPROMロック解除しました。")
+                    print("EEPROMロック解除しました。")
                 else:
-                    print(f"[ERROR] EPROMロック解除に失敗しました。")
+                    print("[ERROR] EPROMロック解除に失敗しました。")
                     return
 
                 # IDの変更
@@ -98,7 +101,9 @@ def main() -> None:
                     if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
                         is_changed = True
                         baudrate_tilt = baudrate
-                        print(f"サーボのidを {id} から {args.changed_id_tilt} に変更しました。")
+                        print(
+                            f"サーボのidを {id} から {args.changed_id_tilt} に変更しました。"
+                        )
                     else:
                         try_time += 1
                         if try_time >= MAX_TRY_TIME:
@@ -107,8 +112,8 @@ def main() -> None:
                             )
                             return
     if not is_changed:
-        print(f"[ERROR] Tiltのサーボが見つかりませんでした。")
-        print(f"[ERROR] Tiltのサーボのコネクタが接続されているか確認してください。")
+        print("[ERROR] Tiltのサーボが見つかりませんでした。")
+        print("[ERROR] Tiltのサーボのコネクタが接続されているか確認してください。")
         return
 
     time.sleep(0.5)
@@ -135,9 +140,9 @@ def main() -> None:
                 portHandler, args.cur_id_pan, 55, 0
             )
             if scs_comm_result == COMM_SUCCESS:
-                print(f"EEPROMロック解除しました。")
+                print("EEPROMロック解除しました。")
             else:
-                print(f"[ERROR] EPROMロック解除に失敗しました。")
+                print("[ERROR] EPROMロック解除に失敗しました。")
                 return
 
             # IDの変更
@@ -148,7 +153,9 @@ def main() -> None:
                     portHandler, args.cur_id_pan, 5, args.changed_id_pan
                 )
                 if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
-                    print(f"サーボのidを {args.cur_id_pan} から {args.changed_id_pan} に変更しました。")
+                    print(
+                        f"サーボのidを {args.cur_id_pan} から {args.changed_id_pan} に変更しました。"
+                    )
                     baudrate_pan = baudrate
                     is_changed = True
                     break
@@ -160,8 +167,10 @@ def main() -> None:
                         )
                         return
     if not is_changed:
-        print(f"[ERROR] Panのサーボが見つかりませんでした。")
-        print(f"[ERROR] Panのサーボのidを'1_temp_change_id.py'で{args.cur_id_pan}に変更済みか確認してください。")
+        print("[ERROR] Panのサーボが見つかりませんでした。")
+        print(
+            f"[ERROR] Panのサーボのidを'1_temp_change_id.py'で{args.cur_id_pan}に変更済みか確認してください。"
+        )
         return
 
     time.sleep(0.5)
@@ -202,11 +211,11 @@ def main() -> None:
                 portHandler, args.changed_id_pan, 55, 1
             )
             if scs_comm_result == COMM_SUCCESS:
-                print(f"PanのサーボのEEPROMロックしました。")
+                print("PanのサーボのEEPROMロックしました。")
                 pan_status = True
                 break
             else:
-                print(f"[ERROR] PanのサーボのEEPROMロックに失敗しました。")
+                print("[ERROR] PanのサーボのEEPROMロックに失敗しました。")
                 return
     # Try to ping the Tilt SCServo
     # Get SCServo model
@@ -241,11 +250,11 @@ def main() -> None:
                 portHandler, args.changed_id_tilt, 55, 1
             )
             if scs_comm_result == COMM_SUCCESS:
-                print(f"TiltのサーボのEEPROMロックしました。")
+                print("TiltのサーボのEEPROMロックしました。")
                 tilt_status = True
                 break
             else:
-                print(f"[ERROR] TiltのサーボのEPROMロックに失敗しました。")
+                print("[ERROR] TiltのサーボのEPROMロックに失敗しました。")
                 return
     if pan_status and tilt_status:
         print("------------------------")

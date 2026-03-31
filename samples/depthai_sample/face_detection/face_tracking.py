@@ -19,9 +19,10 @@ import blobconverter
 import cv2
 import depthai as dai
 import numpy as np
-from akari_client import AkariClient
 from utils.priorbox import PriorBox
 from utils.utils import draw
+
+from akari_client import AkariClient
 
 pan_target_angle = 0.0
 tilt_target_angle = 0.0
@@ -271,7 +272,6 @@ def FaceRecognition(q_detection: Any) -> None:
     # --------------- Inference ---------------
     # Pipeline defined, now the device is assigned and pipeline is started
     with dai.Device(pipeline) as device:
-
         # Output queues will be used to get the rgb frames and nn data
         # from the outputs defined above
         q_cam = device.getOutputQueue("cam", 4, blocking=False)  # type: ignore
@@ -319,7 +319,6 @@ def FaceRecognition(q_detection: Any) -> None:
 
             # Draw
             if dets.shape[0] > 0:
-
                 if dets.ndim == 1:
                     dets = np.expand_dims(dets, 0)
 

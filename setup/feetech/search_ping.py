@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
+import os
+
 from scservo_sdk import *  # Uses SCServo SDK library
 
 # Default setting
@@ -30,13 +31,14 @@ def main() -> None:
     args = parser.parse_args()
 
     if os.name == "nt":
-        import msvcrt
+        pass
 
     else:
-        import sys, tty, termios
+        import sys
+        import termios
 
         fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
+        termios.tcgetattr(fd)
 
     portHandler = PortHandler(args.port)
     packetHandler = PacketHandler(protocol_end)
@@ -51,9 +53,13 @@ def main() -> None:
     for baudrate in badurate_list:
         # Set port baudrate
         if portHandler.setBaudRate(baudrate):
-            print(f"シリアルポートをbaudrate: {baudrate} にセットしました。feetechサーボを探索します。")
+            print(
+                f"シリアルポートをbaudrate: {baudrate} にセットしました。feetechサーボを探索します。"
+            )
         else:
-            print(f"シリアルポートがbaudrate: {baudrate}に対応していません。スキップします。")
+            print(
+                f"シリアルポートがbaudrate: {baudrate}に対応していません。スキップします。"
+            )
 
         for id in range(0, args.search_id + 1):
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
@@ -67,7 +73,7 @@ def main() -> None:
                 )
                 print("------------------------------------------------------------")
 
-    print(f"スキャンが完了しました。")
+    print("スキャンが完了しました。")
     # Close port
     portHandler.closePort()
 
