@@ -95,7 +95,7 @@ def main() -> None:
                     scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
                         portHandler, id, 5, args.changed_id_tilt
                     )
-                    if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
+                    if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
                         is_changed = True
                         baudrate_tilt = baudrate
                         print(f"サーボのidを {id} から {args.changed_id_tilt} に変更しました。")
@@ -147,7 +147,7 @@ def main() -> None:
                 scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
                     portHandler, args.cur_id_pan, 5, args.changed_id_pan
                 )
-                if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
+                if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
                     print(f"サーボのidを {args.cur_id_pan} から {args.changed_id_pan} に変更しました。")
                     baudrate_pan = baudrate
                     is_changed = True
