@@ -13,8 +13,14 @@
   when:
     ansible_distribution == "Debian"
 
-- name: Install platformio via uv tool
-  shell: uv tool install platformio
+- name: Create platformio virtualenv via uv
+  shell: uv venv "{{ ansible_env.HOME }}/.venvs/platformio"
+  args:
+    creates: "{{ ansible_env.HOME }}/.venvs/platformio/bin/python"
+  become: false
+
+- name: Install platformio into uv virtualenv
+  shell: uv pip install --python "{{ ansible_env.HOME }}/.venvs/platformio/bin/python" platformio
   become: false
 
 # When the playbook is executed for the first time,
@@ -36,7 +42,7 @@
   become: true
 
 - name: Upload app to M5Stack
-  shell: PATH="{{ ansible_env.HOME }}/.local/bin:$PATH" platformio run --target=upload
+  shell: PATH="{{ ansible_env.HOME }}/.venvs/platformio/bin:$PATH" platformio run --target=upload
   args:
     chdir: "{{ ansible_env.HOME }}/arduino/"
   when: upload_workspace.changed
