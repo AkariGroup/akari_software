@@ -1,4 +1,6 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -9,9 +11,7 @@ RUN apt-get update && \
         gnome-keyring \
         locales \
         wget \
-        python3-pip \
-        python3-venv \
-        python3-dev\
+        python3-dev \
         gcc \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +24,7 @@ ENV LANG="ja_JP.UTF-8" \
 RUN wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
 
 COPY sdk/ /resources/sdk/
-RUN pip install \
+RUN uv pip install --system \
         /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/vscode/entrypoint.sh /entrypoint.sh

@@ -13,9 +13,8 @@
   when:
     ansible_distribution == "Debian"
 
-- name: Install pip packages
-  pip:
-    name: platformio
+- name: Install platformio via uv
+  shell: uv pip install --system platformio
   become: true
 
 # When the playbook is executed for the first time,

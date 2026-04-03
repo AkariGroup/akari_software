@@ -3,14 +3,14 @@ name = "akari-software"
 version = "0.1.0"
 description = ""
 authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "numpy>=1.26.4,<2",
     "dynamixel-sdk>=3.7.31,<4",
     "akari-client[depthai]",
     "akari-proto",
     "opencv-python>=4.5.5,<5",
-    "click==8.0.4",
+    "click>=8.0.4,<9",
     "pyvirtualcam>=0.9.1,<1",
 ]
 
@@ -38,7 +38,7 @@ akari-proto = { workspace = true }
 # ---- ruff ----
 [tool.ruff]
 line-length = 88
-target-version = "py310"
+target-version = "py312"
 src = ["internal", "sdk", "tools", "samples"]
 exclude = [
     "internal/akira_services/jupyter_lab/jupyter_lab_config.py",
@@ -57,7 +57,7 @@ known-first-party = ["akari_client", "akari_proto", "akari_rpc_server", "akira_c
 
 # ---- mypy ----
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_configs = true

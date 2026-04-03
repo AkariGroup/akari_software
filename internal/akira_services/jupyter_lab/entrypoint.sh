@@ -15,11 +15,11 @@ export VENV_BASE=$HOME/.venv
 if [ ! -d "$VENV_BASE" ]
 then
   echo "Initializing venv"
-  python3 -m venv $VENV_BASE --system-site-packages
+  uv venv $VENV_BASE --system-site-packages
   . $VENV_BASE/bin/activate
   # In order to allow custom jupyterlab installation,
-  # run `pip install` only once for a env
-  pip install --no-index --find-links /wheel jupyterlab
+  # run `uv pip install` only once for a env
+  uv pip install --no-index --find-links /wheel jupyterlab
 else
   . $VENV_BASE/bin/activate
 fi

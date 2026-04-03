@@ -5,10 +5,10 @@ description = "Akari Python package"
 readme = "README.md"
 authors = [{ name = "akari", email = "akari.tmc@gmail.com" }]
 license = { text = "Apache License 2.0" }
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: POSIX",
@@ -19,7 +19,7 @@ dependencies = [
     "dynamixel_sdk",
     "pydantic>=2.0,<3.0",
     "pydantic-settings>=2.0,<3.0",
-    "numpy==1.26.4",
+    "numpy>=1.26.4,<2",
 ]
 
 [project.optional-dependencies]

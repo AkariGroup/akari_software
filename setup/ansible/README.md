@@ -5,14 +5,14 @@ AKARIの動作に必要なソフトウェアをインストールするための
 
 ## 前準備
 
-1. Python 3.8+ および venv がインストールされていることを確認
+1. Python 3.12+ および venv がインストールされていることを確認
    ```sh
    $ python --version
-   Python 3.8.11
+   Python 3.12.x
    ```
   - インストールされていない場合には以下のコマンドで Python をインストールしてください
    ```sh
-   $ sudo apt install python3.8 python3.8-venv
+   $ sudo apt install python3 python3-venv
    ```
 
 

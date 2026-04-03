@@ -12,6 +12,29 @@
       - ssh
   become: true
 
+- name: Get host architecture
+  command: dpkg --print-architecture
+  changed_when: false
+  register: uv_host_arch
+
+- name: Set uv download URL
+  set_fact:
+    uv_version: "0.10.11"
+    uv_arch: "{{ 'x86_64' if uv_host_arch.stdout == 'amd64' else 'aarch64' }}"
+
+- name: Download uv binary
+  get_url:
+    url: "https://github.com/astral-sh/uv/releases/download/{{ uv_version }}/uv-{{ uv_arch }}-unknown-linux-gnu.tar.gz"
+    dest: /tmp/uv.tar.gz
+    mode: "0644"
+  become: true
+
+- name: Install uv binary
+  shell: tar -xzf /tmp/uv.tar.gz --strip-components=1 -C /usr/local/bin/ && rm /tmp/uv.tar.gz
+  args:
+    creates: /usr/local/bin/uv
+  become: true
+
 - name: Clone v4l2loopback repository
   git:
     repo: 'https://github.com/umlaeute/v4l2loopback.git'
