@@ -17,9 +17,7 @@ then
   echo "Initializing venv"
   uv venv $VENV_BASE --system-site-packages
   . $VENV_BASE/bin/activate
-  # In order to allow custom jupyterlab installation,
-  # run `uv pip install` only once for a env
-  uv pip install --no-index --find-links /wheel jupyterlab
+  uv pip install jupyterlab
 else
   . $VENV_BASE/bin/activate
 fi

@@ -24,10 +24,8 @@ ENV LANG="ja_JP.UTF-8" \
 RUN uv venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Pre-build wheels for offline first-run installation in entrypoint
-RUN mkdir -p /wheel \
-    && uv pip wheel -w /wheel jupyterlab==4.0.1
-RUN uv pip install ipywidgets==8.0.3
+# Pre-install jupyterlab and ipywidgets into the base venv
+RUN uv pip install jupyterlab==4.0.1 ipywidgets==8.0.3
 
 COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
 
