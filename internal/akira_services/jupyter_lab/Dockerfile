@@ -21,15 +21,18 @@ ENV LANG="ja_JP.UTF-8" \
     LC_ALL="ja_JP.UTF-8" \
     TZ="Asia/Tokyo"
 
+RUN uv venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
 # Pre-build wheels for offline first-run installation in entrypoint
 RUN mkdir -p /wheel \
     && uv pip wheel -w /wheel jupyterlab==4.0.1
-RUN uv pip install --system ipywidgets==8.0.3
+RUN uv pip install ipywidgets==8.0.3
 
 COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
 
 COPY sdk/ /resources/sdk/
-RUN uv pip install --system \
+RUN uv pip install \
         /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/jupyter_lab/entrypoint.sh /entrypoint.sh

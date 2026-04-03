@@ -10,7 +10,7 @@ dependencies = [
     "depthai==2.30.0",
     "fastapi==0.115.6",
     "grpcio==1.68.1",
-    "numpy==1.26.4",
+    "numpy>=2.0",
     "opencv-python-headless==4.13.0.90",
     "protobuf==5.29.2",
     "uvicorn==0.34.0",

@@ -13,9 +13,9 @@
   when:
     ansible_distribution == "Debian"
 
-- name: Install platformio via uv
-  shell: uv pip install --system platformio
-  become: true
+- name: Install platformio via uv tool
+  shell: uv tool install platformio
+  become: false
 
 # When the playbook is executed for the first time,
 # user might not belong to the dialout group in the session.
@@ -36,7 +36,7 @@
   become: true
 
 - name: Upload app to M5Stack
-  shell: platformio run --target=upload
+  shell: PATH="{{ ansible_env.HOME }}/.local/bin:$PATH" platformio run --target=upload
   args:
     chdir: "{{ ansible_env.HOME }}/arduino/"
   when: upload_workspace.changed

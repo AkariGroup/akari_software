@@ -23,8 +23,11 @@ ENV LANG="ja_JP.UTF-8" \
 
 RUN wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
 
+RUN uv venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
 COPY sdk/ /resources/sdk/
-RUN uv pip install --system \
+RUN uv pip install \
         /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/vscode/entrypoint.sh /entrypoint.sh
