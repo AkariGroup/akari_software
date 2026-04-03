@@ -74,7 +74,7 @@ def command_on_venv(command: str) -> List[str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--clean")
+    parser.add_argument("--clean", action="store_true")
     args, remainder = parser.parse_known_args()
 
     if args.clean:
@@ -85,7 +85,12 @@ def main() -> None:
     install_dependencies(uv)
 
     opts = " ".join(remainder)
-    cmd = command_on_venv(f"ansible-playbook {opts}")
+    # playbookが指定されていない場合、デフォルトでsystem.ymlを使用
+    if not remainder or all(r.startswith("-") for r in remainder):
+        playbook = str(BASE_DIR / "system.yml")
+        cmd = command_on_venv(f"ansible-playbook {opts} {playbook}")
+    else:
+        cmd = command_on_venv(f"ansible-playbook {opts}")
     os.execvp(cmd[0], cmd)
 
 

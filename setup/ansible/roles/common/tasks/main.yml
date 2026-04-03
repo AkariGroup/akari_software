@@ -23,10 +23,9 @@
     uv_arch: "{{ 'x86_64' if uv_host_arch.stdout == 'amd64' else 'aarch64' }}"
 
 - name: Download uv binary
-  get_url:
-    url: "https://github.com/astral-sh/uv/releases/download/{{ uv_version }}/uv-{{ uv_arch }}-unknown-linux-gnu.tar.gz"
-    dest: /tmp/uv.tar.gz
-    mode: "0644"
+  command: curl -fsSL -o /tmp/uv.tar.gz "https://github.com/astral-sh/uv/releases/download/{{ uv_version }}/uv-{{ uv_arch }}-unknown-linux-gnu.tar.gz"
+  args:
+    creates: /tmp/uv.tar.gz
   become: true
 
 - name: Install uv binary
