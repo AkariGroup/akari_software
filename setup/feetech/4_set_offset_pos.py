@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import time
 
 from scservo_sdk import *  # Uses SCServo SDK library
 

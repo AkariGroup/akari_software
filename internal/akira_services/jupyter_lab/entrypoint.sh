@@ -17,12 +17,16 @@ then
   echo "Initializing venv"
   uv venv $VENV_BASE --system-site-packages
   . $VENV_BASE/bin/activate
-  uv pip install jupyterlab
+  uv pip install jupyterlab==4.0.1
 else
   . $VENV_BASE/bin/activate
 fi
 
 # Ensure base venv packages (akari_client etc.) are accessible
-export PYTHONPATH="/opt/venv/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}"
+BASE_SITE_PACKAGES="$(python -c 'import sysconfig; print(sysconfig.get_path("purelib", vars={"base": "/opt/venv", "platbase": "/opt/venv"}))')"
+if [ -d "$BASE_SITE_PACKAGES" ]
+then
+  export PYTHONPATH="$BASE_SITE_PACKAGES${PYTHONPATH:+:$PYTHONPATH}"
+fi
 
 exec "$@"

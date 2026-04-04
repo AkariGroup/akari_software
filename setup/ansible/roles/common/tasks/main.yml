@@ -17,19 +17,21 @@
   changed_when: false
   register: uv_host_arch
 
-- name: Set uv download URL
+- name: Set uv download architecture
   set_fact:
     uv_version: "0.10.11"
-    uv_arch: "{{ 'x86_64' if uv_host_arch.stdout == 'amd64' else 'aarch64' }}"
+    uv_arch: >-
+      {{ {'amd64': 'x86_64', 'arm64': 'aarch64'}[uv_host_arch.stdout] | default('') }}
 
-- name: Download uv binary
-  command: curl -fsSL -o /tmp/uv.tar.gz "https://github.com/astral-sh/uv/releases/download/{{ uv_version }}/uv-{{ uv_arch }}-unknown-linux-gnu.tar.gz"
-  args:
-    creates: /tmp/uv.tar.gz
-  become: true
+- name: Fail on unsupported architecture
+  fail:
+    msg: "Unsupported architecture: {{ uv_host_arch.stdout }}. Supported: amd64, arm64."
+  when: uv_arch == ''
 
-- name: Install uv binary
-  shell: tar -xzf /tmp/uv.tar.gz --strip-components=1 -C /usr/local/bin/ && rm /tmp/uv.tar.gz
+- name: Download and install uv binary
+  shell: >
+    curl -fsSL "https://github.com/astral-sh/uv/releases/download/{{ uv_version }}/uv-{{ uv_arch }}-unknown-linux-gnu.tar.gz"
+    | tar -xz --strip-components=1 -C /usr/local/bin/
   args:
     creates: /usr/local/bin/uv
   become: true

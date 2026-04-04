@@ -14,11 +14,14 @@
     ansible_distribution == "Debian"
 
 - name: Create platformio virtualenv via uv
-  shell: uv venv --seed --allow-existing "{{ ansible_env.HOME }}/.venvs/platformio"
+  command: uv venv --seed --allow-existing "{{ ansible_env.HOME }}/.venvs/platformio"
+  args:
+    creates: "{{ ansible_env.HOME }}/.venvs/platformio/bin/python"
   become: false
 
 - name: Install platformio into uv virtualenv
-  shell: uv pip install --python "{{ ansible_env.HOME }}/.venvs/platformio/bin/python" platformio
+  command: uv pip install --python "{{ ansible_env.HOME }}/.venvs/platformio/bin/python" platformio
+  changed_when: false
   become: false
 
 # When the playbook is executed for the first time,
