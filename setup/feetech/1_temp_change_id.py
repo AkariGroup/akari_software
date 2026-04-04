@@ -87,7 +87,9 @@ def main() -> None:
                         portHandler, id, 5, args.changed_id
                     )
                     if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
-                        print(f"サーボのidを {id} から {args.changed_id} に変更しました。")
+                        print(
+                            f"サーボのidを {id} から {args.changed_id} に変更しました。"
+                        )
                         break
                     else:
                         if i == 2:

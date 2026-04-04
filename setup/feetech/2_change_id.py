@@ -153,7 +153,9 @@ def main() -> None:
                     portHandler, args.cur_id_pan, 5, args.changed_id_pan
                 )
                 if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
-                    print(f"サーボのidを {args.cur_id_pan} から {args.changed_id_pan} に変更しました。")
+                    print(
+                        f"サーボのidを {args.cur_id_pan} から {args.changed_id_pan} に変更しました。"
+                    )
                     baudrate_pan = baudrate
                     is_changed = True
                     break
