@@ -5,16 +5,11 @@ set -e           # コマンド実行に失敗したらエラー
 set -u           # 未定義の変数にアクセスしたらエラー
 set -o pipefail  # パイプのコマンドが失敗したらエラー（bashのみ）
 
-(
-cd internal/docker
-. env.sh
-export AKIRA_IMAGE_TAG=develop
-#docker compose -f docker-compose.dev.yml build
-gnome-terminal -- bash -c "docker compose -f docker-compose.dev.yml up"
-)
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)
+REPOSITORY_ROOT=$(realpath "${SCRIPT_DIR}/../../")
 
-(
-cd internal/akira_frontend
-npm run prebuild
-npm run start
-)
+. "${SCRIPT_DIR}/env.sh"
+export AKIRA_IMAGE_TAG=develop
+
+docker compose -f "${REPOSITORY_ROOT}/internal/akira_services/docker-compose.image.yml" build
+docker compose -f "${SCRIPT_DIR}/docker-compose.dev.yml" build

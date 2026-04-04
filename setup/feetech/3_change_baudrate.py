@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 import time
 
 from scservo_sdk import *  # Uses SCServo SDK library
@@ -42,16 +41,6 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-
-    if os.name == "nt":
-        pass
-
-    else:
-        import sys
-        import termios
-
-        fd = sys.stdin.fileno()
-        termios.tcgetattr(fd)
 
     try:
         baudrate_index = badurate_list.index(args.baudrate)

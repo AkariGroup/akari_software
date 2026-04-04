@@ -24,6 +24,8 @@ services:
       AKIRA_PROJECT_DIR: ${AKIRA_DEV_LOCAL_DIR}/home/akari/projects
       AKIRA_ETC_DIR: ${AKIRA_DEV_LOCAL_DIR}/etc/akira
       AKIRA_VAR_DIR: ${AKIRA_DEV_LOCAL_DIR}/var/lib/akira
+      AKIRA_IMAGE_TAG: ${AKIRA_IMAGE_TAG}
+      AKIRA_SKIP_PULL: "1"
   gateway:
     build:
       context: ../../

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 import time
 
 from scservo_sdk import *  # Uses SCServo SDK library
@@ -36,15 +35,6 @@ def main() -> None:
         type=int,
     )
     args = parser.parse_args()
-    if os.name == "nt":
-        pass
-
-    else:
-        import sys
-        import termios
-
-        fd = sys.stdin.fileno()
-        termios.tcgetattr(fd)
 
     portHandler = PortHandler(args.port)
     packetHandler = PacketHandler(protocol_end)
