@@ -16,7 +16,7 @@ members = [
 
 [[package]]
 name = "akari-client"
-version = "0.4.3"
+version = "0.4.4"
 source = { editable = "sdk/akari_client" }
 dependencies = [
     { name = "dynamixel-sdk" },
@@ -58,7 +58,7 @@ provides-extras = ["grpc", "depthai"]
 
 [[package]]
 name = "akari-proto"
-version = "0.4.3"
+version = "0.4.4"
 source = { editable = "sdk/akari_proto" }
 dependencies = [
     { name = "grpcio" },
