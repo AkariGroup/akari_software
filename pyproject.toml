@@ -32,8 +32,8 @@ members = [
 ]
 
 [tool.uv.sources]
-akari-client = { workspace = true }
 akari-proto = { workspace = true }
+akari-client = { workspace = true }
 
 # ---- ruff ----
 [tool.ruff]
