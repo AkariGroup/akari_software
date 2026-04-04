@@ -13,7 +13,6 @@ import (
 )
 
 const (
-	VSCodeTokenLength            = 20
 	VSCodeContainerListeningPort = 8000
 	VSCodeContainerWorkdir       = "/app"
 	VSCodeContainerVarDir        = "/host_var"
@@ -25,7 +24,6 @@ type VSCode struct {
 
 type vscodeContainerMeta struct {
 	servicePort int
-	token       string
 }
 
 func NewVSCode(
@@ -46,7 +44,6 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 	}
 
 	meta := vscodeContainerMeta{
-		token:       util.GetRandomByteString(VSCodeTokenLength),
 		servicePort: servicePort,
 	}
 
@@ -74,7 +71,6 @@ func (p *VSCode) createContainerConfig() (system.CreateContainerOption, interfac
 	imageRef := fmt.Sprintf("%s:%s", p.image.ContainerOption.Image, p.image.Version)
 	return withOakdAccess(system.CreateContainerOption{
 		Image: imageRef,
-		Env:   []string{fmt.Sprintf("AKARI_VSCODE_TOKEN=%s", meta.token)},
 		Ports: map[string]int{
 			containerPort: meta.servicePort,
 		},
@@ -88,7 +84,7 @@ func (p *VSCode) GetOpenAddress(hostName string) (string, error) {
 
 	if ok {
 		if meta, ok := meta.(vscodeContainerMeta); ok {
-			return fmt.Sprintf("http://%s:%d/?tkn=%s", hostName, meta.servicePort, meta.token), nil
+			return fmt.Sprintf("http://%s:%d/", hostName, meta.servicePort), nil
 		} else {
 			return "", errors.New("invalid internal state")
 		}
@@ -107,7 +103,7 @@ func (p *VSCode) GetOpenProjectAddress(hostName string, projectDir string) (stri
 
 	if ok {
 		if meta, ok := meta.(vscodeContainerMeta); ok {
-			return fmt.Sprintf("http://%s:%d/?tkn=%s&folder=/app/%s", hostName, meta.servicePort, meta.token, relPath), nil
+			return fmt.Sprintf("http://%s:%d/?folder=/app/%s", hostName, meta.servicePort, relPath), nil
 		} else {
 			return "", errors.New("invalid internal state")
 		}

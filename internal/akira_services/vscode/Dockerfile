@@ -4,6 +4,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.10.11 /uv /uvx /bin/
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates \
         curl \
         git \
         libgl1-mesa-dev \
@@ -21,7 +22,7 @@ ENV LANG="ja_JP.UTF-8" \
     LC_ALL="ja_JP.UTF-8" \
     TZ="Asia/Tokyo"
 
-RUN wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 RUN uv venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
@@ -38,4 +39,4 @@ RUN chmod 777 /app
 
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
-CMD /bin/bash -c "code-server --accept-server-license-terms serve-local --disable-telemetry --connection-token $AKARI_VSCODE_TOKEN --host 0.0.0.0"
+CMD ["code-server", "--bind-addr", "0.0.0.0:8000", "--auth", "none", "--disable-telemetry", "/app"]
