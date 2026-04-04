@@ -170,7 +170,7 @@ def main() -> None:
             31,
             offset,
         )
-        if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
+        if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
             print(f"現在位置を{args.default_pos}にオフセットしました。")
         else:
             print(

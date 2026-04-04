@@ -86,10 +86,8 @@ def main() -> None:
                     scs_comm_result, scs_error = packetHandler.write1ByteTxRx(
                         portHandler, id, 5, args.changed_id
                     )
-                    if scs_comm_result == COMM_SUCCESS or COMM_RX_TIMEOUT:
-                        print(
-                            f"サーボのidを {id} から {args.changed_id} に変更しました。"
-                        )
+                    if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
+                        print(f"サーボのidを {id} から {args.changed_id} に変更しました。")
                         break
                     else:
                         if i == 2:
