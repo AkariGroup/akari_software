@@ -22,4 +22,7 @@ else
   . $VENV_BASE/bin/activate
 fi
 
+# Ensure base venv packages (akari_client etc.) are accessible
+export PYTHONPATH="/opt/venv/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}"
+
 exec "$@"

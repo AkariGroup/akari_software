@@ -14,9 +14,7 @@
     ansible_distribution == "Debian"
 
 - name: Create platformio virtualenv via uv
-  shell: uv venv "{{ ansible_env.HOME }}/.venvs/platformio"
-  args:
-    creates: "{{ ansible_env.HOME }}/.venvs/platformio/bin/python"
+  shell: uv venv --seed --allow-existing "{{ ansible_env.HOME }}/.venvs/platformio"
   become: false
 
 - name: Install platformio into uv virtualenv
