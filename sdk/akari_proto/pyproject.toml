@@ -1,12 +1,14 @@
 [project]
 name = "akari-proto"
-version = "0.4.3"
+version = "0.4.4"
 description = "Python package of akari protobuf definitions and utility functions"
 readme = "README.md"
 authors = [{ name = "akari", email = "akari.tmc@gmail.com" }]
 license = { text = "Apache License 2.0" }
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python",
