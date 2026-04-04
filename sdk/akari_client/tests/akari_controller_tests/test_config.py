@@ -4,6 +4,7 @@ import tempfile
 from typing import Iterator
 
 import pytest
+
 from akari_client.config import (
     JointManagerDynamixelSerialConfig,
     default_serial_config,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
+
 from scservo_sdk import *  # Uses SCServo SDK library
 
 # Control table address
@@ -40,15 +40,6 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if os.name == "nt":
-        import msvcrt
-
-    else:
-        import sys, tty, termios
-
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-
     portHandler = PortHandler(args.port)
     packetHandler = PacketHandler(protocol_end)
 
@@ -73,7 +64,9 @@ def main() -> None:
         if scs_comm_result == COMM_SUCCESS:
             print(f"id: {id}, 現在位置: {cur_position}")
         else:
-            print("[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+            print(
+                "[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+            )
             return
 
     print()
@@ -86,11 +79,15 @@ def main() -> None:
             portHandler, id, ADDR_SCS_TORQUE_ENABLE, 1
         )
         if scs_comm_result != COMM_SUCCESS:
-            print(f"[ERROR] ID: {id} のサーボONに失敗しました。ID, Baudrateが正しいか、接続が正しいか確認してください。")
+            print(
+                f"[ERROR] ID: {id} のサーボONに失敗しました。ID, Baudrateが正しいか、接続が正しいか確認してください。"
+            )
             print("[ERROR] %s" % packetHandler.getTxRxResult(scs_comm_result))
             return
         elif scs_error != 0:
-            print(f"[ERROR] ID: {id} のサーボONに失敗しました。ID, Baudrateが正しいか、接続が正しいか確認してください。")
+            print(
+                f"[ERROR] ID: {id} のサーボONに失敗しました。ID, Baudrateが正しいか、接続が正しいか確認してください。"
+            )
             print("[ERROR] %s" % packetHandler.getRxPacketError(scs_error))
             return
 

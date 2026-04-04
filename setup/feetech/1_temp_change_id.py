@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-import os
-import time
 import argparse
+import time
+
 from scservo_sdk import *  # Uses SCServo SDK library
 
 protocol_end = 0  # SCServo bit end(STS/SMS=0, SCS=1)
 badurate_list = [1000000, 500000, 250000, 128000, 115200, 76800, 57600, 38400]
 MAX_TRY_TIME = 3
+
 
 def main() -> None:
     # parse arguments
@@ -34,14 +35,6 @@ def main() -> None:
         type=int,
     )
     args = parser.parse_args()
-    if os.name == "nt":
-        import msvcrt
-
-    else:
-        import sys, tty, termios
-
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
 
     portHandler = PortHandler(args.port)
     packetHandler = PacketHandler(protocol_end)
@@ -72,9 +65,9 @@ def main() -> None:
                     portHandler, id, 55, 0
                 )
                 if scs_comm_result == COMM_SUCCESS:
-                    print(f"EEPROMロック解除しました。")
+                    print("EEPROMロック解除しました。")
                 else:
-                    print(f"[ERROR] EPROMロック解除に失敗しました。")
+                    print("[ERROR] EPROMロック解除に失敗しました。")
                     return
 
                 # IDの変更
@@ -84,7 +77,9 @@ def main() -> None:
                         portHandler, id, 5, args.changed_id
                     )
                     if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
-                        print(f"サーボのidを {id} から {args.changed_id} に変更しました。")
+                        print(
+                            f"サーボのidを {id} から {args.changed_id} に変更しました。"
+                        )
                         break
                     else:
                         if i == 2:
@@ -92,7 +87,6 @@ def main() -> None:
                                 "[ERROR] サーボのidの変更に失敗しました。current_idの間違い、モータの接続間違いがないか確認してください。"
                             )
                             return
-
 
                 time.sleep(0.5)
                 print()
@@ -106,7 +100,10 @@ def main() -> None:
                     )
                     if scs_comm_result != COMM_SUCCESS:
                         if i == MAX_TRY_TIME - 1:
-                            print("[ERROR] %s" % packetHandler.getTxRxResult(scs_comm_result))
+                            print(
+                                "[ERROR] %s"
+                                % packetHandler.getTxRxResult(scs_comm_result)
+                            )
                             print("------------------------")
                             print("pingに失敗しました")
                             print("------------------------")
@@ -114,7 +111,9 @@ def main() -> None:
                         continue
                     elif scs_error != 0:
                         if i == MAX_TRY_TIME - 1:
-                            print("[ERROR] %s" % packetHandler.getRxPacketError(scs_error))
+                            print(
+                                "[ERROR] %s" % packetHandler.getRxPacketError(scs_error)
+                            )
                             print("------------------------")
                             print("pingに失敗しました")
                             print("------------------------")
@@ -130,9 +129,9 @@ def main() -> None:
                             portHandler, args.changed_id, 55, 1
                         )
                         if scs_comm_result == COMM_SUCCESS:
-                            print(f"EEPROMロックしました。")
+                            print("EEPROMロックしました。")
                         else:
-                            print(f"[ERROR] EPROMロックに失敗しました。")
+                            print("[ERROR] EPROMロックに失敗しました。")
                             return
                         print("------------------------")
                         print("idの仮変更OK!")
@@ -143,7 +142,9 @@ def main() -> None:
                 return
 
     print("[ERROR] Feetechサーボが見つかりませんでした。")
-    print("Tilt(ヘッド)のFeetechのコネクタを接続している場合は、外してもう一度試してください。")
+    print(
+        "Tilt(ヘッド)のFeetechのコネクタを接続している場合は、外してもう一度試してください。"
+    )
     return
 
 

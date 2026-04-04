@@ -1,6 +1,7 @@
-from akari_client.joint_manager import AkariJoint
 from fastapi import APIRouter
 from pydantic import BaseModel
+
+from akari_client.joint_manager import AkariJoint
 
 from ._context import get_context
 

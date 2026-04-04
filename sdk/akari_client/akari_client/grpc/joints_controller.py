@@ -1,10 +1,11 @@
 from typing import List
 
 import grpc
+from google.protobuf.empty_pb2 import Empty
+
 from akari_proto import joints_controller_pb2
 from akari_proto.grpc.error import deserialize_error
 from akari_proto.joints_controller_pb2_grpc import JointsControllerServiceStub
-from google.protobuf.empty_pb2 import Empty
 
 from ..joint_controller import PositionLimit, RevoluteJointController
 from ._error import serializer

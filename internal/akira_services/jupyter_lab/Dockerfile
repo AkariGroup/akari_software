@@ -1,4 +1,6 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
+
+COPY --from=ghcr.io/astral-sh/uv:0.10.11 /uv /uvx /bin/
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -10,10 +12,7 @@ RUN apt-get update && \
         locales \
         wget \
         python3-dev \
-        python3-pip \
         python3-venv \
-        python3-dev\
-        gcc \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
@@ -22,14 +21,16 @@ ENV LANG="ja_JP.UTF-8" \
     LC_ALL="ja_JP.UTF-8" \
     TZ="Asia/Tokyo"
 
-RUN pip install wheel
-RUN mkdir -p /wheel \
-    && pip wheel -w /wheel jupyterlab==4.0.1
+RUN uv venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Pre-install jupyterlab and ipywidgets into the base venv
+RUN uv pip install jupyterlab==4.0.1 ipywidgets==8.0.3
+
 COPY internal/akira_services/jupyter_lab/jupyter_lab_config.py /resources/
-RUN pip install ipywidgets==8.0.3
 
 COPY sdk/ /resources/sdk/
-RUN pip install \
+RUN uv pip install \
         /resources/sdk/akari_client[depthai] \
         /resources/sdk/akari_proto/
 COPY internal/akira_services/jupyter_lab/entrypoint.sh /entrypoint.sh

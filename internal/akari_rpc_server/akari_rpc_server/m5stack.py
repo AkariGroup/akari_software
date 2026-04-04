@@ -2,11 +2,12 @@ import json
 from typing import Any, Dict, Iterator, Optional
 
 import grpc
+from google.protobuf.empty_pb2 import Empty
+
 from akari_client.color import Color
 from akari_client.serial.m5stack import M5StackSerialClient
 from akari_proto import m5stack_pb2, m5stack_pb2_grpc
 from akari_proto.grpc.error import serialize_error
-from google.protobuf.empty_pb2 import Empty
 
 from ._error import serializer
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
+import time
+
 from scservo_sdk import *  # Uses SCServo SDK library
 
 protocol_end = 0  # SCServo bit end(STS/SMS=0, SCS=1)
@@ -23,7 +24,7 @@ def main() -> None:
         "--id",
         help="feetechサーボのidを指定します",
         nargs="+",
-        default=[1,2],
+        default=[1, 2],
         type=int,
     )
     parser.add_argument(
@@ -34,15 +35,6 @@ def main() -> None:
         type=int,
     )
     args = parser.parse_args()
-
-    if os.name == "nt":
-        import msvcrt
-
-    else:
-        import sys, tty, termios
-
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
 
     portHandler = PortHandler(args.port)
     packetHandler = PacketHandler(protocol_end)
@@ -59,13 +51,17 @@ def main() -> None:
         for baudrate in badurate_list:
             # Set port baudrate
             if portHandler.setBaudRate(baudrate):
-                print(f"シリアルポートをbaudrate: {baudrate} にセットしました。feetechサーボを探索します。")
+                print(
+                    f"シリアルポートをbaudrate: {baudrate} にセットしました。feetechサーボを探索します。"
+                )
             else:
-                print(f"シリアルポートがbaudrate: {baudrate}に対応していません。スキップします。")
+                print(
+                    f"シリアルポートがbaudrate: {baudrate}に対応していません。スキップします。"
+                )
                 continue
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(
-                        portHandler, id
-                    )
+                portHandler, id
+            )
             if scs_comm_result == COMM_SUCCESS and scs_error == 0:
                 cur_baudrate = baudrate
                 print(f"baudrate: {baudrate} にfeetechサーボID: {id}を発見しました。")
@@ -80,9 +76,9 @@ def main() -> None:
             portHandler, id, 55, 0
         )
         if scs_comm_result == COMM_SUCCESS:
-            print(f"EEPROMロック解除しました。")
+            print("EEPROMロック解除しました。")
         else:
-            print(f"[ERROR] EPROMロック解除に失敗しました。")
+            print("[ERROR] EPROMロック解除に失敗しました。")
             return
 
         print("ENTERキーを入力すると、初期位置設定を開始します。")
@@ -99,26 +95,30 @@ def main() -> None:
                     print(f"現在位置: {cur_position}")
                     break
                 else:
-                    print("[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+                    print(
+                        "[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+                    )
                     return
-            except:
+            except Exception:
                 retry_count += 1
                 if retry_count >= 5:
-                    print("[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+                    print(
+                        "[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+                    )
                     return
                 print("    現在位置の取得をリトライします")
                 pass
 
         time.sleep(0.5)
         # cur_offsetを0にリセット
-        print(f"現在のオフセット値をリセットします。")
+        print("現在のオフセット値をリセットします。")
         scs_comm_result, scs_error = packetHandler.write2ByteTxRx(
             portHandler, id, 31, 0
         )
         time.sleep(0.5)
         # 現在位置の取得
         print()
-        print(f"現在位置を再取得します。")
+        print("現在位置を再取得します。")
         retry_count = 0
         while True:
             try:
@@ -129,12 +129,16 @@ def main() -> None:
                     print(f"現在位置: {cur_position}")
                     break
                 else:
-                    print("[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+                    print(
+                        "[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+                    )
                     return
-            except:
+            except Exception:
                 retry_count += 1
                 if retry_count >= 5:
-                    print("[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+                    print(
+                        "[ERROR] 現在位置の取得に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+                    )
                     return
                 print("    現在位置の取得をリトライします")
                 pass
@@ -159,7 +163,9 @@ def main() -> None:
         if scs_comm_result in (COMM_SUCCESS, COMM_RX_TIMEOUT):
             print(f"現在位置を{args.default_pos}にオフセットしました。")
         else:
-            print("[ERROR] オフセットに失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+            print(
+                "[ERROR] オフセットに失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+            )
             return
 
         time.sleep(0.5)
@@ -168,13 +174,15 @@ def main() -> None:
             portHandler, id, 55, 1
         )
         if scs_comm_result == COMM_SUCCESS:
-            print(f"EEPROMをロックしました。")
+            print("EEPROMをロックしました。")
         else:
-            print(f"[ERROR] id {id}での接続に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。")
+            print(
+                f"[ERROR] id {id}での接続に失敗しました。id, Baudrate間違い、モータの接続間違いがないか確認してください。"
+            )
             return
         portHandler.closePort()
         print()
-        print(f"シリアルポートを再OPENします。")
+        print("シリアルポートを再OPENします。")
         time.sleep(1.0)
 
         # Open port
@@ -195,7 +203,8 @@ def main() -> None:
         # 現在位置の取得
         for i in range(0, 3):
             cur_position, scs_comm_result, scs_error = packetHandler.read2ByteTxRx(
-                portHandler, id, 56)
+                portHandler, id, 56
+            )
             if scs_comm_result != COMM_SUCCESS:
                 if i == 2:
                     print("[ERROR] %s" % packetHandler.getTxRxResult(scs_comm_result))

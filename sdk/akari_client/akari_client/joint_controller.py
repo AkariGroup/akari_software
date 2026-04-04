@@ -10,8 +10,7 @@ class PositionLimit(NamedTuple):
 class RevoluteJointController(abc.ABC):
     @property
     @abc.abstractmethod
-    def joint_name(self) -> str:
-        ...
+    def joint_name(self) -> str: ...
 
     @abc.abstractmethod
     def get_servo_enabled(self) -> bool:

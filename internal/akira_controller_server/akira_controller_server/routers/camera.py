@@ -1,7 +1,8 @@
-from akira_controller_server.media import CaptureMode
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+
+from akira_controller_server.media import CaptureMode
 
 from ._context import get_context
 

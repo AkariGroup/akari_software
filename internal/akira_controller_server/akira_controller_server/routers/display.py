@@ -1,6 +1,7 @@
-from akari_client.color import Color
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+
+from akari_client.color import Color
 
 from ._context import get_context
 

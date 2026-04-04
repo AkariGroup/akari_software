@@ -4,6 +4,7 @@ import signal
 from concurrent.futures import ThreadPoolExecutor
 
 import grpc
+
 from akari_client.akari_client import AkariClient
 from akari_client.config import (
     JointManagerDynamixelSerialConfig,

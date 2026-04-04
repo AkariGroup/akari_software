@@ -7,7 +7,6 @@ Created on 2021/06/11
 @author: Kazuya Yamamoto
 """
 
-
 import time
 
 from akari_client import AkariClient

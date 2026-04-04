@@ -1,7 +1,8 @@
 import uvicorn
-from akira_controller_server.api import api
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+
+from akira_controller_server.api import api
 
 app = FastAPI()
 app.include_router(api)

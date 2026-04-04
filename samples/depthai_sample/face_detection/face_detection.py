@@ -118,7 +118,6 @@ detection_nn.out.link(xout_nn.input)
 # --------------- Inference ---------------
 # Pipeline defined, now the device is assigned and pipeline is started
 with dai.Device(pipeline) as device:
-
     # Output queues will be used to get the rgb frames and nn data
     # from the outputs defined above
     q_cam = device.getOutputQueue("cam", 4, blocking=False)  # type: ignore
@@ -166,7 +165,6 @@ with dai.Device(pipeline) as device:
 
         # Draw
         if dets.shape[0] > 0:
-
             if dets.ndim == 1:
                 dets = np.expand_dims(dets, 0)
 

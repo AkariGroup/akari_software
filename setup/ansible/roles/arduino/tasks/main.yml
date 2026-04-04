@@ -13,10 +13,16 @@
   when:
     ansible_distribution == "Debian"
 
-- name: Install pip packages
-  pip:
-    name: platformio
-  become: true
+- name: Create platformio virtualenv via uv
+  command: uv venv --seed --allow-existing "{{ ansible_env.HOME }}/.venvs/platformio"
+  args:
+    creates: "{{ ansible_env.HOME }}/.venvs/platformio/bin/python"
+  become: false
+
+- name: Install platformio into uv virtualenv
+  command: uv pip install --python "{{ ansible_env.HOME }}/.venvs/platformio/bin/python" platformio
+  changed_when: false
+  become: false
 
 # When the playbook is executed for the first time,
 # user might not belong to the dialout group in the session.
@@ -37,7 +43,7 @@
   become: true
 
 - name: Upload app to M5Stack
-  shell: platformio run --target=upload
+  shell: PATH="{{ ansible_env.HOME }}/.venvs/platformio/bin:$PATH" platformio run --target=upload
   args:
     chdir: "{{ ansible_env.HOME }}/arduino/"
   when: upload_workspace.changed

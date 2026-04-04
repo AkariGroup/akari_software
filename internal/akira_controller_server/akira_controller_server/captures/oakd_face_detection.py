@@ -119,11 +119,13 @@ class FaceDetectionCapture:
             dai.Device(self._pipeline, usb2Mode=True)
         )
         self._rgb_queue: Optional[dai.DataOutputQueue] = self._device.getOutputQueue(
-            name="cam", maxSize=4, blocking=False
+            name="cam",
+            maxSize=4,
+            blocking=False,  # type: ignore[call-arg]
         )
-        self._detection_queue: Optional[
-            dai.DataOutputQueue
-        ] = self._device.getOutputQueue(name="nn", maxSize=4, blocking=False)
+        self._detection_queue: Optional[dai.DataOutputQueue] = (
+            self._device.getOutputQueue(name="nn", maxSize=4, blocking=False)  # type: ignore[call-arg]
+        )
 
     def get_frame(self) -> Optional[np.ndarray]:
         rgb_queue = self._rgb_queue

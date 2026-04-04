@@ -16,9 +16,10 @@ xout = pipeline.create(dai.node.XLinkOut)
 xout.setStreamName("rgb")
 cam.preview.link(xout.input)
 # Connect to device and start pipeline
-with dai.Device(pipeline) as device, pyvirtualcam.Camera(
-    width=1920, height=1080, device="/dev/video20", fps=30
-) as uvc:
+with (
+    dai.Device(pipeline) as device,
+    pyvirtualcam.Camera(width=1920, height=1080, device="/dev/video20", fps=30) as uvc,
+):
     qRgb = device.getOutputQueue(name="rgb", maxSize=4, blocking=False)  # type: ignore
     print("UVC running")
     while True:

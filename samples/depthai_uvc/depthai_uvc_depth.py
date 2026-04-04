@@ -32,9 +32,10 @@ camLeft.out.link(stereo.left)
 camRight.out.link(stereo.right)
 
 # Connect to device and start pipeline
-with dai.Device(pipeline) as device, pyvirtualcam.Camera(
-    width=640, height=480, device="/dev/video20", fps=150
-) as uvc:
+with (
+    dai.Device(pipeline) as device,
+    pyvirtualcam.Camera(width=640, height=480, device="/dev/video20", fps=150) as uvc,
+):
     qDepth = device.getOutputQueue(name="depth", maxSize=4, blocking=False)  # type: ignore
     print("UVC running")
     while True:

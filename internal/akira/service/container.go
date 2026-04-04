@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -144,10 +145,14 @@ func (p *ServiceContainer) createContainer() (system.ContainerId, error) {
 	if err != nil {
 		return "", fmt.Errorf("error while creating a container config: %#v)", err)
 	}
-	err = p.d.PullImage(p.containerConfig.Image)
-	if err != nil {
-		// NOTE: Try launching service container if it fails to pull the latest docker image (e.g. no network connection)
-		p.logger.Warn().Msgf("failed to pull image (ref: %#s): %#s", p.containerConfig.Image, err)
+	if os.Getenv("AKIRA_SKIP_PULL") != "" {
+		p.logger.Info().Msgf("skipping image pull (AKIRA_SKIP_PULL is set)")
+	} else {
+		err = p.d.PullImage(p.containerConfig.Image)
+		if err != nil {
+			// NOTE: Try launching service container if it fails to pull the latest docker image (e.g. no network connection)
+			p.logger.Warn().Msgf("failed to pull image (ref: %#s): %#s", p.containerConfig.Image, err)
+		}
 	}
 
 	containerId, err := p.d.CreateContainer(p.containerConfig)
