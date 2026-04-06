@@ -41,6 +41,7 @@ line-length = 88
 target-version = "py312"
 src = ["internal", "sdk", "tools", "samples"]
 exclude = [
+    "setup/akari_m5_software",
     "internal/akira_services/jupyter_lab/jupyter_lab_config.py",
     "sdk/akari_proto/akari_proto/*pb2*",
 ]
