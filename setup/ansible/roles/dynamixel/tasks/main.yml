@@ -6,10 +6,15 @@
     mode: "644"
     line: 'KERNEL=="ttyUSB*", DRIVERS=="ftdi_sio", MODE="0666", ATTR{device/latency_timer}="1", SYMLINK+="ttyUSB_dynamixel"'
   become: yes
-  notify: Reload udev rules
+  register: dynamixel_udev
+
+- name: Reload udev rules
+  shell: udevadm control --reload-rules && udevadm trigger
+  become: true
+  when: dynamixel_udev.changed
 
 - name: Add dynamixel authentification rules
   file:
-    path: /dev/ttyUSB0
+    path: /dev/ttyUSB_dynamixel
     owner: '{{ ansible_env.USER }}'
   become: true
